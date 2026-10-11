@@ -1,0 +1,1413 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 1 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 1 „Czym jest informatyka?” (Wprowadzenie do informatyki, SWPS).">
+<style>
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+/* ───────── 1. Bauby ───────── */
+.board { display: flex; flex-wrap: wrap; gap: 5px; align-items: flex-end; margin: 6px 0 12px; max-width: 640px; min-height: 104px; }
+.cell { width: 48px; height: 48px; flex: none; display: grid; place-items: center; font-weight: 600; font-size: 1.05rem; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); user-select: none; }
+.cell.hl { background: var(--hl); color: var(--hl-ink); border-color: var(--hl); }
+.cell.out { opacity: .22; }
+.cell.bad { background: var(--bad); color: #fff; border-color: var(--bad); }
+.grp { display: flex; flex-wrap: wrap; gap: 5px; padding: 24px 7px 7px; border-radius: 12px; position: relative; flex: none; max-width: 100%; }
+.grp::before { content: attr(data-label); position: absolute; top: 4px; left: 9px; font-size: .74rem; font-weight: 600; white-space: nowrap; }
+.grp.tak { border: 3px solid var(--hl); background: color-mix(in srgb, var(--hl) 18%, transparent); }
+.grp.tak::before { color: var(--text); }
+.grp.nie { border: 2px dashed var(--muted); }
+.grp.nie::before { color: var(--muted); }
+.board-info { font-size: .85rem; color: var(--muted); margin: 10px 0 0; }
+.timer { height: 4px; background: var(--surface-2); border-radius: 2px; overflow: hidden; max-width: 640px; margin-top: 4px; }
+.timer > span { display: block; height: 100%; width: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); }
+@keyframes ubywa { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@media (max-width: 560px) { .cell { width: 38px; height: 38px; font-size: .95rem; } .board { gap: 4px; } .grp { gap: 4px; padding: 22px 5px 5px; } }
+.blink { width: 100%; max-width: 620px; min-height: 72px; font-size: 1.25rem; border-radius: 12px; }
+.typed { font-family: var(--mono); font-size: 1.4rem; letter-spacing: .08em; padding: 8px 12px; background: var(--surface-2); border-radius: 8px; min-height: 48px; word-break: break-all; }
+.typed .cur { color: var(--muted); }
+.question { min-height: 1.6em; font-weight: 600; color: var(--accent); }
+
+/* ───────── 2. Zgadnij ───────── */
+.ngrid { display: grid; gap: 2px; margin: 10px 0; max-width: 560px; }
+.nc { aspect-ratio: 1; display: grid; place-items: center; font-size: .72rem; border-radius: 3px; background: var(--accent-soft); color: var(--accent); cursor: pointer; font-variant-numeric: tabular-nums; border: 0; padding: 0; font-family: inherit; }
+.nc.dead { background: var(--surface-2); color: var(--muted); opacity: .35; }
+.nc.win { background: var(--good); color: #fff; font-weight: 700; }
+.nc.pick { outline: 2px solid var(--s2); outline-offset: -2px; }
+.ngrid.tiny .nc { font-size: 0; }
+.hist { margin: 8px 0 0; padding-left: 1.6em; max-height: 220px; overflow-y: auto; font-size: .92rem; }
+.hist li { margin: 2px 0; }
+.ans-yes { color: var(--good); font-weight: 600; }
+.ans-no { color: var(--bad); font-weight: 600; }
+.summary { border-radius: var(--radius); padding: 12px 16px; background: var(--good-soft); border-left: 4px solid var(--good); margin: 12px 0; }
+
+/* ───────── 4. Kawałki ───────── */
+.stage { min-height: 170px; display: grid; place-items: center; text-align: center; background: var(--surface-2); border-radius: var(--radius); padding: 14px; }
+.digits { font-family: var(--mono); font-size: clamp(3rem, 12vw, 5.5rem); font-weight: 700; letter-spacing: .12em; min-height: 1.2em; }
+.entry { font-family: var(--mono); font-size: 1.6rem; letter-spacing: .1em; min-height: 1.6em; word-break: break-all; }
+.pad { display: grid; grid-template-columns: repeat(4, minmax(56px, 1fr)); gap: 8px; max-width: 420px; margin: 12px auto 0; }
+.pad button { font: inherit; font-size: 1.3rem; font-weight: 600; min-height: 56px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+.pad button small { display: block; font-family: var(--mono); font-size: .72rem; color: var(--muted); font-weight: 400; }
+.pad button.wide { grid-column: span 2; }
+.pad button.go { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.codes { display: grid; grid-template-columns: repeat(4, auto); gap: 4px 18px; justify-content: center; font-family: var(--mono); font-size: 1.05rem; margin: 8px 0; }
+.fb-good { color: var(--good); font-weight: 600; font-size: 1.2rem; }
+.fb-bad { color: var(--bad); font-weight: 600; font-size: 1.2rem; }
+
+/* ───────── Panel grupy i wykres ───────── */
+.group { border: 1px solid var(--s1); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; background: var(--surface); }
+.group h3 { display: flex; gap: 8px; align-items: center; }
+.group .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; }
+.chart { position: relative; margin-top: 8px; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart .axis text { fill: var(--muted); font-size: 12px; font-family: var(--font); }
+.chart .gridline { stroke: var(--grid); stroke-width: 1; }
+.chart .marker { stroke: var(--text-2); stroke-width: 1.5; stroke-dasharray: none; }
+.chart .marker-lab { fill: var(--text-2); font-size: 12px; font-family: var(--font); }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .88rem; color: var(--text-2); margin-top: 6px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.tip { position: absolute; pointer-events: none; background: var(--text); color: var(--bg); font-size: .82rem; padding: 6px 9px; border-radius: 6px; white-space: nowrap; transform: translate(-50%, -110%); z-index: 3; }
+.group.big { position: fixed; inset: 0; z-index: 100; margin: 0; border-radius: 0; overflow: auto; padding: 24px 5vw; }
+.group:fullscreen { padding: 24px 5vw; overflow: auto; }
+.group.big .chart, .group:fullscreen .chart { max-width: 1200px; margin: 0 auto; }
+.group.big .chart .axis text, .group:fullscreen .chart .axis text { font-size: 14px; }
+
+footer { border-top: 1px solid var(--border); padding: 18px 0 28px; font-size: .85rem; color: var(--muted); }
+footer a { color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 1</a>
+    <a id="groupBadge" class="badge" href="#ustawienia" hidden></a>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#bauby">1. Mrugnięcie</a>
+    <a href="#zgadnij">2. Zgadnij liczbę</a>
+    <a href="#kompresja">3. Kompresja</a>
+    <a href="#kawalki">4. Bity i kawałki</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Czym jest informatyka? Ćwiczenia</h1>
+  <p class="lead">Cztery krótkie ćwiczenia do wykładu 1. Działają w przeglądarce, także bez internetu. Strona niczego nie wysyła, chyba że prowadzący włączy tryb grupowy.</p>
+  <div class="grid2">
+    <a class="tile" href="#bauby"><span class="num">1</span><h3>Jak napisać książkę, mrugając okiem?</h3><p>Porównaj strategie przekazywania liter jednym mrugnięciem.</p><div class="meta">ok. 5 min · slajd „Jak napisać książkę…”</div></a>
+    <a class="tile" href="#zgadnij"><span class="num">2</span><h3>Zgadnij liczbę</h3><p>Ile pytań tak/nie trzeba, by wskazać jedną ze 100 liczb? Zagraj z komputerem i z przeciwnikiem.</p><div class="meta">ok. 5 min · slajdy „Gra w 20 pytań”, „Mini-zadanie”</div></a>
+    <a class="tile" href="#kompresja"><span class="num">3</span><h3>Ile miejsca zajmuje informacja?</h3><p>Skompresuj milion zer, losowy szum i fragment poematu. Długość zapisu to nie to samo co informacja.</p><div class="meta">ok. 3 min · slajd „Informacja = liczba bajtów?”</div></a>
+    <a class="tile" href="#kawalki"><span class="num">4</span><h3>Bity i kawałki</h3><p>Zmierz, ile cyfr dwójkowych zapamiętasz, a potem spróbuj sztuczki z przekodowaniem.</p><div class="meta">ok. 6 min · slajd „Bity a kawałki” (Miller 1956)</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. BAUBY ═══════════════════ -->
+<section id="v-bauby" hidden>
+  <h2>1. Jak napisać książkę, mrugając okiem?</h2>
+  <p class="lead">Jean-Dominique Bauby po udarze mógł poruszać tylko jedną powieką. Pomocnik czytał mu litery, a on mrugał przy właściwej. Policz, ile <strong>kroków</strong> (odczytanych liter albo zadanych pytań) potrzeba przy różnych strategiach, a potem spróbuj sam.</p>
+
+  <div class="card">
+    <h3>Twoja wiadomość</h3>
+    <div class="row">
+      <input id="bMsg" type="text" value="INFORMATYKA" maxlength="40" aria-label="Wiadomość do przekazania" style="flex:1; min-width: 200px; text-transform: uppercase;">
+      <button class="btn" id="bSim">Policz kroki</button>
+    </div>
+    <p id="bMsgErr" class="err" hidden></p>
+    <p class="small muted">Dozwolone: 32 litery polskiego alfabetu i odstęp (␣). Bez Q, V, X.</p>
+  </div>
+
+  <div class="card" id="bSimCard" hidden>
+    <h3>Ile kroków na całą wiadomość?</h3>
+    <div id="bSimBars" class="hbars"></div>
+    <p class="small muted" id="bSimNote"></p>
+  </div>
+
+  <div class="card">
+    <h3>Zagraj: Ty mrugasz, komputer jest pomocnikiem</h3>
+    <div class="field">
+      <label for="bStrat">Strategia pomocnika</label>
+      <select id="bStrat"></select>
+    </div>
+    <div class="row">
+      <label for="bTempo">Tempo</label>
+      <input id="bTempo" type="range" min="400" max="1600" step="100" value="900" aria-describedby="bTempoV">
+      <span id="bTempoV" class="small muted"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="bStart">Start</button>
+      <button class="btn ghost" id="bStop" disabled>Stop</button>
+    </div>
+    <p class="question" id="bQ" aria-live="polite"></p>
+    <div class="timer" aria-hidden="true"><span id="bTimer"></span></div>
+    <p class="board-info" id="bBoardInfo"></p>
+    <div class="board" id="bBoard" aria-hidden="true"></div>
+    <button class="btn blink" id="bBlink" disabled>Mrugnij <span class="small">(spacja)</span></button>
+    <div class="stats">
+      <div class="stat"><div class="k">Napisane</div><div class="typed" id="bTyped">&nbsp;</div></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="k">Kroki</div><div class="v" id="bSteps">0</div></div>
+      <div class="stat"><div class="k">Pomyłki</div><div class="v" id="bErrs">0</div></div>
+      <div class="stat"><div class="k">Czas</div><div class="v" id="bTime">0 s</div></div>
+    </div>
+    <p class="small muted">W strategiach z pytaniami pomocnik otacza żółtą ramką grupę liter. Mrugnij, jeśli Twoja litera jest w tej ramce. Brak mrugnięcia oznacza „nie”: wtedy zostają litery z ramki przerywanej. Wykluczone litery bledną.</p>
+  </div>
+
+  <details class="card">
+    <summary><strong>Skąd strona zna częstości liter?</strong></summary>
+    <p class="small">Liczy je z poniższego tekstu: domyślnie z początku <em>Pana Tadeusza</em> (A. Mickiewicz, 1834). Możesz wkleić dowolny dłuższy polski tekst; im dłuższy, tym pewniejsze częstości.</p>
+    <textarea id="bCorpus" aria-label="Tekst do policzenia częstości liter"></textarea>
+    <p class="small muted" id="bCorpusInfo"></p>
+    <div id="bFreqTop" class="small"></div>
+  </details>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Która strategia wygrała w symulacji, a która była najwygodniejsza, gdy grałeś sam? Dlaczego to nie musi być to samo?</li>
+      <li>Pytanie „czy Twoja litera jest w tej grupie?” wymaga od mrugającego przejrzenia wielu liter naraz. Jaki koszt pomija liczenie samych kroków?</li>
+      <li>Strategia „grupy według częstości” to zapowiedź wykładu 2. Spróbuj odgadnąć, dlaczego jest najkrótsza.</li>
+    </ol>
+  </div>
+  <p class="src">Źródło przykładu: P. Curzon, P. W. McOwan, <em>The Power of Computational Thinking</em>, World Scientific 2017, rozdz. 2. Tekst domyślny: A. Mickiewicz, <em>Pan Tadeusz</em>, Księga I (domena publiczna).</p>
+</section>
+
+<!-- ═══════════════════ 2. ZGADNIJ ═══════════════════ -->
+<section id="v-zgadnij" hidden>
+  <h2>2. Zgadnij liczbę</h2>
+  <p class="lead">Ukryta jest liczba od 1 do N. Pytasz „Czy x ≤ m?” albo „Czy x = m?”, a odpowiedź brzmi tak lub nie. Każde pytanie wyklucza część możliwości. Gra kończy się, gdy zostanie tylko jedna.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <div class="seg" role="group" aria-label="Tryb gry" id="zMode">
+        <button data-mode="ty" aria-pressed="true">Ty zgadujesz</button>
+        <button data-mode="zlosliwy" aria-pressed="false">Złośliwy przeciwnik</button>
+        <button data-mode="komputer" aria-pressed="false">Komputer zgaduje</button>
+      </div>
+      <div class="row">
+        <label for="zN">N =</label>
+        <select id="zN">
+          <option>8</option><option>16</option><option>32</option><option>50</option>
+          <option selected>100</option><option>128</option><option>500</option><option>1000</option>
+        </select>
+        <button class="btn ghost" id="zNew">Nowa gra</button>
+      </div>
+    </div>
+    <p id="zModeInfo" class="small muted" style="margin-top:8px"></p>
+    <p id="zLockInfo" class="note" hidden>Tryb grupowy: N jest ustawione na 100, żeby wyniki całej grupy dało się porównać.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Zadane pytania</div><div class="v" id="zQ">0</div></div>
+      <div class="stat"><div class="k">Pozostałe możliwości</div><div class="v" id="zLeft">100</div></div>
+      <div class="stat"><div class="k">Niepewność</div><div class="v" id="zBits">6,64 bitu</div></div>
+      <div class="stat"><div class="k">Dzielenie na pół gwarantuje</div><div class="v" id="zOpt">7 pytań</div></div>
+    </div>
+
+    <div id="zAsk">
+      <div class="row">
+        <label for="zM">m =</label>
+        <input id="zM" type="number" inputmode="numeric" min="1" max="100" value="50" style="width: 110px">
+        <button class="btn" id="zLe">Czy x ≤ m?</button>
+        <button class="btn" id="zEq">Czy x = m?</button>
+        <button class="btn ghost small" id="zHint">Podpowiedź: podziel na pół</button>
+      </div>
+      <p id="zAskErr" class="err" hidden></p>
+    </div>
+    <div id="zAnswer" hidden>
+      <p class="question" id="zCompQ"></p>
+      <div class="row">
+        <button class="btn" id="zYes">Tak</button>
+        <button class="btn" id="zNo">Nie</button>
+      </div>
+    </div>
+
+    <div id="zGrid" class="ngrid" aria-label="Pozostałe możliwości"></div>
+    <div id="zSummary" class="summary" hidden aria-live="polite"></div>
+    <details>
+      <summary class="small">Historia pytań</summary>
+      <ol id="zHist" class="hist"></ol>
+    </details>
+  </div>
+
+  <div id="grupa-zgadnij"></div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Zagraj ze złośliwym przeciwnikiem, pytając po kolei „czy x = 1?”, „czy x = 2?”… Ile pytań musisz zadać? A ile przy dzieleniu na pół?</li>
+      <li>Przy losowej liczbie zdarza się wygrać w mniej niż 7 pytaniach. Dlaczego nie przeczy to tezie, że 7 jest najlepszą gwarancją dla N = 100?</li>
+      <li>Porównaj N = 128 i N = 1000 (prawie 8 razy więcej liczb). O ile pytań wzrosła gwarancja? Dlaczego tak mało?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════ 3. KOMPRESJA ═══════════════════ -->
+<section id="v-kompresja" hidden>
+  <h2>3. Ile miejsca zajmuje informacja?</h2>
+  <p class="lead">Kompresja zapisuje te same dane krócej, usuwając powtórzenia i przewidywalność. To, ile miejsca zostaje, mówi coś o tym, ile w danych było naprawdę nowego.</p>
+
+  <div class="card">
+    <h3>Przykłady</h3>
+    <div class="row" id="kPresets"></div>
+    <h3 style="margin-top:16px">Twój tekst</h3>
+    <textarea id="kText" placeholder="Wklej albo wpisz dowolny tekst…" aria-label="Tekst do skompresowania"></textarea>
+    <div class="row" style="margin-top:8px">
+      <button class="btn" id="kGo">Skompresuj mój tekst</button>
+      <button class="btn ghost small" id="kClear">Wyczyść tabelę</button>
+      <span id="kBusy" class="small muted" aria-live="polite"></span>
+    </div>
+    <p id="kUnsupported" class="err" hidden>Ta przeglądarka nie obsługuje kompresji (CompressionStream). Użyj aktualnego Chrome, Edge, Firefoksa lub Safari.</p>
+  </div>
+
+  <div class="card" id="kResCard" hidden>
+    <h3>Wyniki</h3>
+    <div class="scroll-x">
+      <table class="t stack" id="kTable">
+        <thead><tr><th>Dane</th><th class="n">Znaków</th><th class="n">Bajtów</th><th class="n">Po kompresji</th><th style="min-width:160px">Zostaje z oryginału</th><th class="n">Bity na znak</th><th>Dla porównania</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="small muted" id="kMethod"></p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Milion losowych zer i jedynek kompresuje się do ok. 16% oryginału. Teoretyczne minimum to 1/8, czyli 12,5%; żaden kompresor nie zejdzie niżej. Dlaczego akurat 1/8? (Podpowiedź: ile bitów informacji niesie jeden losowy znak 0/1, a ile miejsca zajmuje w pliku?)</li>
+      <li>Ten sam tekst powtórzony 20 razy zajmuje po kompresji niewiele więcej niż jedna kopia. Co to mówi o informacji w kopii?</li>
+      <li>Dlaczego bardzo krótki tekst może się po kompresji wydłużyć?</li>
+    </ol>
+  </div>
+  <p class="src">Kompresja: algorytm Deflate (ten sam co w ZIP, gzip i PNG), wbudowany w przeglądarkę. Rozmiar po kompresji to tylko górne oszacowanie informacji: inny algorytm mógłby zapisać dane krócej. Dokładną miarę, entropię, poznamy na wykładzie 2.</p>
+</section>
+
+<!-- ═══════════════════ 4. KAWAŁKI ═══════════════════ -->
+<section id="v-kawalki" hidden>
+  <h2>4. Bity i kawałki</h2>
+  <p class="lead">Miller (1956): pamięć bezpośrednia mieści ok. 7 <em>kawałków</em>, a nie stałą liczbę bitów. Sprawdź, ile cyfr dwójkowych zapamiętasz, a potem spróbuj zamieniać trójki cyfr na jedną cyfrę ósemkową.</p>
+
+  <div class="card">
+    <div id="kwStage" class="stage" aria-live="polite"></div>
+    <div id="kwPad"></div>
+    <div class="row" style="margin-top:12px">
+      <label class="small"><input type="checkbox" id="kwExact"> Dokładniejszy pomiar (2 próby na każdą długość)</label>
+    </div>
+  </div>
+
+  <div id="grupa-kawalki"></div>
+
+  <div class="note">To <strong>demonstracja</strong>, a nie eksperyment: jedna krótka sesja, różne warunki, brak kontroli. W fazie z przekodowaniem cyfry pojawiają się trójkami, co samo w sobie ułatwia grupowanie.</div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>W eksperymencie S. Smitha 20 osób miało zasięg ok. 9 cyfr dwójkowych i ok. 7 ósemkowych. Po 5–10 minutach nauki przekodowania zasięg wzrósł u wszystkich, ale mniej, niż przewidywano. Jak wypadł Twój wynik i dlaczego krótka nauka może nie wystarczyć?</li>
+      <li>Smith po długim treningu zapamiętywał ok. 12 cyfr ósemkowych, czyli 36 dwójkowych. Ile to bitów informacji? Ile kawałków?</li>
+      <li>Zamiana trójki cyfr dwójkowych na cyfrę ósemkową to system liczbowy z wykładu 3. Gdzie jeszcze w życiu codziennym grupujesz dane, żeby je zapamiętać?</li>
+    </ol>
+  </div>
+  <p class="src">G. A. Miller, <em>The Magical Number Seven, Plus or Minus Two</em>, Psychological Review 63(2), 1956, s. 81–97; eksperyment S. Smitha: s. 93–95.</p>
+</section>
+
+<!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
+<section id="v-ustawienia" hidden>
+  <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
+  <p class="lead">Ćwiczenia 2 i 4 mogą wysyłać anonimowe wyniki do Formularza Google i rysować histogram całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła.</p>
+
+  <div class="card">
+    <h3>Jednorazowe przygotowanie (ok. 10 min)</h3>
+    <ol>
+      <li>Utwórz nowy Formularz Google z <strong>czterema pytaniami typu „Krótka odpowiedź”</strong> o nazwach dokładnie: <code>aplikacja</code>, <code>sesja</code>, <code>wariant</code>, <code>wynik</code>. Żadne nie powinno być wymagane.</li>
+      <li>W <strong>Ustawieniach → Odpowiedzi</strong> wyłącz zbieranie adresów e-mail i <strong>ograniczenie do użytkowników SWPS</strong>. Nie włączaj „Ogranicz do 1 odpowiedzi”. Inaczej wysyłka ze strony nie zadziała.</li>
+      <li>W zakładce <strong>Odpowiedzi</strong> kliknij „Połącz z Arkuszami” i utwórz nowy arkusz.</li>
+      <li>W arkuszu: <strong>Plik → Udostępnij → Opublikuj w internecie</strong>. Wybierz arkusz z odpowiedziami i format <strong>CSV</strong>, opublikuj i skopiuj link.</li>
+      <li>W formularzu: <strong>⋮ → Pobierz link wstępnie wypełniony</strong>. Wpisz w pola kolejno <code>APLIKACJA</code>, <code>SESJA</code>, <code>WARIANT</code>, <code>WYNIK</code>, kliknij „Pobierz link” i skopiuj go.</li>
+      <li>Wklej oba linki poniżej, nadaj nazwę sesji i kliknij „Sprawdź”.</li>
+    </ol>
+    <p class="small muted">Wysyłane są tylko: nazwa ćwiczenia, nazwa sesji, wariant i liczba. Arkusz dodaje znacznik czasu. Opublikowany CSV jest publiczny, więc nie dodawaj do formularza pytań o dane osobowe.</p>
+  </div>
+
+  <div class="card">
+    <h3>Konfiguracja</h3>
+    <div class="field">
+      <label for="sPrefill">Link wstępnie wypełniony z formularza</label>
+      <textarea id="sPrefill" style="min-height:70px" placeholder="https://docs.google.com/forms/d/e/…/viewform?usp=pp_url&amp;entry.…=APLIKACJA&amp;…"></textarea>
+      <span id="sPrefillInfo" class="small"></span>
+    </div>
+    <div class="field">
+      <label for="sCsv">Link do opublikowanego arkusza (CSV)</label>
+      <input id="sCsv" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=…&amp;single=true&amp;output=csv">
+    </div>
+    <div class="field">
+      <label for="sSes">Nazwa sesji</label>
+      <input id="sSes" type="text" maxlength="60" style="max-width: 320px">
+      <span class="small muted">Histogram pokazuje tylko wyniki z tej sesji. Na kolejne zajęcia lub grupę zmień nazwę; formularz zostaje ten sam.</span>
+    </div>
+    <div class="field" id="sBaseWrap">
+      <label for="sBase">Adres strony w sieci (do linku dla studentów)</label>
+      <input id="sBase" type="url" placeholder="https://login.github.io/wdi/w01.html">
+      <span class="small muted" id="sBaseInfo"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="sCheck">Sprawdź</button>
+      <button class="btn ghost" id="sSave">Zapisz w tej przeglądarce</button>
+      <button class="btn ghost" id="sForget">Usuń z tej przeglądarki</button>
+    </div>
+    <div id="sOut" class="small" style="margin-top:10px" aria-live="polite"></div>
+  </div>
+
+  <div class="card" id="sLinksCard" hidden>
+    <h3>Linki dla studentów (tryb grupowy)</h3>
+    <p class="small muted">Te linki włączają wysyłanie wyników i histogram. Pokaż je na slajdzie (najlepiej jako kod QR). Zwykły adres strony, bez parametru <code>cfg</code>, działa bez wysyłania.</p>
+    <div class="field"><label for="sLinkZ">Zgadnij liczbę</label><div class="row"><input id="sLinkZ" type="text" readonly style="flex:1"><button class="btn small" data-copy="sLinkZ">Kopiuj</button></div></div>
+    <div class="field"><label for="sLinkK">Bity i kawałki</label><div class="row"><input id="sLinkK" type="text" readonly style="flex:1"><button class="btn small" data-copy="sLinkK">Kopiuj</button></div></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline. Wysyła dane wyłącznie w trybie grupowym, i to tylko anonimowe wyniki liczbowe.</p>
+    <p><a href="#ustawienia">Dla prowadzącego: wspólne wyniki grupy</a></p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+const fmt = (x, d = 2) => Number(x).toLocaleString('pl-PL', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+const fmtInt = (x) => Number(x).toLocaleString('pl-PL');
+function h(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* brak dostępu */ } },
+};
+function isTyping() {
+  const a = document.activeElement;
+  return a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable);
+}
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) {
+    const t = h('textarea'); t.value = text; document.body.append(t); t.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
+    t.remove(); return ok;
+  }
+}
+
+/* ═════════════════════ Wykres: histogram (SVG) ═════════════════════ */
+const SVGNS = 'http://www.w3.org/2000/svg';
+function s(tag, attrs = {}) { const e = document.createElementNS(SVGNS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); return e; }
+/**
+ * serie: [{nazwa, kolor ('s1'|'s2'), wartosci: number[]}]
+ * opts: {min, max (wartości ≥ max trafiają do ostatniego kubełka), etykietaX, znaczniki: [{x, tekst}]}
+ */
+function histogram(host, serie, opts) {
+  host.__hist = [serie, opts];
+  host.innerHTML = '';
+  const all = serie.flatMap((z) => z.wartosci);
+  if (all.length === 0) { host.append(h('p', { class: 'muted small', text: 'Brak wyników w tej sesji. Czekamy na pierwsze odpowiedzi…' })); return; }
+  const lo = Math.min(opts.min, ...all.map(Math.floor));
+  let hi = Math.max(opts.minMax ?? lo + 1, ...all.map(Math.ceil));
+  const cap = opts.cap ?? Infinity; const tail = hi > cap; if (tail) hi = cap;
+  const bins = []; for (let x = lo; x <= hi; x++) bins.push(x);
+  const counts = serie.map((z) => { const c = new Map(bins.map((b) => [b, 0])); for (const v of z.wartosci) { const b = Math.min(Math.max(Math.round(v), lo), hi); c.set(b, c.get(b) + 1); } return c; });
+  const maxC = Math.max(1, ...counts.flatMap((c) => [...c.values()]));
+  const W = Math.round(Math.max(300, Math.min(1100, host.clientWidth || 720))), H = W < 500 ? 270 : 310, m = { l: 36, r: 10, t: 36, b: 44 };
+  const pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const band = pw / bins.length;
+  const nS = serie.length; const gap = 2;
+  const bw = Math.min(24, (band * 0.72 - gap * (nS - 1)) / nS);
+  const groupW = bw * nS + gap * (nS - 1);
+  const yTicks = niceTicks(maxC);
+  const yMax = yTicks[yTicks.length - 1];
+  const y = (v) => m.t + ph - (v / yMax) * ph;
+  const xC = (i) => m.l + band * i + band / 2;
+  const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': opts.opis || 'Histogram wyników grupy' });
+  const gA = s('g', { class: 'axis' });
+  for (const t of yTicks) {
+    gA.append(s('line', { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: 'gridline' }));
+    const tx = s('text', { x: m.l - 8, y: y(t) + 4, 'text-anchor': 'end' }); tx.textContent = t; gA.append(tx);
+  }
+  const step = Math.ceil(bins.length / Math.max(4, Math.floor(pw / 30)));
+  bins.forEach((b, i) => {
+    if (i % step !== 0 && i !== bins.length - 1) return;
+    const tx = s('text', { x: xC(i), y: H - m.b + 18, 'text-anchor': 'middle' });
+    tx.textContent = (tail && i === bins.length - 1) ? `${b}+` : b; gA.append(tx);
+  });
+  const xl = s('text', { x: m.l + pw / 2, y: H - 6, 'text-anchor': 'middle' }); xl.textContent = opts.etykietaX; gA.append(xl);
+  const yl = s('text', { x: 4, y: 12, 'text-anchor': 'start' }); yl.textContent = 'liczba osób'; gA.append(yl);
+  svg.append(gA);
+  for (const z of (opts.znaczniki || [])) {
+    const i = bins.indexOf(z.x); if (i < 0) continue;
+    const xx = xC(i) + band / 2;
+    svg.append(s('line', { x1: xx, x2: xx, y1: m.t - 14, y2: m.t + ph, class: 'marker' }));
+    const tx = s('text', { x: xx + 5, y: m.t - 6, class: 'marker-lab' }); tx.textContent = z.tekst; svg.append(tx);
+  }
+  const gB = s('g');
+  bins.forEach((b, i) => {
+    counts.forEach((c, k) => {
+      const v = c.get(b); if (!v) return;
+      const x0 = xC(i) - groupW / 2 + k * (bw + gap);
+      const y0 = y(v), y1 = m.t + ph, r = Math.min(4, bw / 2, y1 - y0);
+      const d = `M${x0},${y1} V${y0 + r} Q${x0},${y0} ${x0 + r},${y0} H${x0 + bw - r} Q${x0 + bw},${y0} ${x0 + bw},${y0 + r} V${y1} Z`;
+      gB.append(s('path', { d, fill: `var(--${serie[k].kolor})` }));
+    });
+  });
+  svg.append(gB);
+  // warstwa najechania: cały pas kubełka
+  const tip = h('div', { class: 'tip', hidden: true });
+  bins.forEach((b, i) => {
+    const r = s('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, fill: 'transparent' });
+    const label = (tail && i === bins.length - 1) ? `${b} lub więcej` : `${b}`;
+    const lines = serie.map((z, k) => `${nS > 1 ? z.nazwa + ': ' : ''}${counts[k].get(b)} ${osoby(counts[k].get(b))}`);
+    r.addEventListener('pointerenter', () => {
+      tip.hidden = false; tip.innerHTML = '';
+      tip.append(h('strong', { text: `${opts.etykietaKrotka || ''}${label}` }), ...lines.map((l) => [h('br'), l]).flat());
+      const rect = svg.getBoundingClientRect(); const sc = rect.width / W;
+      tip.style.left = `${(xC(i)) * sc}px`; tip.style.top = `${(m.t + 10) * sc}px`;
+    });
+    r.addEventListener('pointerleave', () => { tip.hidden = true; });
+    svg.append(r);
+  });
+  host.append(svg, tip);
+  if (nS > 1) host.append(h('div', { class: 'legend' }, serie.map((z) => h('span', {}, h('i', { style: `background: var(--${z.kolor})` }), `${z.nazwa} (n = ${z.wartosci.length})`))));
+  // widok tabeli (dostępność)
+  const tb = h('table', { class: 't' }, h('thead', {}, h('tr', {}, h('th', { text: opts.etykietaX }), serie.map((z) => h('th', { class: 'n', text: nS > 1 ? z.nazwa : 'liczba osób' })))),
+    h('tbody', {}, bins.map((b, i) => h('tr', {}, h('td', { text: (tail && i === bins.length - 1) ? `${b}+` : String(b) }), counts.map((c) => h('td', { class: 'n', text: String(c.get(b)) }))))));
+  host.append(h('details', { class: 'small', style: 'margin-top:8px' }, h('summary', { text: 'Tabela' }), h('div', { class: 'scroll-x' }, tb)));
+}
+let resizeT = null;
+window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(() => { for (const c of $$('.chart')) if (c.__hist && c.offsetParent) histogram(c, ...c.__hist); }, 150); });
+document.addEventListener('fullscreenchange', () => setTimeout(() => { for (const c of $$('.chart')) if (c.__hist) histogram(c, ...c.__hist); }, 100));
+function niceTicks(max) {
+  const step = max <= 5 ? 1 : max <= 10 ? 2 : max <= 25 ? 5 : max <= 50 ? 10 : Math.pow(10, Math.floor(Math.log10(max))) / (max / Math.pow(10, Math.floor(Math.log10(max))) < 2.5 ? 2 : 1);
+  const top = Math.ceil(max / step) * step; const t = []; for (let v = 0; v <= top; v += step) t.push(v); return t;
+}
+function plural(n, a, b, c) { n = Math.abs(n); if (n === 1) return a; const d = n % 10, dd = n % 100; return (d >= 2 && d <= 4 && !(dd >= 12 && dd <= 14)) ? b : c; }
+const pl = (n, a, b, c) => `${fmtInt(n)} ${plural(n, a, b, c)}`;
+function osoby(n) { if (n === 1) return 'osoba'; const d = n % 10, dd = n % 100; return (d >= 2 && d <= 4 && !(dd >= 12 && dd <= 14)) ? 'osoby' : 'osób'; }
+function mediana(a) { if (!a.length) return null; const b = [...a].sort((x, y) => x - y); const k = Math.floor(b.length / 2); return b.length % 2 ? b[k] : (b[k - 1] + b[k]) / 2; }
+function hbars(host, items, { max, format, suffix = '' }) {
+  host.innerHTML = '';
+  const mx = max ?? Math.max(1, ...items.map((i) => i.v));
+  for (const it of items) {
+    const pct = Math.max(0.4, (it.v / mx) * 100);
+    const f = pct / 100;
+    const fill = h('div', { class: 'fill', style: `width: calc((100% - 100px) * ${f})` });
+    const val = h('div', { class: 'val', style: `left: calc((100% - 100px) * ${f} + 8px)`, text: (format ? format(it.v) : fmtInt(it.v)) + suffix });
+    host.append(h('div', { class: 'hbar' }, h('div', { class: 'lab' }, it.label, it.sub ? h('div', { class: 'small muted', text: it.sub }) : null), h('div', { class: 'track' }, fill, val)));
+  }
+}
+
+/* ═════════════════════ Tryb grupowy ═════════════════════ */
+const CFG_KEY = 'wdi-w01-grupa';
+function b64e(str) { const b = new TextEncoder().encode(str); let bin = ''; b.forEach((x) => { bin += String.fromCharCode(x); }); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64d(str) { let t = str.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; const bin = atob(t); return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))); }
+function cfgPoprawna(c) {
+  return c && typeof c === 'object' && /^https?:\/\//.test(c.f || '') && /^https?:\/\//.test(c.c || '') &&
+    c.e && ['a', 's', 'w', 'v'].every((k) => /^entry\.\d+$/.test(c.e[k] || '')) && typeof c.s === 'string' && c.s.trim().length > 0 && c.s.length <= 60;
+}
+function parseCSV(text) {
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(f); f = ''; }
+    else if (ch === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (ch !== '\r') f += ch;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x !== ''));
+}
+const Grupa = {
+  cfg: null, zrodlo: null,
+  init() {
+    const p = new URLSearchParams(location.search).get('cfg');
+    if (p) { try { const c = JSON.parse(b64d(p)); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'url'; } } catch (e) { /* zły parametr: tryb samodzielny */ } }
+    if (!this.cfg) { const raw = store.get(CFG_KEY); if (raw) { try { const c = JSON.parse(raw); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'local'; } } catch (e) { /* ignoruj */ } } }
+    this.odznaka();
+  },
+  aktywna() { return !!this.cfg; },
+  odznaka() {
+    const b = $('#groupBadge');
+    if (!this.cfg) { b.hidden = true; return; }
+    b.hidden = false; b.textContent = `Tryb grupowy · ${this.cfg.s}`;
+    b.title = this.zrodlo === 'local' ? 'Konfiguracja zapisana w tej przeglądarce' : 'Konfiguracja z linku';
+  },
+  async wyslij(aplikacja, wariant, wynik, cfg = this.cfg) {
+    const body = new URLSearchParams();
+    body.set(cfg.e.a, aplikacja); body.set(cfg.e.s, cfg.s); body.set(cfg.e.w, wariant); body.set(cfg.e.v, String(wynik));
+    await fetch(cfg.f, { method: 'POST', mode: 'no-cors', body });
+  },
+  async pobierz(cfg = this.cfg) {
+    const r = await fetch(cfg.c, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`serwer odpowiedział kodem ${r.status}`);
+    const rows = parseCSV(await r.text());
+    if (rows.length === 0) return { rows: [], kol: null };
+    const head = rows[0].map((x) => x.trim().toLowerCase());
+    const idx = (n, fb) => { const i = head.indexOf(n); return i >= 0 ? i : fb; };
+    const kol = { a: idx('aplikacja', 1), s: idx('sesja', 2), w: idx('wariant', 3), v: idx('wynik', 4), znalezione: ['aplikacja', 'sesja', 'wariant', 'wynik'].every((n) => head.includes(n)) };
+    const out = rows.slice(1).map((r) => ({ a: (r[kol.a] || '').trim(), s: (r[kol.s] || '').trim(), w: (r[kol.w] || '').trim(), v: Number(String(r[kol.v] || '').replace(',', '.').trim()) }));
+    return { rows: out, kol };
+  },
+};
+
+/** Panel wyników grupy w danym ćwiczeniu. */
+function panelGrupy(host, { aplikacja, tytul, rysuj }) {
+  if (!Grupa.aktywna()) return null;
+  let payload = null, timer = null, aktywny = false;
+  const status = h('span', { class: 'small muted', 'aria-live': 'polite' });
+  const send = h('button', { class: 'btn', disabled: true, text: 'Wyślij mój wynik do grupy' });
+  const meta = h('p', { class: 'small muted' });
+  const chart = h('div', { class: 'chart' });
+  const stats = h('p', { class: 'small' });
+  const refresh = h('button', { class: 'btn ghost small', text: 'Odśwież' });
+  const big = h('button', { class: 'btn ghost small', text: 'Na cały ekran' });
+  const box = h('div', { class: 'group' },
+    h('h3', {}, h('span', { class: 'dot' }), `${tytul} · sesja „${Grupa.cfg.s}”`),
+    h('div', { class: 'row' }, send, status),
+    stats, chart,
+    h('div', { class: 'row' }, refresh, big, meta));
+  host.append(box);
+
+  send.addEventListener('click', async () => {
+    if (!payload) return;
+    send.disabled = true; status.textContent = 'Wysyłanie…';
+    try {
+      for (const p of payload) await Grupa.wyslij(aplikacja, p.wariant, p.wynik);
+      status.textContent = 'Wysłano. Wynik pojawi się na wykresie po odświeżeniu arkusza (zwykle w ciągu kilku minut).';
+      payload = null;
+      setTimeout(odswiez, 4000);
+    } catch (e) {
+      status.textContent = 'Nie udało się wysłać (brak internetu?). Spróbuj ponownie.'; send.disabled = false;
+    }
+  });
+  async function odswiez() {
+    meta.textContent = 'Pobieranie…';
+    try {
+      const { rows } = await Grupa.pobierz();
+      const moje = rows.filter((r) => r.a === aplikacja && r.s === Grupa.cfg.s && Number.isFinite(r.v));
+      rysuj(chart, stats, moje);
+      meta.textContent = `Aktualizacja: ${new Date().toLocaleTimeString('pl-PL')}. Opublikowany arkusz odświeża się z opóźnieniem do kilku minut.`;
+    } catch (e) {
+      meta.textContent = `Wyniki grupy są chwilowo niedostępne (${e.message || 'błąd sieci'}). Twój wynik jest widoczny powyżej.`;
+    }
+  }
+  refresh.addEventListener('click', odswiez);
+  big.addEventListener('click', async () => {
+    if (box.classList.contains('big')) { box.classList.remove('big'); big.textContent = 'Na cały ekran'; if (chart.__hist) histogram(chart, ...chart.__hist); return; }
+    if (document.fullscreenElement) { await document.exitFullscreen(); return; }
+    if (box.requestFullscreen) { try { await box.requestFullscreen(); return; } catch (e) { /* zapasowo nakładka */ } }
+    box.classList.add('big'); big.textContent = 'Zamknij'; if (chart.__hist) histogram(chart, ...chart.__hist);
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && box.classList.contains('big')) { box.classList.remove('big'); big.textContent = 'Na cały ekran'; if (chart.__hist) histogram(chart, ...chart.__hist); } });
+  return {
+    gotowe(p) { payload = p; send.disabled = !p; if (p) status.textContent = ''; },
+    start() { aktywny = true; odswiez(); clearInterval(timer); timer = setInterval(() => { if (aktywny && !document.hidden) odswiez(); }, 20000); },
+    stop() { aktywny = false; clearInterval(timer); },
+  };
+}
+
+/* ═════════════════════ 1. BAUBY ═════════════════════ */
+const ALFABET = 'A Ą B C Ć D E Ę F G H I J K L Ł M N Ń O Ó P R S Ś T U W Y Z Ź Ż'.split(' ').concat(['␣']);
+const TEKST = `Litwo! Ojczyzno moja! ty jesteś jak zdrowie.
+Ile cię trzeba cenić, ten tylko się dowie,
+Kto cię stracił. Dziś piękność twą w całej ozdobie
+Widzę i opisuję, bo tęsknię po tobie.
+Panno Święta, co Jasnej bronisz Częstochowy
+I w Ostrej świecisz Bramie! Ty, co gród zamkowy
+Nowogródzki ochraniasz z jego wiernym ludem!
+Jak mnie dziecko do zdrowia powróciłaś cudem
+(Gdy od płaczącej matki pod Twoją opiekę
+Ofiarowany, martwą podniosłem powiekę
+I zaraz mogłem pieszo do Twych świątyń progu
+Iść za wrócone życie podziękować Bogu),
+Tak nas powrócisz cudem na Ojczyzny łono.
+Tymczasem przenoś moją duszę utęsknioną
+Do tych pagórków leśnych, do łąk zielonych,
+Szeroko nad błękitnym Niemnem rozciągnionych;
+Do tych pól malowanych zbożem rozmaitem,
+Wyzłacanych pszenicą, posrebrzanych żytem;
+Gdzie bursztynowy świerzop, gryka jak śnieg biała,
+Gdzie panieńskim rumieńcem dzięcielina pała,
+A wszystko przepasane jakby wstęgą, miedzą
+Zieloną, na niej z rzadka ciche grusze siedzą.`;
+const STRATEGIE = [
+  { id: 'alfa', nazwa: 'Po kolei, alfabetycznie', typ: 'kolejno' },
+  { id: 'czest', nazwa: 'Po kolei, od najczęstszych liter', typ: 'kolejno' },
+  { id: 'pol', nazwa: 'Pytania „czy w tej połowie alfabetu?”', typ: 'drzewo' },
+  { id: 'polcz', nazwa: 'Pytania o grupy dobrane według częstości', typ: 'drzewo', sub: 'zapowiedź wykładu 2' },
+];
+const Bauby = (() => {
+  let freq = {}, plany = {}, gra = null;
+  function normalizuj(t) { return t.toLocaleUpperCase('pl-PL').replace(/\s+/g, ' ').trim(); }
+  function symbole(t) { return [...normalizuj(t)].map((c) => (c === ' ' ? '␣' : c)); }
+  function policz(tekst) {
+    const c = Object.fromEntries(ALFABET.map((a) => [a, 0]));
+    for (const ch of symbole(tekst)) if (ch in c) c[ch]++;
+    return c;
+  }
+  function drzewo(items, waga, tryb) {
+    if (items.length === 1) return { items };
+    let k;
+    if (tryb === 'polowa') k = Math.ceil(items.length / 2);
+    else {
+      const tot = items.reduce((a, x) => a + waga[x], 0); let acc = 0, best = Infinity; k = 1;
+      for (let i = 1; i < items.length; i++) { acc += waga[items[i - 1]]; const d = Math.abs(2 * acc - tot); if (d < best) { best = d; k = i; } }
+    }
+    return { items, lewy: drzewo(items.slice(0, k), waga, tryb), prawy: drzewo(items.slice(k), waga, tryb) };
+  }
+  function glebokosc(node, sym, d = 0) { if (!node.lewy) return d; return node.lewy.items.includes(sym) ? glebokosc(node.lewy, sym, d + 1) : glebokosc(node.prawy, sym, d + 1); }
+  function przygotuj() {
+    freq = policz($('#bCorpus').value);
+    const total = Object.values(freq).reduce((a, b) => a + b, 0);
+    const waga = Object.fromEntries(ALFABET.map((a) => [a, freq[a] + 0.5]));
+    const wgCzest = [...ALFABET].sort((a, b) => freq[b] - freq[a] || ALFABET.indexOf(a) - ALFABET.indexOf(b));
+    // plansza ułożona w kolejności, w której pracuje pomocnik; grupy w drzewie są wtedy zawsze spójnymi fragmentami planszy
+    plany = {
+      alfa: { kolejnosc: ALFABET, plansza: ALFABET },
+      czest: { kolejnosc: wgCzest, plansza: wgCzest },
+      pol: { korzen: drzewo(ALFABET, waga, 'polowa'), plansza: ALFABET },
+      polcz: { korzen: drzewo(wgCzest, waga, 'czestosc'), plansza: wgCzest },
+    };
+    $('#bCorpusInfo').textContent = `Policzono ${fmtInt(total)} symboli (litery i odstępy).`;
+    $('#bFreqTop').textContent = 'Najczęstsze: ' + wgCzest.slice(0, 10).map((a) => `${a} ${fmt(100 * freq[a] / Math.max(1, total), 1)}%`).join(' · ');
+  }
+  function kroki(strat, sym) {
+    const p = plany[strat.id];
+    return strat.typ === 'kolejno' ? p.kolejnosc.indexOf(sym) + 1 : glebokosc(p.korzen, sym);
+  }
+  function wiadomosc() {
+    const raw = $('#bMsg').value; const syms = symbole(raw);
+    const zle = [...new Set(syms.filter((c) => !ALFABET.includes(c)))];
+    const err = $('#bMsgErr');
+    if (syms.length === 0) { err.hidden = false; err.textContent = 'Wpisz wiadomość.'; return null; }
+    if (zle.length) { err.hidden = false; err.textContent = `Znaki spoza alfabetu: ${zle.join(' ')}`; return null; }
+    err.hidden = true; return syms;
+  }
+  function symuluj() {
+    const syms = wiadomosc(); if (!syms) return;
+    przygotuj();
+    const wyn = STRATEGIE.map((st) => ({ label: st.nazwa, sub: st.sub, v: syms.reduce((a, c) => a + kroki(st, c), 0) }));
+    hbars($('#bSimBars'), wyn, { format: (v) => pl(v, 'krok', 'kroki', 'kroków') });
+    $('#bSimCard').hidden = false;
+    const best = wyn.reduce((a, b) => (b.v < a.v ? b : a));
+    $('#bSimNote').textContent = `Wiadomość ma ${pl(syms.length, 'symbol', 'symbole', 'symboli')}. Najmniej kroków: „${best.label}” (średnio ${fmt(best.v / syms.length, 2)} na symbol). Symulacja zakłada brak pomyłek.`;
+  }
+  // ───── plansza i gra ─────
+  const OPIS_PLANSZY = {
+    alfa: 'Plansza w kolejności alfabetycznej, tak jak czyta pomocnik.',
+    czest: 'Plansza w kolejności od najczęstszej litery, tak jak czyta pomocnik.',
+    pol: 'Plansza alfabetyczna. Pomocnik pyta o połowę pozostałych liter: o tę w żółtej ramce.',
+    polcz: 'Plansza od najczęstszej litery. Pomocnik pyta o grupę w żółtej ramce; grupy są dobrane tak, żeby „tak” i „nie” były mniej więcej równie prawdopodobne.',
+  };
+  /** Rysuje planszę. hl: podświetlone litery; wezel: bieżące pytanie (dwie ramki); zla: błędnie wybrana litera. */
+  function rysuj({ hl = [], wezel = null, zla = null } = {}) {
+    const id = gra ? gra.strat.id : $('#bStrat').value;
+    const kol = (gra ? gra.plan : plany[id]).plansza;
+    const b = $('#bBoard'); b.innerHTML = '';
+    const cell = (a, cls = '') => h('div', { class: `cell ${cls}`.trim(), 'data-s': a, text: a });
+    if (!wezel) {
+      for (const a of kol) b.append(cell(a, a === zla ? 'bad' : hl.includes(a) ? 'hl' : ''));
+    } else {
+      const L = wezel.lewy.items, R = wezel.prawy.items;
+      const i0 = kol.indexOf(wezel.items[0]), i1 = i0 + wezel.items.length;
+      for (const a of kol.slice(0, i0)) b.append(cell(a, 'out'));
+      b.append(h('div', { class: 'grp tak', 'data-label': L.length === 1 ? 'Ta litera? Mrugnij' : `Tutaj (${pl(L.length, 'litera', 'litery', 'liter')})? Mrugnij` }, L.map((a) => cell(a, 'hl'))));
+      b.append(h('div', { class: 'grp nie', 'data-label': 'Jeśli nie mrugniesz: tutaj' }, R.map((a) => cell(a))));
+      for (const a of kol.slice(i1)) b.append(cell(a, 'out'));
+    }
+    $('#bBoardInfo').textContent = OPIS_PLANSZY[id];
+  }
+  function tempo() { return Number($('#bTempo').value); }
+  function odliczaj(ms) { const t = $('#bTimer'); t.style.animation = 'none'; void t.offsetWidth; t.style.animation = ms ? `ubywa ${ms}ms linear forwards` : 'none'; }
+  function pokazStan() {
+    if (!gra) return;
+    const typed = $('#bTyped'); typed.innerHTML = '';
+    typed.append(gra.cel.slice(0, gra.poz).join('').replace(/␣/g, ' ') || ' ');
+    if (gra.poz < gra.cel.length) typed.append(h('span', { class: 'cur', text: gra.cel.slice(gra.poz).join('').replace(/␣/g, '·') }));
+    $('#bSteps').textContent = gra.kroki; $('#bErrs').textContent = gra.bledy;
+    $('#bTime').textContent = `${fmt((performance.now() - gra.t0) / 1000, 1)} s`;
+  }
+  function start() {
+    const syms = wiadomosc(); if (!syms) return;
+    przygotuj(); stop();
+    const strat = STRATEGIE.find((x) => x.id === $('#bStrat').value);
+    gra = { strat, plan: plany[strat.id], cel: syms, poz: 0, kroki: 0, bledy: 0, t0: performance.now(), timer: null, i: 0, wezel: null, czeka: false };
+    $('#bStart').disabled = true; $('#bStop').disabled = false; $('#bBlink').disabled = false;
+    nowaLitera();
+  }
+  function stop(koniec = false) {
+    if (gra) clearTimeout(gra.timer);
+    $('#bStart').disabled = false; $('#bStop').disabled = true; $('#bBlink').disabled = true;
+    odliczaj(0);
+    if (!koniec) { gra = null; rysuj(); $('#bQ').textContent = ''; }
+    if (gra && !koniec) gra = null;
+  }
+  function nowaLitera() {
+    if (gra.poz >= gra.cel.length) {
+      pokazStan(); clearTimeout(gra.timer);
+      $('#bQ').textContent = `Gotowe! ${pl(gra.kroki, 'krok', 'kroki', 'kroków')}, ${pl(gra.bledy, 'pomyłka', 'pomyłki', 'pomyłek')}.`;
+      stop(true); gra = null; rysuj(); return;
+    }
+    gra.i = 0; gra.wezel = gra.plan.korzen;
+    if (gra.strat.typ === 'kolejno') pokazLitere(); else zadajPytanie();
+  }
+  function pokazLitere() {
+    const lit = gra.plan.kolejnosc[gra.i];
+    gra.kroki++; rysuj({ hl: [lit] });
+    $('#bQ').textContent = `Pomocnik czyta: „${lit === '␣' ? 'odstęp' : lit}”…`;
+    pokazStan();
+    odliczaj(tempo());
+    gra.timer = setTimeout(() => { gra.i = (gra.i + 1) % gra.plan.kolejnosc.length; pokazLitere(); }, tempo());
+  }
+  function zadajPytanie() {
+    const w = gra.wezel; gra.kroki++;
+    rysuj({ wezel: w });
+    $('#bQ').textContent = `Pytanie: czy Twoja litera jest w żółtej ramce?`;
+    pokazStan();
+    const okno = Math.max(1200, tempo() * 2); odliczaj(okno);
+    gra.timer = setTimeout(() => odpowiedzDrzewo(false), okno);
+  }
+  function odpowiedzDrzewo(tak) {
+    clearTimeout(gra.timer);
+    gra.wezel = tak ? gra.wezel.lewy : gra.wezel.prawy;
+    if (gra.wezel.items.length === 1) rozstrzygnij(gra.wezel.items[0]); else zadajPytanie();
+  }
+  function rozstrzygnij(lit) {
+    clearTimeout(gra.timer); odliczaj(0);
+    const cel = gra.cel[gra.poz];
+    if (lit === cel) { gra.poz++; rysuj({ hl: [lit] }); $('#bQ').textContent = `Zapisano „${lit === '␣' ? 'odstęp' : lit}”.`; }
+    else {
+      gra.bledy++; rysuj({ zla: lit });
+      $('#bQ').textContent = `To „${lit === '␣' ? 'odstęp' : lit}”, a nie „${cel === '␣' ? 'odstęp' : cel}”. Pomocnik zaczyna od nowa.`;
+    }
+    pokazStan();
+    gra.timer = setTimeout(nowaLitera, 900);
+  }
+  function mrugnij() {
+    if (!gra || $('#bBlink').disabled) return;
+    if (gra.strat.typ === 'kolejno') { clearTimeout(gra.timer); rozstrzygnij(gra.plan.kolejnosc[gra.i]); }
+    else if (gra.wezel && gra.wezel.lewy) odpowiedzDrzewo(true);
+  }
+  function init() {
+    $('#bCorpus').value = TEKST;
+    for (const st of STRATEGIE) $('#bStrat').append(h('option', { value: st.id, text: st.nazwa }));
+    przygotuj(); rysuj();
+    $('#bStrat').addEventListener('change', () => { if (!gra) rysuj(); });
+    const tv = () => { $('#bTempoV').textContent = `${fmt(tempo() / 1000, 1)} s na literę`; }; tv();
+    $('#bTempo').addEventListener('input', tv);
+    $('#bSim').addEventListener('click', symuluj);
+    $('#bMsg').addEventListener('keydown', (e) => { if (e.key === 'Enter') symuluj(); });
+    $('#bCorpus').addEventListener('input', () => { przygotuj(); if (!gra) rysuj(); if (!$('#bSimCard').hidden) symuluj(); });
+    $('#bStart').addEventListener('click', start);
+    $('#bStop').addEventListener('click', () => stop());
+    $('#bBlink').addEventListener('click', mrugnij);
+    document.addEventListener('keydown', (e) => {
+      if (e.code !== 'Space' || $('#v-bauby').hidden || isTyping()) return;
+      if (document.activeElement && document.activeElement.tagName === 'BUTTON') return; // przycisk sam obsłuży spację
+      e.preventDefault(); mrugnij();
+    });
+    symuluj();
+  }
+  return { init, wyjscie: () => stop() };
+})();
+
+/* ═════════════════════ 2. ZGADNIJ LICZBĘ ═════════════════════ */
+const Zgadnij = (() => {
+  let N = 100, tryb = 'ty', zywe = null, sekret = 0, pytania = [], koniec = false, panel = null, pytanieKomp = null;
+  const opt = () => Math.ceil(Math.log2(N));
+  const ileZywych = () => { let c = 0; for (let i = 1; i <= N; i++) c += zywe[i]; return c; };
+  const pierwszyZywy = () => { for (let i = 1; i <= N; i++) if (zywe[i]) return i; return null; };
+  function polowa() { // m takie, że ≈ połowa żywych jest ≤ m
+    const c = ileZywych(); const cel = Math.ceil(c / 2); let acc = 0;
+    for (let i = 1; i <= N; i++) { acc += zywe[i]; if (acc >= cel) return i; } return N;
+  }
+  const INFO = {
+    ty: 'Komputer wylosował liczbę. Zadawaj pytania i obserwuj, jak znikają możliwości.',
+    zlosliwy: 'Przeciwnik nie wybrał liczby. Na każde pytanie odpowiada tak, by zostało jak najwięcej możliwości, ale nigdy nie przeczy wcześniejszym odpowiedziom.',
+    komputer: 'Pomyśl o liczbie od 1 do N. Komputer zadaje pytania, a Ty odpowiadasz zgodnie z prawdą.',
+  };
+  function nowa() {
+    if (Grupa.aktywna()) { N = 100; $('#zN').value = '100'; }
+    else N = Number($('#zN').value);
+    zywe = new Uint8Array(N + 1).fill(1); zywe[0] = 0;
+    sekret = 1 + Math.floor(Math.random() * N);
+    pytania = []; koniec = false;
+    $('#zM').max = N; $('#zM').value = Math.ceil(N / 2);
+    $('#zHist').innerHTML = ''; $('#zSummary').hidden = true; $('#zAskErr').hidden = true;
+    $('#zModeInfo').textContent = INFO[tryb];
+    $('#zAsk').hidden = tryb === 'komputer'; $('#zAnswer').hidden = tryb !== 'komputer';
+    budujSiatke(); odswiez();
+    if (panel) panel.gotowe(null);
+    if (tryb === 'komputer') pytajKomputer();
+  }
+  function budujSiatke() {
+    const g = $('#zGrid'); g.innerHTML = '';
+    const cols = N <= 16 ? N : N <= 100 ? 10 : N <= 200 ? 16 : N <= 500 ? 25 : 40;
+    g.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    g.classList.toggle('tiny', N > 200);
+    g.style.maxWidth = N <= 16 ? `${N * 52}px` : '';
+    for (let i = 1; i <= N; i++) g.append(h('button', { class: 'nc', 'data-n': i, title: String(i), 'aria-label': `liczba ${i}`, text: String(i), tabindex: N > 200 ? '-1' : null }));
+  }
+  function odswiez() {
+    const c = ileZywych();
+    $('#zQ').textContent = pytania.length; $('#zLeft').textContent = fmtInt(c);
+    const bity = Math.log2(Math.max(1, c));
+    $('#zBits').textContent = Number.isInteger(bity) ? pl(bity, 'bit', 'bity', 'bitów') : `${fmt(bity, 2)} bitu`;
+    $('#zOpt').textContent = pl(opt(), 'pytanie', 'pytania', 'pytań');
+    const m = Number($('#zM').value);
+    for (const b of $$('#zGrid .nc')) {
+      const n = Number(b.dataset.n);
+      b.classList.toggle('dead', !zywe[n]);
+      b.classList.toggle('win', koniec && zywe[n] === 1);
+      b.classList.toggle('pick', !koniec && n === m && tryb !== 'komputer');
+    }
+    for (const b of $$('#zAsk button')) b.disabled = koniec;
+  }
+  function odpowiedz(typ, m) {
+    if (tryb === 'ty') return typ === 'le' ? sekret <= m : sekret === m;
+    // złośliwy: zostaw większą część
+    let a = 0, b = 0;
+    for (let i = 1; i <= N; i++) { if (!zywe[i]) continue; const tak = typ === 'le' ? i <= m : i === m; if (tak) a++; else b++; }
+    if (a === 0) return false; if (b === 0) return true;
+    return a > b;
+  }
+  function zastosuj(typ, m, tak) {
+    for (let i = 1; i <= N; i++) { if (!zywe[i]) continue; const pas = typ === 'le' ? i <= m : i === m; if (pas !== tak) zywe[i] = 0; }
+  }
+  function zapisz(kto, typ, m, tak) {
+    pytania.push({ typ, m, tak });
+    $('#zHist').append(h('li', {}, `${kto}: czy x ${typ === 'le' ? '≤' : '='} ${m}? `, h('span', { class: tak ? 'ans-yes' : 'ans-no', text: tak ? 'Tak' : 'Nie' }), h('span', { class: 'muted', text: ` → zostaje ${fmtInt(ileZywych())}` })));
+  }
+  function pytaj(typ) {
+    if (koniec) return;
+    const m = Number($('#zM').value); const err = $('#zAskErr');
+    if (!Number.isInteger(m) || m < 1 || m > N) { err.hidden = false; err.textContent = `Podaj liczbę całkowitą od 1 do ${N}.`; return; }
+    err.hidden = true;
+    const tak = odpowiedz(typ, m); zastosuj(typ, m, tak); zapisz('Ty', typ, m, tak);
+    sprawdzKoniec(); odswiez();
+  }
+  function pytajKomputer() {
+    if (ileZywych() <= 1) { sprawdzKoniec(); odswiez(); return; }
+    const m = polowa(); pytanieKomp = m;
+    $('#zCompQ').textContent = `Pytanie ${pytania.length + 1}: czy Twoja liczba jest ≤ ${m}?`;
+  }
+  function odpKomputerowi(tak) {
+    if (koniec || pytanieKomp == null) return;
+    zastosuj('le', pytanieKomp, tak); zapisz('Komputer', 'le', pytanieKomp, tak);
+    pytanieKomp = null; sprawdzKoniec(); odswiez(); if (!koniec) pytajKomputer();
+  }
+  function sprawdzKoniec() {
+    if (ileZywych() !== 1) return;
+    koniec = true; const x = pierwszyZywy(); const q = pytania.length; const sm = $('#zSummary'); sm.hidden = false;
+    $('#zAnswer').hidden = true;
+    const sup = (n) => String(n).replace(/\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
+    const gw = `Dzielenie na pół gwarantuje ${pl(opt(), 'pytanie', 'pytania', 'pytań')} dla N = ${fmtInt(N)}, bo 2${sup(opt())} = ${fmtInt(2 ** opt())} ≥ ${fmtInt(N)}${opt() > 1 ? `, a 2${sup(opt() - 1)} = ${fmtInt(2 ** (opt() - 1))} to za mało` : ''}.`;
+    if (tryb === 'ty') sm.textContent = `Ukryta liczba to ${x}. Zadałeś ${pl(q, 'pytanie', 'pytania', 'pytań')}. ${gw}${q < opt() ? ' Tym razem miałeś szczęście, ale nie da się tego zagwarantować.' : ''}`;
+    else if (tryb === 'zlosliwy') sm.textContent = `Została tylko liczba ${x}. Zadałeś ${pl(q, 'pytanie', 'pytania', 'pytań')}. Przeciwnik do końca nie miał ustalonej liczby, więc szczęście nie pomogło. ${gw} Żadna strategia nie gwarantuje mniej.`;
+    else sm.textContent = `Twoja liczba to ${x}. Komputer zadał ${pl(q, 'pytanie', 'pytania', 'pytań')}. ${gw}`;
+    if (panel && tryb === 'ty' && N === 100) panel.gotowe([{ wariant: 'N100', wynik: q }]);
+  }
+  function rysuj(chart, stats, rows) {
+    const v = rows.filter((r) => r.w === 'N100').map((r) => r.v);
+    const med = mediana(v); const do7 = v.filter((x) => x <= 7).length;
+    stats.textContent = v.length ? `Wyników: ${v.length} · mediana: ${fmt(med, 1)} · co najwyżej 7 pytań: ${fmt(100 * do7 / v.length, 0)}%` : '';
+    histogram(chart, [{ nazwa: 'liczba pytań', kolor: 's1', wartosci: v }], { min: 1, minMax: 12, cap: 25, etykietaX: 'liczba zadanych pytań', etykietaKrotka: 'Pytań: ', znaczniki: [{ x: 7, tekst: 'gwarancja: 7' }], opis: 'Histogram liczby pytań w grupie' });
+  }
+  function init() {
+    for (const b of $$('#zMode button')) b.addEventListener('click', () => {
+      tryb = b.dataset.mode; $$('#zMode button').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false')); nowa();
+    });
+    $('#zN').addEventListener('change', nowa);
+    $('#zNew').addEventListener('click', nowa);
+    $('#zLe').addEventListener('click', () => pytaj('le'));
+    $('#zEq').addEventListener('click', () => pytaj('eq'));
+    $('#zHint').addEventListener('click', () => { $('#zM').value = polowa(); odswiez(); });
+    $('#zM').addEventListener('input', odswiez);
+    $('#zM').addEventListener('keydown', (e) => { if (e.key === 'Enter') pytaj('le'); });
+    $('#zYes').addEventListener('click', () => odpKomputerowi(true));
+    $('#zNo').addEventListener('click', () => odpKomputerowi(false));
+    $('#zGrid').addEventListener('click', (e) => { const b = e.target.closest('.nc'); if (!b || tryb === 'komputer' || koniec) return; $('#zM').value = b.dataset.n; odswiez(); });
+    if (Grupa.aktywna()) { $('#zN').disabled = true; $('#zLockInfo').hidden = false; }
+    panel = panelGrupy($('#grupa-zgadnij'), { aplikacja: 'zgadnij', tytul: 'Ile pytań zadała grupa? (tryb „Ty zgadujesz”, N = 100)', rysuj });
+    nowa();
+  }
+  return { init, wejscie: () => panel && panel.start(), wyjscie: () => panel && panel.stop() };
+})();
+
+/* ═════════════════════ 3. KOMPRESJA ═════════════════════ */
+const Kompresja = (() => {
+  let metoda = null;
+  const enc = new TextEncoder();
+  function wykryj() {
+    if (typeof CompressionStream === 'undefined') return null;
+    for (const m of ['deflate-raw', 'gzip']) { try { new CompressionStream(m); return m; } catch (e) { /* kolejna */ } }
+    return null;
+  }
+  async function rozmiar(bytes) {
+    const stream = new Blob([bytes]).stream().pipeThrough(new CompressionStream(metoda));
+    return (await new Response(stream).arrayBuffer()).byteLength;
+  }
+  function losowe(n, alfabet) {
+    const out = new Uint8Array(n); const buf = new Uint8Array(65536); const k = alfabet.length;
+    const lim = 256 - (256 % k);
+    let i = 0;
+    while (i < n) { crypto.getRandomValues(buf); for (let j = 0; j < buf.length && i < n; j++) if (buf[j] < lim) out[i++] = alfabet.charCodeAt(buf[j] % k); }
+    return out;
+  }
+  const PRESETY = [
+    { nazwa: 'Milion zer', gen: () => new Uint8Array(1e6).fill(48), znaki: 1e6, por: 'jedna informacja: „milion zer”' },
+    { nazwa: 'Milion losowych 0/1', gen: () => losowe(1e6, '01'), znaki: 1e6, por: () => `1 bit/znak → min. ok. ${fmtInt(1e6 / 8)} B` },
+    { nazwa: '100 000 losowych liter a–z', gen: () => losowe(1e5, 'abcdefghijklmnopqrstuvwxyz'), znaki: 1e5, por: () => `log₂ 26 ≈ ${fmt(Math.log2(26), 2)} bit/znak → min. ok. ${fmtInt(Math.round(1e5 * Math.log2(26) / 8))} B` },
+    { nazwa: 'Pan Tadeusz (początek)', gen: () => enc.encode(TEKST), znaki: [...TEKST].length, por: '' },
+    { nazwa: 'Ten sam tekst × 20', gen: () => enc.encode(Array(20).fill(TEKST).join('\n')), znaki: [...TEKST].length * 20 + 19, por: '' },
+    { nazwa: 'ABRAKADABRA', gen: () => enc.encode('ABRAKADABRA'), znaki: 11, por: 'bardzo krótki tekst' },
+  ];
+  async function dodaj(nazwa, bytes, znaki, por) {
+    if (!metoda) return;
+    $('#kBusy').textContent = 'Liczę…';
+    await sleep(10);
+    const c = await rozmiar(bytes);
+    $('#kBusy').textContent = '';
+    const pct = 100 * c / Math.max(1, bytes.length);
+    const f = Math.min(100, pct) / 100;
+    const fill = h('div', { class: 'fill', style: `width: calc((100% - 64px) * ${f})` });
+    const val = h('div', { class: 'val', style: `left: calc((100% - 64px) * ${f} + 6px)`, text: `${fmt(pct, pct < 1 ? 2 : 1)}%` });
+    $('#kTable tbody').append(h('tr', {},
+      h('td', { text: nazwa }), h('td', { class: 'n', 'data-l': 'Znaków', text: fmtInt(znaki) }), h('td', { class: 'n', 'data-l': 'Bajtów', text: fmtInt(bytes.length) }), h('td', { class: 'n', 'data-l': 'Po kompresji', text: fmtInt(c) }),
+      h('td', { 'data-l': 'Zostaje' }, h('div', { class: 'hbar', style: 'grid-template-columns: 1fr' }, h('div', { class: 'track' }, fill, val))),
+      h('td', { class: 'n', 'data-l': 'Bity na znak', text: fmt(8 * c / Math.max(1, znaki), 3) }), h('td', { class: 'small muted', 'data-l': 'Dla porównania', text: (typeof por === 'function' ? por() : por) || '' })));
+    $('#kResCard').hidden = false;
+  }
+  function init() {
+    metoda = wykryj();
+    if (!metoda) { $('#kUnsupported').hidden = false; $('#kGo').disabled = true; }
+    $('#kMethod').textContent = metoda ? `Metoda: Deflate${metoda === 'gzip' ? ' w formacie gzip (dodaje ok. 18 B nagłówka)' : ' bez nagłówka'}. „Bity na znak” = 8 × bajty po kompresji / liczba znaków.` : '';
+    for (const p of PRESETY) $('#kPresets').append(h('button', { class: 'btn ghost small', text: p.nazwa, disabled: !metoda, onclick: () => dodaj(p.nazwa, p.gen(), p.znaki, p.por) }));
+    $('#kGo').addEventListener('click', () => {
+      const t = $('#kText').value; if (!t) { $('#kText').focus(); return; }
+      const nm = t.length > 24 ? `„${t.slice(0, 24).replace(/\s+/g, ' ')}…”` : `„${t}”`;
+      dodaj(`Twój tekst: ${nm}`, enc.encode(t), [...t].length, '');
+    });
+    $('#kClear').addEventListener('click', () => { $('#kTable tbody').innerHTML = ''; $('#kResCard').hidden = true; });
+  }
+  return { init };
+})();
+
+/* ═════════════════════ 4. BITY I KAWAŁKI ═════════════════════ */
+const Kawalki = (() => {
+  const T_CYFRA = 600, T_PRZERWA = 200; // 0,8 s na cyfrę w obu fazach
+  let gen = 0, biegnie = false, przerwano = false, wynikA = null, wynikB = null, panel = null, wejscie = null;
+  const zyje = (g) => { if (g !== gen) throw new Error('stop'); };
+  const stage = () => $('#kwStage'); const pad = () => $('#kwPad');
+  const OCT = ['000', '001', '010', '011', '100', '101', '110', '111'];
+  function los(n) { const b = new Uint8Array(n); crypto.getRandomValues(b); return [...b].map((x) => x & 1).join(''); }
+  function ekran(...kids) { stage().innerHTML = ''; stage().append(h('div', {}, ...kids)); }
+  async function prezentuj(seq, faza, g) {
+    const d = h('div', { class: 'digits', text: '+' }); ekran(d);
+    await sleep(900); zyje(g);
+    const kawalki = faza === 'A' ? seq.split('') : seq.match(/.{3}/g);
+    for (const k of kawalki) {
+      d.textContent = k; await sleep(T_CYFRA * k.length); zyje(g);
+      d.textContent = ' '; await sleep(T_PRZERWA * k.length); zyje(g);
+    }
+  }
+  function wpisz(dlugosc, faza) {
+    return new Promise((resolve) => {
+      let buf = '';
+      const show = h('div', { class: 'entry', 'aria-live': 'polite' });
+      const info = h('p', { class: 'small muted', text: faza === 'A' ? `Wpisz ${pl(dlugosc, 'cyfrę', 'cyfry', 'cyfr')} w tej samej kolejności.` : `Wpisz ${pl(dlugosc / 3, 'cyfrę ósemkową', 'cyfry ósemkowe', 'cyfr ósemkowych')} (każda to trójka cyfr dwójkowych).` });
+      ekran(h('p', { text: 'Co zobaczyłeś?' }), show, info);
+      const upd = () => { show.textContent = (faza === 'B' ? (buf.match(/.{1,3}/g) || []).join(' ') : buf) || ' '; };
+      upd();
+      const dodaj = (x) => { if (buf.length + x.length <= dlugosc + 3) { buf += x; upd(); } };
+      const cofnij = () => { buf = buf.slice(0, faza === 'B' ? Math.max(0, buf.length - 3) : buf.length - 1); upd(); };
+      const zakoncz = () => { document.removeEventListener('keydown', kd); pad().innerHTML = ''; wejscie = null; resolve(buf); };
+      const p = h('div', { class: 'pad' });
+      if (faza === 'A') p.append(h('button', { text: '0', onclick: () => dodaj('0') }), h('button', { text: '1', onclick: () => dodaj('1') }));
+      else OCT.forEach((b, i) => p.append(h('button', { onclick: () => dodaj(b) }, String(i), h('small', { text: b }))));
+      p.append(h('button', { class: faza === 'A' ? 'wide' : '', text: '⌫', 'aria-label': 'Usuń', onclick: cofnij }), h('button', { class: `go ${faza === 'A' ? '' : 'wide'}`, text: 'OK', onclick: zakoncz }));
+      pad().innerHTML = ''; pad().append(p);
+      const kd = (e) => {
+        if ($('#v-kawalki').hidden) return;
+        if (faza === 'A' && (e.key === '0' || e.key === '1')) dodaj(e.key);
+        else if (faza === 'B' && /^[0-7]$/.test(e.key)) dodaj(OCT[Number(e.key)]);
+        else if (e.key === 'Backspace') { e.preventDefault(); cofnij(); }
+        else if (e.key === 'Enter') { e.preventDefault(); zakoncz(); }
+      };
+      document.addEventListener('keydown', kd);
+      wejscie = zakoncz;
+    });
+  }
+  async function proba(L, faza, g) {
+    const seq = los(L);
+    await prezentuj(seq, faza, g);
+    const odp = await wpisz(L, faza);
+    zyje(g);
+    const ok = odp === seq;
+    const fmtSeq = (x) => (faza === 'B' ? x.match(/.{1,3}/g).join(' ') : x);
+    ekran(h('p', { class: ok ? 'fb-good' : 'fb-bad', text: ok ? '✓ Dobrze' : '✗ Nie tym razem' }), ok ? '' : h('p', { class: 'mono', text: `Było: ${fmtSeq(seq)}` }));
+    await sleep(ok ? 900 : 1800); zyje(g);
+    return ok;
+  }
+  async function pomiar(faza, g) {
+    const dokladny = $('#kwExact').checked;
+    let L = faza === 'A' ? 4 : 6; const krok = faza === 'A' ? 1 : 3; const max = faza === 'A' ? 20 : 39; let span = 0;
+    while (L <= max) {
+      ekran(h('p', { text: `Następny ciąg: ${pl(L, 'cyfra', 'cyfry', 'cyfr')}${faza === 'B' ? ` (${pl(L / 3, 'trójka', 'trójki', 'trójek')})` : ''}` }));
+      await sleep(1000); zyje(g);
+      let ok = await proba(L, faza, g);
+      if (!ok && dokladny) ok = await proba(L, faza, g);
+      if (!ok) break;
+      span = L; L += krok;
+    }
+    return span;
+  }
+  function intro() {
+    gen++; przerwano = false; pad().innerHTML = '';
+    ekran(
+      h('p', {}, h('strong', { text: 'Faza 1: bez przekodowania. ' }), 'Na ekranie pojawią się kolejno cyfry 0 i 1. Zapamiętaj je i odtwórz. Ciągi będą coraz dłuższe, aż do pierwszej pomyłki.'),
+      h('button', { class: 'btn', text: 'Start fazy 1', onclick: () => biegnij('A') }));
+  }
+  async function biegnij(faza) {
+    const g = ++gen; biegnie = true;
+    if (faza === 'A' && panel) panel.gotowe(null);
+    try {
+      if (faza === 'A') { wynikA = await pomiar('A', g); trening(); }
+      else { wynikB = await pomiar('B', g); podsumowanie(); }
+    } catch (e) { if (e.message !== 'stop') throw e; }
+    finally { if (g === gen) biegnie = false; }
+  }
+  function trening() {
+    pad().innerHTML = '';
+    const tabela = h('div', { class: 'codes' }, OCT.map((b, i) => h('span', { text: `${b} = ${i}` })));
+    ekran(
+      h('p', {}, h('strong', { text: `Twój zasięg bez przekodowania: ${wynikA ? pl(wynikA, 'cyfra dwójkowa', 'cyfry dwójkowe', 'cyfr dwójkowych') : 'mniej niż 4 cyfry dwójkowe'}.` })),
+      h('p', { text: 'Faza 2: każdą trójkę cyfr dwójkowych zamieniaj w myślach na jedną cyfrę ósemkową. Zamiast „1 0 1 1 1 0” pamiętasz „5 6”. Najpierw krótki trening.' }),
+      tabela,
+      h('button', { class: 'btn', text: 'Trening (10 trójek)', onclick: cwicz }), ' ',
+      h('button', { class: 'btn ghost', text: 'Pomiń trening', onclick: () => biegnij('B') }));
+  }
+  async function cwicz() {
+    let dobre = 0;
+    for (let i = 0; i < 10; i++) {
+      const k = Math.floor(Math.random() * 8);
+      const odp = await new Promise((resolve) => {
+        ekran(h('p', { class: 'small muted', text: `Trening ${i + 1}/10: która to cyfra ósemkowa?` }), h('div', { class: 'digits', text: OCT[k] }));
+        const p = h('div', { class: 'pad' }, OCT.map((b, j) => h('button', { text: String(j), onclick: () => { document.removeEventListener('keydown', kd); resolve(j); } })));
+        const kd = (e) => { if (!$('#v-kawalki').hidden && /^[0-7]$/.test(e.key)) { document.removeEventListener('keydown', kd); resolve(Number(e.key)); } };
+        document.addEventListener('keydown', kd);
+        pad().innerHTML = ''; pad().append(p);
+      });
+      pad().innerHTML = '';
+      if (odp === k) dobre++;
+      ekran(h('p', { class: odp === k ? 'fb-good' : 'fb-bad', text: odp === k ? '✓' : `✗ ${OCT[k]} = ${k}` }));
+      await sleep(odp === k ? 400 : 1200);
+    }
+    ekran(h('p', {}, h('strong', { text: `Trening: ${dobre}/10 poprawnie.` })),
+      h('p', { text: 'Teraz pomiar. Cyfry pojawią się trójkami. Odpowiadasz cyframi ósemkowymi, a strona zamieni je z powrotem na dwójkowe.' }),
+      h('button', { class: 'btn', text: 'Start fazy 2', onclick: () => biegnij('B') }), ' ',
+      h('button', { class: 'btn ghost', text: 'Powtórz trening', onclick: cwicz }));
+  }
+  function podsumowanie() {
+    pad().innerHTML = '';
+    const a = wynikA || 0, b = wynikB || 0;
+    ekran(
+      h('p', {}, h('strong', { text: `Bez przekodowania: ${a ? pl(a, 'cyfra dwójkowa', 'cyfry dwójkowe', 'cyfr dwójkowych') : 'mniej niż 4 cyfry dwójkowe'}.` })),
+      h('p', {}, h('strong', { text: `Z przekodowaniem: ${b ? pl(b, 'cyfra dwójkowa', 'cyfry dwójkowe', 'cyfr dwójkowych') : 'mniej niż 6 cyfr dwójkowych'}${b ? `, czyli ${pl(b / 3, 'kawałek', 'kawałki', 'kawałków')}` : ''}.` })),
+      h('p', { class: 'small muted', text: 'W badaniu Smitha krótka nauka zwiększyła zasięg u wszystkich, ale mniej, niż przewidywano. Duży zysk przyszedł dopiero po długim treningu.' }),
+      h('button', { class: 'btn ghost', text: 'Zacznij od nowa', onclick: intro }));
+    const doWyslania = [{ wariant: 'przed', wynik: a }, { wariant: 'po', wynik: b }].filter((x) => x.wynik > 0);
+    if (panel) panel.gotowe(doWyslania.length ? doWyslania : null);
+  }
+  function rysuj(chart, stats, rows) {
+    const przed = rows.filter((r) => r.w === 'przed').map((r) => r.v);
+    const po = rows.filter((r) => r.w === 'po').map((r) => r.v);
+    const mp = mediana(przed), mo = mediana(po);
+    stats.textContent = (przed.length || po.length) ? `Mediana bez przekodowania: ${mp == null ? '—' : fmt(mp, 1)} · z przekodowaniem: ${mo == null ? '—' : fmt(mo, 1)} cyfr dwójkowych` : '';
+    histogram(chart, [{ nazwa: 'bez przekodowania', kolor: 's1', wartosci: przed }, { nazwa: 'z przekodowaniem', kolor: 's2', wartosci: po }],
+      { min: 3, minMax: 12, cap: 40, etykietaX: 'zasięg (cyfry dwójkowe)', etykietaKrotka: 'Zasięg: ', opis: 'Histogram zasięgu pamięci w grupie przed przekodowaniem i po nim' });
+  }
+  function init() {
+    panel = panelGrupy($('#grupa-kawalki'), { aplikacja: 'kawalki', tytul: 'Zasięg pamięci w grupie', rysuj });
+    intro();
+  }
+  function wyjscie() {
+    if (panel) panel.stop();
+    if (biegnie) { gen++; biegnie = false; przerwano = true; if (wejscie) wejscie(); }
+  }
+  function wejscieWidok() {
+    if (panel) panel.start();
+    if (przerwano) { intro(); stage().prepend(h('p', { class: 'small muted', text: 'Pomiar przerwano, bo opuszczono tę zakładkę. Zacznij od nowa.' })); }
+  }
+  return { init, wejscie: wejscieWidok, wyjscie };
+})();
+
+/* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
+const Ustawienia = (() => {
+  let roboczy = null;
+  function domyslnaSesja() { const d = new Date(); return `W01-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+  function parsujPrefill(link) {
+    let u; try { u = new URL(link.trim()); } catch (e) { throw new Error('To nie wygląda na adres internetowy.'); }
+    if (!/\/forms\/.+\/(viewform|formResponse)$/.test(u.pathname)) throw new Error('To nie jest link do Formularza Google (powinien kończyć się na /viewform?…).');
+    const f = u.origin + u.pathname.replace(/\/viewform$/, '/formResponse');
+    const e = {}; const MAP = { APLIKACJA: 'a', SESJA: 's', WARIANT: 'w', WYNIK: 'v' };
+    for (const [k, v] of u.searchParams) if (/^entry\.\d+$/.test(k) && MAP[v.trim().toUpperCase()]) e[MAP[v.trim().toUpperCase()]] = k;
+    const brak = Object.entries(MAP).filter(([, kk]) => !e[kk]).map(([n]) => n);
+    if (brak.length) throw new Error(`W linku brakuje pól: ${brak.join(', ')}. Wpisz te słowa w pola formularza przed pobraniem linku.`);
+    return { f, e };
+  }
+  function zbierz() {
+    const { f, e } = parsujPrefill($('#sPrefill').value);
+    const c = $('#sCsv').value.trim();
+    if (!/^https?:\/\//.test(c)) throw new Error('Podaj link do opublikowanego arkusza (CSV).');
+    const sesja = $('#sSes').value.trim();
+    if (!sesja) throw new Error('Podaj nazwę sesji.');
+    return { v: 1, f, e, c, s: sesja };
+  }
+  function baza() {
+    if (location.protocol === 'file:') return $('#sBase').value.trim();
+    return location.origin + location.pathname;
+  }
+  function linki(cfg) {
+    const b = baza(); const card = $('#sLinksCard');
+    if (!b) { card.hidden = true; return; }
+    const q = `?cfg=${b64e(JSON.stringify(cfg))}`;
+    $('#sLinkZ').value = `${b}${q}#zgadnij`; $('#sLinkK').value = `${b}${q}#kawalki`; card.hidden = false;
+  }
+  function wypelnij(cfg) {
+    if (!cfg) return;
+    const u = new URL(cfg.f.replace(/\/formResponse$/, '/viewform'));
+    u.searchParams.set('usp', 'pp_url'); u.searchParams.set(cfg.e.a, 'APLIKACJA'); u.searchParams.set(cfg.e.s, 'SESJA'); u.searchParams.set(cfg.e.w, 'WARIANT'); u.searchParams.set(cfg.e.v, 'WYNIK');
+    $('#sPrefill').value = u.toString(); $('#sCsv').value = cfg.c; $('#sSes').value = cfg.s;
+  }
+  function out(...kids) { const o = $('#sOut'); o.innerHTML = ''; o.append(...kids); }
+  async function sprawdz() {
+    let cfg; try { cfg = zbierz(); } catch (e) { out(h('p', { class: 'err', text: e.message })); return; }
+    roboczy = cfg; linki(cfg);
+    const lista = h('ul');
+    const pkt = (ok, t) => lista.append(h('li', { class: ok ? 'ok' : 'err', text: `${ok ? '✓' : '✗'} ${t}` }));
+    out(lista);
+    pkt(true, 'Link formularza rozpoznany, wszystkie cztery pola znalezione.');
+    try { await Grupa.wyslij('test', 'test', 0, cfg); pkt(true, 'Wpis testowy wysłany (aplikacja = test). Przeglądarka nie potwierdza odbioru: sprawdź, czy pojawił się w arkuszu.'); }
+    catch (e) { pkt(false, `Wysyłka nie powiodła się: ${e.message}`); }
+    try {
+      const { rows, kol } = await Grupa.pobierz(cfg);
+      pkt(true, `Arkusz CSV odczytany: ${rows.length} wierszy odpowiedzi.`);
+      if (kol && !kol.znalezione) pkt(false, 'Nie znaleziono kolumn o nazwach aplikacja, sesja, wariant, wynik. Używam kolejności kolumn 2–5. Sprawdź nazwy pytań.');
+      const testy = rows.filter((r) => r.a === 'test' && r.s === cfg.s).length;
+      lista.append(h('li', { class: 'muted', text: `Wpisów testowych w tej sesji: ${testy}. Nowy wpis może pojawić się w CSV dopiero po kilku minutach; kliknij „Sprawdź” ponownie.` }));
+    } catch (e) {
+      pkt(false, `Nie udało się odczytać CSV: ${e.message}. Sprawdź, czy arkusz jest opublikowany jako CSV.`);
+    }
+    if (location.protocol === 'file:' && !$('#sBase').value.trim()) lista.append(h('li', { class: 'muted', text: 'Strona jest otwarta z dysku. Żeby wygenerować linki dla studentów, wpisz adres strony w sieci (GitHub Pages).' }));
+  }
+  function init() {
+    $('#sSes').value = domyslnaSesja();
+    if (location.protocol === 'file:') $('#sBaseInfo').textContent = 'Strona jest otwarta z dysku, więc link musi wskazywać kopię w sieci.';
+    else { $('#sBase').value = location.origin + location.pathname; $('#sBase').readOnly = true; $('#sBaseInfo').textContent = 'Adres tej strony.'; }
+    const zapisana = store.get(CFG_KEY); if (zapisana) { try { wypelnij(JSON.parse(zapisana)); } catch (e) { /* ignoruj */ } }
+    else if (Grupa.cfg) wypelnij(Grupa.cfg);
+    $('#sPrefill').addEventListener('input', () => {
+      const i = $('#sPrefillInfo');
+      if (!$('#sPrefill').value.trim()) { i.textContent = ''; return; }
+      try { const { e } = parsujPrefill($('#sPrefill').value); i.className = 'small ok'; i.textContent = `✓ Pola: aplikacja = ${e.a}, sesja = ${e.s}, wariant = ${e.w}, wynik = ${e.v}`; }
+      catch (err) { i.className = 'small err'; i.textContent = err.message; }
+    });
+    $('#sPrefill').dispatchEvent(new Event('input'));
+    $('#sCheck').addEventListener('click', sprawdz);
+    $('#sBase').addEventListener('input', () => { if (roboczy) linki(roboczy); });
+    $('#sSave').addEventListener('click', () => {
+      let cfg; try { cfg = zbierz(); } catch (e) { out(h('p', { class: 'err', text: e.message })); return; }
+      const ok = store.set(CFG_KEY, JSON.stringify(cfg)); linki(cfg);
+      out(h('p', { class: ok ? 'ok' : 'err', text: ok ? 'Zapisano. W tej przeglądarce tryb grupowy będzie włączony także bez parametru w linku. Odśwież stronę, żeby go uruchomić.' : 'Ta przeglądarka nie pozwala zapisywać ustawień. Używaj linków dla studentów.' }));
+    });
+    $('#sForget').addEventListener('click', () => { store.del(CFG_KEY); out(h('p', { text: 'Usunięto zapisaną konfigurację. Po odświeżeniu strona będzie działać samodzielnie (chyba że otworzysz link z parametrem cfg).' })); });
+    for (const b of $$('[data-copy]')) b.addEventListener('click', async () => { const ok = await copyText($('#' + b.dataset.copy).value); b.textContent = ok ? 'Skopiowano' : 'Zaznacz i skopiuj'; setTimeout(() => { b.textContent = 'Kopiuj'; }, 1600); });
+    if (Grupa.cfg) linki(Grupa.cfg);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+const WIDOKI = ['start', 'bauby', 'zgadnij', 'kompresja', 'kawalki', 'ustawienia'];
+const MODULY = { bauby: Bauby, zgadnij: Zgadnij, kawalki: Kawalki };
+let biezacy = null;
+function nawiguj() {
+  const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  if (biezacy && biezacy !== v && MODULY[biezacy] && MODULY[biezacy].wyjscie) MODULY[biezacy].wyjscie();
+  for (const w of WIDOKI) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (MODULY[v] && MODULY[v].wejscie) MODULY[v].wejscie();
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = { start: 'Wykład 1 · ćwiczenia', bauby: 'Mrugnięcie · W1', zgadnij: 'Zgadnij liczbę · W1', kompresja: 'Kompresja · W1', kawalki: 'Bity i kawałki · W1', ustawienia: 'Ustawienia prowadzącego · W1' }[v];
+}
+Grupa.init();
+Bauby.init(); Zgadnij.init(); Kompresja.init(); Kawalki.init(); Ustawienia.init();
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+</script>
+</body>
+</html>
