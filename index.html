@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wprowadzenie do informatyki</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu „Wprowadzenie do informatyki” (SWPS).">
+<style>
+:root { --head-bg: #1f4e79; --head-ink: #fff; --bg: #f6f7f9; --surface: #fff; --border: #dfe3e8; --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280; --accent: #1f4e79; --accent-ink: #fff; --accent-soft: #e8eef5; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #111418; --surface: #16191d; --border: #2c333b; --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1; --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39; --head-bg: #182a3f; --head-ink: #eceff3; color-scheme: dark; } }
+:root[data-theme="dark"] { --head-bg: #182a3f; --head-ink: #eceff3; --bg: #111418; --surface: #16191d; --border: #2c333b; --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1; --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+header { background: var(--head-bg); color: var(--head-ink); padding: 28px 0 22px; }
+header h1 { margin: 0 0 4px; font-size: 1.7rem; }
+header p { margin: 0; opacity: .85; }
+main { padding: 24px 0 40px; }
+.lec { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin: 14px 0; }
+.lec h2 { margin: 0 0 4px; font-size: 1.2rem; }
+.lec .meta { color: var(--muted); font-size: .9rem; margin-bottom: 10px; }
+.lec ul { margin: 0; padding-left: 1.2em; }
+.lec li { margin: 4px 0; }
+a { color: var(--accent); }
+.soon { color: var(--muted); }
+.dl { display: inline-block; margin-top: 10px; font-size: .9rem; }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--border); padding: 16px 0 28px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Wprowadzenie do informatyki</h1>
+    <p>Ćwiczenia interaktywne do wykładu · Uniwersytet SWPS, Psychologia i informatyka</p>
+  </div>
+</header>
+<main class="wrap">
+  <section class="lec">
+    <h2>Wykład 1. Czym jest informatyka?</h2>
+    <div class="meta">Informacja jako wybór, algorytm, gałęzie informatyki</div>
+    <ul>
+      <li><a href="w01.html#bauby">Jak napisać książkę, mrugając okiem?</a></li>
+      <li><a href="w01.html#zgadnij">Zgadnij liczbę</a></li>
+      <li><a href="w01.html#kompresja">Ile miejsca zajmuje informacja?</a></li>
+      <li><a href="w01.html#kawalki">Bity i kawałki</a></li>
+    </ul>
+    <a class="dl" href="w01.html" download>Pobierz do pracy bez internetu (jeden plik HTML)</a>
+  </section>
+  <section class="lec">
+    <h2 class="soon">Wykład 2. Teoria informacji i kodowanie</h2>
+    <div class="meta">Wkrótce</div>
+  </section>
+</main>
+<footer><div class="wrap">dr Paweł Róg · Uniwersytet SWPS. Strony działają w przeglądarce i niczego nie wysyłają (poza trybem grupowym na wykładzie).</div></footer>
+</body>
+</html>
