@@ -211,6 +211,21 @@ table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-spac
 footer { border-top: 1px solid var(--border); padding: 18px 0 28px; font-size: .85rem; color: var(--muted); }
 footer a { color: var(--muted); }
 
+
+/* ───────── 5. Gałęzie ───────── */
+.problem { font-size: 1.15rem; line-height: 1.45; padding: 14px 16px; background: var(--surface-2); border-radius: var(--radius); margin: 8px 0 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: inherit; font-size: .92rem; padding: 7px 12px; border-radius: 99px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; min-height: 38px; text-align: left; }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.chip.main { border-color: var(--good); background: var(--good-soft); color: var(--text); }
+.chip.also { border-color: var(--amber); background: var(--amber-soft); color: var(--text); }
+.chip.miss { border-style: dashed; }
+.chip.wrong { text-decoration: line-through; opacity: .7; }
+.chip:disabled { cursor: default; }
+.chip .tag { font-size: .75rem; margin-left: 6px; color: var(--text-2); font-weight: 600; }
+.feedback { margin-top: 12px; padding: 12px 16px; border-radius: var(--radius); background: var(--surface-2); }
+.progress { font-size: .85rem; color: var(--muted); }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -227,6 +242,7 @@ footer a { color: var(--muted); }
     <a href="#zgadnij">2. Zgadnij liczbę</a>
     <a href="#kompresja">3. Kompresja</a>
     <a href="#kawalki">4. Bity i kawałki</a>
+    <a href="#galezie">5. Gałęzie</a>
   </nav>
 </header>
 
@@ -235,12 +251,13 @@ footer a { color: var(--muted); }
 <!-- ═══════════════════ START ═══════════════════ -->
 <section id="v-start">
   <h1>Czym jest informatyka? Ćwiczenia</h1>
-  <p class="lead">Cztery krótkie ćwiczenia do wykładu 1. Działają w przeglądarce, także bez internetu. Strona niczego nie wysyła, chyba że prowadzący włączy tryb grupowy.</p>
+  <p class="lead">Pięć krótkich ćwiczeń do wykładu 1. Działają w przeglądarce, także bez internetu. Strona niczego nie wysyła, chyba że prowadzący włączy tryb grupowy.</p>
   <div class="grid2">
     <a class="tile" href="#bauby"><span class="num">1</span><h3>Jak napisać książkę, mrugając okiem?</h3><p>Porównaj strategie przekazywania liter jednym mrugnięciem.</p><div class="meta">ok. 5 min · slajd „Jak napisać książkę…”</div></a>
     <a class="tile" href="#zgadnij"><span class="num">2</span><h3>Zgadnij liczbę</h3><p>Ile pytań tak/nie trzeba, by wskazać jedną ze 100 liczb? Zagraj z komputerem i z przeciwnikiem.</p><div class="meta">ok. 5 min · slajdy „Gra w 20 pytań”, „Mini-zadanie”</div></a>
     <a class="tile" href="#kompresja"><span class="num">3</span><h3>Ile miejsca zajmuje informacja?</h3><p>Skompresuj milion zer, losowy szum i fragment poematu. Długość zapisu to nie to samo co informacja.</p><div class="meta">ok. 3 min · slajd „Informacja = liczba bajtów?”</div></a>
     <a class="tile" href="#kawalki"><span class="num">4</span><h3>Bity i kawałki</h3><p>Zmierz, ile cyfr dwójkowych zapamiętasz, a potem spróbuj sztuczki z przekodowaniem.</p><div class="meta">ok. 6 min · slajd „Bity a kawałki” (Miller 1956)</div></a>
+    <a class="tile" href="#galezie"><span class="num">5</span><h3>Do której gałęzi to należy?</h3><p>Dziesięć prawdziwych problemów. Przypisz każdy do obszarów informatyki i porównaj się z salą.</p><div class="meta">ok. 6 min · slajdy „Dziewięć obszarów według ACM” i „Zadanie: przyporządkuj problem”</div></a>
   </div>
 </section>
 
@@ -452,10 +469,27 @@ footer a { color: var(--muted); }
   <p class="src">G. A. Miller, <em>The Magical Number Seven, Plus or Minus Two</em>, Psychological Review 63(2), 1956, s. 81–97; eksperyment S. Smitha: s. 93–95.</p>
 </section>
 
+<!-- ═══════════════════ 5. GAŁĘZIE ═══════════════════ -->
+<section id="v-galezie" hidden>
+  <h2>5. Do której gałęzi to należy?</h2>
+  <p class="lead">Dla każdego problemu zaznacz obszar lub obszary informatyki, bez których nie da się go rozwiązać. Używamy podziału ACM z 1989 r. (dziewięć obszarów ze slajdu). Często pasuje więcej niż jeden.</p>
+  <div class="card" id="gCard"></div>
+  <div id="grupa-galezie"></div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Przy których problemach najtrudniej było wybrać jeden obszar? Co to mówi o granicach między gałęziami?</li>
+      <li>Przy jednym z problemów żaden z dziewięciu obszarów z 1989 r. nie pasował w całości. Dlaczego CC2020 wydziela dziś dyscypliny, których w 1989 r. nie było?</li>
+      <li>Wybierz problem z własnych zainteresowań psychologicznych i opisz go tak, żeby wymagał co najmniej trzech obszarów.</li>
+    </ol>
+  </div>
+  <p class="src">Obszary: P. J. Denning i in., <em>Computing as a Discipline</em>, Communications of the ACM 32(1), 1989, s. 12; dyscypliny: ACM, IEEE-CS, <em>Computing Curricula 2020</em>, rozdz. 2. Przypisania „głównych” obszarów to propozycja prowadzącego do dyskusji, a nie jedyna poprawna odpowiedź.</p>
+</section>
+
 <!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
 <section id="v-ustawienia" hidden>
   <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
-  <p class="lead">Ćwiczenia 2 i 4 mogą wysyłać anonimowe wyniki do Formularza Google i rysować histogram całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła.</p>
+  <p class="lead">Ćwiczenia 2, 4 i 5 mogą wysyłać anonimowe wyniki do Formularza Google i rysować wykres całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła.</p>
 
   <div class="card">
     <h3>Jednorazowe przygotowanie (ok. 10 min)</h3>
@@ -504,6 +538,7 @@ footer a { color: var(--muted); }
     <p class="small muted">Te linki włączają wysyłanie wyników i histogram. Pokaż je na slajdzie (najlepiej jako kod QR). Zwykły adres strony, bez parametru <code>cfg</code>, działa bez wysyłania.</p>
     <div class="field"><label for="sLinkZ">Zgadnij liczbę</label><div class="row"><input id="sLinkZ" type="text" readonly style="flex:1"><button class="btn small" data-copy="sLinkZ">Kopiuj</button></div></div>
     <div class="field"><label for="sLinkK">Bity i kawałki</label><div class="row"><input id="sLinkK" type="text" readonly style="flex:1"><button class="btn small" data-copy="sLinkK">Kopiuj</button></div></div>
+    <div class="field"><label for="sLinkG">Do której gałęzi to należy?</label><div class="row"><input id="sLinkG" type="text" readonly style="flex:1"><button class="btn small" data-copy="sLinkG">Kopiuj</button></div></div>
   </div>
 </section>
 
@@ -542,7 +577,9 @@ const store = {
 };
 function isTyping() {
   const a = document.activeElement;
-  return a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable);
+  if (!a) return false;
+  if (a.tagName === 'INPUT') return !['checkbox', 'radio', 'range', 'button', 'submit'].includes(a.type);
+  return a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable;
 }
 async function copyText(text) {
   try { await navigator.clipboard.writeText(text); return true; }
@@ -1304,6 +1341,102 @@ const Kawalki = (() => {
   return { init, wejscie: wejscieWidok, wyjscie };
 })();
 
+/* ═════════════════════ 5. GAŁĘZIE INFORMATYKI ═════════════════════ */
+const Galezie = (() => {
+  const OBSZARY = [
+    'Algorytmy i struktury danych', 'Języki programowania', 'Architektura komputerów', 'Obliczenia numeryczne i symboliczne',
+    'Systemy operacyjne', 'Metodologia i inżynieria oprogramowania', 'Bazy danych i wyszukiwanie informacji',
+    'Sztuczna inteligencja i robotyka', 'Komunikacja człowiek–komputer',
+  ];
+  // glowna: obszar, bez którego problem nie istnieje; tez: obszary, które też uczciwie można wskazać (indeksy w OBSZARY)
+  const KARTY = [
+    { id: 'k1', tekst: 'Ankieta online zebrała 50 000 odpowiedzi. Trzeba je bezpiecznie przechowywać i w ułamku sekundy odnaleźć wszystkie odpowiedzi jednej osoby.', glowna: [6], tez: [0],
+      wyj: 'Przechowywanie i szybkie odnajdywanie rekordów to rdzeń baz danych. Indeks, dzięki któremu wyszukiwanie jest szybkie, to struktura danych, stąd także algorytmy.' },
+    { id: 'k2', tekst: 'Aplikacja do treningu pamięci roboczej ma tak pokazywać bodźce i przyciski, żeby starsze osoby nie popełniały przypadkowych pomyłek.', glowna: [8], tez: [5],
+      wyj: 'Projektowanie interakcji z myślą o percepcji i ograniczeniach użytkownika to komunikacja człowiek–komputer (HCI). Testy z użytkownikami to też element inżynierii oprogramowania.' },
+    { id: 'k3', tekst: 'Program ma rozpoznawać emocje na podstawie zdjęć twarzy.', glowna: [7], tez: [0, 3],
+      wyj: 'Rozpoznawanie wzorców w obrazach to sztuczna inteligencja. Uczenie modelu to w praktyce wielkie obliczenia numeryczne na macierzach, a jego sprawność zależy od algorytmów.' },
+    { id: 'k4', tekst: 'Telefon zaczyna się zacinać, gdy jednocześnie działa nawigacja, muzyka i aparat.', glowna: [4], tez: [2],
+      wyj: 'Dzielenie czasu procesora i pamięci między wiele programów to zadanie systemu operacyjnego. To, ile da się wycisnąć z samego sprzętu, zależy od architektury.' },
+    { id: 'k5', tekst: 'Dwunastoosobowy zespół pisze aplikację terapeutyczną. Każda nowa funkcja psuje coś, co wcześniej działało.', glowna: [5], tez: [],
+      wyj: 'Organizacja pracy zespołu, testy automatyczne i kontrola wersji to metodologia i inżynieria oprogramowania. Problem nie leży w pojedynczym algorytmie, tylko w procesie wytwarzania.' },
+    { id: 'k6', tekst: 'Symulacja rozprzestrzeniania się plotki w sieci społecznej daje inne wyniki na różnych komputerach, bo inaczej zaokrąglają liczby.', glowna: [3], tez: [0, 2],
+      wyj: 'Zachowanie błędów zaokrągleń w długich obliczeniach to klasyczny temat obliczeń numerycznych (reprezentację liczb poznamy na wykładzie 3). Sposób zapisu liczb wynika też z architektury.' },
+    { id: 'k7', tekst: 'Posortowanie miliona wyników testu trwa godzinę. Jak zrobić to w kilka sekund?', glowna: [0], tez: [],
+      wyj: 'Wybór algorytmu sortowania i jego złożoność to algorytmy i struktury danych (wykłady 6–10). Szybszy komputer pomógłby niewiele w porównaniu z lepszym algorytmem.' },
+    { id: 'k8', tekst: 'Potrzebny jest prosty język do opisywania eksperymentów psychologicznych, zrozumiały i dla badacza, i dla komputera.', glowna: [1], tez: [8],
+      wyj: 'Projektowanie składni i znaczenia języka to języki programowania. To, czy badacz zrozumie zapis, jest też pytaniem z komunikacji człowiek–komputer.' },
+    { id: 'k9', tekst: 'Procesor w zegarku sportowym ma liczyć tętno przez tydzień na jednej baterii.', glowna: [2], tez: [4, 3],
+      wyj: 'Energooszczędny układ i jego zestaw instrukcji to architektura. System operacyjny usypia niepotrzebne podzespoły, a samo wyznaczanie tętna z sygnału to obliczenia numeryczne.' },
+    { id: 'k10', tekst: 'Dane z dzienniczka nastroju są wrażliwe. Nie mogą wyciec ani zostać podejrzane przez osoby niepowołane.', glowna: [], tez: [4, 6, 5],
+      wyj: 'Żaden z dziewięciu obszarów z 1989 r. nie obejmuje tego w całości: kontrola dostępu to systemy operacyjne, szyfrowanie rekordów to bazy danych, unikanie luk to inżynieria oprogramowania. Dlatego CC2020 wydziela dziś cyberbezpieczeństwo jako osobną dyscyplinę.' },
+  ];
+  let idx = 0, wybor = new Set(), sprawdzone = false, odpowiedzi = [], panel = null, kartaGrupy = 'k1';
+  const karta = () => KARTY[idx];
+  function rysuj() {
+    const box = $('#gCard'); box.innerHTML = '';
+    if (idx >= KARTY.length) return podsumowanie();
+    const k = karta();
+    box.append(h('div', { class: 'progress', text: `Problem ${idx + 1} z ${KARTY.length}` }), h('div', { class: 'problem', text: k.tekst }));
+    const chips = h('div', { class: 'chips', role: 'group', 'aria-label': 'Obszary informatyki' });
+    OBSZARY.forEach((o, i) => {
+      const b = h('button', { class: 'chip', 'aria-pressed': wybor.has(i) ? 'true' : 'false', disabled: sprawdzone }, o);
+      if (sprawdzone) {
+        const g = k.glowna.includes(i), t = k.tez.includes(i), w = wybor.has(i);
+        if (g) { b.classList.add('main'); b.append(h('span', { class: 'tag', text: w ? '✓ główny' : 'główny (pominięty)' })); if (!w) b.classList.add('miss'); }
+        else if (t) { b.classList.add('also'); b.append(h('span', { class: 'tag', text: w ? '✓ też pasuje' : 'też pasuje' })); if (!w) b.classList.add('miss'); }
+        else if (w) b.classList.add('wrong');
+        b.setAttribute('aria-pressed', w ? 'true' : 'false');
+      } else b.addEventListener('click', () => { if (wybor.has(i)) wybor.delete(i); else wybor.add(i); rysuj(); });
+      chips.append(b);
+    });
+    box.append(chips);
+    const row = h('div', { class: 'row', style: 'margin-top:14px' });
+    if (!sprawdzone) {
+      row.append(h('button', { class: 'btn', text: 'Sprawdź', disabled: wybor.size === 0, onclick: () => { sprawdzone = true; odpowiedzi[idx] = [...wybor]; rysuj(); } }));
+      row.append(h('span', { class: 'small muted', text: wybor.size ? `Zaznaczono: ${wybor.size}` : 'Zaznacz co najmniej jeden obszar.' }));
+    } else {
+      const trafiona = k.glowna.length ? k.glowna.every((g) => wybor.has(g)) : [...wybor].some((w) => k.tez.includes(w));
+      box.append(h('div', { class: 'feedback' }, h('strong', { text: k.glowna.length ? (trafiona ? 'Główny obszar trafiony. ' : 'Główny obszar to inny. ') : 'Podchwytliwe. ' }), k.wyj));
+      row.append(h('button', { class: 'btn', text: idx + 1 < KARTY.length ? 'Następny problem' : 'Podsumowanie', onclick: () => { idx++; wybor = new Set(); sprawdzone = false; rysuj(); } }));
+    }
+    box.append(row);
+  }
+  function podsumowanie() {
+    const box = $('#gCard'); box.innerHTML = '';
+    let traf = 0, n = 0;
+    KARTY.forEach((k, i) => { if (!k.glowna.length) return; n++; if (k.glowna.every((g) => (odpowiedzi[i] || []).includes(g))) traf++; });
+    const sr = odpowiedzi.reduce((a, o) => a + (o ? o.length : 0), 0) / KARTY.length;
+    box.append(h('h3', { text: 'Podsumowanie' }),
+      h('p', {}, `Główny obszar wskazany w ${traf} z ${n} problemów, które go mają. Średnio zaznaczałeś ${Number.isInteger(sr) ? pl(sr, 'obszar', 'obszary', 'obszarów') : `${fmt(sr, 1)} obszaru`} na problem.`),
+      h('p', { class: 'small muted', text: 'Jeśli przy jakimś problemie wybrałeś inny obszar i umiesz to uzasadnić, Twoja odpowiedź też jest dobra: granice między gałęziami są umowne.' }),
+      h('button', { class: 'btn ghost', text: 'Zacznij od nowa', onclick: () => { idx = 0; wybor = new Set(); sprawdzone = false; odpowiedzi = []; if (panel) panel.gotowe(null); rysuj(); } }));
+    if (panel) {
+      const p = []; KARTY.forEach((k, i) => (odpowiedzi[i] || []).forEach((o) => p.push({ wariant: k.id, wynik: o + 1 })));
+      panel.gotowe(p.length ? p : null);
+    }
+  }
+  function rysujGrupe(chart, stats, rows) {
+    chart.__rerender = () => rysujGrupe(chart, stats, rows);
+    chart.innerHTML = '';
+    const sel = h('select', { 'aria-label': 'Problem' }, KARTY.map((k, i) => h('option', { value: k.id, text: `${i + 1}. ${k.tekst.length > 70 ? k.tekst.slice(0, 68) + '…' : k.tekst}`, selected: k.id === kartaGrupy })));
+    sel.addEventListener('change', () => { kartaGrupy = sel.value; rysujGrupe(chart, stats, rows); });
+    const k = KARTY.find((x) => x.id === kartaGrupy);
+    const moje = rows.filter((r) => r.w === kartaGrupy && r.v >= 1 && r.v <= OBSZARY.length);
+    const cnt = OBSZARY.map((_, i) => moje.filter((r) => r.v === i + 1).length);
+    stats.textContent = moje.length ? `Zaznaczeń przy tym problemie: ${moje.length}` : '';
+    const bars = h('div', { class: 'hbars', style: 'margin-top:12px' });
+    chart.append(h('div', { class: 'row' }, sel), bars);
+    if (!moje.length) { bars.append(h('p', { class: 'muted small', text: 'Brak odpowiedzi przy tym problemie.' })); return; }
+    hbars(bars, OBSZARY.map((o, i) => ({ label: o, sub: k.glowna.includes(i) ? 'obszar główny' : k.tez.includes(i) ? 'też pasuje' : null, v: cnt[i] })), { max: Math.max(1, ...cnt), format: (v) => fmtInt(v) });
+  }
+  function init() {
+    panel = panelGrupy($('#grupa-galezie'), { aplikacja: 'galezie', tytul: 'Co wybrała sala?', rysuj: rysujGrupe });
+    rysuj();
+  }
+  return { init, wejscie: () => panel && panel.start(), wyjscie: () => panel && panel.stop() };
+})();
+
 /* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
 const Ustawienia = (() => {
   let roboczy = null;
@@ -1334,7 +1467,7 @@ const Ustawienia = (() => {
     const b = baza(); const card = $('#sLinksCard');
     if (!b) { card.hidden = true; return; }
     const q = `?cfg=${b64e(JSON.stringify(cfg))}`;
-    $('#sLinkZ').value = `${b}${q}#zgadnij`; $('#sLinkK').value = `${b}${q}#kawalki`; card.hidden = false;
+    $('#sLinkZ').value = `${b}${q}#zgadnij`; $('#sLinkK').value = `${b}${q}#kawalki`; $('#sLinkG').value = `${b}${q}#galezie`; card.hidden = false;
   }
   function wypelnij(cfg) {
     if (!cfg) return;
@@ -1391,8 +1524,8 @@ const Ustawienia = (() => {
 })();
 
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'bauby', 'zgadnij', 'kompresja', 'kawalki', 'ustawienia'];
-const MODULY = { bauby: Bauby, zgadnij: Zgadnij, kawalki: Kawalki };
+const WIDOKI = ['start', 'bauby', 'zgadnij', 'kompresja', 'kawalki', 'galezie', 'ustawienia'];
+const MODULY = { bauby: Bauby, zgadnij: Zgadnij, kawalki: Kawalki, galezie: Galezie };
 let biezacy = null;
 function nawiguj() {
   const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
@@ -1402,10 +1535,10 @@ function nawiguj() {
   if (MODULY[v] && MODULY[v].wejscie) MODULY[v].wejscie();
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 1 · ćwiczenia', bauby: 'Mrugnięcie · W1', zgadnij: 'Zgadnij liczbę · W1', kompresja: 'Kompresja · W1', kawalki: 'Bity i kawałki · W1', ustawienia: 'Ustawienia prowadzącego · W1' }[v];
+  document.title = { start: 'Wykład 1 · ćwiczenia', bauby: 'Mrugnięcie · W1', zgadnij: 'Zgadnij liczbę · W1', kompresja: 'Kompresja · W1', kawalki: 'Bity i kawałki · W1', galezie: 'Gałęzie informatyki · W1', ustawienia: 'Ustawienia prowadzącego · W1' }[v];
 }
 Grupa.init();
-Bauby.init(); Zgadnij.init(); Kompresja.init(); Kawalki.init(); Ustawienia.init();
+Bauby.init(); Zgadnij.init(); Kompresja.init(); Kawalki.init(); Galezie.init(); Ustawienia.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
 </script>

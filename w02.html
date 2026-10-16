@@ -1,0 +1,2026 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 2 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 2 „Teoria informacji i kodowanie” (Wprowadzenie do informatyki, SWPS).">
+<style>
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+/* ───────── 1. Bauby ───────── */
+.board { display: flex; flex-wrap: wrap; gap: 5px; align-items: flex-end; margin: 6px 0 12px; max-width: 640px; min-height: 104px; }
+.cell { width: 48px; height: 48px; flex: none; display: grid; place-items: center; font-weight: 600; font-size: 1.05rem; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); user-select: none; }
+.cell.hl { background: var(--hl); color: var(--hl-ink); border-color: var(--hl); }
+.cell.out { opacity: .22; }
+.cell.bad { background: var(--bad); color: #fff; border-color: var(--bad); }
+.grp { display: flex; flex-wrap: wrap; gap: 5px; padding: 24px 7px 7px; border-radius: 12px; position: relative; flex: none; max-width: 100%; }
+.grp::before { content: attr(data-label); position: absolute; top: 4px; left: 9px; font-size: .74rem; font-weight: 600; white-space: nowrap; }
+.grp.tak { border: 3px solid var(--hl); background: color-mix(in srgb, var(--hl) 18%, transparent); }
+.grp.tak::before { color: var(--text); }
+.grp.nie { border: 2px dashed var(--muted); }
+.grp.nie::before { color: var(--muted); }
+.board-info { font-size: .85rem; color: var(--muted); margin: 10px 0 0; }
+.timer { height: 4px; background: var(--surface-2); border-radius: 2px; overflow: hidden; max-width: 640px; margin-top: 4px; }
+.timer > span { display: block; height: 100%; width: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); }
+@keyframes ubywa { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@media (max-width: 560px) { .cell { width: 38px; height: 38px; font-size: .95rem; } .board { gap: 4px; } .grp { gap: 4px; padding: 22px 5px 5px; } }
+.blink { width: 100%; max-width: 620px; min-height: 72px; font-size: 1.25rem; border-radius: 12px; }
+.typed { font-family: var(--mono); font-size: 1.4rem; letter-spacing: .08em; padding: 8px 12px; background: var(--surface-2); border-radius: 8px; min-height: 48px; word-break: break-all; }
+.typed .cur { color: var(--muted); }
+.question { min-height: 1.6em; font-weight: 600; color: var(--accent); }
+
+/* ───────── 2. Zgadnij ───────── */
+.ngrid { display: grid; gap: 2px; margin: 10px 0; max-width: 560px; }
+.nc { aspect-ratio: 1; display: grid; place-items: center; font-size: .72rem; border-radius: 3px; background: var(--accent-soft); color: var(--accent); cursor: pointer; font-variant-numeric: tabular-nums; border: 0; padding: 0; font-family: inherit; }
+.nc.dead { background: var(--surface-2); color: var(--muted); opacity: .35; }
+.nc.win { background: var(--good); color: #fff; font-weight: 700; }
+.nc.pick { outline: 2px solid var(--s2); outline-offset: -2px; }
+.ngrid.tiny .nc { font-size: 0; }
+.hist { margin: 8px 0 0; padding-left: 1.6em; max-height: 220px; overflow-y: auto; font-size: .92rem; }
+.hist li { margin: 2px 0; }
+.ans-yes { color: var(--good); font-weight: 600; }
+.ans-no { color: var(--bad); font-weight: 600; }
+.summary { border-radius: var(--radius); padding: 12px 16px; background: var(--good-soft); border-left: 4px solid var(--good); margin: 12px 0; }
+
+/* ───────── 4. Kawałki ───────── */
+.stage { min-height: 170px; display: grid; place-items: center; text-align: center; background: var(--surface-2); border-radius: var(--radius); padding: 14px; }
+.digits { font-family: var(--mono); font-size: clamp(3rem, 12vw, 5.5rem); font-weight: 700; letter-spacing: .12em; min-height: 1.2em; }
+.entry { font-family: var(--mono); font-size: 1.6rem; letter-spacing: .1em; min-height: 1.6em; word-break: break-all; }
+.pad { display: grid; grid-template-columns: repeat(4, minmax(56px, 1fr)); gap: 8px; max-width: 420px; margin: 12px auto 0; }
+.pad button { font: inherit; font-size: 1.3rem; font-weight: 600; min-height: 56px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+.pad button small { display: block; font-family: var(--mono); font-size: .72rem; color: var(--muted); font-weight: 400; }
+.pad button.wide { grid-column: span 2; }
+.pad button.go { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.codes { display: grid; grid-template-columns: repeat(4, auto); gap: 4px 18px; justify-content: center; font-family: var(--mono); font-size: 1.05rem; margin: 8px 0; }
+.fb-good { color: var(--good); font-weight: 600; font-size: 1.2rem; }
+.fb-bad { color: var(--bad); font-weight: 600; font-size: 1.2rem; }
+
+/* ───────── Panel grupy i wykres ───────── */
+.group { border: 1px solid var(--s1); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; background: var(--surface); }
+.group h3 { display: flex; gap: 8px; align-items: center; }
+.group .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; }
+.chart { position: relative; margin-top: 8px; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart .axis text { fill: var(--muted); font-size: 12px; font-family: var(--font); }
+.chart .gridline { stroke: var(--grid); stroke-width: 1; }
+.chart .marker { stroke: var(--text-2); stroke-width: 1.5; stroke-dasharray: none; }
+.chart .marker-lab { fill: var(--text-2); font-size: 12px; font-family: var(--font); }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .88rem; color: var(--text-2); margin-top: 6px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.tip { position: absolute; pointer-events: none; background: var(--text); color: var(--bg); font-size: .82rem; padding: 6px 9px; border-radius: 6px; white-space: nowrap; transform: translate(-50%, -110%); z-index: 3; }
+.group.big { position: fixed; inset: 0; z-index: 100; margin: 0; border-radius: 0; overflow: auto; padding: 24px 5vw; }
+.group:fullscreen { padding: 24px 5vw; overflow: auto; }
+.group.big .chart, .group:fullscreen .chart { max-width: 1200px; margin: 0 auto; }
+.group.big .chart .axis text, .group:fullscreen .chart .axis text { font-size: 14px; }
+
+footer { border-top: 1px solid var(--border); padding: 18px 0 28px; font-size: .85rem; color: var(--muted); }
+footer a { color: var(--muted); }
+
+
+/* ───────── 5. Gałęzie ───────── */
+.problem { font-size: 1.15rem; line-height: 1.45; padding: 14px 16px; background: var(--surface-2); border-radius: var(--radius); margin: 8px 0 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: inherit; font-size: .92rem; padding: 7px 12px; border-radius: 99px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; min-height: 38px; text-align: left; }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.chip.main { border-color: var(--good); background: var(--good-soft); color: var(--text); }
+.chip.also { border-color: var(--amber); background: var(--amber-soft); color: var(--text); }
+.chip.miss { border-style: dashed; }
+.chip.wrong { text-decoration: line-through; opacity: .7; }
+.chip:disabled { cursor: default; }
+.chip .tag { font-size: .75rem; margin-left: 6px; color: var(--text-2); font-weight: 600; }
+.feedback { margin-top: 12px; padding: 12px 16px; border-radius: var(--radius); background: var(--surface-2); }
+.progress { font-size: .85rem; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+
+/* ───────── W02: piaskownica entropii ───────── */
+.erows { display: grid; gap: 6px; margin: 10px 0 4px; }
+.erow { display: grid; grid-template-columns: 2.2em minmax(110px, 1fr) 4.6em minmax(160px, 2fr) 11.5em; gap: 10px; align-items: center; }
+.erow .sym { font-weight: 700; font-family: var(--mono); font-size: 1.1rem; text-align: center; }
+.erow input[type="range"] { width: 100%; }
+.erow .p { font-variant-numeric: tabular-nums; text-align: right; }
+.erow .vals { font-size: .85rem; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.ebars { position: relative; height: 26px; }
+.ebars .bI, .ebars .bW { position: absolute; left: 0; height: 9px; border-radius: 0 4px 4px 0; min-width: 1px; }
+.ebars .bI { top: 2px; background: color-mix(in srgb, var(--s1) 35%, transparent); }
+.ebars .bW { top: 14px; background: var(--s1); }
+.ebars .over { position: absolute; right: -2px; top: 0; font-size: .8rem; color: var(--muted); }
+.eaxis { position: relative; height: 16px; font-size: .72rem; color: var(--muted); }
+.eaxis span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.ehead { display: grid; grid-template-columns: 2.2em minmax(110px, 1fr) 4.6em minmax(160px, 2fr) 11.5em; gap: 10px; }
+.ekey { display: flex; gap: 18px; flex-wrap: wrap; font-size: .85rem; color: var(--text-2); margin-top: 6px; }
+.ekey i { display: inline-block; width: 22px; height: 9px; border-radius: 0 4px 4px 0; margin-right: 6px; vertical-align: 1px; }
+@media (max-width: 640px) {
+  .erow, .ehead { grid-template-columns: 2em 1fr 4.4em; }
+  .erow .ebars, .ehead .eaxis { grid-column: 2 / 4; }
+  .erow .vals { grid-column: 2 / 4; margin-top: -6px; }
+  .ehead > :nth-child(-n+3) { display: none; }
+  .erow { padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+}
+.big .v { font-size: 2rem; }
+.curve-ctl { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+.curve-ctl input[type="range"] { flex: 1; min-width: 180px; }
+
+/* ───────── W02: kody ───────── */
+.tiles { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.tnode { font: inherit; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 64px; padding: 8px 10px; border-radius: 10px; border: 2px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+.tnode .w { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 1.05rem; }
+.tnode .s { font-family: var(--mono); font-size: .8rem; color: var(--muted); max-width: 12em; overflow-wrap: anywhere; }
+.tnode.sel { border-color: var(--s2); background: color-mix(in srgb, var(--s2) 12%, var(--surface)); }
+.tnode.wrong { border-color: var(--bad); }
+.treewrap { overflow-x: auto; margin-top: 8px; }
+.treewrap svg { display: block; }
+.treewrap .edge { stroke: var(--muted); stroke-width: 1.2; }
+.treewrap .elab { fill: var(--bad); font: 700 13px var(--font); }
+.treewrap .node circle { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5; }
+.treewrap .node.leaf circle { fill: var(--accent-soft); }
+.treewrap .node.root circle { stroke-width: 2.5; cursor: pointer; }
+.treewrap .node.root.sel circle { stroke: var(--s2); stroke-width: 3.5; }
+.treewrap .node text { fill: var(--text); font: 11px var(--font); }
+.treewrap .node .lsym { font: 700 14px var(--mono); }
+.treewrap .node .lcode { fill: var(--bad); font: 12px var(--mono); }
+.sf { display: grid; gap: 0; margin: 10px 0; max-width: 560px; }
+.sfrow { display: grid; grid-template-columns: 3em 5em 1fr; gap: 10px; padding: 7px 10px; border-radius: 6px; align-items: center; }
+.sfrow .s { font-family: var(--mono); font-weight: 700; }
+.sfrow .p { font-variant-numeric: tabular-nums; text-align: right; }
+.sfrow .c { font-family: var(--mono); color: var(--bad); }
+.sfrow.cur { background: var(--accent-soft); }
+.sfrow.out { opacity: .5; }
+.sfrow.sep { box-shadow: inset 0 3px 0 -1px var(--accent); }
+.cut { font: inherit; font-size: .82rem; margin: 2px 0 2px 2.5em; padding: 3px 10px; border: 1px dashed var(--accent); border-radius: 99px; background: transparent; color: var(--accent); cursor: pointer; justify-self: start; }
+.cut:hover, .cut:focus-visible { background: var(--accent-soft); }
+.cmp { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+
+
+/* ───────── W02: pracownia kodów ───────── */
+.ctab { display: grid; gap: 6px; margin: 10px 0; max-width: 560px; }
+.crow { display: grid; grid-template-columns: 2.2em 6.5em 1fr 3.5em; gap: 8px; align-items: center; }
+.crow .sym { font-family: var(--mono); font-weight: 700; text-align: center; }
+.crow input { font-family: var(--mono); width: 100%; min-width: 0; }
+.crow input.zly { border-color: var(--bad); }
+.crow .len { font-variant-numeric: tabular-nums; color: var(--muted); text-align: right; }
+.crow.head { font-size: .8rem; color: var(--muted); }
+.verdicts { display: grid; gap: 8px; margin: 8px 0; }
+.verdict { display: grid; grid-template-columns: 1.6em 1fr; gap: 6px; align-items: start; }
+.verdict .ic { font-weight: 700; }
+.verdict.yes .ic { color: var(--good); }
+.verdict.no .ic { color: var(--bad); }
+.verdict.info .ic { color: var(--muted); }
+.verdict .det { font-size: .88rem; color: var(--text-2); }
+.parses { margin: 8px 0 0; padding-left: 1.4em; font-family: var(--mono); }
+.parses li { margin: 3px 0; }
+.parses .sep { color: var(--muted); }
+
+/* ───────── W02: szum ───────── */
+.lane { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.lane h3 { margin-bottom: .2em; }
+.lane .meta { font-size: .85rem; color: var(--muted); margin-bottom: 8px; }
+.bits { display: flex; flex-wrap: wrap; gap: 6px 10px; font-family: var(--mono); }
+.blk { display: inline-flex; gap: 1px; }
+.bit { font: 600 .95rem var(--mono); width: 1.35em; height: 1.75em; padding: 0; border: 1px solid var(--border); border-radius: 3px; background: var(--surface-2); color: var(--text); cursor: pointer; }
+.bit.red { color: var(--muted); font-style: italic; background: transparent; }
+.bit.flip { background: var(--bad); border-color: var(--bad); color: #fff; font-style: normal; }
+.bit.fix { outline: 2px solid var(--good); outline-offset: 1px; }
+.blk.err { box-shadow: 0 0 0 2px var(--amber); border-radius: 4px; }
+.outcome { margin-top: 10px; font-size: .95rem; }
+.outcome .txt { font-family: var(--mono); font-size: 1.15rem; padding: 2px 8px; background: var(--surface-2); border-radius: 6px; }
+.outcome .bad-ch { color: var(--bad); text-decoration: underline; }
+.st-ok { color: var(--good); font-weight: 600; }
+.st-det { color: var(--amber); font-weight: 600; }
+.st-bad { color: var(--bad); font-weight: 600; }
+
+/* ───────── W02: Hick–Hyman ───────── */
+.hstage { background: var(--surface-2); border-radius: var(--radius); padding: 20px 12px; text-align: center; user-select: none; }
+.lights { display: grid; grid-template-columns: repeat(8, minmax(28px, 64px)); gap: 10px; justify-content: center; margin: 18px 0 8px; }
+.light { aspect-ratio: 1; border-radius: 50%; border: 3px solid var(--border); background: transparent; opacity: .25; }
+.light.act { opacity: 1; border-color: var(--text-2); }
+.light.on { background: var(--hl); border-color: var(--hl); box-shadow: 0 0 0 6px color-mix(in srgb, var(--hl) 35%, transparent); }
+.lkeys { display: grid; grid-template-columns: repeat(8, minmax(28px, 64px)); gap: 10px; justify-content: center; font-family: var(--mono); font-weight: 700; color: var(--muted); }
+.lkeys span.act { color: var(--text); }
+.hstatus { min-height: 2.2em; font-size: 1.2rem; font-weight: 600; }
+.hintro { max-width: 46em; margin: 0 auto 12px; color: var(--text-2); }
+.hstatus.bad { color: var(--bad); }
+.hstatus.good { color: var(--good); }
+.hpad { display: grid; grid-template-columns: repeat(8, minmax(28px, 64px)); gap: 10px; justify-content: center; margin-top: 12px; }
+.hpad button { font: inherit; font-weight: 700; min-height: 54px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); touch-action: manipulation; }
+.hpad button:disabled { opacity: .2; }
+@media (max-width: 560px) { .lights, .lkeys, .hpad { gap: 5px; } .light { border-width: 2px; } }
+.chart .fitline { stroke: var(--text-2); stroke-width: 1.5; }
+.chart .pt { fill: var(--s1); fill-opacity: .35; }
+.chart .med { fill: var(--s1); stroke: var(--surface); stroke-width: 2; }
+.chart .ptlab { fill: var(--text-2); font: 12px var(--font); }
+
+/* ───────── W02: następna litera ───────── */
+.ltext { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: flex-start; font-family: var(--mono); padding: 14px; background: var(--surface-2); border-radius: var(--radius); min-height: 4.6em; margin-top: 12px; }
+.lw { display: inline-flex; gap: 3px; }
+.lc { display: inline-flex; flex-direction: column; align-items: center; min-width: 1.2rem; }
+.lc .ch { font-size: 1.35rem; line-height: 1.3; }
+.lc .n { font-size: .72rem; line-height: 1.15; color: var(--muted); font-variant-numeric: tabular-nums; }
+.lc .n.k1 { color: var(--good); }
+.lc .n.k4 { color: var(--bad); font-weight: 700; }
+.lc .n.m { color: var(--s2); font-weight: 400; }
+.lc.sp .ch { color: var(--muted); opacity: .55; }
+.lc.cur .ch { color: var(--s1); font-weight: 700; animation: lmig 1.1s steps(2) infinite; }
+@keyframes lmig { 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) { .lc.cur .ch { animation: none; } }
+.lstatus { margin-top: 10px; min-height: 1.6em; }
+.lstatus .zle { font-family: var(--mono); color: var(--bad); }
+.lkb { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; margin-top: 10px; }
+.lkb button { font: inherit; font-family: var(--mono); font-size: 1.1rem; min-height: 46px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); touch-action: manipulation; cursor: pointer; }
+.lkb button.sp { grid-column: span 3; font-family: var(--font); font-size: .95rem; }
+.lkb button:disabled { opacity: .25; text-decoration: line-through; cursor: default; }
+.lkb.done button { opacity: .25; }
+.chart .ldot { fill: var(--s1); }
+.lodtw { font-family: var(--mono); word-break: break-word; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 2</a>
+    <a id="groupBadge" class="badge" href="#ustawienia" hidden></a>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#entropia">1. Entropia</a>
+    <a href="#hick">2. Hick–Hyman</a>
+    <a href="#pracownia">3. Pracownia kodów</a>
+    <a href="#litera">4. Następna litera</a>
+    <a href="#szum">5. Szum</a>
+    <a href="#kody">6. Huffman i Shannon–Fano</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Teoria informacji i kodowanie: ćwiczenia</h1>
+  <p class="lead">Sześć ćwiczeń do wykładu 2, w kolejności slajdów. Działają w przeglądarce, także bez internetu. Strona niczego nie wysyła, chyba że prowadzący włączy tryb grupowy.</p>
+  <div class="grid2">
+    <a class="tile" href="#entropia"><span class="num">1</span><h3>Piaskownica entropii</h3><p>Zmieniaj prawdopodobieństwa i patrz, jak zmienia się informacja własna komunikatów i entropia źródła.</p><div class="meta">ok. 5 min · slajdy „Informacja własna” do „Moneta niesymetryczna”</div></a>
+    <a class="tile" href="#hick"><span class="num">2</span><h3>Prawo Hicka–Hymana</h3><p>Zmierz własny czas reakcji przy 1, 2, 4 i 8 bodźcach i sprawdź, czy rośnie liniowo z entropią.</p><div class="meta">ok. 5 min · najlepiej na komputerze z klawiaturą · slajd „Entropia w głowie”</div></a>
+    <a class="tile" href="#pracownia"><span class="num">3</span><h3>Pracownia kodów</h3><p>Wymyśl własny kod. Strona sprawdzi, czy jest prefiksowy i jednoznaczny, policzy sumę Krafta, L i redundancję i pokaże wszystkie odczytania ciągu.</p><div class="meta">ok. 6 min · slajdy od „Kodu i średniej długości” do „Kontrprzykładu”</div></a>
+    <a class="tile" href="#litera"><span class="num">4</span><h3>Zgadnij następną literę</h3><p>Gra Shannona: zgaduj kolejne znaki ukrytego zdania. Z liczby prób oszacujesz, ile bitów niesie jedna litera polskiego tekstu, i porównasz się z maszyną.</p><div class="meta">ok. 7 min · slajdy „Entropia źródła” i „Redundancja”</div></a>
+    <a class="tile" href="#szum"><span class="num">5</span><h3>Szum i pożądana redundancja</h3><p>Wyślij wiadomość przez zaszumiony kanał. Porównaj: bez zabezpieczeń, bit parzystości, potrójne powtórzenie i kod Hamminga.</p><div class="meta">ok. 6 min · slajd „Redundancja”</div></a>
+    <a class="tile" href="#kody"><span class="num">6</span><h3>Huffman i Shannon–Fano krok po kroku</h3><p>Zbuduj kod sam: łącz najlżejsze drzewa albo tnij posortowaną listę. Porównaj wyniki z entropią.</p><div class="meta">ok. 10 min · slajdy od „Metody Shannona–Fano” do „ABRAKADABRA”</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. ENTROPIA ═══════════════════ -->
+<section id="v-entropia" hidden>
+  <h2>1. Piaskownica entropii</h2>
+  <p class="lead">Źródło nadaje komunikaty A, B, C… z różnymi prawdopodobieństwami. Przesuwaj suwaki (strona sama dba, żeby prawdopodobieństwa sumowały się do 1) i obserwuj informację własną <span class="mono">I(p) = log₂ 1/p</span> każdego komunikatu oraz entropię <span class="mono">H = Σ p·I(p)</span>.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <div class="row"><label for="eN">Liczba komunikatów</label>
+        <select id="eN"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
+      </div>
+    </div>
+    <div class="row" id="ePresets" style="margin-top:10px"></div>
+    <div class="ehead" aria-hidden="true" style="margin-top:12px"><span></span><span></span><span></span><div class="eaxis" id="eAxis"></div><span></span></div>
+    <div class="erows" id="eRows"></div>
+    <div class="ekey"><span><i style="background: color-mix(in srgb, var(--s1) 35%, transparent)"></i>informacja własna I(p), w bitach</span><span><i style="background: var(--s1)"></i>wkład do entropii p·I(p)</span></div>
+    <div class="stats" style="margin-top:14px">
+      <div class="stat big"><div class="k">Entropia H</div><div class="v" id="eH">—</div></div>
+      <div class="stat big"><div class="k">Maksimum log₂ n</div><div class="v" id="eMax">—</div></div>
+      <div class="stat big"><div class="k">H jako część maksimum</div><div class="v" id="ePct">—</div></div>
+    </div>
+    <p class="small muted" id="eNote"></p>
+  </div>
+
+  <div class="card">
+    <h3>Moneta niesymetryczna: H(p)</h3>
+    <p class="small muted">Dwa komunikaty: orzeł z prawdopodobieństwem p i reszka z 1 − p. Przeciągnij punkt na wykresie albo suwak.</p>
+    <div class="chart" id="eCurve"></div>
+    <div class="curve-ctl">
+      <label for="eP">p =</label>
+      <input id="eP" type="range" min="0" max="1" step="0.01" value="0.9">
+      <span class="mono" id="ePV"></span>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="k">H(p)</div><div class="v" id="eHp">—</div></div>
+      <div class="stat"><div class="k">I(orzeł)</div><div class="v" id="eIo">—</div></div>
+      <div class="stat"><div class="k">I(reszka)</div><div class="v" id="eIr">—</div></div>
+    </div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Ustaw jeden komunikat na prawie 0. Jego informacja własna jest ogromna, a entropia prawie się nie zmienia. Dlaczego?</li>
+      <li>Kiedy entropia osiąga maksimum log₂ n? Czy da się je przekroczyć, dodając „sensacyjne” rzadkie komunikaty?</li>
+      <li>Moneta, która w 90% przypadków daje orła, niesie ok. 0,47 bitu na rzut. Co to znaczy dla kogoś, kto chce zapisać milion takich rzutów?</li>
+    </ol>
+  </div>
+  <p class="src">C. E. Shannon, <em>A Mathematical Theory of Communication</em>, Bell Syst. Tech. J. 27 (1948), §6.</p>
+</section>
+
+<!-- ═══════════════════ 2. KODY ═══════════════════ -->
+<section id="v-kody" hidden>
+  <h2>6. Huffman i Shannon–Fano krok po kroku</h2>
+  <p class="lead">Zbuduj kod prefiksowy dwiema metodami. Huffman łączy od dołu dwa najlżejsze drzewa. Shannon–Fano dzieli od góry posortowaną listę na dwie części o możliwie równych sumach.</p>
+
+  <div class="card">
+    <h3>Dane</h3>
+    <div class="row" id="kdPresets"></div>
+    <div class="row" style="margin-top:10px">
+      <input id="kdText" type="text" maxlength="200" placeholder="albo wpisz własny tekst…" aria-label="Własny tekst do zakodowania" style="flex:1; min-width: 200px">
+      <button class="btn" id="kdTextGo">Policz litery</button>
+    </div>
+    <p id="kdErr" class="err" hidden></p>
+    <p id="kdData" class="small" style="margin-top:8px"></p>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <div class="seg" role="group" aria-label="Metoda" id="kdMode">
+        <button data-m="huff" aria-pressed="true">Huffman</button>
+        <button data-m="sf" aria-pressed="false">Shannon–Fano</button>
+      </div>
+      <div class="row">
+        <button class="btn ghost small" id="kdStep">Zrób krok za mnie</button>
+        <button class="btn ghost small" id="kdAll">Dokończ</button>
+        <button class="btn ghost small" id="kdReset">Od nowa</button>
+      </div>
+    </div>
+    <p id="kdInstr" class="small muted" style="margin-top:10px"></p>
+    <div id="kdWork"></div>
+    <p id="kdMsg" class="question" aria-live="polite"></p>
+    <div id="kdTree" class="treewrap" aria-hidden="true"></div>
+    <div id="kdResult" hidden></div>
+  </div>
+
+  <div class="card" id="kdCmp" hidden>
+    <h3>Porównanie na tych danych</h3>
+    <div class="cmp" id="kdCmpBody"></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Na danych 0,35 / 0,17 / 0,17 / 0,16 / 0,15 Huffman wygrywa minimalnie. Spróbuj 0,4 / 0,3 / 0,2 / 0,1. Czy zawsze jest różnica?</li>
+      <li>W Shannonie–Fano wybierz celowo „złe” cięcie. O ile pogarsza się L? Czy kod nadal jest prefiksowy?</li>
+      <li>Przy remisie wag Huffman może połączyć różne pary. Czy zmienia to kody? A średnią długość L?</li>
+    </ol>
+  </div>
+  <p class="src">D. A. Huffman, <em>A Method for the Construction of Minimum-Redundancy Codes</em>, Proc. IRE 40(9), 1952, s. 1098–1101; metoda Fano za: C. E. Shannon 1948, §9.</p>
+</section>
+
+<!-- ═══════════════════ 3. PRACOWNIA KODÓW ═══════════════════ -->
+<section id="v-pracownia" hidden>
+  <h2>3. Pracownia kodów</h2>
+  <p class="lead">Wpisz słowa kodowe (z zer i jedynek) dla każdego symbolu. Strona na bieżąco sprawdza, czy kod jest prefiksowy (warunek Fano) i czy da się go jednoznacznie odczytać, liczy sumę Krafta, średnią długość L i redundancję R.</p>
+
+  <div class="card">
+    <h3>Twój kod</h3>
+    <div class="row" id="prPresets"></div>
+    <div class="ctab" id="prTab"></div>
+    <div class="row">
+      <button class="btn ghost small" id="prAdd">+ symbol</button>
+      <button class="btn ghost small" id="prDel">− symbol</button>
+    </div>
+    <p class="small muted" style="margin-top:8px">Prawdopodobieństwa wpisuj jako ułamek (1/8) albo liczbę (0,125). Jeśli nie sumują się do 1, strona je przeskaluje.</p>
+  </div>
+
+  <div class="card">
+    <h3>Diagnoza</h3>
+    <div class="verdicts" id="prVerdicts"></div>
+    <div class="stats" id="prStats"></div>
+  </div>
+
+  <div class="card">
+    <h3>Odczytaj ciąg bitów</h3>
+    <div class="row">
+      <input id="prBits" type="text" inputmode="numeric" maxlength="40" value="001001" aria-label="Ciąg bitów do odczytania" style="flex:1; min-width: 180px; font-family: var(--mono)">
+      <button class="btn" id="prDecode">Odczytaj</button>
+    </div>
+    <div id="prOut" aria-live="polite"></div>
+    <div class="row" style="margin-top:14px">
+      <input id="prWord" type="text" maxlength="16" placeholder="np. ABBA" aria-label="Wiadomość z symboli do zakodowania" style="flex:1; min-width: 140px; font-family: var(--mono); text-transform: uppercase">
+      <button class="btn ghost" id="prEncode">Zakoduj i odczytaj</button>
+    </div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Kod II ma sumę Krafta 9/8. Spróbuj zmienić w nim jedno słowo tak, żeby stał się prefiksowy, nie wydłużając pozostałych. Czy się da?</li>
+      <li>Kod {0, 01, 11} nie jest prefiksowy, a jednak jest jednoznaczny. Odczytaj <span class="mono">0111</span> i <span class="mono">01111</span>. Kiedy wiesz, jaki był pierwszy symbol?</li>
+      <li>Fragment alfabetu Morse’a bez pauz (E = 0, T = 1, I = 00, A = 01…) jest niejednoznaczny. Co w praktyce pełni rolę trzeciego symbolu?</li>
+    </ol>
+  </div>
+  <p class="src">Test jednoznaczności: algorytm Sardinasa–Pattersona (1953), bez dowodu. Nierówność Krafta–McMillana: Kraft 1949, McMillan 1956; zob. też C. E. Shannon 1948, §9.</p>
+</section>
+
+<!-- ═══════════════════ 4. SZUM I REDUNDANCJA ═══════════════════ -->
+<section id="v-szum" hidden>
+  <h2>5. Szum i pożądana redundancja</h2>
+  <p class="lead">Kompresja usuwa redundancję. Tutaj dodajemy ją celowo: wysyłamy dodatkowe bity, żeby odbiorca mógł wykryć albo nawet poprawić przekłamania. Kliknij dowolny bit w kanale, żeby go przekłamać.</p>
+
+  <div class="card">
+    <div class="row">
+      <label for="szText">Wiadomość</label>
+      <input id="szText" type="text" maxlength="12" value="TAK" style="font-family: var(--mono); width: 10em">
+      <label for="szP">Prawdopodobieństwo przekłamania bitu</label>
+      <input id="szP" type="range" min="0" max="0.2" step="0.005" value="0.03" style="flex:1; min-width: 140px">
+      <span class="mono" id="szPV"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="szSend">Wyślij przez szum</button>
+      <button class="btn ghost" id="szClear">Bez przekłamań</button>
+    </div>
+    <p class="small muted" style="margin-top:8px">Każdy znak to 8 bitów (UTF-8; polska litera zajmuje 2 bajty). Bity dodane dla bezpieczeństwa są pochyłe i szare; przekłamane są czerwone.</p>
+  </div>
+
+  <div id="szLanes"></div>
+
+  <div class="card">
+    <h3>Wyślij tę wiadomość 1000 razy</h3>
+    <p class="small muted">Przy obecnym prawdopodobieństwie przekłamania. Kolumna „teoretycznie” to wynik z rachunku prawdopodobieństwa.</p>
+    <button class="btn" id="szSim">Symuluj</button>
+    <div class="scroll-x" style="margin-top:10px"><table class="t" id="szSimT" hidden><thead><tr><th>Metoda</th><th class="n">Bitów</th><th class="n">Doszło poprawnie</th><th class="n">Teoretycznie</th><th class="n">Błąd wykryty</th><th class="n">Błąd niezauważony</th></tr></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Przekłam dwa bity w tym samym bajcie w wariancie z bitem parzystości. Co widzi odbiorca?</li>
+      <li>Potrójne powtórzenie i kod Hamminga poprawiają pojedyncze błędy. Który robi to taniej i ile kosztuje każdy z nich?</li>
+      <li>Ustaw prawdopodobieństwo na 0. Redundancja jest wtedy czystym kosztem. Gdzie w praktyce się ją jednak płaci? (Sieci, dyski RAID, kody QR, kopie zapasowe.)</li>
+    </ol>
+  </div>
+  <p class="src">R. W. Hamming, <em>Error Detecting and Error Correcting Codes</em>, Bell System Technical Journal 29(2), 1950, s. 147–160.</p>
+</section>
+
+<!-- ═══════════════════ 3. HICK–HYMAN ═══════════════════ -->
+<section id="v-hick" hidden>
+  <h2>2. Prawo Hicka–Hymana</h2>
+  <p class="lead">Czas reakcji z wyborem rośnie wraz z entropią zbioru bodźców. Zmierz to na sobie: gdy zapali się światło, naciśnij odpowiadający mu klawisz tak szybko, jak potrafisz, starając się nie pomylić.</p>
+  <p class="note" id="hDevice" hidden>Na telefonie pomiar jest mniej dokładny: ekran dotykowy dodaje własne opóźnienia. Jeśli możesz, użyj komputera z klawiaturą.</p>
+
+  <div class="card">
+    <div class="hstage" id="hStage">
+      <div class="hstatus" id="hStatus" aria-live="polite"></div>
+      <div class="lights" id="hLights" aria-hidden="true"></div>
+      <div class="lkeys" id="hKeys" aria-hidden="true"></div>
+      <div class="hpad" id="hPad"></div>
+      <div id="hCtl" style="margin-top:16px"></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <label class="small"><input type="checkbox" id="hShort"> Krótka wersja (12 prób na warunek zamiast 20)</label>
+    </div>
+  </div>
+
+  <div class="card" id="hRes" hidden>
+    <h3>Twoje wyniki</h3>
+    <div class="scroll-x"><table class="t" id="hTable"><thead><tr><th>Warunek</th><th class="n">H (bity)</th><th class="n">Mediana czasu reakcji</th><th class="n">Pomyłki</th></tr></thead><tbody></tbody></table></div>
+    <div class="chart" id="hChart"></div>
+    <p id="hFit"></p>
+    <p class="small muted" id="hCmp"></p>
+  </div>
+
+  <div id="grupa-hick"></div>
+
+  <div class="note"><strong>Demonstracja, a nie eksperyment:</strong> jedna krótka sesja, przeglądarka i ekran dodają kilkadziesiąt milisekund, a kolejność warunków jest stała (efekt wprawy). Liczy się kształt zależności, nie dokładne wartości.</div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Warunek „4 bodźce, nierówno” ma tyle samo bodźców co „4 bodźce”, ale mniejszą entropię. Jak wypadł Twój czas reakcji? O tym był eksperyment Hymana.</li>
+      <li>Hick najlepiej dopasował dane do log₂(n + 1), a nie log₂ n. Co oznacza „+1”? (Podpowiedź: czy przy jednym bodźcu nie ma żadnej niepewności?)</li>
+      <li>Co z tego wynika dla projektu menu w aplikacji: czy 8 opcji jest „8 razy wolniejsze” od jednej?</li>
+    </ol>
+  </div>
+  <p class="src">W. E. Hick, <em>On the Rate of Gain of Information</em>, Q. J. Exp. Psychol. 4(1), 1952, s. 11–26; R. Hyman, <em>Stimulus Information as a Determinant of Reaction Time</em>, J. Exp. Psychol. 45(3), 1953, s. 188–196.</p>
+</section>
+
+<!-- ═══════════════════ 4. NASTĘPNA LITERA ═══════════════════ -->
+<section id="v-litera" hidden>
+  <h2>4. Zgadnij następną literę</h2>
+  <p class="lead">Ile informacji niesie jedna litera polskiego tekstu? Claude Shannon zmierzył to w 1951 r. grą: ktoś zgaduje kolejne znaki ukrytego tekstu, a ktoś inny zapisuje, za którym razem padła trafna odpowiedź. Zagraj. Tekst ma tylko małe litery i spacje, bez interpunkcji, czyli 33 możliwe znaki.</p>
+
+  <div class="card">
+    <div class="row">
+      <button class="btn ghost small" id="lNowy">Inny tekst</button>
+      <button class="btn ghost small" id="lPartner" aria-expanded="false">Tekst dla partnera</button>
+      <span class="small muted" id="lInfo"></span>
+    </div>
+    <div id="lPartnerBox" hidden style="margin-top:10px">
+      <label for="lPartnerIn" class="small">Wpisz zdanie tak, żeby partner go nie widział (co najmniej 30 znaków). Interpunkcja i wielkie litery zostaną usunięte.</label>
+      <div class="row" style="margin-top:6px">
+        <input id="lPartnerIn" type="password" autocomplete="off" spellcheck="false" style="flex:1; min-width: 200px">
+        <button class="btn small" id="lPartnerGo">Zacznij</button>
+      </div>
+      <p class="small" id="lPartnerErr" style="color: var(--bad)"></p>
+    </div>
+    <div class="ltext" id="lTekst" aria-label="Odgadnięta część tekstu"></div>
+    <div class="lstatus" id="lStatus" aria-live="polite"></div>
+    <div class="lkb" id="lKlaw" aria-label="Litery do wyboru"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="lKoniec" disabled>Zakończ i policz</button>
+      <span class="small muted" id="lPodp"></span>
+    </div>
+  </div>
+
+  <div class="card" id="lWynik" hidden>
+    <h3>Twój wynik</h3>
+    <p id="lPodsum"></p>
+    <p class="small muted" style="margin-bottom:4px">Za którym razem trafiałeś (procent znaków):</p>
+    <div id="lRozklad"></div>
+    <div class="scroll-x" style="margin-top:14px"><table class="t" id="lTab"><thead><tr><th>Kto zgaduje</th><th class="n">Za 1. razem</th><th class="n">Oszacowanie H (bity na znak)</th></tr></thead><tbody></tbody></table></div>
+    <p class="small muted" id="lGw" hidden>* Dolne oszacowanie Shannona zakłada, że najczęściej trafia się za 1. razem, rzadziej za 2. itd. Przy tym zgadywaniu warunek nie zachodzi, więc podajemy tylko górne.</p>
+    <p id="lRed"></p>
+    <p class="small muted" style="margin-bottom:0">Pod każdym znakiem: u góry Twoja liczba prób, na dole (pomarańczowa) liczba prób maszyny pamiętającej 3 poprzednie znaki.</p>
+    <div class="ltext" id="lPor"></div>
+    <details style="margin-top:14px">
+      <summary><strong>Dlaczego z liczby prób da się oszacować entropię?</strong></summary>
+      <p>Wyobraź sobie, że nadawca i odbiorca mają identycznego „bliźniaka”, który zgaduje zawsze tak samo. Zamiast tekstu wystarczy wysłać same liczby prób: odbiorca prosi bliźniaka o kolejne propozycje i bierze tę o podanym numerze. Ciąg liczb niesie więc całą informację tekstu. Jest też bardzo przewidywalny (dużo jedynek), więc da się go krótko zakodować, np. kodem Huffmana. Stąd górne oszacowanie: entropia rozkładu liczb prób, H ≤ −Σ q<sub>i</sub> log₂ q<sub>i</sub>, gdzie q<sub>i</sub> to odsetek znaków odgadniętych za i-tym razem. Dolne oszacowanie Shannon wyprowadził osobno; tu podajemy je bez dowodu.</p>
+      <p>Maszyna jest takim bliźniakiem: działa zawsze tak samo. Sprawdź, że z jej liczb prób da się odtworzyć tekst.</p>
+      <button class="btn small ghost" id="lOdtworz">Odtwórz tekst z samych liczb maszyny</button>
+      <p class="small lodtw" id="lOdtw"></p>
+    </details>
+  </div>
+
+  <div id="grupa-litera"></div>
+
+  <div class="note"><strong>To szacunek, nie pomiar.</strong> Przy ok. 100 znakach kilka szczęśliwych lub pechowych trafień przesuwa wynik o kilka dziesiątych bitu. Shannon dla angielskiego (27 znaków, kontekst do 100 liter) otrzymał od ok. 0,6 do ok. 1,3 bitu na znak. Dla polskiego z 33 znakami wyniki nie muszą być takie same.</div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Gdzie trafiałeś od razu, a gdzie potrzebowałeś wielu prób? Porównaj początki i końce wyrazów.</li>
+      <li>Maszyna pamiętająca więcej znaków zgaduje lepiej, ale zwykle i tak przegrywa z człowiekiem. Czego ona nie wie, a Ty wiesz? Duże modele językowe robią to samo co ta maszyna, czyli przewidują następny fragment tekstu, tylko uczą się na ogromnych zbiorach tekstów i patrzą na bardzo długi kontekst.</li>
+      <li>Jeśli H wynosi ok. 1,5 bitu na znak, a log₂ 33 ≈ 5,04, to ok. 70% „pojemności” każdego znaku jest przewidywalne. Jak ta redundancja pomaga przeczytać tekst z literówkami albo dokończyć czyjeś zdanie?</li>
+    </ol>
+  </div>
+  <p class="src">C. E. Shannon, <em>Prediction and Entropy of Printed English</em>, Bell System Technical Journal 30(1), 1951, s. 50–64. Maszyna uczy się na ok. 10 tys. znaków tekstów napisanych na potrzeby tej strony. Teksty do zgadywania nie należą do tego zbioru.</p>
+</section>
+
+<!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
+<section id="v-ustawienia" hidden>
+  <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
+  <p class="lead">Ćwiczenia 2 (prawo Hicka–Hymana) i 4 (następna litera) mogą wysyłać anonimowe wyniki do Formularza Google i rysować wykres całej sali. Możesz użyć tego samego formularza i arkusza co w wykładzie 1; zmień tylko nazwę sesji. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła.</p>
+
+  <div class="card">
+    <h3>Jednorazowe przygotowanie (ok. 10 min)</h3>
+    <ol>
+      <li>Utwórz nowy Formularz Google z <strong>czterema pytaniami typu „Krótka odpowiedź”</strong> o nazwach dokładnie: <code>aplikacja</code>, <code>sesja</code>, <code>wariant</code>, <code>wynik</code>. Żadne nie powinno być wymagane.</li>
+      <li>W <strong>Ustawieniach → Odpowiedzi</strong> wyłącz zbieranie adresów e-mail i <strong>ograniczenie do użytkowników SWPS</strong>. Nie włączaj „Ogranicz do 1 odpowiedzi”. Inaczej wysyłka ze strony nie zadziała.</li>
+      <li>W zakładce <strong>Odpowiedzi</strong> kliknij „Połącz z Arkuszami” i utwórz nowy arkusz.</li>
+      <li>W arkuszu: <strong>Plik → Udostępnij → Opublikuj w internecie</strong>. Wybierz arkusz z odpowiedziami i format <strong>CSV</strong>, opublikuj i skopiuj link.</li>
+      <li>W formularzu: <strong>⋮ → Pobierz link wstępnie wypełniony</strong>. Wpisz w pola kolejno <code>APLIKACJA</code>, <code>SESJA</code>, <code>WARIANT</code>, <code>WYNIK</code>, kliknij „Pobierz link” i skopiuj go.</li>
+      <li>Wklej oba linki poniżej, nadaj nazwę sesji i kliknij „Sprawdź”.</li>
+    </ol>
+    <p class="small muted">Wysyłane są tylko: nazwa ćwiczenia, nazwa sesji, wariant i liczba. Arkusz dodaje znacznik czasu. Opublikowany CSV jest publiczny, więc nie dodawaj do formularza pytań o dane osobowe.</p>
+  </div>
+
+  <div class="card">
+    <h3>Konfiguracja</h3>
+    <div class="field">
+      <label for="sPrefill">Link wstępnie wypełniony z formularza</label>
+      <textarea id="sPrefill" style="min-height:70px" placeholder="https://docs.google.com/forms/d/e/…/viewform?usp=pp_url&amp;entry.…=APLIKACJA&amp;…"></textarea>
+      <span id="sPrefillInfo" class="small"></span>
+    </div>
+    <div class="field">
+      <label for="sCsv">Link do opublikowanego arkusza (CSV)</label>
+      <input id="sCsv" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=…&amp;single=true&amp;output=csv">
+    </div>
+    <div class="field">
+      <label for="sSes">Nazwa sesji</label>
+      <input id="sSes" type="text" maxlength="60" style="max-width: 320px">
+      <span class="small muted">Histogram pokazuje tylko wyniki z tej sesji. Na kolejne zajęcia lub grupę zmień nazwę; formularz zostaje ten sam.</span>
+    </div>
+    <div class="field" id="sBaseWrap">
+      <label for="sBase">Adres strony w sieci (do linku dla studentów)</label>
+      <input id="sBase" type="url" placeholder="https://login.github.io/wdi/w02.html">
+      <span class="small muted" id="sBaseInfo"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="sCheck">Sprawdź</button>
+      <button class="btn ghost" id="sSave">Zapisz w tej przeglądarce</button>
+      <button class="btn ghost" id="sForget">Usuń z tej przeglądarki</button>
+    </div>
+    <div id="sOut" class="small" style="margin-top:10px" aria-live="polite"></div>
+  </div>
+
+  <div class="card" id="sLinksCard" hidden>
+    <h3>Linki dla studentów (tryb grupowy)</h3>
+    <p class="small muted">Te linki włączają wysyłanie wyników i wykres grupy. Pokaż je na slajdzie (najlepiej jako kod QR). Zwykły adres strony, bez parametru <code>cfg</code>, działa bez wysyłania.</p>
+    <div class="field"><label for="sLinkH">Prawo Hicka–Hymana</label><div class="row"><input id="sLinkH" type="text" readonly style="flex:1"><button class="btn small" data-copy="sLinkH">Kopiuj</button></div></div>
+    <div class="field"><label for="sLinkL">Zgadnij następną literę</label><div class="row"><input id="sLinkL" type="text" readonly style="flex:1"><button class="btn small" data-copy="sLinkL">Kopiuj</button></div></div>
+  </div>
+</section>
+
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline. Wysyła dane wyłącznie w trybie grupowym, i to tylko anonimowe wyniki liczbowe.</p>
+    <p><a href="#ustawienia">Dla prowadzącego: wspólne wyniki grupy</a></p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+const fmt = (x, d = 2) => Number(x).toLocaleString('pl-PL', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+const fmtInt = (x) => Number(x).toLocaleString('pl-PL');
+function h(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* brak dostępu */ } },
+};
+function isTyping() {
+  const a = document.activeElement;
+  if (!a) return false;
+  if (a.tagName === 'INPUT') return !['checkbox', 'radio', 'range', 'button', 'submit'].includes(a.type);
+  return a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable;
+}
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) {
+    const t = h('textarea'); t.value = text; document.body.append(t); t.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
+    t.remove(); return ok;
+  }
+}
+
+/* ═════════════════════ Wykres: histogram (SVG) ═════════════════════ */
+const SVGNS = 'http://www.w3.org/2000/svg';
+function s(tag, attrs = {}) { const e = document.createElementNS(SVGNS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); return e; }
+/**
+ * serie: [{nazwa, kolor ('s1'|'s2'), wartosci: number[]}]
+ * opts: {min, max (wartości ≥ max trafiają do ostatniego kubełka), etykietaX, znaczniki: [{x, tekst}]}
+ */
+function histogram(host, serie, opts) {
+  host.__rerender = () => histogram(host, serie, opts);
+  host.innerHTML = '';
+  const all = serie.flatMap((z) => z.wartosci);
+  if (all.length === 0) { host.append(h('p', { class: 'muted small', text: 'Brak wyników w tej sesji. Czekamy na pierwsze odpowiedzi…' })); return; }
+  const lo = Math.min(opts.min, ...all.map(Math.floor));
+  let hi = Math.max(opts.minMax ?? lo + 1, ...all.map(Math.ceil));
+  const cap = opts.cap ?? Infinity; const tail = hi > cap; if (tail) hi = cap;
+  const bins = []; for (let x = lo; x <= hi; x++) bins.push(x);
+  const counts = serie.map((z) => { const c = new Map(bins.map((b) => [b, 0])); for (const v of z.wartosci) { const b = Math.min(Math.max(Math.round(v), lo), hi); c.set(b, c.get(b) + 1); } return c; });
+  const maxC = Math.max(1, ...counts.flatMap((c) => [...c.values()]));
+  const W = Math.round(Math.max(300, Math.min(1100, host.clientWidth || 720))), H = W < 500 ? 270 : 310, m = { l: 36, r: 10, t: 36, b: 44 };
+  const pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const band = pw / bins.length;
+  const nS = serie.length; const gap = 2;
+  const bw = Math.min(24, (band * 0.72 - gap * (nS - 1)) / nS);
+  const groupW = bw * nS + gap * (nS - 1);
+  const yTicks = niceTicks(maxC);
+  const yMax = yTicks[yTicks.length - 1];
+  const y = (v) => m.t + ph - (v / yMax) * ph;
+  const xC = (i) => m.l + band * i + band / 2;
+  const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': opts.opis || 'Histogram wyników grupy' });
+  const gA = s('g', { class: 'axis' });
+  for (const t of yTicks) {
+    gA.append(s('line', { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), class: 'gridline' }));
+    const tx = s('text', { x: m.l - 8, y: y(t) + 4, 'text-anchor': 'end' }); tx.textContent = t; gA.append(tx);
+  }
+  const step = Math.ceil(bins.length / Math.max(4, Math.floor(pw / 30)));
+  bins.forEach((b, i) => {
+    if (i % step !== 0 && i !== bins.length - 1) return;
+    const tx = s('text', { x: xC(i), y: H - m.b + 18, 'text-anchor': 'middle' });
+    tx.textContent = (tail && i === bins.length - 1) ? `${b}+` : b; gA.append(tx);
+  });
+  const xl = s('text', { x: m.l + pw / 2, y: H - 6, 'text-anchor': 'middle' }); xl.textContent = opts.etykietaX; gA.append(xl);
+  const yl = s('text', { x: 4, y: 12, 'text-anchor': 'start' }); yl.textContent = 'liczba osób'; gA.append(yl);
+  svg.append(gA);
+  for (const z of (opts.znaczniki || [])) {
+    const i = bins.indexOf(z.x); if (i < 0) continue;
+    const xx = xC(i) + band / 2;
+    svg.append(s('line', { x1: xx, x2: xx, y1: m.t - 14, y2: m.t + ph, class: 'marker' }));
+    const tx = s('text', { x: xx + 5, y: m.t - 6, class: 'marker-lab' }); tx.textContent = z.tekst; svg.append(tx);
+  }
+  const gB = s('g');
+  bins.forEach((b, i) => {
+    counts.forEach((c, k) => {
+      const v = c.get(b); if (!v) return;
+      const x0 = xC(i) - groupW / 2 + k * (bw + gap);
+      const y0 = y(v), y1 = m.t + ph, r = Math.min(4, bw / 2, y1 - y0);
+      const d = `M${x0},${y1} V${y0 + r} Q${x0},${y0} ${x0 + r},${y0} H${x0 + bw - r} Q${x0 + bw},${y0} ${x0 + bw},${y0 + r} V${y1} Z`;
+      gB.append(s('path', { d, fill: `var(--${serie[k].kolor})` }));
+    });
+  });
+  svg.append(gB);
+  // warstwa najechania: cały pas kubełka
+  const tip = h('div', { class: 'tip', hidden: true });
+  bins.forEach((b, i) => {
+    const r = s('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, fill: 'transparent' });
+    const label = (tail && i === bins.length - 1) ? `${b} lub więcej` : `${b}`;
+    const lines = serie.map((z, k) => `${nS > 1 ? z.nazwa + ': ' : ''}${counts[k].get(b)} ${osoby(counts[k].get(b))}`);
+    r.addEventListener('pointerenter', () => {
+      tip.hidden = false; tip.innerHTML = '';
+      tip.append(h('strong', { text: `${opts.etykietaKrotka || ''}${label}` }), ...lines.map((l) => [h('br'), l]).flat());
+      const rect = svg.getBoundingClientRect(); const sc = rect.width / W;
+      tip.style.left = `${(xC(i)) * sc}px`; tip.style.top = `${(m.t + 10) * sc}px`;
+    });
+    r.addEventListener('pointerleave', () => { tip.hidden = true; });
+    svg.append(r);
+  });
+  host.append(svg, tip);
+  if (nS > 1) host.append(h('div', { class: 'legend' }, serie.map((z) => h('span', {}, h('i', { style: `background: var(--${z.kolor})` }), `${z.nazwa} (n = ${z.wartosci.length})`))));
+  // widok tabeli (dostępność)
+  const tb = h('table', { class: 't' }, h('thead', {}, h('tr', {}, h('th', { text: opts.etykietaX }), serie.map((z) => h('th', { class: 'n', text: nS > 1 ? z.nazwa : 'liczba osób' })))),
+    h('tbody', {}, bins.map((b, i) => h('tr', {}, h('td', { text: (tail && i === bins.length - 1) ? `${b}+` : String(b) }), counts.map((c) => h('td', { class: 'n', text: String(c.get(b)) }))))));
+  host.append(h('details', { class: 'small', style: 'margin-top:8px' }, h('summary', { text: 'Tabela' }), h('div', { class: 'scroll-x' }, tb)));
+}
+let resizeT = null;
+window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(() => { for (const c of $$('.chart')) if (c.__rerender && c.offsetParent) c.__rerender(); }, 150); });
+document.addEventListener('fullscreenchange', () => setTimeout(() => { for (const c of $$('.chart')) if (c.__rerender) c.__rerender(); }, 100));
+function niceTicks(max) {
+  const step = max <= 5 ? 1 : max <= 10 ? 2 : max <= 25 ? 5 : max <= 50 ? 10 : Math.pow(10, Math.floor(Math.log10(max))) / (max / Math.pow(10, Math.floor(Math.log10(max))) < 2.5 ? 2 : 1);
+  const top = Math.ceil(max / step) * step; const t = []; for (let v = 0; v <= top; v += step) t.push(v); return t;
+}
+function plural(n, a, b, c) { n = Math.abs(n); if (n === 1) return a; const d = n % 10, dd = n % 100; return (d >= 2 && d <= 4 && !(dd >= 12 && dd <= 14)) ? b : c; }
+const pl = (n, a, b, c) => `${fmtInt(n)} ${plural(n, a, b, c)}`;
+function osoby(n) { if (n === 1) return 'osoba'; const d = n % 10, dd = n % 100; return (d >= 2 && d <= 4 && !(dd >= 12 && dd <= 14)) ? 'osoby' : 'osób'; }
+function mediana(a) { if (!a.length) return null; const b = [...a].sort((x, y) => x - y); const k = Math.floor(b.length / 2); return b.length % 2 ? b[k] : (b[k - 1] + b[k]) / 2; }
+function hbars(host, items, { max, format, suffix = '' }) {
+  host.innerHTML = '';
+  const mx = max ?? Math.max(1, ...items.map((i) => i.v));
+  for (const it of items) {
+    const pct = Math.max(0.4, (it.v / mx) * 100);
+    const f = pct / 100;
+    const fill = h('div', { class: 'fill', style: `width: calc((100% - 100px) * ${f})` });
+    const val = h('div', { class: 'val', style: `left: calc((100% - 100px) * ${f} + 8px)`, text: (format ? format(it.v) : fmtInt(it.v)) + suffix });
+    host.append(h('div', { class: 'hbar' }, h('div', { class: 'lab' }, it.label, it.sub ? h('div', { class: 'small muted', text: it.sub }) : null), h('div', { class: 'track' }, fill, val)));
+  }
+}
+
+/* ═════════════════════ Tryb grupowy ═════════════════════ */
+const CFG_KEY = 'wdi-w02-grupa';
+function b64e(str) { const b = new TextEncoder().encode(str); let bin = ''; b.forEach((x) => { bin += String.fromCharCode(x); }); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64d(str) { let t = str.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; const bin = atob(t); return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))); }
+function cfgPoprawna(c) {
+  return c && typeof c === 'object' && /^https?:\/\//.test(c.f || '') && /^https?:\/\//.test(c.c || '') &&
+    c.e && ['a', 's', 'w', 'v'].every((k) => /^entry\.\d+$/.test(c.e[k] || '')) && typeof c.s === 'string' && c.s.trim().length > 0 && c.s.length <= 60;
+}
+function parseCSV(text) {
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(f); f = ''; }
+    else if (ch === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (ch !== '\r') f += ch;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x !== ''));
+}
+const Grupa = {
+  cfg: null, zrodlo: null,
+  init() {
+    const p = new URLSearchParams(location.search).get('cfg');
+    if (p) { try { const c = JSON.parse(b64d(p)); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'url'; } } catch (e) { /* zły parametr: tryb samodzielny */ } }
+    if (!this.cfg) { const raw = store.get(CFG_KEY); if (raw) { try { const c = JSON.parse(raw); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'local'; } } catch (e) { /* ignoruj */ } } }
+    this.odznaka();
+  },
+  aktywna() { return !!this.cfg; },
+  odznaka() {
+    const b = $('#groupBadge');
+    if (!this.cfg) { b.hidden = true; return; }
+    b.hidden = false; b.textContent = `Tryb grupowy · ${this.cfg.s}`;
+    b.title = this.zrodlo === 'local' ? 'Konfiguracja zapisana w tej przeglądarce' : 'Konfiguracja z linku';
+  },
+  async wyslij(aplikacja, wariant, wynik, cfg = this.cfg) {
+    const body = new URLSearchParams();
+    body.set(cfg.e.a, aplikacja); body.set(cfg.e.s, cfg.s); body.set(cfg.e.w, wariant); body.set(cfg.e.v, String(wynik));
+    await fetch(cfg.f, { method: 'POST', mode: 'no-cors', body });
+  },
+  async pobierz(cfg = this.cfg) {
+    const r = await fetch(cfg.c, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`serwer odpowiedział kodem ${r.status}`);
+    const rows = parseCSV(await r.text());
+    if (rows.length === 0) return { rows: [], kol: null };
+    const head = rows[0].map((x) => x.trim().toLowerCase());
+    const idx = (n, fb) => { const i = head.indexOf(n); return i >= 0 ? i : fb; };
+    const kol = { a: idx('aplikacja', 1), s: idx('sesja', 2), w: idx('wariant', 3), v: idx('wynik', 4), znalezione: ['aplikacja', 'sesja', 'wariant', 'wynik'].every((n) => head.includes(n)) };
+    const out = rows.slice(1).map((r) => ({ a: (r[kol.a] || '').trim(), s: (r[kol.s] || '').trim(), w: (r[kol.w] || '').trim(), v: Number(String(r[kol.v] || '').replace(',', '.').trim()) }));
+    return { rows: out, kol };
+  },
+};
+
+/** Panel wyników grupy w danym ćwiczeniu. */
+function panelGrupy(host, { aplikacja, tytul, rysuj }) {
+  if (!Grupa.aktywna()) return null;
+  let payload = null, timer = null, aktywny = false;
+  const status = h('span', { class: 'small muted', 'aria-live': 'polite' });
+  const send = h('button', { class: 'btn', disabled: true, text: 'Wyślij mój wynik do grupy' });
+  const meta = h('p', { class: 'small muted' });
+  const chart = h('div', { class: 'chart' });
+  const stats = h('p', { class: 'small' });
+  const refresh = h('button', { class: 'btn ghost small', text: 'Odśwież' });
+  const big = h('button', { class: 'btn ghost small', text: 'Na cały ekran' });
+  const box = h('div', { class: 'group' },
+    h('h3', {}, h('span', { class: 'dot' }), `${tytul} · sesja „${Grupa.cfg.s}”`),
+    h('div', { class: 'row' }, send, status),
+    stats, chart,
+    h('div', { class: 'row' }, refresh, big, meta));
+  host.append(box);
+
+  send.addEventListener('click', async () => {
+    if (!payload) return;
+    send.disabled = true; status.textContent = 'Wysyłanie…';
+    try {
+      for (const p of payload) await Grupa.wyslij(aplikacja, p.wariant, p.wynik);
+      status.textContent = 'Wysłano. Wynik pojawi się na wykresie po odświeżeniu arkusza (zwykle w ciągu kilku minut).';
+      payload = null;
+      setTimeout(odswiez, 4000);
+    } catch (e) {
+      status.textContent = 'Nie udało się wysłać (brak internetu?). Spróbuj ponownie.'; send.disabled = false;
+    }
+  });
+  async function odswiez() {
+    meta.textContent = 'Pobieranie…';
+    try {
+      const { rows } = await Grupa.pobierz();
+      const moje = rows.filter((r) => r.a === aplikacja && r.s === Grupa.cfg.s && Number.isFinite(r.v));
+      rysuj(chart, stats, moje);
+      meta.textContent = `Aktualizacja: ${new Date().toLocaleTimeString('pl-PL')}. Opublikowany arkusz odświeża się z opóźnieniem do kilku minut.`;
+    } catch (e) {
+      meta.textContent = `Wyniki grupy są chwilowo niedostępne (${e.message || 'błąd sieci'}). Twój wynik jest widoczny powyżej.`;
+    }
+  }
+  refresh.addEventListener('click', odswiez);
+  big.addEventListener('click', async () => {
+    if (box.classList.contains('big')) { box.classList.remove('big'); big.textContent = 'Na cały ekran'; if (chart.__rerender) chart.__rerender(); return; }
+    if (document.fullscreenElement) { await document.exitFullscreen(); return; }
+    if (box.requestFullscreen) { try { await box.requestFullscreen(); return; } catch (e) { /* zapasowo nakładka */ } }
+    box.classList.add('big'); big.textContent = 'Zamknij'; if (chart.__rerender) chart.__rerender();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && box.classList.contains('big')) { box.classList.remove('big'); big.textContent = 'Na cały ekran'; if (chart.__rerender) chart.__rerender(); } });
+  return {
+    gotowe(p) { payload = p; send.disabled = !p; if (p) status.textContent = ''; },
+    start() { aktywny = true; odswiez(); clearInterval(timer); timer = setInterval(() => { if (aktywny && !document.hidden) odswiez(); }, 20000); },
+    stop() { aktywny = false; clearInterval(timer); },
+  };
+}
+
+
+
+/** Liczba bitów z poprawną odmianą: 1 bit, 2 bity, 5 bitów, 2,47 bitu. */
+function fbit(x, d = 3) {
+  if (!Number.isFinite(x)) return '∞';
+  const r = Number(x.toFixed(d));
+  return Number.isInteger(r) ? pl(r, 'bit', 'bity', 'bitów') : `${fmt(r, d)} bitu`;
+}
+
+/* ═════════════════════ Wykres: czas reakcji względem H (SVG) ═════════════════════ */
+function wykresRT(host, cfg) {
+  host.__rerender = () => wykresRT(host, cfg);
+  const { punkty = [], glowne = [], linia = null, opis = '' } = cfg;
+  host.innerHTML = '';
+  const ys = [...punkty, ...glowne].map((p) => p.y).filter(Number.isFinite);
+  if (!ys.length) { host.append(h('p', { class: 'muted small', text: 'Brak wyników. Czekamy na pierwsze odpowiedzi…' })); return; }
+  const W = Math.round(Math.max(300, Math.min(1100, host.clientWidth || 720))), H = W < 500 ? 280 : 320;
+  const m = { l: 52, r: 14, t: 22, b: 48 }; const pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const span = Math.max(...ys) - Math.min(...ys);
+  const step = span > 600 ? 200 : span > 250 ? 100 : 50;
+  const lo = Math.max(0, Math.floor((Math.min(...ys) - step / 2) / step) * step);
+  const hi = Math.ceil((Math.max(...ys) + step / 2) / step) * step;
+  const xMax = 3.25;
+  const X = (x) => m.l + (x / xMax) * pw; const Y = (y) => m.t + ph - ((y - lo) / (hi - lo)) * ph;
+  const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img', 'aria-label': opis });
+  const gA = s('g', { class: 'axis' });
+  for (let v = lo; v <= hi + 1e-9; v += step) {
+    gA.append(s('line', { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), class: 'gridline' }));
+    const t = s('text', { x: m.l - 8, y: Y(v) + 4, 'text-anchor': 'end' }); t.textContent = v; gA.append(t);
+  }
+  for (const x of [0, 1, 2, 3]) { const t = s('text', { x: X(x), y: H - m.b + 18, 'text-anchor': 'middle' }); t.textContent = x; gA.append(t); }
+  const xl = s('text', { x: m.l + pw / 2, y: H - 8, 'text-anchor': 'middle' }); xl.textContent = 'entropia zbioru bodźców H (bity)'; gA.append(xl);
+  const yl = s('text', { x: 4, y: 12, 'text-anchor': 'start' }); yl.textContent = 'czas reakcji (ms)'; gA.append(yl);
+  svg.append(gA);
+  if (linia) {
+    const x0 = 0, x1 = 3.1; const y0 = linia.a + linia.b * x0, y1 = linia.a + linia.b * x1;
+    const clip = (y) => Math.min(hi, Math.max(lo, y));
+    svg.append(s('line', { x1: X(x0), y1: Y(clip(y0)), x2: X(x1), y2: Y(clip(y1)), class: 'fitline' }));
+  }
+  for (const p of punkty) svg.append(s('circle', { cx: X(p.x) + (p.dx || 0), cy: Y(p.y), r: 3.5, class: 'pt' }));
+  for (const p of glowne) {
+    const c = s('circle', { cx: X(p.x), cy: Y(p.y), r: 6, class: 'med' });
+    const tt = s('title'); tt.textContent = `${p.lab}: H = ${fbit(p.x, 2)}, ${fmtInt(Math.round(p.y))} ms`; c.append(tt);
+    svg.append(c);
+    if (p.lab) { const t = s('text', { x: X(p.x) + 9, y: Y(p.y) - 8, class: 'ptlab' }); t.textContent = p.lab; svg.append(t); }
+  }
+  host.append(svg);
+}
+function regresja(pts) {
+  const n = pts.length; if (n < 2) return null;
+  const mx = pts.reduce((a, p) => a + p.x, 0) / n, my = pts.reduce((a, p) => a + p.y, 0) / n;
+  let sxy = 0, sxx = 0; for (const p of pts) { sxy += (p.x - mx) * (p.y - my); sxx += (p.x - mx) ** 2; }
+  if (sxx === 0) return null; const b = sxy / sxx; return { a: my - b * mx, b };
+}
+
+/* ═════════════════════ 1. PIASKOWNICA ENTROPII ═════════════════════ */
+const Entropia = (() => {
+  const SYM = 'ABCDEFGH'.split('');
+  const MAXB = 10;
+  let wagi = [40, 30, 20, 10];
+  const PRESETY = [
+    { nazwa: 'Równomierny', f: (n) => Array(n).fill(50) },
+    { nazwa: 'Źródło B ze slajdu', w: [16, 16, 16, 8, 4, 2, 1, 1] },
+    { nazwa: '1/2, 1/4, 1/8, 1/16, 1/16', w: [8, 4, 2, 1, 1] },
+    { nazwa: 'Moneta 0,9 / 0,1', w: [90, 10] },
+    { nazwa: 'Prawie pewnik 0,99 / 0,01', w: [99, 1] },
+  ];
+  const I = (p) => (p > 0 ? Math.log2(1 / p) : Infinity);
+  const Hof = (ps) => ps.reduce((a, p) => (p > 0 ? a + p * Math.log2(1 / p) : a), 0);
+  const bity = fbit;
+  function bud() {
+    const box = $('#eRows'); box.innerHTML = '';
+    wagi.forEach((w, i) => {
+      const r = h('input', { type: 'range', min: '0', max: '100', step: '1', value: String(w), 'aria-label': `Waga komunikatu ${SYM[i]}` });
+      r.addEventListener('input', () => { wagi[i] = Number(r.value); odswiez(); });
+      box.append(h('div', { class: 'erow', 'data-i': i },
+        h('span', { class: 'sym', text: SYM[i] }), r, h('span', { class: 'p' }),
+        h('div', { class: 'ebars' }, h('div', { class: 'bI' }), h('div', { class: 'bW' }), h('span', { class: 'over', hidden: true, text: '›' })),
+        h('span', { class: 'vals' })));
+    });
+    const ax = $('#eAxis'); ax.innerHTML = '';
+    for (let b = 0; b <= MAXB; b += 2) ax.append(h('span', { style: `left: ${(b / MAXB) * 100}%`, text: b === MAXB ? `${b} bit` : String(b) }));
+    odswiez();
+  }
+  function odswiez() {
+    const n = wagi.length; const sum = wagi.reduce((a, b) => a + b, 0);
+    const rows = $$('#eRows .erow');
+    if (sum === 0) { $('#eH').textContent = '—'; $('#eNote').textContent = 'Wszystkie wagi są zerowe. Ustaw przynajmniej jedną.'; return; }
+    const ps = wagi.map((w) => w / sum);
+    ps.forEach((p, i) => {
+      const r = rows[i]; const ii = I(p); const wk = p > 0 ? p * ii : 0;
+      $('.p', r).textContent = `${fmt(100 * p, 1)}%`;
+      $('.bI', r).style.width = `${Math.min(1, (Number.isFinite(ii) ? ii : MAXB) / MAXB) * 100}%`;
+      $('.bW', r).style.width = `${Math.min(1, wk / MAXB) * 100}%`;
+      $('.over', r).hidden = !(ii > MAXB);
+      $('.vals', r).textContent = p > 0 ? `I = ${fmt(ii, 2)} · wkład ${fmt(wk, 3)}` : 'p = 0: nigdy nie wystąpi';
+    });
+    const Hv = Hof(ps); const mx = Math.log2(n);
+    $('#eH').textContent = bity(Hv); $('#eMax').textContent = bity(mx); $('#ePct').textContent = `${fmt(100 * Hv / mx, 1)}%`;
+    const iMax = ps.reduce((k, p, i) => (p > 0 && p < ps[k] ? i : k), ps.findIndex((p) => p > 0));
+    $('#eNote').textContent = `Najbardziej zaskakujący komunikat: ${SYM[iMax]} (${bity(I(ps[iMax]), 2)}). Entropia to średnie zaskoczenie, więc rzadki komunikat mało do niej wnosi.`;
+  }
+  function ustawN(n) {
+    if (n > wagi.length) wagi = wagi.concat(Array(n - wagi.length).fill(25)); else wagi = wagi.slice(0, n);
+    $('#eN').value = String(n); bud();
+  }
+  // ───── krzywa H(p) ─────
+  let p0 = 0.9;
+  function Hb(p) { return (p <= 0 || p >= 1) ? 0 : -(p * Math.log2(p) + (1 - p) * Math.log2(1 - p)); }
+  function krzywa() {
+    const host = $('#eCurve'); host.innerHTML = ''; host.__rerender = krzywa;
+    const W = Math.round(Math.max(300, Math.min(900, host.clientWidth || 640))), H = W < 500 ? 230 : 260;
+    const m = { l: 44, r: 16, t: 16, b: 42 }; const pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const X = (p) => m.l + p * pw, Y = (v) => m.t + ph - v * ph;
+    const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img', 'aria-label': 'Wykres entropii monety H(p)' });
+    const gA = s('g', { class: 'axis' });
+    for (const v of [0, 0.5, 1]) { gA.append(s('line', { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), class: 'gridline' })); const t = s('text', { x: m.l - 8, y: Y(v) + 4, 'text-anchor': 'end' }); t.textContent = fmt(v, 1); gA.append(t); }
+    for (const p of [0, 0.25, 0.5, 0.75, 1]) { const t = s('text', { x: X(p), y: H - m.b + 18, 'text-anchor': 'middle' }); t.textContent = fmt(p, 2); gA.append(t); }
+    const xl = s('text', { x: m.l + pw / 2, y: H - 6, 'text-anchor': 'middle' }); xl.textContent = 'p = P(orzeł)'; gA.append(xl);
+    const yl = s('text', { x: 4, y: 11 }); yl.textContent = 'H (bity)'; gA.append(yl);
+    svg.append(gA);
+    let d = ''; for (let i = 0; i <= 200; i++) { const p = i / 200; d += `${i ? 'L' : 'M'}${X(p).toFixed(1)},${Y(Hb(p)).toFixed(1)}`; }
+    svg.append(s('path', { d, fill: 'none', stroke: 'var(--s1)', 'stroke-width': 2, 'stroke-linejoin': 'round' }));
+    svg.append(s('line', { x1: X(p0), x2: X(p0), y1: Y(0), y2: Y(Hb(p0)), stroke: 'var(--muted)', 'stroke-width': 1 }));
+    svg.append(s('circle', { cx: X(p0), cy: Y(Hb(p0)), r: 7, fill: 'var(--s1)', stroke: 'var(--surface)', 'stroke-width': 2 }));
+    const hit = s('rect', { x: m.l, y: m.t, width: pw, height: ph, fill: 'transparent', style: 'cursor: ew-resize; touch-action: none' });
+    let drag = false;
+    const ustaw = (e) => { const r = svg.getBoundingClientRect(); const x = (e.clientX - r.left) * (W / r.width); p0 = Math.min(1, Math.max(0, Math.round(((x - m.l) / pw) * 100) / 100)); $('#eP').value = String(p0); krzywa(); staty(); };
+    hit.addEventListener('pointerdown', (e) => { drag = true; hit.setPointerCapture(e.pointerId); ustaw(e); });
+    hit.addEventListener('pointermove', (e) => { if (drag) ustaw(e); });
+    hit.addEventListener('pointerup', () => { drag = false; });
+    svg.append(hit); host.append(svg);
+  }
+  function staty() {
+    $('#ePV').textContent = `${fmt(p0, 2)} (reszka: ${fmt(1 - p0, 2)})`;
+    $('#eHp').textContent = bity(Hb(p0)); $('#eIo').textContent = bity(I(p0), 2); $('#eIr').textContent = bity(I(1 - p0), 2);
+  }
+  function init() {
+    for (const pr of PRESETY) $('#ePresets').append(h('button', { class: 'btn ghost small', text: pr.nazwa, onclick: () => { wagi = pr.w ? [...pr.w] : pr.f(wagi.length); $('#eN').value = String(wagi.length); bud(); } }));
+    $('#eN').addEventListener('change', () => ustawN(Number($('#eN').value)));
+    $('#eP').addEventListener('input', () => { p0 = Number($('#eP').value); krzywa(); staty(); });
+    bud(); staty();
+  }
+  return { init, wejscie: () => krzywa() };
+})();
+
+/* ═════════════════════ 2. HUFFMAN I SHANNON–FANO ═════════════════════ */
+const Kody = (() => {
+  const PRESETY = [
+    { nazwa: 'A–E: 0,35 / 0,17 / 0,17 / 0,16 / 0,15', items: [['A', 35], ['B', 17], ['C', 17], ['D', 16], ['E', 15]], skala: 100 },
+    { nazwa: '0,4 / 0,3 / 0,2 / 0,1', items: [['A', 40], ['B', 30], ['C', 20], ['D', 10]], skala: 100 },
+    { nazwa: '1/2, 1/4, 1/8, 1/16, 1/16', items: [['A', 8], ['B', 4], ['C', 2], ['D', 1], ['E', 1]], skala: 16 },
+    { nazwa: 'ABRAKADABRA', tekst: 'ABRAKADABRA' },
+  ];
+  let dane = null, tryb = 'huff', wyniki = {};
+  let las = [], wybrane = [], nastId = 0, pomylki = 0;          // Huffman
+  let kol = [], stos = [], kodySF = {};                         // Shannon–Fano
+  const pOf = (w) => w / dane.suma;
+  const fw = (w) => (dane.liczn ? fmtInt(w) : fmt(w / dane.skala, 3));
+  const fp = (w) => fmt(pOf(w), 3);
+  const dispSym = (c) => (c === ' ' ? '␣' : c);
+
+  function ustawDane(d) {
+    dane = d; dane.suma = d.items.reduce((a, it) => a + it.w, 0); wyniki = {};
+    $('#kdData').textContent = (d.liczn ? `Tekst „${d.tekst}” (${d.N} znaków). Liczności: ` : 'Prawdopodobieństwa: ') +
+      d.items.map((it) => `${dispSym(it.s)} ${d.liczn ? it.w : fmt(it.w / d.skala, 3)}`).join(' · ');
+    $('#kdCmp').hidden = true; start();
+  }
+  function zTekstu(t) {
+    const err = $('#kdErr');
+    if (!t) { err.hidden = false; err.textContent = 'Wpisz tekst.'; return; }
+    const c = new Map(); for (const ch of t) c.set(ch, (c.get(ch) || 0) + 1);
+    if (c.size < 2) { err.hidden = false; err.textContent = 'Potrzebne są co najmniej dwa różne znaki.'; return; }
+    if (c.size > 14) { err.hidden = false; err.textContent = `Za dużo różnych znaków (${c.size}). Drzewo będzie czytelne do 14; skróć tekst.`; return; }
+    err.hidden = true;
+    const items = [...c.entries()].map(([s0, w]) => ({ s: s0, w }));
+    ustawDane({ items, liczn: true, tekst: t, N: [...t].length, skala: 1 });
+  }
+  function start() {
+    $('#kdResult').hidden = true; $('#kdMsg').textContent = '';
+    if (tryb === 'huff') {
+      nastId = 0; pomylki = 0; wybrane = [];
+      las = dane.items.map((it) => ({ id: nastId++, w: it.w, s: it.s }));
+      $('#kdInstr').textContent = 'Kliknij dwa drzewa o najmniejszych wagach. Zostaną połączone pod nowym węzłem o wadze równej sumie. Lżejsze idzie na lewo (0), cięższe na prawo (1).';
+    } else {
+      kol = [...dane.items].sort((a, b) => b.w - a.w); kodySF = Object.fromEntries(kol.map((it) => [it.s, '']));
+      stos = [{ a: 0, b: kol.length }];
+      $('#kdInstr').textContent = 'Lista jest posortowana malejąco. Wybierz miejsce cięcia bieżącej części (podświetlonej). Górna część dostaje 0, dolna 1. Klasyczna metoda wybiera cięcie, przy którym sumy są najbliższe.';
+    }
+    rysuj();
+  }
+  // ───── Huffman ─────
+  const lisc = (n) => !n.l;
+  const symbole = (n) => (lisc(n) ? [n.s] : [...symbole(n.l), ...symbole(n.r)]);
+  function dwaNajmniejsze() { const w = las.map((n) => n.w).sort((x, y) => x - y); return [w[0], w[1]]; }
+  function polacz(a, b) {
+    const [l, r] = a.w <= b.w ? [a, b] : [b, a];
+    const nowy = { id: nastId++, w: a.w + b.w, l, r };
+    las = las.filter((n) => n !== a && n !== b); las.push(nowy);
+    $('#kdMsg').textContent = `Połączono ${symbole(l).map(dispSym).join('')} (${fw(l.w)}) i ${symbole(r).map(dispSym).join('')} (${fw(r.w)}) → ${fw(nowy.w)}.`;
+  }
+  function klik(id) {
+    if (las.length < 2) return;
+    if (wybrane.includes(id)) wybrane = wybrane.filter((x) => x !== id); else wybrane.push(id);
+    if (wybrane.length === 2) {
+      const [a, b] = wybrane.map((x) => las.find((n) => n.id === x)); const [m1, m2] = dwaNajmniejsze();
+      const ws = [a.w, b.w].sort((x, y) => x - y);
+      if (ws[0] === m1 && ws[1] === m2) { polacz(a, b); wybrane = []; }
+      else { pomylki++; $('#kdMsg').textContent = `To nie są dwa najlżejsze drzewa. Najmniejsze wagi to ${fw(m1)} i ${fw(m2)}.`; wybrane = []; }
+    }
+    rysuj();
+  }
+  function krokHuff() { const [m1, m2] = dwaNajmniejsze(); const a = las.find((n) => n.w === m1); const b = las.find((n) => n !== a && n.w === m2); polacz(a, b); wybrane = []; }
+  function kodyHuff() { const k = {}; const idz = (n, c) => { if (lisc(n)) k[n.s] = c || '0'; else { idz(n.l, c + '0'); idz(n.r, c + '1'); } }; idz(las[0], ''); return k; }
+  function rysujLas() {
+    const work = $('#kdWork'); work.innerHTML = '';
+    const tiles = h('div', { class: 'tiles' });
+    for (const n of las) {
+      tiles.append(h('button', { class: `tnode${wybrane.includes(n.id) ? ' sel' : ''}`, onclick: () => klik(n.id), disabled: las.length < 2, 'aria-pressed': wybrane.includes(n.id) ? 'true' : 'false' },
+        h('span', { class: 'w', text: fw(n.w) }), h('span', { class: 's', text: symbole(n).map(dispSym).join(' ') })));
+    }
+    work.append(tiles);
+    // drzewa
+    const kody = las.length === 1 ? kodyHuff() : null;
+    const colW = 52, rowH = 62, R = 19; let col = 0; const nodes = [], edges = [];
+    const umiesc = (n, d, root) => {
+      if (lisc(n)) { n.x = col++; n.y = d; } else { umiesc(n.l, d + 1); umiesc(n.r, d + 1); n.x = (n.l.x + n.r.x) / 2; n.y = d; edges.push([n, n.l, '0'], [n, n.r, '1']); }
+      n.root = !!root; nodes.push(n);
+    };
+    las.forEach((t) => { umiesc(t, 0, true); col += 0.5; });
+    const maxD = Math.max(...nodes.map((n) => n.y));
+    const W = Math.max(1, col - 0.5) * colW + 40, H = (maxD + 1) * rowH + (kody ? 44 : 30);
+    const X = (x) => 20 + x * colW + colW / 2, Y = (y) => 26 + y * rowH;
+    const svg = s('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}` });
+    for (const [a, b, z] of edges) {
+      svg.append(s('line', { x1: X(a.x), y1: Y(a.y) + R, x2: X(b.x), y2: Y(b.y) - R, class: 'edge' }));
+      const t = s('text', { x: (X(a.x) + X(b.x)) / 2 + (b.x < a.x ? -9 : 5), y: (Y(a.y) + Y(b.y)) / 2 + 4, class: 'elab' }); t.textContent = z; svg.append(t);
+    }
+    for (const n of nodes) {
+      const g = s('g', { class: `node${lisc(n) ? ' leaf' : ''}${n.root && las.length > 1 ? ' root' : ''}${wybrane.includes(n.id) ? ' sel' : ''}` });
+      g.append(s('circle', { cx: X(n.x), cy: Y(n.y), r: R }));
+      const t = s('text', { x: X(n.x), y: Y(n.y) + 4, 'text-anchor': 'middle' }); t.textContent = fw(n.w); g.append(t);
+      if (lisc(n)) {
+        const ts = s('text', { x: X(n.x), y: Y(n.y) + R + 16, 'text-anchor': 'middle', class: 'lsym' }); ts.textContent = dispSym(n.s); g.append(ts);
+        if (kody) { const tc = s('text', { x: X(n.x), y: Y(n.y) + R + 32, 'text-anchor': 'middle', class: 'lcode' }); tc.textContent = kody[n.s]; g.append(tc); }
+      }
+      if (n.root && las.length > 1) g.addEventListener('click', () => klik(n.id));
+      svg.append(g);
+    }
+    const tr = $('#kdTree'); tr.innerHTML = ''; tr.append(svg);
+    if (kody) koniec('huff', kody);
+  }
+  // ───── Shannon–Fano ─────
+  function sumy(a, k, b) { let L = 0, P = 0; for (let i = a; i < k; i++) L += kol[i].w; for (let i = k; i < b; i++) P += kol[i].w; return [L, P]; }
+  function najlepszeCiecie(a, b) { let best = a + 1, bd = Infinity; for (let k = a + 1; k < b; k++) { const [L, P] = sumy(a, k, b); if (Math.abs(L - P) < bd - 1e-12) { bd = Math.abs(L - P); best = k; } } return best; }
+  function tnij(k) {
+    const { a, b } = stos.pop(); const naj = najlepszeCiecie(a, b);
+    for (let i = a; i < b; i++) kodySF[kol[i].s] += i < k ? '0' : '1';
+    if (b - k > 1) stos.push({ a: k, b }); if (k - a > 1) stos.push({ a, b: k });
+    const [L, P] = sumy(a, k, b);
+    $('#kdMsg').textContent = k === naj ? `Cięcie ${fw(L)} | ${fw(P)}: najbliższe połowie.` : `Cięcie ${fw(L)} | ${fw(P)}. Klasyczna metoda cięłaby tak, żeby sumy były bliższe (różnica ${fw(Math.abs(sumy(a, naj, b)[0] - sumy(a, naj, b)[1]))} zamiast ${fw(Math.abs(L - P))}).`;
+    rysuj();
+  }
+  function rysujSF() {
+    const work = $('#kdWork'); work.innerHTML = ''; $('#kdTree').innerHTML = '';
+    const cur = stos[stos.length - 1]; const box = h('div', { class: 'sf' });
+    box.append(h('div', { class: 'sfrow small muted' }, h('span', { text: 'symbol' }), h('span', { class: 'p', text: dane.liczn ? 'liczność' : 'p' }), h('span', { text: 'kod (na razie)' })));
+    kol.forEach((it, i) => {
+      const w = cur && i >= cur.a && i < cur.b;
+      const sep = i > 0 && kodySF[kol[i - 1].s] !== kodySF[it.s];
+      box.append(h('div', { class: `sfrow${w ? ' cur' : ''}${!cur || w ? '' : ' out'}${sep ? ' sep' : ''}` }, h('span', { class: 's', text: dispSym(it.s) }), h('span', { class: 'p', text: fw(it.w) }), h('span', { class: 'c', text: kodySF[it.s] || '·' })));
+      if (w && i + 1 < cur.b) { const [L, P] = sumy(cur.a, i + 1, cur.b); box.append(h('button', { class: 'cut', onclick: () => tnij(i + 1), text: `✂ tnij tutaj: ${fw(L)} | ${fw(P)}` })); }
+    });
+    work.append(box);
+    if (!cur) koniec('sf', kodySF);
+  }
+  // ───── wyniki ─────
+  function koniec(m, kody) {
+    const res = $('#kdResult'); res.hidden = false; res.innerHTML = '';
+    const Hv = dane.items.reduce((a, it) => a + pOf(it.w) * Math.log2(1 / pOf(it.w)), 0);
+    const L = dane.items.reduce((a, it) => a + pOf(it.w) * kody[it.s].length, 0);
+    wyniki[m] = L;
+    const tb = h('table', { class: 't' }, h('thead', {}, h('tr', {}, h('th', { text: 'Symbol' }), h('th', { class: 'n', text: dane.liczn ? 'Liczność' : 'p' }), h('th', { text: 'Kod' }), h('th', { class: 'n', text: 'Długość' }))),
+      h('tbody', {}, [...dane.items].sort((a, b) => b.w - a.w).map((it) => h('tr', {}, h('td', { class: 'mono', text: dispSym(it.s) }), h('td', { class: 'n', text: fw(it.w) }), h('td', { class: 'mono', text: kody[it.s] }), h('td', { class: 'n', text: String(kody[it.s].length) })))));
+    res.append(h('h3', { text: m === 'huff' ? `Kod Huffmana gotowy${pomylki ? ` (pomyłki przy wyborze: ${pomylki})` : ''}` : 'Kod Shannona–Fano gotowy' }), h('div', { class: 'scroll-x' }, tb));
+    res.append(h('div', { class: 'stats', style: 'margin-top:10px' },
+      h('div', { class: 'stat' }, h('div', { class: 'k', text: 'Średnia długość L' }), h('div', { class: 'v', text: fbit(L) })),
+      h('div', { class: 'stat' }, h('div', { class: 'k', text: 'Entropia H' }), h('div', { class: 'v', text: fbit(Hv) })),
+      h('div', { class: 'stat' }, h('div', { class: 'k', text: 'Redundancja R = L − H' }), h('div', { class: 'v', text: fmt(L - Hv, 3) })),
+      h('div', { class: 'stat' }, h('div', { class: 'k', text: 'Efektywność H / L' }), h('div', { class: 'v', text: `${fmt(100 * Hv / L, 1)}%` }))));
+    if (dane.liczn) {
+      const bitow = dane.items.reduce((a, it) => a + it.w * kody[it.s].length, 0);
+      const stala = Math.ceil(Math.log2(dane.items.length));
+      res.append(h('p', {}, `Cały tekst: `, h('strong', { text: pl(bitow, 'bit', 'bity', 'bitów') }), `. Dla porównania: ASCII ${pl(8 * dane.N, 'bit', 'bity', 'bitów')}, kod stałej długości (${pl(stala, 'bit', 'bity', 'bitów')} na znak) ${pl(stala * dane.N, 'bit', 'bity', 'bitów')}. Odbiorca musi jeszcze dostać tabelę kodu.`));
+    }
+    porownaj(Hv);
+  }
+  function porownaj(Hv) {
+    if (wyniki.huff == null || wyniki.sf == null) { $('#kdCmp').hidden = true; return; }
+    const box = $('#kdCmpBody'); box.innerHTML = '';
+    const kafel = (k, v) => h('div', { class: 'stat' }, h('div', { class: 'k', text: k }), h('div', { class: 'v', text: v }));
+    box.append(kafel('Entropia H', fbit(Hv)), kafel('Shannon–Fano: L', fbit(wyniki.sf)), kafel('Huffman: L', fbit(wyniki.huff)));
+    const d = wyniki.sf - wyniki.huff;
+    box.append(h('p', { class: 'small', style: 'grid-column: 1 / -1; margin: 0', text: Math.abs(d) < 1e-9 ? 'Na tych danych obie metody dały tę samą średnią długość.' : `Huffman jest krótszy o ${fbit(d)} na symbol. Ma gwarancję optymalności wśród kodów prefiksowych przy kodowaniu symbol po symbolu; Shannon–Fano jej nie ma.` }));
+    $('#kdCmp').hidden = false;
+  }
+  function rysuj() { if (tryb === 'huff') rysujLas(); else rysujSF(); }
+  function krok() { if (tryb === 'huff') { if (las.length > 1) { krokHuff(); rysuj(); } } else if (stos.length) { const c = stos[stos.length - 1]; tnij(najlepszeCiecie(c.a, c.b)); } }
+  function init() {
+    for (const p of PRESETY) $('#kdPresets').append(h('button', { class: 'btn ghost small', text: p.nazwa, onclick: () => (p.tekst ? zTekstu(p.tekst) : ustawDane({ items: p.items.map(([s0, w]) => ({ s: s0, w })), liczn: false, skala: p.skala })) }));
+    $('#kdTextGo').addEventListener('click', () => zTekstu($('#kdText').value));
+    $('#kdText').addEventListener('keydown', (e) => { if (e.key === 'Enter') zTekstu($('#kdText').value); });
+    for (const b of $$('#kdMode button')) b.addEventListener('click', () => { tryb = b.dataset.m; $$('#kdMode button').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false')); start(); });
+    $('#kdStep').addEventListener('click', krok);
+    $('#kdAll').addEventListener('click', () => { let g = 0; while (g++ < 100 && (tryb === 'huff' ? las.length > 1 : stos.length > 0)) { if (tryb === 'huff') krokHuff(); else { const c = stos[stos.length - 1]; const k = najlepszeCiecie(c.a, c.b); const { a, b } = stos.pop(); for (let i = a; i < b; i++) kodySF[kol[i].s] += i < k ? '0' : '1'; if (b - k > 1) stos.push({ a: k, b }); if (k - a > 1) stos.push({ a, b: k }); } } $('#kdMsg').textContent = ''; rysuj(); });
+    $('#kdReset').addEventListener('click', start);
+    const p = PRESETY[0]; ustawDane({ items: p.items.map(([s0, w]) => ({ s: s0, w })), liczn: false, skala: p.skala });
+  }
+  return { init };
+})();
+
+/* ═════════════════════ 3. PRACOWNIA KODÓW ═════════════════════ */
+const Pracownia = (() => {
+  const SYM = 'ABCDEFGH'.split('');
+  const P5 = ['1/2', '1/4', '1/8', '1/16', '1/16'];
+  const PRESETY = [
+    { nazwa: 'Kod I', p: P5, k: ['000', '001', '010', '011', '100'] },
+    { nazwa: 'Kod II', p: P5, k: ['00', '01', '10', '11', '001'] },
+    { nazwa: 'Kod III', p: P5, k: ['00', '01', '10', '110', '111'] },
+    { nazwa: 'Kod IV', p: P5, k: ['0', '10', '110', '1110', '1111'] },
+    { nazwa: 'Kontrprzykład {0, 01, 11}', p: ['1/2', '1/4', '1/4'], k: ['0', '01', '11'], bity: '0111' },
+    { nazwa: 'Morse bez pauz (E T I A N M)', p: ['1/6', '1/6', '1/6', '1/6', '1/6', '1/6'], k: ['0', '1', '00', '01', '10', '11'], sym: ['E', 'T', 'I', 'A', 'N', 'M'], bity: '0110' },
+  ];
+  let wiersze = [];
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+  function parseP(t) {
+    t = String(t).trim().replace(',', '.');
+    if (!t) return NaN;
+    if (t.includes('/')) { const [a, b] = t.split('/').map(Number); return b ? a / b : NaN; }
+    return Number(t);
+  }
+  function ustaw(pr) {
+    wiersze = pr.k.map((k, i) => ({ s: (pr.sym || SYM)[i], p: pr.p[i], k }));
+    if (pr.bity) $('#prBits').value = pr.bity;
+    budujTabele(); analiza(); odczytaj();
+  }
+  function budujTabele() {
+    const t = $('#prTab'); t.innerHTML = '';
+    t.append(h('div', { class: 'crow head' }, h('span', { text: '' }), h('span', { text: 'p' }), h('span', { text: 'słowo kodowe' }), h('span', { class: 'len', text: 'długość' })));
+    wiersze.forEach((w, i) => {
+      const ip = h('input', { type: 'text', value: w.p, 'aria-label': `Prawdopodobieństwo ${w.s}`, inputmode: 'decimal' });
+      const ik = h('input', { type: 'text', value: w.k, 'aria-label': `Słowo kodowe ${w.s}`, inputmode: 'numeric', maxlength: '16' });
+      ip.addEventListener('input', () => { w.p = ip.value; analiza(); });
+      ik.addEventListener('input', () => { w.k = ik.value.replace(/[^01]/g, ''); if (ik.value !== w.k) ik.value = w.k; analiza(); odczytaj(); });
+      t.append(h('div', { class: 'crow', 'data-i': i }, h('span', { class: 'sym', text: w.s }), ip, ik, h('span', { class: 'len' })));
+    });
+  }
+  // liczba wszystkich podziałów ciągu na słowa kodowe (programowanie dynamiczne) i do `limit` przykładów
+  function odczytania(bits, kody, limit = 12) {
+    const n = bits.length; const ile = Array(n + 1).fill(0); ile[n] = 1;
+    for (let i = n - 1; i >= 0; i--) for (const k of kody) if (k.k && bits.startsWith(k.k, i)) ile[i] += ile[i + k.k.length];
+    const przyk = [];
+    const idz = (i, acc) => { if (przyk.length >= limit) return; if (i === n) { przyk.push([...acc]); return; } for (const k of kody) if (k.k && bits.startsWith(k.k, i) && ile[i + k.k.length] > 0) { acc.push(k); idz(i + k.k.length, acc); acc.pop(); } };
+    if (ile[0] > 0) idz(0, []);
+    return { ile: ile[0], przyk };
+  }
+  function sardinasPatterson(C) {
+    const zbior = new Set(C);
+    let S = new Set();
+    for (const u of C) for (const v of C) if (u !== v && v.startsWith(u)) S.add(v.slice(u.length));
+    const widziane = new Set();
+    for (let it = 0; it < 200; it++) {
+      if (S.size === 0) return true;
+      for (const x of S) if (zbior.has(x)) return false;
+      const klucz = [...S].sort().join('|'); if (widziane.has(klucz)) return true; widziane.add(klucz);
+      const N = new Set();
+      for (const x of S) for (const c of C) { if (c.startsWith(x) && c !== x) N.add(c.slice(x.length)); if (x.startsWith(c) && x !== c) N.add(x.slice(c.length)); }
+      S = N;
+    }
+    return true;
+  }
+  function przykladNiejednoznacznosci(kody) {
+    // najkrótszy ciąg złożony z co najwyżej 3 słów, który ma ≥ 2 odczytania
+    let best = null;
+    const rek = (str, d) => { if (d > 0) { const o = odczytania(str, kody, 3); if (o.ile >= 2 && (!best || str.length < best.length)) best = str; } if (d < 3) for (const k of kody) rek(str + k.k, d + 1); };
+    rek('', 0); return best;
+  }
+  function werdykt(stan, tytul, det) {
+    return h('div', { class: `verdict ${stan}` }, h('span', { class: 'ic', text: stan === 'yes' ? '✓' : stan === 'no' ? '✗' : 'ⓘ' }), h('div', {}, h('div', { text: tytul }), det ? h('div', { class: 'det' }, det) : null));
+  }
+  function analiza() {
+    const V = $('#prVerdicts'); V.innerHTML = ''; const St = $('#prStats'); St.innerHTML = '';
+    $$('#prTab .crow[data-i]').forEach((r, i) => { const k = wiersze[i].k; $('.len', r).textContent = k.length || '—'; $('input:nth-of-type(2)', r).classList.toggle('zly', !k); });
+    const puste = wiersze.filter((w) => !w.k);
+    if (puste.length) { V.append(werdykt('no', `Brak słowa kodowego dla: ${puste.map((w) => w.s).join(', ')}.`)); return; }
+    const C = wiersze.map((w) => w.k);
+    const dup = wiersze.filter((w, i) => C.indexOf(w.k) !== i);
+    // prefiksowość
+    const nar = [];
+    wiersze.forEach((a) => wiersze.forEach((b) => { if (a !== b && b.k.startsWith(a.k) && a.k !== b.k) nar.push(`„${a.k}” (${a.s}) jest początkiem „${b.k}” (${b.s})`); }));
+    if (dup.length) V.append(werdykt('no', 'Dwa symbole mają to samo słowo kodowe.', `${dup.map((w) => `${w.s} = ${w.k}`).join(', ')}: odbiorca nie odróżni tych symboli.`));
+    const pref = nar.length === 0 && !dup.length;
+    V.append(werdykt(pref ? 'yes' : 'no', pref ? 'Kod prefiksowy (spełnia warunek Fano).' : 'Kod nie jest prefiksowy.', pref ? 'Każdy symbol rozpoznasz, gdy tylko przeczytasz jego ostatni bit.' : nar.slice(0, 4).join('; ') + (nar.length > 4 ? `; i ${nar.length - 4} więcej` : '')));
+    let ud = pref;
+    if (!pref && !dup.length) ud = sardinasPatterson(C);
+    if (!pref) {
+      const pr = ud ? null : przykladNiejednoznacznosci(wiersze);
+      V.append(werdykt(ud ? 'yes' : 'no', ud ? 'Mimo to kod jest jednoznacznie dekodowalny.' : 'Kod nie jest jednoznacznie dekodowalny.',
+        ud ? 'Każdy ciąg da się odczytać tylko na jeden sposób, ale czasem trzeba poczekać na dalsze bity.' : (pr ? h('span', {}, 'Przykład: ciąg ', h('span', { class: 'mono', text: pr }), ' ma kilka odczytań (wpisz go poniżej).') : null)));
+    }
+    // Kraft
+    const Lmax = Math.max(...C.map((k) => k.length));
+    let num = 0; for (const k of C) num += 2 ** (Lmax - k.length);
+    let den = 2 ** Lmax; const g = gcd(num, den); const fr = den / g === 1 ? `${num / g}` : `${num / g}/${den / g}`;
+    const kOK = num <= den;
+    V.append(werdykt(kOK ? 'yes' : 'no', `Suma Krafta Σ 2^(−lᵢ) = ${fr} ${kOK ? '≤ 1' : '> 1'}.`,
+      kOK ? (pref ? 'Zgodnie z twierdzeniem Krafta–McMillana.' : 'Takie długości ma jakiś kod prefiksowy: dałoby się przepisać słowa tak, żeby kod był prefiksowy.') : 'Żaden jednoznacznie dekodowalny kod nie ma takich długości słów (twierdzenie Krafta–McMillana).'));
+    // L, H, R
+    const ps = wiersze.map((w) => parseP(w.p));
+    if (ps.some((p) => !(p > 0))) { V.append(werdykt('info', 'Podaj dodatnie prawdopodobieństwa wszystkich symboli, żeby policzyć L, H i R.')); return; }
+    const sum = ps.reduce((a, b) => a + b, 0); const pn = ps.map((p) => p / sum);
+    if (Math.abs(sum - 1) > 1e-6) V.append(werdykt('info', `Prawdopodobieństwa sumują się do ${fmt(sum, 4)}, a nie do 1. Strona je przeskalowała.`));
+    const L = pn.reduce((a, p, i) => a + p * C[i].length, 0);
+    const Hh = pn.reduce((a, p) => a + p * Math.log2(1 / p), 0);
+    const kaf = (k, v) => h('div', { class: 'stat' }, h('div', { class: 'k', text: k }), h('div', { class: 'v', text: v }));
+    St.append(kaf('Średnia długość L', fbit(L)), kaf('Entropia H', fbit(Hh)));
+    if (ud) St.append(kaf('Redundancja R = L − H', fmt(L - Hh, 3)));
+    else St.append(kaf('Redundancja', 'nie liczymy'));
+    if (ud && L < Hh - 1e-9) V.append(werdykt('info', 'L < H przy kodzie jednoznacznym? To niemożliwe; sprawdź prawdopodobieństwa.'));
+  }
+  function odczytaj() {
+    const out = $('#prOut'); out.innerHTML = '';
+    const bits = $('#prBits').value.replace(/[^01]/g, '');
+    if (!bits) return;
+    if (wiersze.some((w) => !w.k)) return;
+    const { ile, przyk } = odczytania(bits, wiersze);
+    if (ile === 0) { out.append(h('p', { class: 'st-bad', text: 'Tego ciągu nie da się podzielić na słowa kodowe.' })); return; }
+    out.append(h('p', { class: ile === 1 ? 'st-ok' : 'st-bad', text: ile === 1 ? 'Jedno odczytanie:' : `Ciąg ma ${pl(ile, 'odczytanie', 'odczytania', 'odczytań')}${ile > przyk.length ? ` (pokazuję ${przyk.length})` : ''}:` }));
+    out.append(h('ol', { class: 'parses' }, przyk.map((pp) => h('li', {}, pp.map((k, j) => [j ? h('span', { class: 'sep', text: ' | ' }) : null, `${k.k}→${k.s}`]).flat(), h('span', { class: 'sep', text: `   = ${pp.map((k) => k.s).join('')}` })))));
+  }
+  function init() {
+    for (const pr of PRESETY) $('#prPresets').append(h('button', { class: 'btn ghost small', text: pr.nazwa, onclick: () => ustaw(pr) }));
+    $('#prAdd').addEventListener('click', () => { if (wiersze.length >= 8) return; const used = new Set(wiersze.map((w) => w.s)); const s0 = SYM.find((x) => !used.has(x)) || '?'; wiersze.push({ s: s0, p: '1/8', k: '' }); budujTabele(); analiza(); });
+    $('#prDel').addEventListener('click', () => { if (wiersze.length <= 2) return; wiersze.pop(); budujTabele(); analiza(); odczytaj(); });
+    $('#prDecode').addEventListener('click', odczytaj);
+    $('#prBits').addEventListener('input', odczytaj);
+    $('#prEncode').addEventListener('click', () => {
+      const w = $('#prWord').value.toUpperCase(); const mapa = Object.fromEntries(wiersze.map((x) => [x.s, x.k]));
+      const zle = [...w].filter((c) => !(c in mapa));
+      if (!w || zle.length) { $('#prOut').innerHTML = ''; $('#prOut').append(h('p', { class: 'err', text: w ? `Brak symboli w kodzie: ${[...new Set(zle)].join(' ')}` : 'Wpisz wiadomość z symboli kodu.' })); return; }
+      $('#prBits').value = [...w].map((c) => mapa[c]).join(''); odczytaj();
+    });
+    ustaw(PRESETY[1]);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ 4. SZUM I REDUNDANCJA ═════════════════════ */
+const Szum = (() => {
+  const enc = new TextEncoder(); const dec = new TextDecoder('utf-8', { fatal: false });
+  let dane = [], maski = {}, wynikiKanalu = {};
+  const xor = (a) => a.reduce((x, y) => x ^ y, 0);
+  const bajtyNaBity = (b) => [...b].flatMap((x) => Array.from({ length: 8 }, (_, i) => (x >> (7 - i)) & 1));
+  const bityNaBajty = (bits) => { const out = new Uint8Array(Math.floor(bits.length / 8)); for (let i = 0; i < out.length; i++) for (let j = 0; j < 8; j++) out[i] = (out[i] << 1) | bits[8 * i + j]; return out; };
+  // Hamming(7,4): pozycje 1..7 = p1 p2 d1 p3 d2 d3 d4
+  const ham = (d) => { const [d1, d2, d3, d4] = d; return [d1 ^ d2 ^ d4, d1 ^ d3 ^ d4, d1, d2 ^ d3 ^ d4, d2, d3, d4]; };
+  const unham = (c) => { const s = (c[0] ^ c[2] ^ c[4] ^ c[6]) | ((c[1] ^ c[2] ^ c[5] ^ c[6]) << 1) | ((c[3] ^ c[4] ^ c[5] ^ c[6]) << 2); const x = [...c]; if (s) x[s - 1] ^= 1; return { d: [x[2], x[4], x[5], x[6]], poz: s ? s - 1 : -1 }; };
+  const METODY = [
+    { id: 'raw', nazwa: 'Bez zabezpieczeń', blok: 8,
+      koduj: (d) => d.map((b) => ({ b, red: false })),
+      dekoduj: (r) => ({ dane: r, wykryte: [], poprawione: [] }) },
+    { id: 'par', nazwa: 'Bit parzystości na każdy bajt', blok: 9,
+      koduj: (d) => { const out = []; for (let i = 0; i < d.length; i += 8) { const B = d.slice(i, i + 8); B.forEach((b) => out.push({ b, red: false })); out.push({ b: xor(B), red: true }); } return out; },
+      dekoduj: (r) => { const dd = [], wyk = []; for (let i = 0, k = 0; i < r.length; i += 9, k++) { const B = r.slice(i, i + 9); dd.push(...B.slice(0, 8)); if (xor(B)) wyk.push(k); } return { dane: dd, wykryte: wyk, poprawione: [] }; } },
+    { id: 'rep', nazwa: 'Każdy bit trzy razy (kod powtórzeniowy)', blok: 3,
+      koduj: (d) => d.flatMap((b) => [{ b, red: false }, { b, red: true }, { b, red: true }]),
+      dekoduj: (r) => { const dd = [], pop = []; for (let i = 0, k = 0; i < r.length; i += 3, k++) { const s = r[i] + r[i + 1] + r[i + 2]; const v = s >= 2 ? 1 : 0; dd.push(v); if (s === 1 || s === 2) pop.push(k); } return { dane: dd, wykryte: [], poprawione: pop }; } },
+    { id: 'ham', nazwa: 'Kod Hamminga (7,4)', blok: 7,
+      koduj: (d) => { const out = []; for (let i = 0; i < d.length; i += 4) { const c = ham(d.slice(i, i + 4)); c.forEach((b, j) => out.push({ b, red: [0, 1, 3].includes(j) })); } return out; },
+      dekoduj: (r) => { const dd = [], pop = []; for (let i = 0, k = 0; i < r.length; i += 7, k++) { const u = unham(r.slice(i, i + 7)); dd.push(...u.d); if (u.poz >= 0) pop.push(k); } return { dane: dd, wykryte: [], poprawione: pop }; } },
+  ];
+  const narzut = (m) => (m.id === 'raw' ? 0 : m.id === 'par' ? 12.5 : m.id === 'rep' ? 200 : 75);
+  function p() { return Number($('#szP').value); }
+  function nowaWiadomosc() {
+    const t = $('#szText').value || ' ';
+    dane = bajtyNaBity(enc.encode(t));
+    for (const m of METODY) maski[m.id] = new Uint8Array(m.koduj(dane).length);
+    rysuj();
+  }
+  function losuj() { for (const m of METODY) { const n = maski[m.id].length; for (let i = 0; i < n; i++) maski[m.id][i] = Math.random() < p() ? 1 : 0; } rysuj(); }
+  function wyczysc() { for (const m of METODY) maski[m.id].fill(0); rysuj(); }
+  function tekstZ(bits) { return dec.decode(bityNaBajty(bits)); }
+  function blokOK(m, k, d) {
+    if (m.id === 'rep') return d.dane[k] === dane[k];
+    if (m.id === 'ham') return [0, 1, 2, 3].every((i) => d.dane[4 * k + i] === dane[4 * k + i]);
+    return false;
+  }
+  function rysuj() {
+    const host = $('#szLanes'); host.innerHTML = '';
+    const oryg = $('#szText').value || ' ';
+    for (const m of METODY) {
+      const wys = m.koduj(dane); const mask = maski[m.id];
+      const odebr = wys.map((x, i) => x.b ^ mask[i]);
+      const d = m.dekoduj(odebr);
+      const txt = tekstZ(d.dane); const ok = txt === oryg;
+      const nPrzek = mask.reduce((a, b) => a + b, 0);
+      // bity w blokach
+      const bits = h('div', { class: 'bits' });
+      for (let i = 0, k = 0; i < wys.length; i += m.blok, k++) {
+        const blk = h('span', { class: `blk${d.wykryte.includes(k) ? ' err' : ''}` });
+        for (let j = i; j < Math.min(i + m.blok, wys.length); j++) {
+          const b = h('button', { class: `bit${wys[j].red ? ' red' : ''}${mask[j] ? ' flip' : ''}${mask[j] && d.poprawione.includes(k) && blokOK(m, k, d) ? ' fix' : ''}`, text: String(odebr[j]), 'aria-label': `bit ${j + 1}${mask[j] ? ', przekłamany' : ''}`, title: wys[j].red ? 'bit dodany dla bezpieczeństwa' : 'bit danych' });
+          b.addEventListener('click', () => { mask[j] ^= 1; rysuj(); });
+          blk.append(b);
+        }
+        bits.append(blk);
+      }
+      let st, cls;
+      if (d.wykryte.length) { st = `Wykryto błąd w ${d.wykryte.length === 1 ? 'bajcie' : 'bajtach'} ${d.wykryte.map((k) => k + 1).join(', ')}. Odbiorca nie wie, który bit jest zły, więc prosi o ponowne wysłanie.`; cls = 'st-det'; }
+      else if (ok && nPrzek) { st = `Poprawiono ${pl(d.poprawione.length, 'blok', 'bloki', 'bloków')}: wiadomość doszła cała.`; cls = 'st-ok'; }
+      else if (ok) { st = 'Doszło poprawnie.'; cls = 'st-ok'; }
+      else { st = m.id === 'par' ? 'Błąd niezauważony: parzysta liczba przekłamań w bajcie oszukała kontrolę.' : m.id === 'raw' ? 'Błąd niezauważony: odbiorca nie ma jak go wykryć.' : 'Za dużo przekłamań w jednym bloku: „poprawka” zepsuła dane, a odbiorca o tym nie wie.'; cls = 'st-bad'; }
+      const txtEl = h('span', { class: 'txt' }); const o = [...oryg], r = [...txt];
+      r.forEach((c, i) => txtEl.append(c === o[i] ? c : h('span', { class: 'bad-ch', text: c })));
+      host.append(h('div', { class: 'lane' },
+        h('h3', { text: m.nazwa }),
+        h('div', { class: 'meta', text: `${pl(wys.length, 'bit', 'bity', 'bitów')} w kanale (narzut ${fmt(narzut(m), 1)}%) · przekłamania: ${nPrzek}` }),
+        bits,
+        h('div', { class: 'outcome' }, 'Odebrano: ', txtEl, ' ', h('span', { class: cls, text: st }))));
+    }
+  }
+  function symuluj() {
+    const N = 1000, pp = p(); const oryg = $('#szText').value || ' ';
+    const tb = $('#szSimT tbody'); tb.innerHTML = '';
+    for (const m of METODY) {
+      const wys = m.koduj(dane).map((x) => x.b); let dobrze = 0, wykr = 0, zle = 0;
+      for (let t = 0; t < N; t++) {
+        const r = wys.map((b) => (Math.random() < pp ? b ^ 1 : b)); const d = m.dekoduj(r);
+        if (d.wykryte.length) wykr++; else if (tekstZ(d.dane) === oryg) dobrze++; else zle++;
+      }
+      const nb = dane.length; let teor = null;
+      if (m.id === 'raw') teor = (1 - pp) ** nb;
+      if (m.id === 'rep') teor = ((1 - pp) ** 3 + 3 * pp * (1 - pp) ** 2) ** nb;
+      if (m.id === 'ham') teor = ((1 - pp) ** 7 + 7 * pp * (1 - pp) ** 6) ** (nb / 4);
+      if (m.id === 'par') teor = (1 - pp) ** (nb / 8 * 9);
+      const pr = (x) => `${fmt(100 * x / N, 1)}%`;
+      tb.append(h('tr', {}, h('td', { text: m.nazwa }), h('td', { class: 'n', text: fmtInt(wys.length) }), h('td', { class: 'n', text: pr(dobrze) }),
+        h('td', { class: 'n', text: teor == null ? '—' : `${fmt(100 * teor, 1)}%` }), h('td', { class: 'n', text: m.id === 'par' ? pr(wykr) : '—' }), h('td', { class: 'n', text: pr(zle) })));
+    }
+    $('#szSimT').hidden = false;
+  }
+  function init() {
+    const pv = () => { $('#szPV').textContent = `${fmt(100 * p(), 1)}%`; }; pv();
+    $('#szP').addEventListener('input', pv);
+    $('#szText').addEventListener('input', nowaWiadomosc);
+    $('#szSend').addEventListener('click', losuj);
+    $('#szClear').addEventListener('click', wyczysc);
+    $('#szSim').addEventListener('click', symuluj);
+    nowaWiadomosc();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ 3. HICK–HYMAN ═════════════════════ */
+const Hick = (() => {
+  const KODY = ['KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon'];
+  const ETYK = ['A', 'S', 'D', 'F', 'J', 'K', 'L', ';'];
+  const WARUNKI = [
+    { id: 'n1', nazwa: '1 bodziec', sw: [3], p: [1] },
+    { id: 'n2', nazwa: '2 bodźce', sw: [3, 4], p: [0.5, 0.5] },
+    { id: 'n4', nazwa: '4 bodźce', sw: [2, 3, 4, 5], p: [0.25, 0.25, 0.25, 0.25] },
+    { id: 'n8', nazwa: '8 bodźców', sw: [0, 1, 2, 3, 4, 5, 6, 7], p: Array(8).fill(0.125) },
+    { id: 'nier', nazwa: '4 bodźce, nierówno', sw: [2, 3, 4, 5], p: [0.1, 0.7, 0.1, 0.1] },
+  ];
+  for (const w of WARUNKI) w.H = w.p.reduce((a, p) => a + p * Math.log2(1 / p), 0);
+  const PRAKTYKA = 2;
+  const dotyk = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
+  let gen = 0, biegnie = false, przerwano = false, odbiorca = null, startowy = null, wyniki = [], panel = null;
+  const zyje = (g) => { if (g !== gen) throw new Error('stop'); };
+  const status = (t, k = '') => { const e = $('#hStatus'); e.textContent = t; e.className = `hstatus ${k}`; };
+  function swiatla(aktywne = [], on = null) {
+    $$('#hLights .light').forEach((e, i) => { e.classList.toggle('act', aktywne.includes(i)); e.classList.toggle('on', i === on); });
+    $$('#hKeys span').forEach((e, i) => e.classList.toggle('act', aktywne.includes(i)));
+    $$('#hPad button').forEach((e, i) => { e.disabled = !aktywne.includes(i); });
+  }
+  function sekwencja(w, n) {
+    // dokładne proporcje (metoda największych reszt), potem tasowanie
+    const raw = w.p.map((p) => p * n); const c = raw.map(Math.floor); let rest = n - c.reduce((a, b) => a + b, 0);
+    raw.map((r, i) => [r - Math.floor(r), i]).sort((a, b) => b[0] - a[0]).slice(0, rest).forEach(([, i]) => { c[i]++; });
+    const seq = []; c.forEach((k, i) => { for (let j = 0; j < k; j++) seq.push(w.sw[i]); });
+    for (let i = seq.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [seq[i], seq[j]] = [seq[j], seq[i]]; }
+    return seq;
+  }
+  function czekaj(ms) { return new Promise((res) => { const t = ms != null ? setTimeout(() => { odbiorca = null; res(null); }, ms) : null; odbiorca = (i, ts) => { clearTimeout(t); odbiorca = null; res({ i, ts }); }; }); }
+  function nacisk(i, ts) { if (odbiorca) odbiorca(i, ts); }
+  async function proba(w, cel, g) {
+    for (;;) {
+      zyje(g); swiatla(w.sw); status('+');
+      const early = await czekaj(700 + Math.random() * 800); zyje(g);
+      if (early) { status('Za wcześnie! Czekaj, aż zapali się światło.', 'bad'); await sleep(1000); zyje(g); continue; }
+      break;
+    }
+    status(' '); swiatla(w.sw, cel);
+    let onset = null; requestAnimationFrame(() => { onset = performance.now(); });
+    const r = await czekaj(3000); zyje(g);
+    swiatla(w.sw);
+    if (!r) { status('Za wolno', 'bad'); await sleep(700); return { ok: false, rt: null }; }
+    const now = performance.now(); let ts = r.ts; if (!(ts > 0) || Math.abs(now - ts) > 1000) ts = now;
+    const rt = onset == null ? 0 : ts - onset; const ok = r.i === cel;
+    status(ok ? `${fmtInt(Math.round(rt))} ms` : 'Zły klawisz', ok ? 'good' : 'bad');
+    await sleep(ok ? 450 : 900); zyje(g);
+    return { ok, rt };
+  }
+  function przycisk(tekst, fn, opis = null) {
+    const ctl = $('#hCtl'); ctl.innerHTML = '';
+    if (opis) ctl.append(h('p', { class: 'hintro', text: opis }));
+    const b = h('button', { class: 'btn', text: tekst });
+    return new Promise((res) => { const go = () => { startowy = null; ctl.innerHTML = ''; fn && fn(); res(); }; b.addEventListener('click', go); startowy = go; ctl.append(b); if (!dotyk) ctl.append(h('div', { class: 'small muted', style: 'margin-top:6px', text: 'albo naciśnij spację' })); });
+  }
+  async function warunek(w, k, g) {
+    const N = $('#hShort').checked ? 12 : 20;
+    swiatla(w.sw);
+    status(`Warunek ${k + 1}/${WARUNKI.length}: ${w.nazwa}. ${dotyk ? 'Przyciski' : 'Klawisze'}: ${w.sw.map((i) => ETYK[i]).join(' ')}`);
+    await przycisk('Start warunku'); zyje(g);
+    const seq = [...sekwencja(w, PRAKTYKA), ...sekwencja(w, N)];
+    const rts = []; let bledy = 0;
+    for (let t = 0; t < seq.length; t++) {
+      const r = await proba(w, seq[t], g);
+      if (t < PRAKTYKA) continue;
+      if (r.ok && r.rt >= 150 && r.rt <= 2500) rts.push(r.rt); else if (!r.ok) bledy++;
+    }
+    return { w, med: mediana(rts), n: rts.length, bledy };
+  }
+  async function bieg() {
+    const g = ++gen; biegnie = true; wyniki = []; $('#hRes').hidden = true; if (panel) panel.gotowe(null);
+    try {
+      for (let k = 0; k < WARUNKI.length; k++) {
+        const r = await warunek(WARUNKI[k], k, g); wyniki.push(r);
+        status(`${WARUNKI[k].nazwa}: mediana ${r.med == null ? '—' : `${fmtInt(Math.round(r.med))} ms`}${r.bledy ? `, pomyłki: ${r.bledy}` : ''}`);
+      }
+      swiatla([]); pokazWyniki(); intro('Zmierz jeszcze raz');
+    } catch (e) { if (e.message !== 'stop') throw e; }
+    finally { if (g === gen) biegnie = false; }
+  }
+  function pokazWyniki() {
+    $('#hRes').hidden = false;
+    const tb = $('#hTable tbody'); tb.innerHTML = '';
+    for (const r of wyniki) tb.append(h('tr', {}, h('td', { text: r.w.nazwa }), h('td', { class: 'n', text: fmt(r.w.H, 2) }), h('td', { class: 'n', text: r.med == null ? '—' : `${fmtInt(Math.round(r.med))} ms` }), h('td', { class: 'n', text: String(r.bledy) })));
+    const pts = wyniki.filter((r) => r.med != null).map((r) => ({ x: r.w.H, y: r.med, lab: r.w.id === 'nier' ? '4 nierówno' : r.w.nazwa.split(' ')[0] }));
+    const lin = regresja(pts);
+    wykresRT($('#hChart'), { glowne: pts, linia: lin, opis: 'Twój czas reakcji względem entropii' });
+    $('#hFit').innerHTML = '';
+    if (lin) $('#hFit').append('Prosta dopasowana do Twoich wyników: ', h('strong', { text: `RT ≈ ${fmtInt(Math.round(lin.a))} ms + ${fmtInt(Math.round(lin.b))} ms × H` }), `. Każdy dodatkowy bit niepewności kosztował Cię ok. ${fmtInt(Math.round(lin.b))} ms.`);
+    const n4 = wyniki.find((r) => r.w.id === 'n4'), ni = wyniki.find((r) => r.w.id === 'nier');
+    if (n4 && ni && n4.med != null && ni.med != null) $('#hCmp').textContent = `4 bodźce po równo (H = 2 bity): ${fmtInt(Math.round(n4.med))} ms. 4 bodźce nierówno (H ≈ ${fbit(ni.w.H, 2)}): ${fmtInt(Math.round(ni.med))} ms. Hyman: liczy się entropia, a nie sama liczba bodźców.`;
+    if (panel) {
+      const p = wyniki.filter((r) => r.med != null).map((r) => ({ wariant: r.w.id, wynik: Math.round(r.med) }));
+      panel.gotowe(p.length ? p : null);
+    }
+  }
+  function rysujGrupe(chart, stats, rows) {
+    const byW = Object.fromEntries(WARUNKI.map((w) => [w.id, []]));
+    for (const r of rows) if (byW[r.w] && r.v >= 100 && r.v <= 3000) byW[r.w].push(r.v);
+    const punkty = []; const glowne = [];
+    WARUNKI.forEach((w, k) => {
+      byW[w.id].forEach((v, j) => punkty.push({ x: w.H, y: v, dx: ((j * 37) % 13 - 6) }));
+      const med = mediana(byW[w.id]); if (med != null) glowne.push({ x: w.H, y: med, lab: w.id === 'nier' ? '4 nierówno' : w.nazwa.split(' ')[0] });
+    });
+    const lin = regresja(glowne);
+    const osob = Math.max(0, ...Object.values(byW).map((a) => a.length));
+    stats.textContent = osob ? `Osób: ${osob}${lin ? ` · prosta przez mediany grupy: RT ≈ ${fmtInt(Math.round(lin.a))} ms + ${fmtInt(Math.round(lin.b))} ms × H` : ''}` : '';
+    wykresRT(chart, { punkty, glowne, linia: lin, opis: 'Czasy reakcji grupy względem entropii' });
+  }
+  function intro(tekst = 'Start') {
+    swiatla([]);
+    if (!wyniki.length) status('');
+    przycisk(tekst, bieg, 'Pięć krótkich serii: 1, 2, 4 i 8 równie prawdopodobnych bodźców, potem 4 bodźce z nierównymi prawdopodobieństwami. Na początku każdej serii są 2 próby rozgrzewkowe. Całość trwa ok. 3–5 minut.');
+  }
+  function init() {
+    for (let i = 0; i < 8; i++) {
+      $('#hLights').append(h('div', { class: 'light' }));
+      $('#hKeys').append(h('span', { text: ETYK[i] }));
+      const b = h('button', { text: ETYK[i], 'aria-label': `Światło ${i + 1}` });
+      b.addEventListener('pointerdown', (e) => { e.preventDefault(); nacisk(i, e.timeStamp); });
+      $('#hPad').append(b);
+    }
+    if (dotyk) { $('#hDevice').hidden = false; $('#hKeys').hidden = true; } else { $('#hPad').hidden = true; }
+    document.addEventListener('keydown', (e) => {
+      if ($('#v-hick').hidden || e.repeat || isTyping()) return;
+      const i = KODY.indexOf(e.code);
+      if (i >= 0) { e.preventDefault(); nacisk(i, e.timeStamp); }
+      else if (e.code === 'Space' && startowy) { e.preventDefault(); startowy(); }
+    });
+    panel = panelGrupy($('#grupa-hick'), { aplikacja: 'hick', tytul: 'Czas reakcji w grupie', rysuj: rysujGrupe });
+    intro();
+  }
+  function wyjscie() { if (panel) panel.stop(); if (biegnie) { gen++; biegnie = false; przerwano = true; odbiorca = null; } }
+  function wejscie() { if (panel) panel.start(); if (przerwano) { przerwano = false; intro(); status('Pomiar przerwano, bo opuszczono tę zakładkę. Zacznij od nowa.'); } }
+  return { init, wejscie, wyjscie };
+})();
+
+/* ═════════════════════ 4. NASTĘPNA LITERA (gra Shannona) ═════════════════════ */
+const LITERA_KORPUS = "Rano obudził mnie deszcz. Krople stukały o parapet tak równo, że przez chwilę myślałem, że to zegar. Wstałem, nastawiłem wodę na herbatę i wyjrzałem przez okno. Ulica była prawie pusta, tylko pod przystankiem stało kilka osób z parasolami. Autobus spóźniał się jak zwykle, więc nikt nie wyglądał na zaskoczonego.\n\nW kuchni pachniało jeszcze wczorajszym ciastem. Babcia zawsze mówiła, że najlepsze ciasto to takie, które smakuje następnego dnia. Ukroiłem kawałek, usiadłem przy stole i zacząłem przeglądać notatki z ostatnich zajęć. Wykładowca mówił o tym, jak komputer zapisuje liczby i litery, a ja wtedy myślałem głównie o tym, czy zdążę na pociąg.\n\nDworzec w naszym mieście jest mały, ale bardzo ruchliwy. Rano przyjeżdżają tu ludzie z okolicznych wsi, którzy pracują w fabryce albo w szpitalu. Po południu wszystko odwraca się w drugą stronę. Kasjerka zna większość pasażerów z widzenia i czasem pyta, czy bilet ma być taki sam jak wczoraj.\n\nMoja siostra uczy się grać na skrzypcach. Na początku dźwięki przypominały raczej skrzypienie drzwi niż muzykę, ale po kilku miesiącach coś się zmieniło. Teraz potrafi zagrać prostą melodię bez zatrzymywania się. Mówi, że najtrudniejsze nie są palce, tylko cierpliwość. Codziennie ćwiczy pół godziny, nawet wtedy, gdy nie ma ochoty.\n\nJesień w górach jest najpiękniejsza wtedy, gdy rano leży mgła, a w południe wychodzi słońce. Szlak prowadzi przez las bukowy, potem przez polanę, na której pasą się owce. Z góry widać całą dolinę, rzekę i dachy domów. Schronisko jest otwarte przez cały rok, a gospodarz podaje gorącą zupę i herbatę z sokiem malinowym.\n\nPsychologowie od dawna badają, jak ludzie podejmują decyzje. Okazuje się, że rzadko liczymy wszystkie możliwości. Częściej korzystamy z prostych reguł, które zwykle działają, ale czasem prowadzą nas na manowce. Gdy mamy mało czasu, wybieramy to, co znamy, albo to, co przyszło nam do głowy jako pierwsze. Nie jest to głupota, tylko oszczędzanie wysiłku.\n\nPamięć robocza ma ograniczoną pojemność. Możemy w niej utrzymać tylko kilka elementów naraz, dlatego numer telefonu łatwiej zapamiętać w grupach niż jako długi ciąg cyfr. To samo dotyczy nauki. Lepiej uczyć się krótko i często niż długo i rzadko. Mózg potrzebuje przerw, żeby uporządkować to, co zobaczył i usłyszał.\n\nPierwsze komputery zajmowały całe pokoje i ważyły kilkadziesiąt ton. Programowano je, przełączając kable i przestawiając przełączniki. Dziś w kieszeni nosimy urządzenie, które jest od nich miliony razy szybsze. Zmieniło się prawie wszystko, ale podstawowy pomysł pozostał ten sam: maszyna wykonuje po kolei proste instrukcje zapisane w pamięci.\n\nKiedy piszemy wiadomość na telefonie, klawiatura podpowiada nam kolejne słowa. Robi to na podstawie tego, co napisaliśmy wcześniej, i tego, jak zwykle piszą ludzie. Czasem podpowiedź jest zabawna, czasem trafia w punkt. Program nie rozumie, co chcemy powiedzieć, ale wie, które słowa często stoją obok siebie.\n\nW sobotę poszliśmy na targ. Sprzedawcy wołali, że mają najlepsze jabłka w okolicy, a pani przy stoisku z serami dawała wszystkim do spróbowania małe kawałki. Kupiliśmy ziemniaki, marchew, cebulę i pęczek koperku. Po drodze do domu zatrzymaliśmy się w piekarni, bo zapach świeżego chleba był nie do wytrzymania.\n\nNa obiad była zupa pomidorowa z makaronem. Dzieci zawsze pytają, czy będzie też drugie danie, a potem i tak nie mają siły go zjeść. Po obiedzie dziadek usiadł w fotelu z gazetą i po dziesięciu minutach już spał. Gazeta zsunęła mu się na kolana, a kot natychmiast się na niej położył.\n\nNauka języka obcego przypomina budowanie domu. Najpierw trzeba położyć fundamenty, czyli poznać podstawowe słowa i zasady gramatyki. Potem dokłada się kolejne cegły. Najważniejsze jest jednak to, żeby w tym domu zamieszkać, czyli mówić, słuchać i czytać jak najczęściej. Błędy są częścią nauki i nie warto się ich bać.\n\nBiblioteka uniwersytecka jest otwarta do późnego wieczora. W czasie sesji trudno znaleźć wolne miejsce przy oknie. Studenci siedzą nad książkami, laptopami i kubkami kawy. Ktoś szepcze, ktoś przewraca kartki, ktoś zasnął z głową na zeszycie. Bibliotekarka udaje, że tego nie widzi, bo sama kiedyś była studentką.\n\nWieczorem zadzwoniła mama. Zapytała, czy jem regularnie, czy się wysypiam i czy mam ciepłą kurtkę. Odpowiedziałem, że wszystko jest w porządku, chociaż nie było to do końca prawdą. Rozmawialiśmy jeszcze o sąsiadach, o pogodzie i o tym, kiedy przyjadę na święta. Na koniec powiedziała, żebym na siebie uważał.\n\nRower to najlepszy środek transportu w mieście. Nie trzeba szukać miejsca do parkowania ani stać w korkach. Wystarczy dobry zamek, lampka i trochę odwagi, gdy trzeba przejechać przez ruchliwe skrzyżowanie. Zimą jest trudniej, ale niektórzy jeżdżą przez cały rok, bez względu na śnieg i mróz.\n\nKażdy system informatyczny składa się z danych i z programów, które te dane przetwarzają. Dane mogą być liczbami, tekstem, obrazem albo dźwiękiem, ale w pamięci komputera wszystko jest zapisane jako ciąg zer i jedynek. To, co widzimy na ekranie, zależy od tego, jak program odczyta te bity. Ten sam ciąg może być literą, kolorem albo fragmentem melodii.\n\nNasz pies boi się burzy. Gdy tylko słychać pierwszy grzmot, chowa się pod łóżko i nie chce wyjść nawet po ulubioną kość. Weterynarz powiedział, że to częste u psów i że trzeba po prostu przy nim być i mówić spokojnym głosem. Po burzy pies wychodzi, otrząsa się i zachowuje tak, jakby nic się nie stało.\n\nLatem nad jeziorem jest tłoczno. Rodziny rozkładają koce na trawie, dzieci budują zamki z piasku, a młodzież pływa do pomostu i z powrotem. Ratownik siedzi na wysokim krześle i co jakiś czas gwiżdże na tych, którzy wypływają za daleko. Wieczorem wszyscy zbierają się przy ognisku, pieką kiełbaski i śpiewają piosenki.\n\nW szkole najbardziej lubiłem lekcje historii. Nauczycielka opowiadała o dawnych czasach tak, jakby sama w nich żyła. Pamiętam, jak opisywała życie w średniowiecznym mieście: wąskie uliczki, kupców na rynku, cechy rzemieślnicze i mury obronne. Dopiero po latach zrozumiałem, że historia to przede wszystkim opowieść o zwykłych ludziach.\n\nOgród wymaga dużo pracy, ale daje też dużo radości. Wiosną trzeba przekopać grządki, posiać nasiona i podlewać je codziennie. Latem zbiera się truskawki, groszek i pierwsze ogórki. Jesienią grabi się liście i sadzi cebulki tulipanów, które zakwitną dopiero za kilka miesięcy. Ogrodnik musi umieć czekać.\n\nKiedy uczymy się nowej umiejętności, na początku wszystko wymaga uwagi. Jazda samochodem wydaje się niemożliwa: trzeba patrzeć w lusterka, zmieniać biegi, pilnować prędkości i jeszcze słuchać instruktora. Po kilku miesiącach większość tych czynności dzieje się sama. Mówimy wtedy, że stały się automatyczne i nie obciążają już naszej uwagi.\n\nAlgorytm to przepis, który krok po kroku prowadzi od danych do wyniku. Przepis na ciasto też jest algorytmem, choć niezbyt precyzyjnym, bo szczypta soli dla każdego znaczy coś innego. Komputer potrzebuje instrukcji, które nie zostawiają miejsca na domysły. Dlatego programowanie uczy dokładności i myślenia o wszystkich możliwych przypadkach.\n\nZimą w naszym bloku często psuje się winda. Sąsiedzi z dziesiątego piętra narzekają najgłośniej, ale w końcu i tak chodzą po schodach. Administrator obiecuje, że w przyszłym roku winda zostanie wymieniona. Obiecuje to od pięciu lat, więc nikt już w to nie wierzy. Za to wszyscy mamy lepszą kondycję.\n\nTeatr lalek w naszym mieście istnieje od ponad pięćdziesięciu lat. Przychodzą tu przedszkolaki, uczniowie i dorośli, którzy pamiętają te same przedstawienia ze swojego dzieciństwa. Lalki są robione ręcznie w pracowni na zapleczu. Każda ma swój charakter, a aktorzy mówią, że po kilku spektaklach lalka zaczyna żyć własnym życiem.\n\nWiadomości w telewizji zaczynają się zawsze o tej samej porze. Najpierw polityka, potem wydarzenia z kraju i ze świata, na końcu sport i pogoda. Mój ojciec ogląda je codziennie, choć twierdzi, że i tak wie, co powiedzą. Może właśnie dlatego je ogląda: lubi sprawdzać, czy miał rację.\n\nNa studiach poznałem ludzi z różnych stron kraju. Jedni przyjechali z dużych miast, inni z małych miasteczek i wsi. Na początku trzymaliśmy się w grupach, które znały się wcześniej, ale wspólne projekty szybko to zmieniły. Okazało się, że najlepiej pracuje się z kimś, kto myśli trochę inaczej niż my.\n\nKażdego dnia podejmujemy setki drobnych decyzji. Co zjeść na śniadanie, którą drogą pójść do pracy, czy odpisać na wiadomość od razu, czy później. Większości z nich nawet nie zauważamy. Gdyby każda wymagała długiego namysłu, nie zdążylibyśmy zrobić niczego innego. Nawyki są więc nie tylko wygodne, ale wręcz niezbędne.\n\nMorze zimą wygląda zupełnie inaczej niż latem. Plaża jest pusta, wiatr jest zimny i wilgotny, a fale są szare i wysokie. Po brzegu spacerują tylko ludzie z psami i ci, którzy szukają bursztynu po sztormie. W kawiarni na deptaku siedzi kilka osób, które grzeją ręce o kubki z gorącą czekoladą.\n\nKiedy przeprowadzałem się do nowego mieszkania, okazało się, że mam znacznie więcej rzeczy, niż myślałem. Książki, ubrania, naczynia, stare zeszyty i kable, o których nie wiedziałem, do czego służą. Część oddałem znajomym, część wyrzuciłem, a resztę zapakowałem do kartonów. Niektóre kartony stoją nierozpakowane do dziś.\n\nSieć komputerowa łączy urządzenia, które wymieniają między sobą dane. Wiadomość wysłana z telefonu jest dzielona na małe pakiety, które wędrują różnymi drogami i składają się w całość dopiero u odbiorcy. Dzięki temu awaria jednego połączenia nie przerywa całej rozmowy. Sieć po prostu znajduje inną drogę.\n\nDziadek opowiadał, że kiedy był mały, do szkoły chodził pieszo przez las. Zimą droga zajmowała mu prawie godzinę. W klasie stał piec, w którym palił woźny, a uczniowie przynosili drewno z domu. Mimo to dziadek wspominał szkołę bardzo dobrze. Mówił, że najważniejsze było to, że ktoś go nauczył czytać.\n\nW poniedziałek zaczyna się nowy semestr. Plan zajęć jest już gotowy, choć jak zwykle kilka sal trzeba będzie jeszcze zmienić. Pierwsze tygodnie są zawsze spokojne, potem wszystko przyspiesza. Kolokwia, projekty i prezentacje pojawiają się nagle w tym samym tygodniu. Kto zaczyna wcześniej, ten śpi spokojniej.\n";
+const LITERA_TEKSTY = ["W piątek wieczorem w kinie było pełno ludzi. Wszyscy czekali na nowy film, o którym od tygodnia mówiło całe miasto.", "Kiedy pada śnieg, dzieci wybiegają na podwórko z sankami, a rodzice stoją przy oknie i proszą, żeby założyły czapki.", "Mój brat zawsze gubi klucze. Szuka ich w każdej kieszeni, pod poduszką i w lodówce, a potem znajduje je w drzwiach.", "Najlepsza kawa jest w małej kawiarni na rogu ulicy. Właściciel pamięta, co pijesz, i zaczyna ją robić, gdy tylko wejdziesz.", "Pociąg do Krakowa odjeżdża z peronu drugiego. Podróż trwa niecałe trzy godziny, więc można przeczytać kilka rozdziałów książki.", "Sąsiadka z parteru hoduje na balkonie pomidory, paprykę i zioła. Latem cała klatka schodowa pachnie bazylią i miętą.", "Przed egzaminem warto się dobrze wyspać. Zmęczony mózg gorzej zapamiętuje nowe informacje i łatwiej popełnia proste błędy.", "Na urodziny dostałem od przyjaciół stary aparat fotograficzny. Okazało się, że działa, tylko trzeba było kupić do niego film.", "Każdy program komputerowy zaczyna się od pomysłu, ale kończy na długich godzinach szukania błędów, które ktoś przeoczył.", "W lesie za miastem rosną grzyby. Jesienią przyjeżdżają tu całe rodziny z koszykami i wracają do domu przed zmrokiem.", "Moja koleżanka z pokoju codziennie rano biega po parku. Mówi, że to najlepszy sposób, żeby obudzić się bez kawy.", "Stary zegar w salonie spóźnia się o pięć minut, ale nikt nie chce go naprawić, bo wszyscy już się do tego przyzwyczaili."];
+const Litera = (() => {
+  const ALF = 'aąbcćdeęfghijklłmnńoóprsśtuwyzźż ';
+  const N = ALF.length; const IDX = new Map([...ALF].map((c, i) => [c, i]));
+  const MAXK = 3, MIN_ZN = 30, PAD = ' '.repeat(MAXK);
+  const ZERO = new Uint32Array(N);
+  const HMAX = Math.log2(N);
+  const norm = (t) => [...t.toLowerCase().normalize('NFC').replace(/[^\p{L}\p{N}]+/gu, ' ')].filter((c) => IDX.has(c)).join('').replace(/ +/g, ' ').trim();
+  // Model n-gramowy: liczniki[k] = mapa kontekst (k znaków) → liczby wystąpień następnego znaku
+  const liczniki = Array.from({ length: MAXK + 1 }, () => new Map());
+  function trenuj(t) {
+    const P = PAD + t;
+    for (let i = MAXK; i < P.length; i++) {
+      const j = IDX.get(P[i]);
+      for (let k = 0; k <= MAXK; k++) {
+        const ctx = P.slice(i - k, i); let a = liczniki[k].get(ctx);
+        if (!a) { a = new Uint32Array(N); liczniki[k].set(ctx, a); }
+        a[j]++;
+      }
+    }
+  }
+  /** Kolejność propozycji maszyny: najpierw najczęstsze po k znakach kontekstu, remisy rozstrzyga krótszy kontekst. */
+  function ranking(ctx, k) {
+    const rows = []; for (let kk = k; kk >= 0; kk--) rows.push(liczniki[kk].get(kk ? ctx.slice(ctx.length - kk) : '') || ZERO);
+    return [...Array(N).keys()].sort((a, b) => { for (const r of rows) if (r[a] !== r[b]) return r[b] - r[a]; return a - b; });
+  }
+  function probyMaszyny(t, k) { const P = PAD + t; const out = []; for (let i = MAXK; i < P.length; i++) out.push(ranking(P.slice(i - MAXK, i), k).indexOf(IDX.get(P[i])) + 1); return out; }
+  function odtworz(g, k) { let P = PAD; for (const n of g) P += ALF[ranking(P.slice(-MAXK), k)[n - 1]]; return P.slice(MAXK); }
+  function rozklad(g) { const c = new Array(N + 2).fill(0); for (const x of g) c[x]++; return c; }
+  /** Oszacowania Shannona (1951) z liczb trafień c[i] (i = numer próby). */
+  function oszacowanie(c) {
+    const n = c.reduce((a, b) => a + b, 0); if (!n) return null;
+    let gora = 0, dol = 0;
+    for (let i = 1; i <= N; i++) {
+      const q = c[i] / n, q1 = (c[i + 1] || 0) / n;
+      if (q > 0) gora -= q * Math.log2(q);
+      dol += i * (q - q1) * Math.log2(i);
+    }
+    return { dol, gora, p1: c[1] / n, n };
+  }
+  const bnz = (x) => x.toFixed(2).replace('.', ',');
+  /** Dolne oszacowanie Shannona zakłada, że trafień za 1. razem jest najwięcej, za 2. mniej itd.; przy krótkim lub nietypowym zgadywaniu może wyjść ponad górne i wtedy go nie pokazujemy. */
+  const przedzial = (o) => (o.dol <= o.gora ? `od ${bnz(o.dol)} do ${bnz(o.gora)}` : `≤ ${bnz(o.gora)}*`);
+  let kolejka = [], tekst = '', poz = 0, proby = [], zle = new Set(), wlasny = false, panel = null, zakonczono = false;
+
+  function tasuj(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  function nowy(t, czyWlasny = false) {
+    tekst = t; poz = 0; proby = []; zle = new Set(); wlasny = czyWlasny; zakonczono = false;
+    $('#lWynik').hidden = true; if (panel) panel.gotowe(null);
+    $('#lInfo').textContent = czyWlasny ? 'Tekst od partnera' : '';
+    rysuj();
+  }
+  function nastepny() {
+    if (!kolejka.length) kolejka = tasuj([...LITERA_TEKSTY.keys()]);
+    nowy(norm(LITERA_TEKSTY[kolejka.pop()]));
+  }
+  function komorka(c, liczby) {
+    const el = h('span', { class: `lc${c === ' ' ? ' sp' : ''}` }, h('span', { class: 'ch', text: c === ' ' ? '␣' : c }));
+    for (const [n, m] of liczby) el.append(h('span', { class: `n${m ? ' m' : n === 1 ? ' k1' : n >= 4 ? ' k4' : ''}`, text: String(n) }));
+    return el;
+  }
+  /** Tekst z liczbami prób; spacje osobno, wyrazy nie łamią się w środku. */
+  function rysujTekst(host, n, rzedy, kursor) {
+    host.innerHTML = ''; let w = h('span', { class: 'lw' });
+    for (let i = 0; i < n; i++) {
+      const c = tekst[i]; const el = komorka(c, rzedy.map((r) => [r.g[i], r.m]));
+      if (c === ' ') { if (w.childNodes.length) host.append(w); host.append(el); w = h('span', { class: 'lw' }); } else w.append(el);
+    }
+    if (kursor) w.append(h('span', { class: 'lc cur' }, h('span', { class: 'ch', text: '?' }), h('span', { class: 'n', text: ' ' })));
+    if (w.childNodes.length) host.append(w);
+  }
+  function rysuj() {
+    const koniec = poz >= tekst.length || zakonczono;
+    rysujTekst($('#lTekst'), poz, [{ g: proby, m: false }], !koniec);
+    $$('#lKlaw button').forEach((b, i) => { b.disabled = koniec || zle.has(i); });
+    $('#lKlaw').classList.toggle('done', koniec);
+    const st = $('#lStatus'); st.innerHTML = '';
+    if (koniec) st.append(`Koniec: odgadnięto ${pl(poz, 'znak', 'znaki', 'znaków')}.`);
+    else {
+      st.append(`Znak ${poz + 1} z ${tekst.length} · próba ${zle.size + 1}`);
+      if (zle.size) st.append(' · już wiesz, że to nie: ', h('span', { class: 'zle', text: [...zle].map((i) => (ALF[i] === ' ' ? '␣' : ALF[i])).join(' ') }));
+    }
+    $('#lKoniec').disabled = koniec || poz < MIN_ZN;
+    $('#lPodp').textContent = koniec ? '' : poz < MIN_ZN ? `Policzyć można po co najmniej ${MIN_ZN} znakach (zostało ${MIN_ZN - poz}).` : 'Możesz grać do końca tekstu albo zakończyć teraz.';
+  }
+  function zgadnij(i) {
+    if (zakonczono || poz >= tekst.length || zle.has(i)) return;
+    if (ALF[i] === tekst[poz]) { proby.push(zle.size + 1); zle = new Set(); poz++; if (poz >= tekst.length) { zakoncz(); return; } }
+    else zle.add(i);
+    rysuj();
+  }
+  function zakoncz() {
+    zakonczono = true; rysuj();
+    const t = tekst.slice(0, poz);
+    const ty = oszacowanie(rozklad(proby));
+    const maszyny = [0, 1, 2, 3].map((k) => ({ k, g: probyMaszyny(t, k) }));
+    $('#lWynik').hidden = false;
+    const sr = proby.reduce((a, b) => a + b, 0) / proby.length;
+    $('#lPodsum').textContent = `Odgadłeś ${pl(poz, 'znak', 'znaki', 'znaków')}. Za pierwszym razem: ${fmt(100 * ty.p1, 0)}%. Średnio ${bnz(sr)} próby na znak.`;
+    const c = rozklad(proby); const items = [];
+    for (let i = 1; i <= 9; i++) items.push({ label: `za ${i}. razem`, v: (100 * c[i]) / poz });
+    items.push({ label: 'za 10. lub dalej', v: (100 * c.slice(10).reduce((a, b) => a + b, 0)) / poz });
+    hbars($('#lRozklad'), items, { max: 100, format: (v) => fmt(v, 0), suffix: '%' });
+    const tb = $('#lTab tbody'); tb.innerHTML = '';
+    const wiersz = (kto, p1, H, mocno = false) => tb.append(h('tr', mocno ? { style: 'font-weight:700' } : {}, h('td', { text: kto }), h('td', { class: 'n', text: p1 }), h('td', { class: 'n', text: H })));
+    wiersz('Nikt: 33 znaki równie prawdopodobne', `${fmt(100 / N, 0)}%`, `${bnz(HMAX)} (log₂ 33)`);
+    let gwiazdka = false;
+    const opis = ['Maszyna znająca tylko częstości liter', 'Maszyna pamiętająca 1 poprzedni znak', 'Maszyna pamiętająca 2 poprzednie znaki', 'Maszyna pamiętająca 3 poprzednie znaki'];
+    for (const m of maszyny) { const o = oszacowanie(rozklad(m.g)); wiersz(opis[m.k], `${fmt(100 * o.p1, 0)}%`, przedzial(o)); gwiazdka ||= o.dol > o.gora; }
+    wiersz('Ty', `${fmt(100 * ty.p1, 0)}%`, przedzial(ty), true); gwiazdka ||= ty.dol > ty.gora;
+    $('#lGw').hidden = !gwiazdka;
+    $('#lRed').textContent = `Twoje górne oszacowanie: H ≤ ${bnz(ty.gora)} bitu na znak. Redundancja tego tekstu wynosi więc co najmniej 1 − ${bnz(ty.gora)}/${bnz(HMAX)} ≈ ${fmt(100 * Math.max(0, 1 - ty.gora / HMAX), 0)}%: tyle „pojemności” znaków dało się przewidzieć.`;
+    const m3 = maszyny[3].g;
+    rysujTekst($('#lPor'), poz, [{ g: proby, m: false }, { g: m3, m: true }], false);
+    $('#lOdtw').textContent = '';
+    $('#lOdtworz').onclick = () => {
+      const odt = odtworz(m3, 3); const ok = odt === t;
+      $('#lOdtw').innerHTML = '';
+      $('#lOdtw').append(h('div', { class: 'muted', text: `Liczby maszyny: ${m3.join(' ')}` }), h('div', { text: `Odtworzony tekst: ${odt}` }), h('div', { class: ok ? 'st-ok' : 'st-bad', text: ok ? 'Identyczny z oryginałem.' : 'Coś się nie zgadza.' }));
+    };
+    if (panel) {
+      const p = [{ wariant: 'gora', wynik: Math.round(100 * ty.gora) }];
+      for (let i = 1; i <= N; i++) if (c[i]) p.push({ wariant: `k${i}`, wynik: c[i] });
+      panel.gotowe(p);
+    }
+  }
+  /** Wykres kropkowy: każda kropka to jedna osoba; przedziały co 0,1 bitu. */
+  function kropki(host, wart, znaczniki) {
+    host.__rerender = () => kropki(host, wart, znaczniki);
+    host.innerHTML = '';
+    if (!wart.length) { host.append(h('p', { class: 'muted small', text: 'Brak wyników w tej sesji. Czekamy na pierwsze odpowiedzi…' })); return; }
+    const X1 = 5.5, kos = new Map();
+    for (const v of wart) { const b = Math.round(Math.min(Math.max(v, 0), X1) * 10); kos.set(b, (kos.get(b) || 0) + 1); }
+    const W = Math.round(Math.max(300, Math.min(1100, host.clientWidth || 720))), m = { l: 14, r: 14, t: 40, b: 44 };
+    const pw = W - m.l - m.r; const r = Math.max(3, Math.min(7, pw / 55 / 2 * 0.9));
+    const maxS = Math.max(...kos.values()); const ph = Math.max(60, Math.min(260, maxS * 2 * r + 10));
+    const H = m.t + ph + m.b; const x = (v) => m.l + (v / X1) * pw; const yb = m.t + ph;
+    const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Górne oszacowania entropii w grupie, jedna kropka na osobę' });
+    const gA = s('g', { class: 'axis' });
+    for (let t = 0; t <= 5; t++) {
+      gA.append(s('line', { x1: x(t), x2: x(t), y1: m.t - 4, y2: yb, class: 'gridline' }));
+      const tx = s('text', { x: x(t), y: yb + 18, 'text-anchor': 'middle' }); tx.textContent = t; gA.append(tx);
+    }
+    const xl = s('text', { x: m.l + pw / 2, y: H - 6, 'text-anchor': 'middle' }); xl.textContent = 'górne oszacowanie H (bity na znak)'; gA.append(xl);
+    svg.append(gA);
+    for (const [b, n] of kos) for (let j = 0; j < n; j++) {
+      const c = s('circle', { cx: x(b / 10), cy: yb - r - j * 2 * r, r: r * 0.9, class: 'ldot' });
+      const tt = s('title'); tt.textContent = `${fmt(b / 10, 1)} bitu na znak: ${n} ${osoby(n)}`; c.append(tt); svg.append(c);
+    }
+    znaczniki.forEach((z, k) => {
+      const xx = x(Math.min(z.x, X1));
+      svg.append(s('line', { x1: xx, x2: xx, y1: m.t - 16 + k * 14, y2: yb, class: 'marker' }));
+      const tx = s('text', { x: xx + (z.lewo ? -5 : 5), y: m.t - 20 + k * 14, class: 'marker-lab', 'text-anchor': z.lewo ? 'end' : 'start' }); tx.textContent = z.tekst; svg.append(tx);
+    });
+    host.append(svg);
+  }
+  function rysujGrupe(chart, stats, rows) {
+    const gory = rows.filter((r) => r.w === 'gora' && r.v > 0 && r.v <= 600).map((r) => r.v / 100);
+    const c = new Array(N + 2).fill(0);
+    for (const r of rows) { const mm = /^k(\d+)$/.exec(r.w); if (mm && +mm[1] >= 1 && +mm[1] <= N && r.v > 0 && Number.isInteger(r.v)) c[+mm[1]] += r.v; }
+    const raz = oszacowanie(c); const med = mediana(gory);
+    stats.textContent = gory.length ? `Osób: ${gory.length} · mediana górnych oszacowań: ${bnz(med)} bitu na znak${raz ? ` · wszystkie zgadnięcia razem (${pl(raz.n, 'znak', 'znaki', 'znaków')}): ${przedzial(raz)} bitu na znak` : ''}` : '';
+    const zn = [{ x: HMAX, tekst: 'log₂ 33 ≈ 5,04', lewo: true }];
+    if (med != null) zn.unshift({ x: med, tekst: `mediana ${bnz(med)}` });
+    kropki(chart, gory, zn);
+  }
+  function init() {
+    trenuj(norm(LITERA_KORPUS));
+    [...ALF].forEach((c, i) => {
+      const b = h('button', { class: c === ' ' ? 'sp' : '', text: c === ' ' ? 'spacja' : c, 'aria-label': c === ' ' ? 'spacja' : c });
+      b.addEventListener('click', () => { zgadnij(i); b.blur(); });
+      $('#lKlaw').append(b);
+    });
+    document.addEventListener('keydown', (e) => {
+      if ($('#v-litera').hidden || isTyping() || e.metaKey || (e.ctrlKey && !e.altKey) || e.repeat) return;
+      const k = e.key === ' ' ? ' ' : (e.key || '').toLowerCase();
+      if (k.length === 1 && IDX.has(k)) { e.preventDefault(); zgadnij(IDX.get(k)); }
+    });
+    document.addEventListener('keyup', (e) => { if (!$('#v-litera').hidden && e.key === ' ' && !isTyping()) e.preventDefault(); });
+    $('#lNowy').addEventListener('click', () => { $('#lPartnerBox').hidden = true; $('#lPartner').setAttribute('aria-expanded', 'false'); nastepny(); });
+    $('#lPartner').addEventListener('click', () => { const b = $('#lPartnerBox'); b.hidden = !b.hidden; $('#lPartner').setAttribute('aria-expanded', String(!b.hidden)); if (!b.hidden) $('#lPartnerIn').focus(); });
+    const start = () => {
+      const t = norm($('#lPartnerIn').value);
+      if (t.length < MIN_ZN) { $('#lPartnerErr').textContent = `Po usunięciu interpunkcji zostało ${pl(t.length, 'znak', 'znaki', 'znaków')}. Potrzeba co najmniej ${MIN_ZN}.`; return; }
+      $('#lPartnerErr').textContent = ''; $('#lPartnerIn').value = ''; $('#lPartnerBox').hidden = true; $('#lPartner').setAttribute('aria-expanded', 'false');
+      nowy(t, true);
+    };
+    $('#lPartnerGo').addEventListener('click', start);
+    $('#lPartnerIn').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); start(); } });
+    $('#lKoniec').addEventListener('click', zakoncz);
+    panel = panelGrupy($('#grupa-litera'), { aplikacja: 'litera', tytul: 'Ile bitów na znak w grupie', rysuj: rysujGrupe });
+    nastepny();
+  }
+  function wejscie() { if (panel) panel.start(); }
+  function wyjscie() { if (panel) panel.stop(); }
+  return { init, wejscie, wyjscie, _test: { norm, probyMaszyny, oszacowanie, rozklad, odtworz } };
+})();
+
+/* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
+const Ustawienia = (() => {
+  let roboczy = null;
+  function domyslnaSesja() { const d = new Date(); return `W02-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+  function parsujPrefill(link) {
+    let u; try { u = new URL(link.trim()); } catch (e) { throw new Error('To nie wygląda na adres internetowy.'); }
+    if (!/\/forms\/.+\/(viewform|formResponse)$/.test(u.pathname)) throw new Error('To nie jest link do Formularza Google (powinien kończyć się na /viewform?…).');
+    const f = u.origin + u.pathname.replace(/\/viewform$/, '/formResponse');
+    const e = {}; const MAP = { APLIKACJA: 'a', SESJA: 's', WARIANT: 'w', WYNIK: 'v' };
+    for (const [k, v] of u.searchParams) if (/^entry\.\d+$/.test(k) && MAP[v.trim().toUpperCase()]) e[MAP[v.trim().toUpperCase()]] = k;
+    const brak = Object.entries(MAP).filter(([, kk]) => !e[kk]).map(([n]) => n);
+    if (brak.length) throw new Error(`W linku brakuje pól: ${brak.join(', ')}. Wpisz te słowa w pola formularza przed pobraniem linku.`);
+    return { f, e };
+  }
+  function zbierz() {
+    const { f, e } = parsujPrefill($('#sPrefill').value);
+    const c = $('#sCsv').value.trim();
+    if (!/^https?:\/\//.test(c)) throw new Error('Podaj link do opublikowanego arkusza (CSV).');
+    const sesja = $('#sSes').value.trim();
+    if (!sesja) throw new Error('Podaj nazwę sesji.');
+    return { v: 1, f, e, c, s: sesja };
+  }
+  function baza() {
+    if (location.protocol === 'file:') return $('#sBase').value.trim();
+    return location.origin + location.pathname;
+  }
+  function linki(cfg) {
+    const b = baza(); const card = $('#sLinksCard');
+    if (!b) { card.hidden = true; return; }
+    const q = `?cfg=${b64e(JSON.stringify(cfg))}`;
+    $('#sLinkH').value = `${b}${q}#hick`; $('#sLinkL').value = `${b}${q}#litera`; card.hidden = false;
+  }
+  function wypelnij(cfg) {
+    if (!cfg) return;
+    const u = new URL(cfg.f.replace(/\/formResponse$/, '/viewform'));
+    u.searchParams.set('usp', 'pp_url'); u.searchParams.set(cfg.e.a, 'APLIKACJA'); u.searchParams.set(cfg.e.s, 'SESJA'); u.searchParams.set(cfg.e.w, 'WARIANT'); u.searchParams.set(cfg.e.v, 'WYNIK');
+    $('#sPrefill').value = u.toString(); $('#sCsv').value = cfg.c; $('#sSes').value = cfg.s;
+  }
+  function out(...kids) { const o = $('#sOut'); o.innerHTML = ''; o.append(...kids); }
+  async function sprawdz() {
+    let cfg; try { cfg = zbierz(); } catch (e) { out(h('p', { class: 'err', text: e.message })); return; }
+    roboczy = cfg; linki(cfg);
+    const lista = h('ul');
+    const pkt = (ok, t) => lista.append(h('li', { class: ok ? 'ok' : 'err', text: `${ok ? '✓' : '✗'} ${t}` }));
+    out(lista);
+    pkt(true, 'Link formularza rozpoznany, wszystkie cztery pola znalezione.');
+    try { await Grupa.wyslij('test', 'test', 0, cfg); pkt(true, 'Wpis testowy wysłany (aplikacja = test). Przeglądarka nie potwierdza odbioru: sprawdź, czy pojawił się w arkuszu.'); }
+    catch (e) { pkt(false, `Wysyłka nie powiodła się: ${e.message}`); }
+    try {
+      const { rows, kol } = await Grupa.pobierz(cfg);
+      pkt(true, `Arkusz CSV odczytany: ${rows.length} wierszy odpowiedzi.`);
+      if (kol && !kol.znalezione) pkt(false, 'Nie znaleziono kolumn o nazwach aplikacja, sesja, wariant, wynik. Używam kolejności kolumn 2–5. Sprawdź nazwy pytań.');
+      const testy = rows.filter((r) => r.a === 'test' && r.s === cfg.s).length;
+      lista.append(h('li', { class: 'muted', text: `Wpisów testowych w tej sesji: ${testy}. Nowy wpis może pojawić się w CSV dopiero po kilku minutach; kliknij „Sprawdź” ponownie.` }));
+    } catch (e) {
+      pkt(false, `Nie udało się odczytać CSV: ${e.message}. Sprawdź, czy arkusz jest opublikowany jako CSV.`);
+    }
+    if (location.protocol === 'file:' && !$('#sBase').value.trim()) lista.append(h('li', { class: 'muted', text: 'Strona jest otwarta z dysku. Żeby wygenerować linki dla studentów, wpisz adres strony w sieci (GitHub Pages).' }));
+  }
+  function init() {
+    $('#sSes').value = domyslnaSesja();
+    if (location.protocol === 'file:') $('#sBaseInfo').textContent = 'Strona jest otwarta z dysku, więc link musi wskazywać kopię w sieci.';
+    else { $('#sBase').value = location.origin + location.pathname; $('#sBase').readOnly = true; $('#sBaseInfo').textContent = 'Adres tej strony.'; }
+    const zapisana = store.get(CFG_KEY); if (zapisana) { try { wypelnij(JSON.parse(zapisana)); } catch (e) { /* ignoruj */ } }
+    else if (Grupa.cfg) wypelnij(Grupa.cfg);
+    $('#sPrefill').addEventListener('input', () => {
+      const i = $('#sPrefillInfo');
+      if (!$('#sPrefill').value.trim()) { i.textContent = ''; return; }
+      try { const { e } = parsujPrefill($('#sPrefill').value); i.className = 'small ok'; i.textContent = `✓ Pola: aplikacja = ${e.a}, sesja = ${e.s}, wariant = ${e.w}, wynik = ${e.v}`; }
+      catch (err) { i.className = 'small err'; i.textContent = err.message; }
+    });
+    $('#sPrefill').dispatchEvent(new Event('input'));
+    $('#sCheck').addEventListener('click', sprawdz);
+    $('#sBase').addEventListener('input', () => { if (roboczy) linki(roboczy); });
+    $('#sSave').addEventListener('click', () => {
+      let cfg; try { cfg = zbierz(); } catch (e) { out(h('p', { class: 'err', text: e.message })); return; }
+      const ok = store.set(CFG_KEY, JSON.stringify(cfg)); linki(cfg);
+      out(h('p', { class: ok ? 'ok' : 'err', text: ok ? 'Zapisano. W tej przeglądarce tryb grupowy będzie włączony także bez parametru w linku. Odśwież stronę, żeby go uruchomić.' : 'Ta przeglądarka nie pozwala zapisywać ustawień. Używaj linków dla studentów.' }));
+    });
+    $('#sForget').addEventListener('click', () => { store.del(CFG_KEY); out(h('p', { text: 'Usunięto zapisaną konfigurację. Po odświeżeniu strona będzie działać samodzielnie (chyba że otworzysz link z parametrem cfg).' })); });
+    for (const b of $$('[data-copy]')) b.addEventListener('click', async () => { const ok = await copyText($('#' + b.dataset.copy).value); b.textContent = ok ? 'Skopiowano' : 'Zaznacz i skopiuj'; setTimeout(() => { b.textContent = 'Kopiuj'; }, 1600); });
+    if (Grupa.cfg) linki(Grupa.cfg);
+  }
+  return { init };
+})();
+
+
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+const WIDOKI = ['start', 'entropia', 'hick', 'pracownia', 'litera', 'szum', 'kody', 'ustawienia'];
+const MODULY = { entropia: Entropia, hick: Hick, litera: Litera };
+let biezacy = null;
+function nawiguj() {
+  const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  if (biezacy && biezacy !== v && MODULY[biezacy] && MODULY[biezacy].wyjscie) MODULY[biezacy].wyjscie();
+  for (const w of WIDOKI) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (MODULY[v] && MODULY[v].wejscie) MODULY[v].wejscie();
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = { start: 'Wykład 2 · ćwiczenia', entropia: 'Entropia · W2', kody: 'Huffman i Shannon–Fano · W2', pracownia: 'Pracownia kodów · W2', szum: 'Szum i redundancja · W2', litera: 'Następna litera · W2', hick: 'Hick–Hyman · W2', ustawienia: 'Ustawienia prowadzącego · W2' }[v];
+}
+Grupa.init();
+Entropia.init(); Pracownia.init(); Szum.init(); Kody.init(); Hick.init(); Litera.init(); Ustawienia.init();
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+</script>
+</body>
+</html>
