@@ -66,6 +66,9 @@ code, .mono { font-family: var(--mono); }
 .top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
 .top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
 .brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+.home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
 .badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
 .tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
@@ -233,7 +236,7 @@ footer a { color: var(--muted); }
 
 <header class="top">
   <div class="wrap bar">
-    <a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 1</a>
+    <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 1</a></div>
     <a id="groupBadge" class="badge" href="#ustawienia" hidden></a>
   </div>
   <nav class="wrap tabs" aria-label="Ćwiczenia">
