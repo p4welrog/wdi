@@ -67,6 +67,8 @@ code, .mono { font-family: var(--mono); }
 .top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
 .brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
 .top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+html { scroll-padding-top: 96px; }
+@media (max-width: 560px) { html { scroll-padding-top: 124px; } }
 .home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
 .home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
 .badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
@@ -371,6 +373,32 @@ footer a { color: var(--muted); }
 .lkb.done button { opacity: .25; }
 .chart .ldot { fill: var(--s1); }
 .lodtw { font-family: var(--mono); word-break: break-word; }
+
+/* ───────── W02: kod genetyczny ───────── */
+.dseq { display: flex; flex-wrap: wrap; gap: 10px 6px; align-items: flex-start; font-family: var(--mono); padding: 14px; background: var(--surface-2); border-radius: var(--radius); margin-top: 12px; min-height: 3.5em; }
+.dcod { display: inline-flex; flex-direction: column; align-items: center; border: 1px solid var(--border); background: var(--surface); border-radius: 6px; padding: 2px 3px 1px; }
+.dcod.st { border-color: var(--bad); }
+.dcod.sel { outline: 2px solid var(--s1); outline-offset: 1px; }
+.dcod .bs { display: flex; }
+.dcod .aa { font: .74rem/1.3 var(--font); color: var(--text-2); }
+.dcod.st .aa { color: var(--bad); font-weight: 700; }
+.dfree { display: inline-flex; flex-wrap: wrap; opacity: .45; padding-top: 3px; }
+.db { font: inherit; font-size: 1.12rem; line-height: 1.35; border: 0; background: transparent; color: inherit; padding: 0 1px; min-width: .85em; border-radius: 3px; cursor: pointer; touch-action: manipulation; }
+.db:hover, .db:focus-visible { background: color-mix(in srgb, var(--s1) 22%, transparent); }
+.db.sub { color: var(--s2); font-weight: 700; text-decoration: underline; }
+.db.ins { color: var(--s2); font-weight: 700; background: color-mix(in srgb, var(--s2) 18%, transparent); }
+.db.delb { box-shadow: inset 3px 0 0 var(--bad); }
+.ddel { color: var(--bad); font-weight: 700; padding-top: 3px; }
+.dprot { font-family: var(--mono); font-size: 1.15rem; letter-spacing: .06em; word-break: break-all; }
+.dprot .df { background: color-mix(in srgb, var(--bad) 28%, transparent); border-radius: 3px; }
+.dprot .dst { color: var(--bad); }
+.dtab { display: grid; grid-template-columns: auto repeat(4, minmax(118px, 1fr)); gap: 3px; font-family: var(--mono); font-size: .82rem; min-width: 560px; }
+.dtab .hd { font-family: var(--font); font-weight: 700; color: var(--muted); text-align: center; padding: 4px; }
+.dtab .dcell { background: var(--surface-2); border-radius: 6px; padding: 4px 6px; }
+.dtab .dcell div { padding: 0 3px; border-radius: 3px; white-space: nowrap; }
+.dtab .dcell .stop { color: var(--bad); }
+.dtab .dcell .syn { background: color-mix(in srgb, var(--s1) 16%, transparent); }
+.dtab .dcell .on { background: color-mix(in srgb, var(--s1) 40%, transparent); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -387,7 +415,8 @@ footer a { color: var(--muted); }
     <a href="#pracownia">3. Pracownia kodów</a>
     <a href="#litera">4. Następna litera</a>
     <a href="#szum">5. Szum</a>
-    <a href="#kody">6. Huffman i Shannon–Fano</a>
+    <a href="#dna">6. Kod genetyczny</a>
+    <a href="#kody">7. Huffman i Shannon–Fano</a>
   </nav>
 </header>
 
@@ -396,14 +425,15 @@ footer a { color: var(--muted); }
 <!-- ═══════════════════ START ═══════════════════ -->
 <section id="v-start">
   <h1>Teoria informacji i kodowanie: ćwiczenia</h1>
-  <p class="lead">Sześć ćwiczeń do wykładu 2, w kolejności slajdów. Działają w przeglądarce, także bez internetu. Strona niczego nie wysyła, chyba że prowadzący włączy tryb grupowy.</p>
+  <p class="lead">Siedem ćwiczeń do wykładu 2, w kolejności slajdów. Działają w przeglądarce, także bez internetu. Strona niczego nie wysyła, chyba że prowadzący włączy tryb grupowy.</p>
   <div class="grid2">
     <a class="tile" href="#entropia"><span class="num">1</span><h3>Piaskownica entropii</h3><p>Zmieniaj prawdopodobieństwa i patrz, jak zmienia się informacja własna komunikatów i entropia źródła.</p><div class="meta">ok. 5 min · slajdy „Informacja własna” do „Moneta niesymetryczna”</div></a>
     <a class="tile" href="#hick"><span class="num">2</span><h3>Prawo Hicka–Hymana</h3><p>Zmierz własny czas reakcji przy 1, 2, 4 i 8 bodźcach i sprawdź, czy rośnie liniowo z entropią.</p><div class="meta">ok. 5 min · najlepiej na komputerze z klawiaturą · slajd „Entropia w głowie”</div></a>
     <a class="tile" href="#pracownia"><span class="num">3</span><h3>Pracownia kodów</h3><p>Wymyśl własny kod. Strona sprawdzi, czy jest prefiksowy i jednoznaczny, policzy sumę Krafta, L i redundancję i pokaże wszystkie odczytania ciągu.</p><div class="meta">ok. 6 min · slajdy od „Kodu i średniej długości” do „Kontrprzykładu”</div></a>
     <a class="tile" href="#litera"><span class="num">4</span><h3>Zgadnij następną literę</h3><p>Gra Shannona: zgaduj kolejne znaki ukrytego zdania. Z liczby prób oszacujesz, ile bitów niesie jedna litera polskiego tekstu, i porównasz się z maszyną.</p><div class="meta">ok. 7 min · slajdy „Entropia źródła” i „Redundancja”</div></a>
     <a class="tile" href="#szum"><span class="num">5</span><h3>Szum i pożądana redundancja</h3><p>Wyślij wiadomość przez zaszumiony kanał. Porównaj: bez zabezpieczeń, bit parzystości, potrójne powtórzenie i kod Hamminga.</p><div class="meta">ok. 6 min · slajd „Redundancja”</div></a>
-    <a class="tile" href="#kody"><span class="num">6</span><h3>Huffman i Shannon–Fano krok po kroku</h3><p>Zbuduj kod sam: łącz najlżejsze drzewa albo tnij posortowaną listę. Porównaj wyniki z entropią.</p><div class="meta">ok. 10 min · slajdy od „Metody Shannona–Fano” do „ABRAKADABRA”</div></a>
+    <a class="tile" href="#dna"><span class="num">6</span><h3>Kod genetyczny: DNA → białko</h3><p>Kod blokowy z natury: 64 kodony na 21 znaczeń. Zamieniaj, wstawiaj i usuwaj litery i zobacz, kiedy redundancja chroni białko, a kiedy przesunięcie ramki niszczy wszystko.</p><div class="meta">ok. 6 min · slajd „Przykład z biologii: kod genetyczny”</div></a>
+    <a class="tile" href="#kody"><span class="num">7</span><h3>Huffman i Shannon–Fano krok po kroku</h3><p>Zbuduj kod sam: łącz najlżejsze drzewa albo tnij posortowaną listę. Porównaj wyniki z entropią.</p><div class="meta">ok. 10 min · slajdy od „Metody Shannona–Fano” do „ABRAKADABRA”</div></a>
   </div>
 </section>
 
@@ -459,7 +489,7 @@ footer a { color: var(--muted); }
 
 <!-- ═══════════════════ 2. KODY ═══════════════════ -->
 <section id="v-kody" hidden>
-  <h2>6. Huffman i Shannon–Fano krok po kroku</h2>
+  <h2>7. Huffman i Shannon–Fano krok po kroku</h2>
   <p class="lead">Zbuduj kod prefiksowy dwiema metodami. Huffman łączy od dołu dwa najlżejsze drzewa. Shannon–Fano dzieli od góry posortowaną listę na dwie części o możliwie równych sumach.</p>
 
   <div class="card">
@@ -696,6 +726,68 @@ footer a { color: var(--muted); }
     </ol>
   </div>
   <p class="src">C. E. Shannon, <em>Prediction and Entropy of Printed English</em>, Bell System Technical Journal 30(1), 1951, s. 50–64. Maszyna uczy się na ok. 10 tys. znaków tekstów napisanych na potrzeby tej strony. Teksty do zgadywania nie należą do tego zbioru.</p>
+</section>
+
+<!-- ═══════════════════ 6. KOD GENETYCZNY ═══════════════════ -->
+<section id="v-dna" hidden>
+  <h2>6. Kod genetyczny: DNA → białko</h2>
+  <p class="lead">Kod genetyczny to kod blokowy: każde słowo (kodon) ma 3 litery z alfabetu A, C, G, T. Daje to 64 słowa na 21 znaczeń: 20 aminokwasów i sygnał „stop”. Wybierz sekwencję, a potem ją uszkodź: kliknij literę, żeby ją zamienić, wstawić przed nią nową albo ją usunąć.</p>
+  <p class="small muted">64 kodony to L = 6 bitów na kodon. Do zapisania jednego z 21 znaczeń wystarczy log₂ 21 ≈ 4,39 bitu, więc redundancja wynosi co najmniej 6 − log₂ 21 ≈ 1,61 bitu na kodon.</p>
+
+  <div class="card">
+    <div class="row" id="dPresets">
+      <span class="small muted">Sekwencja:</span>
+      <button class="btn ghost small" data-p="przyklad">Przykład</button>
+      <button class="btn ghost small" data-p="slowo">Ukryte słowo</button>
+      <button class="btn ghost small" data-p="losowy">Losowy gen</button>
+    </div>
+    <label for="dIn" class="small" style="display:block; margin-top:10px">Nić kodująca DNA (możesz wpisać własną; U zostanie zamienione na T):</label>
+    <textarea id="dIn" rows="2" spellcheck="false" style="width:100%; font-family: var(--mono); margin-top:4px"></textarea>
+    <div class="row" style="margin-top:10px" role="radiogroup" aria-label="Co robi kliknięcie litery">
+      <span class="small muted">Kliknięcie litery:</span>
+      <label class="small"><input type="radio" name="dTryb" value="sub" checked> zamienia ją (A → C → G → T)</label>
+      <label class="small"><input type="radio" name="dTryb" value="ins"> wstawia przed nią
+        <select id="dInsB" aria-label="Wstawiana litera"><option>A</option><option>C</option><option>G</option><option>T</option></select></label>
+      <label class="small"><input type="radio" name="dTryb" value="del"> usuwa ją</label>
+    </div>
+    <div class="dseq" id="dView" aria-label="Sekwencja podzielona na kodony"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn small" id="dRand">Losowa mutacja punktowa</button>
+      <button class="btn ghost small" id="dReset">Przywróć oryginał</button>
+    </div>
+    <div style="margin-top:12px">
+      <div class="small muted">Białko z oryginału:</div>
+      <div class="dprot" id="dProtO"></div>
+      <div class="small muted" style="margin-top:6px">Białko po zmianach:</div>
+      <div class="dprot" id="dProtM"></div>
+      <p id="dOcena" style="margin-top:10px" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Wszystkie mutacje punktowe tej sekwencji</h3>
+    <p class="small muted">Każdą literę każdego kodonu (bez kodonu stop) zamieniamy po kolei na każdą z 3 pozostałych. Co się dzieje z aminokwasem?</p>
+    <div class="scroll-x"><table class="t" id="dStat"><thead><tr><th>Która litera kodonu</th><th class="n">Bez zmiany (cicha)</th><th class="n">Inny aminokwas</th><th class="n">Przedwczesny stop</th></tr></thead><tbody></tbody></table></div>
+    <p class="small muted">Dla całego kodu standardowego (wszystkie 549 zamian w 61 kodonach, które nie są stopem): przy 3. literze 126 na 183 zamiany są ciche (ok. 69%), przy 1. literze 8 na 183, przy 2. żadna.</p>
+  </div>
+
+  <details class="card" open>
+    <summary><strong>Tabela kodu genetycznego (64 kodony)</strong></summary>
+    <p class="small muted">Wiersz: 1. litera, kolumna: 2. litera, w komórce: 3. litera. Podświetla się ostatnio zmieniony kodon (albo ten, którego nazwę aminokwasu klikniesz) i jego synonimy.</p>
+    <div class="scroll-x"><div class="dtab" id="dTab"></div></div>
+  </details>
+
+  <div class="note"><strong>Uproszczenia:</strong> czytamy od pierwszego ATG do pierwszego stopu, bez intronów i bez całej maszynerii komórki. Używamy kodu standardowego; mitochondria i niektóre organizmy mają jego warianty. W mRNA zamiast T jest U.</div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Usuń jedną literę na początku genu. Co się dzieje z białkiem? Usuń potem drugą i trzecią obok. Co się zmieniło? (Tak w 1961 r. Crick i współpracownicy pokazali, że kod jest trójkowy.)</li>
+      <li>Dlaczego zamiana 3. litery kodonu najczęściej nic nie zmienia, a zamiana 2. zawsze coś zmienia? Czy to jest kod korygujący błędy, jak kod Hamminga?</li>
+      <li>Kod nie ma separatorów, tak jak kod prefiksowy. Crick, Griffith i Orgel zaproponowali w 1957 r. „kod bez przecinków”, w którym żadne przesunięcie nie daje sensownego słowa. Dlaczego odkrycie, że TTT (w mRNA: UUU) koduje fenyloalaninę, obaliło tę hipotezę? (Podpowiedź: przeczytaj TTTTTT od drugiej litery.)</li>
+    </ol>
+  </div>
+  <p class="src">F. H. C. Crick, J. S. Griffith, L. E. Orgel, <em>Codes Without Commas</em>, PNAS 43(5), 1957, s. 416–421; M. W. Nirenberg, J. H. Matthaei, PNAS 47(10), 1961, s. 1588–1602; F. H. C. Crick, L. Barnett, S. Brenner, R. J. Watts-Tobin, <em>General Nature of the Genetic Code for Proteins</em>, Nature 192, 1961, s. 1227–1232. Sekwencje przykładowe są wymyślone.</p>
 </section>
 
 <!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
@@ -1718,6 +1810,137 @@ const Hick = (() => {
   return { init, wejscie, wyjscie };
 })();
 
+/* ═════════════════════ 6. KOD GENETYCZNY ═════════════════════ */
+const Gen = (() => {
+  const B = 'TCAG', AA = 'FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG';
+  const KOD = {}; for (let i = 0; i < 64; i++) KOD[B[i >> 4] + B[(i >> 2) & 3] + B[i & 3]] = AA[i];
+  const NAZWY = { A: ['Ala', 'alanina'], R: ['Arg', 'arginina'], N: ['Asn', 'asparagina'], D: ['Asp', 'kwas asparaginowy'], C: ['Cys', 'cysteina'], Q: ['Gln', 'glutamina'], E: ['Glu', 'kwas glutaminowy'], G: ['Gly', 'glicyna'], H: ['His', 'histydyna'], I: ['Ile', 'izoleucyna'], L: ['Leu', 'leucyna'], K: ['Lys', 'lizyna'], M: ['Met', 'metionina (też start)'], F: ['Phe', 'fenyloalanina'], P: ['Pro', 'prolina'], S: ['Ser', 'seryna'], T: ['Thr', 'treonina'], W: ['Trp', 'tryptofan'], Y: ['Tyr', 'tyrozyna'], V: ['Val', 'walina'], '*': ['stop', 'koniec białka'] };
+  const PRESETY = {
+    przyklad: 'CCGCCATGGCTAAAGGATTTCTGGAAACCTGGCATGTTAGCGATTACCCAAAGTAAGCC',
+    slowo: 'ATGTGGATTACTGCTATGTATTAA',
+  };
+  const SENS = Object.keys(KOD).filter((c) => KOD[c] !== '*');
+  let orig = '', cur = [], delKoniec = false, wybrany = null;
+  const tekst = () => cur.map((x) => x.b).join('');
+  const norm = (t) => t.toUpperCase().replace(/U/g, 'T').replace(/[^ACGT]/g, '').slice(0, 600);
+  function tlumacz(t) {
+    const start = t.indexOf('ATG');
+    if (start < 0) return { start: -1, kodony: [], bialko: '', koniec: -1 };
+    const kodony = []; let i = start;
+    for (; i + 3 <= t.length; i += 3) { const c = t.slice(i, i + 3); kodony.push({ i, c, a: KOD[c] }); if (KOD[c] === '*') { i += 3; break; } }
+    return { start, kodony, bialko: kodony.map((k) => k.a).join(''), koniec: i };
+  }
+  function ustaw(t) { orig = t; cur = [...t].map((b) => ({ b, t: '', d: false })); delKoniec = false; $('#dIn').value = t; rysuj(); }
+  function losowyGen() { let t = 'ATG'; for (let i = 0; i < 18; i++) t += SENS[Math.floor(Math.random() * SENS.length)]; return t + ['TAA', 'TAG', 'TGA'][Math.floor(Math.random() * 3)]; }
+  function tryb() { return document.querySelector('input[name="dTryb"]:checked').value; }
+  function klik(i) {
+    const m = tryb();
+    if (m === 'sub') { const x = cur[i]; x.b = 'ACGT'[('ACGT'.indexOf(x.b) + 1) % 4]; if (x.t !== 'ins') x.t = 'sub'; }
+    else if (m === 'ins') cur.splice(i, 0, { b: $('#dInsB').value, t: 'ins', d: false });
+    else { const usun = cur.splice(i, 1)[0]; if (usun.t !== 'ins') { if (i < cur.length) cur[i].d = true; else delKoniec = true; } }
+    const tr = tlumacz(tekst()); const k = tr.kodony.find((q) => i >= q.i && i < q.i + 3); wybrany = k ? k.c : null;
+    $('#dIn').value = tekst(); rysuj();
+  }
+  function losowaMutacja() {
+    const tr = tlumacz(tekst()); if (tr.start < 0) return;
+    const i = tr.start + Math.floor(Math.random() * (tr.koniec - tr.start));
+    const inne = 'ACGT'.replace(cur[i].b, ''); cur[i].b = inne[Math.floor(Math.random() * 3)]; if (cur[i].t !== 'ins') cur[i].t = 'sub';
+    $('#dIn').value = tekst(); rysuj();
+  }
+  function baza(i) {
+    const x = cur[i];
+    const b = h('button', { class: `db${x.t ? ' ' + x.t : ''}${x.d ? ' delb' : ''}`, text: x.b, 'aria-label': `pozycja ${i + 1}: ${x.b}${x.t === 'sub' ? ', zmieniona' : x.t === 'ins' ? ', wstawiona' : ''}${x.d ? ', przed nią usunięto literę' : ''}` });
+    b.addEventListener('click', (e) => { e.stopPropagation(); klik(i); });
+    return b;
+  }
+  function rysuj() {
+    const t = tekst(); const tr = tlumacz(t);
+    const v = $('#dView'); v.innerHTML = '';
+    if (!t.length) v.append(h('span', { class: 'muted small', text: 'Pusta sekwencja.' }));
+    const wolne = (od, doo) => { if (doo <= od) return; const sp = h('span', { class: 'dfree', title: od === 0 && tr.start > 0 ? 'przed kodonem start' : 'poza ramką odczytu' }); for (let i = od; i < doo; i++) sp.append(baza(i)); v.append(sp); };
+    if (tr.start < 0) wolne(0, t.length);
+    else {
+      wolne(0, tr.start);
+      for (const k of tr.kodony) {
+        const [skr, nazwa] = NAZWY[k.a];
+        const box = h('span', { class: `dcod${k.a === '*' ? ' st' : ''}${wybrany === k.c ? ' sel' : ''}`, title: `${k.c}: ${nazwa}` }, h('span', { class: 'bs' }, ...[0, 1, 2].map((j) => baza(k.i + j))), h('span', { class: 'aa', text: skr }));
+        box.addEventListener('click', () => { wybrany = k.c; rysujTabele(); for (const e of $$('#dView .dcod')) e.classList.toggle('sel', e.title.startsWith(k.c + ':')); });
+        v.append(box);
+      }
+      wolne(tr.koniec, t.length);
+    }
+    if (delKoniec) v.append(h('span', { class: 'ddel', text: '|', title: 'usunięto literę na końcu' }));
+    porownaj(tr); statystyka(tr); rysujTabele();
+  }
+  function bialkoEl(host, p, wzor, odRoznic) {
+    host.innerHTML = '';
+    if (p == null) { host.append(h('span', { class: 'muted small', text: 'brak kodonu start ATG' })); return; }
+    [...p].forEach((a, i) => {
+      const r = odRoznic != null && i >= odRoznic ? true : wzor != null && wzor[i] !== a;
+      host.append(h('span', { class: `${a === '*' ? 'dst' : ''}${r ? ' df' : ''}`, text: a === '*' ? '■' : a, title: NAZWY[a][1] }));
+    });
+    if (!p.endsWith('*')) host.append(h('span', { class: 'muted small', text: ' (brak stopu)' }));
+  }
+  function porownaj(tr) {
+    const to = tlumacz(orig); const po = to.start < 0 ? null : to.bialko, pm = tr.start < 0 ? null : tr.bialko;
+    const ins = cur.filter((x) => x.t === 'ins').length, del = orig.length - (cur.length - ins);
+    const zmian = cur.some((x) => x.t) || del > 0;
+    let pierwsza = null; if (po != null && pm != null) { pierwsza = 0; while (pierwsza < Math.min(po.length, pm.length) && po[pierwsza] === pm[pierwsza]) pierwsza++; }
+    const netto = ins - del;
+    bialkoEl($('#dProtO'), po, null, null);
+    bialkoEl($('#dProtM'), pm, po, netto % 3 !== 0 && pierwsza != null ? pierwsza : null);
+    const oc = $('#dOcena'); oc.innerHTML = ''; let txt = '', cls = '';
+    if (!zmian) txt = 'Na razie bez zmian. Kliknij dowolną literę w sekwencji.';
+    else if (pm == null) { txt = 'Zniknął kodon start ATG: rybosom nie ma od czego zacząć, białka nie ma.'; cls = 'st-bad'; }
+    else if (po === pm) { txt = 'Mutacja cicha (synonimiczna): białko jest takie samo, bo zmieniony kodon jest synonimem. To zasługa redundancji kodu.'; cls = 'st-ok'; }
+    else if (netto % 3 !== 0) { txt = `Przesunięcie ramki odczytu (${netto > 0 ? '+' : '−'}${Math.abs(netto)}): od ${pierwsza + 1}. aminokwasu dalej wszystkie kodony są czytane inaczej. Białko ma ${pl(pm.replace('*', '').length, 'aminokwas', 'aminokwasy', 'aminokwasów')} zamiast ${po.replace('*', '').length}.`; cls = 'st-bad'; }
+    else if (pm.endsWith('*') && pm.length < po.length && po.startsWith(pm.slice(0, -1))) { txt = `Mutacja nonsensowna: przedwczesny stop. Białko skrócone z ${po.replace('*', '').length} do ${pm.replace('*', '').length} aminokwasów.`; cls = 'st-bad'; }
+    else if (pm.length === po.length) {
+      const r = [...pm].map((a, i) => [a, po[i], i]).filter(([a, b]) => a !== b);
+      txt = `Mutacja zmiany sensu: ${r.map(([a, b, i]) => `${i + 1}. aminokwas ${NAZWY[b][0]} → ${NAZWY[a][0]}`).join(', ')}. Reszta białka bez zmian.`; cls = 'st-det';
+    } else if (netto !== 0) { txt = `Zmiana o ${pl(Math.abs(netto), 'literę', 'litery', 'liter')}, czyli wielokrotność 3: ramka wraca na miejsce. Białko jest ${netto > 0 ? 'dłuższe' : 'krótsze'} o ${pl(Math.abs(netto) / 3, 'aminokwas', 'aminokwasy', 'aminokwasów')}, a od pewnego miejsca dalej takie jak oryginał.`; cls = 'st-det'; }
+    else { txt = `Białko się zmieniło: ${pm.endsWith('*') ? '' : 'zniknął kodon stop i odczyt biegnie do końca sekwencji; '}ma ${pl(pm.replace('*', '').length, 'aminokwas', 'aminokwasy', 'aminokwasów')} zamiast ${po.replace('*', '').length}.`; cls = 'st-bad'; }
+    oc.append(h('span', { class: cls, text: txt }));
+  }
+  function statystyka(tr) {
+    const tb = $('#dStat tbody'); tb.innerHTML = '';
+    const c = [0, 1, 2].map(() => ({ cicha: 0, zmiana: 0, stop: 0 }));
+    for (const k of tr.kodony) {
+      if (k.a === '*') continue;
+      for (let j = 0; j < 3; j++) for (const b of 'ACGT') {
+        if (b === k.c[j]) continue;
+        const a = KOD[k.c.slice(0, j) + b + k.c.slice(j + 1)];
+        c[j][a === k.a ? 'cicha' : a === '*' ? 'stop' : 'zmiana']++;
+      }
+    }
+    const pr = (x, n) => (n ? `${x} (${fmt(100 * x / n, 0)}%)` : '—');
+    const wiersz = (nazwa, o, mocno) => { const n = o.cicha + o.zmiana + o.stop; tb.append(h('tr', mocno ? { style: 'font-weight:700' } : {}, h('td', { text: nazwa }), h('td', { class: 'n', text: pr(o.cicha, n) }), h('td', { class: 'n', text: pr(o.zmiana, n) }), h('td', { class: 'n', text: pr(o.stop, n) }))); };
+    ['1. litera', '2. litera', '3. litera'].forEach((n, j) => wiersz(n, c[j]));
+    wiersz('Razem', c.reduce((a, o) => ({ cicha: a.cicha + o.cicha, zmiana: a.zmiana + o.zmiana, stop: a.stop + o.stop }), { cicha: 0, zmiana: 0, stop: 0 }), true);
+  }
+  function rysujTabele() {
+    const t = $('#dTab'); t.innerHTML = '';
+    const aw = wybrany ? KOD[wybrany] : null;
+    t.append(h('div', { class: 'hd', text: '' }), ...[...B].map((b) => h('div', { class: 'hd', text: `2. litera: ${b}` })));
+    for (const x of B) {
+      t.append(h('div', { class: 'hd', style: 'align-self:center', text: x }));
+      for (const y of B) {
+        const cell = h('div', { class: 'dcell' });
+        for (const z of B) { const c = x + y + z, a = KOD[c]; cell.append(h('div', { class: `${a === '*' ? 'stop' : ''}${c === wybrany ? ' on' : a === aw ? ' syn' : ''}`, text: `${c} ${NAZWY[a][0]}`, title: NAZWY[a][1] })); }
+        t.append(cell);
+      }
+    }
+  }
+  function init() {
+    for (const b of $$('#dPresets button')) b.addEventListener('click', () => { wybrany = null; ustaw(b.dataset.p === 'losowy' ? losowyGen() : PRESETY[b.dataset.p]); });
+    $('#dIn').addEventListener('input', () => { const pos = $('#dIn').selectionStart; const t = norm($('#dIn').value); orig = t; cur = [...t].map((b) => ({ b, t: '', d: false })); delKoniec = false; if ($('#dIn').value !== t) { $('#dIn').value = t; try { $('#dIn').setSelectionRange(pos, pos); } catch (e) { /* nic */ } } rysuj(); });
+    $('#dRand').addEventListener('click', losowaMutacja);
+    $('#dReset').addEventListener('click', () => ustaw(orig));
+    ustaw(PRESETY.przyklad);
+  }
+  return { init, _test: { KOD, tlumacz } };
+})();
+
 /* ═════════════════════ 4. NASTĘPNA LITERA (gra Shannona) ═════════════════════ */
 const LITERA_KORPUS = "Rano obudził mnie deszcz. Krople stukały o parapet tak równo, że przez chwilę myślałem, że to zegar. Wstałem, nastawiłem wodę na herbatę i wyjrzałem przez okno. Ulica była prawie pusta, tylko pod przystankiem stało kilka osób z parasolami. Autobus spóźniał się jak zwykle, więc nikt nie wyglądał na zaskoczonego.\n\nW kuchni pachniało jeszcze wczorajszym ciastem. Babcia zawsze mówiła, że najlepsze ciasto to takie, które smakuje następnego dnia. Ukroiłem kawałek, usiadłem przy stole i zacząłem przeglądać notatki z ostatnich zajęć. Wykładowca mówił o tym, jak komputer zapisuje liczby i litery, a ja wtedy myślałem głównie o tym, czy zdążę na pociąg.\n\nDworzec w naszym mieście jest mały, ale bardzo ruchliwy. Rano przyjeżdżają tu ludzie z okolicznych wsi, którzy pracują w fabryce albo w szpitalu. Po południu wszystko odwraca się w drugą stronę. Kasjerka zna większość pasażerów z widzenia i czasem pyta, czy bilet ma być taki sam jak wczoraj.\n\nMoja siostra uczy się grać na skrzypcach. Na początku dźwięki przypominały raczej skrzypienie drzwi niż muzykę, ale po kilku miesiącach coś się zmieniło. Teraz potrafi zagrać prostą melodię bez zatrzymywania się. Mówi, że najtrudniejsze nie są palce, tylko cierpliwość. Codziennie ćwiczy pół godziny, nawet wtedy, gdy nie ma ochoty.\n\nJesień w górach jest najpiękniejsza wtedy, gdy rano leży mgła, a w południe wychodzi słońce. Szlak prowadzi przez las bukowy, potem przez polanę, na której pasą się owce. Z góry widać całą dolinę, rzekę i dachy domów. Schronisko jest otwarte przez cały rok, a gospodarz podaje gorącą zupę i herbatę z sokiem malinowym.\n\nPsychologowie od dawna badają, jak ludzie podejmują decyzje. Okazuje się, że rzadko liczymy wszystkie możliwości. Częściej korzystamy z prostych reguł, które zwykle działają, ale czasem prowadzą nas na manowce. Gdy mamy mało czasu, wybieramy to, co znamy, albo to, co przyszło nam do głowy jako pierwsze. Nie jest to głupota, tylko oszczędzanie wysiłku.\n\nPamięć robocza ma ograniczoną pojemność. Możemy w niej utrzymać tylko kilka elementów naraz, dlatego numer telefonu łatwiej zapamiętać w grupach niż jako długi ciąg cyfr. To samo dotyczy nauki. Lepiej uczyć się krótko i często niż długo i rzadko. Mózg potrzebuje przerw, żeby uporządkować to, co zobaczył i usłyszał.\n\nPierwsze komputery zajmowały całe pokoje i ważyły kilkadziesiąt ton. Programowano je, przełączając kable i przestawiając przełączniki. Dziś w kieszeni nosimy urządzenie, które jest od nich miliony razy szybsze. Zmieniło się prawie wszystko, ale podstawowy pomysł pozostał ten sam: maszyna wykonuje po kolei proste instrukcje zapisane w pamięci.\n\nKiedy piszemy wiadomość na telefonie, klawiatura podpowiada nam kolejne słowa. Robi to na podstawie tego, co napisaliśmy wcześniej, i tego, jak zwykle piszą ludzie. Czasem podpowiedź jest zabawna, czasem trafia w punkt. Program nie rozumie, co chcemy powiedzieć, ale wie, które słowa często stoją obok siebie.\n\nW sobotę poszliśmy na targ. Sprzedawcy wołali, że mają najlepsze jabłka w okolicy, a pani przy stoisku z serami dawała wszystkim do spróbowania małe kawałki. Kupiliśmy ziemniaki, marchew, cebulę i pęczek koperku. Po drodze do domu zatrzymaliśmy się w piekarni, bo zapach świeżego chleba był nie do wytrzymania.\n\nNa obiad była zupa pomidorowa z makaronem. Dzieci zawsze pytają, czy będzie też drugie danie, a potem i tak nie mają siły go zjeść. Po obiedzie dziadek usiadł w fotelu z gazetą i po dziesięciu minutach już spał. Gazeta zsunęła mu się na kolana, a kot natychmiast się na niej położył.\n\nNauka języka obcego przypomina budowanie domu. Najpierw trzeba położyć fundamenty, czyli poznać podstawowe słowa i zasady gramatyki. Potem dokłada się kolejne cegły. Najważniejsze jest jednak to, żeby w tym domu zamieszkać, czyli mówić, słuchać i czytać jak najczęściej. Błędy są częścią nauki i nie warto się ich bać.\n\nBiblioteka uniwersytecka jest otwarta do późnego wieczora. W czasie sesji trudno znaleźć wolne miejsce przy oknie. Studenci siedzą nad książkami, laptopami i kubkami kawy. Ktoś szepcze, ktoś przewraca kartki, ktoś zasnął z głową na zeszycie. Bibliotekarka udaje, że tego nie widzi, bo sama kiedyś była studentką.\n\nWieczorem zadzwoniła mama. Zapytała, czy jem regularnie, czy się wysypiam i czy mam ciepłą kurtkę. Odpowiedziałem, że wszystko jest w porządku, chociaż nie było to do końca prawdą. Rozmawialiśmy jeszcze o sąsiadach, o pogodzie i o tym, kiedy przyjadę na święta. Na koniec powiedziała, żebym na siebie uważał.\n\nRower to najlepszy środek transportu w mieście. Nie trzeba szukać miejsca do parkowania ani stać w korkach. Wystarczy dobry zamek, lampka i trochę odwagi, gdy trzeba przejechać przez ruchliwe skrzyżowanie. Zimą jest trudniej, ale niektórzy jeżdżą przez cały rok, bez względu na śnieg i mróz.\n\nKażdy system informatyczny składa się z danych i z programów, które te dane przetwarzają. Dane mogą być liczbami, tekstem, obrazem albo dźwiękiem, ale w pamięci komputera wszystko jest zapisane jako ciąg zer i jedynek. To, co widzimy na ekranie, zależy od tego, jak program odczyta te bity. Ten sam ciąg może być literą, kolorem albo fragmentem melodii.\n\nNasz pies boi się burzy. Gdy tylko słychać pierwszy grzmot, chowa się pod łóżko i nie chce wyjść nawet po ulubioną kość. Weterynarz powiedział, że to częste u psów i że trzeba po prostu przy nim być i mówić spokojnym głosem. Po burzy pies wychodzi, otrząsa się i zachowuje tak, jakby nic się nie stało.\n\nLatem nad jeziorem jest tłoczno. Rodziny rozkładają koce na trawie, dzieci budują zamki z piasku, a młodzież pływa do pomostu i z powrotem. Ratownik siedzi na wysokim krześle i co jakiś czas gwiżdże na tych, którzy wypływają za daleko. Wieczorem wszyscy zbierają się przy ognisku, pieką kiełbaski i śpiewają piosenki.\n\nW szkole najbardziej lubiłem lekcje historii. Nauczycielka opowiadała o dawnych czasach tak, jakby sama w nich żyła. Pamiętam, jak opisywała życie w średniowiecznym mieście: wąskie uliczki, kupców na rynku, cechy rzemieślnicze i mury obronne. Dopiero po latach zrozumiałem, że historia to przede wszystkim opowieść o zwykłych ludziach.\n\nOgród wymaga dużo pracy, ale daje też dużo radości. Wiosną trzeba przekopać grządki, posiać nasiona i podlewać je codziennie. Latem zbiera się truskawki, groszek i pierwsze ogórki. Jesienią grabi się liście i sadzi cebulki tulipanów, które zakwitną dopiero za kilka miesięcy. Ogrodnik musi umieć czekać.\n\nKiedy uczymy się nowej umiejętności, na początku wszystko wymaga uwagi. Jazda samochodem wydaje się niemożliwa: trzeba patrzeć w lusterka, zmieniać biegi, pilnować prędkości i jeszcze słuchać instruktora. Po kilku miesiącach większość tych czynności dzieje się sama. Mówimy wtedy, że stały się automatyczne i nie obciążają już naszej uwagi.\n\nAlgorytm to przepis, który krok po kroku prowadzi od danych do wyniku. Przepis na ciasto też jest algorytmem, choć niezbyt precyzyjnym, bo szczypta soli dla każdego znaczy coś innego. Komputer potrzebuje instrukcji, które nie zostawiają miejsca na domysły. Dlatego programowanie uczy dokładności i myślenia o wszystkich możliwych przypadkach.\n\nZimą w naszym bloku często psuje się winda. Sąsiedzi z dziesiątego piętra narzekają najgłośniej, ale w końcu i tak chodzą po schodach. Administrator obiecuje, że w przyszłym roku winda zostanie wymieniona. Obiecuje to od pięciu lat, więc nikt już w to nie wierzy. Za to wszyscy mamy lepszą kondycję.\n\nTeatr lalek w naszym mieście istnieje od ponad pięćdziesięciu lat. Przychodzą tu przedszkolaki, uczniowie i dorośli, którzy pamiętają te same przedstawienia ze swojego dzieciństwa. Lalki są robione ręcznie w pracowni na zapleczu. Każda ma swój charakter, a aktorzy mówią, że po kilku spektaklach lalka zaczyna żyć własnym życiem.\n\nWiadomości w telewizji zaczynają się zawsze o tej samej porze. Najpierw polityka, potem wydarzenia z kraju i ze świata, na końcu sport i pogoda. Mój ojciec ogląda je codziennie, choć twierdzi, że i tak wie, co powiedzą. Może właśnie dlatego je ogląda: lubi sprawdzać, czy miał rację.\n\nNa studiach poznałem ludzi z różnych stron kraju. Jedni przyjechali z dużych miast, inni z małych miasteczek i wsi. Na początku trzymaliśmy się w grupach, które znały się wcześniej, ale wspólne projekty szybko to zmieniły. Okazało się, że najlepiej pracuje się z kimś, kto myśli trochę inaczej niż my.\n\nKażdego dnia podejmujemy setki drobnych decyzji. Co zjeść na śniadanie, którą drogą pójść do pracy, czy odpisać na wiadomość od razu, czy później. Większości z nich nawet nie zauważamy. Gdyby każda wymagała długiego namysłu, nie zdążylibyśmy zrobić niczego innego. Nawyki są więc nie tylko wygodne, ale wręcz niezbędne.\n\nMorze zimą wygląda zupełnie inaczej niż latem. Plaża jest pusta, wiatr jest zimny i wilgotny, a fale są szare i wysokie. Po brzegu spacerują tylko ludzie z psami i ci, którzy szukają bursztynu po sztormie. W kawiarni na deptaku siedzi kilka osób, które grzeją ręce o kubki z gorącą czekoladą.\n\nKiedy przeprowadzałem się do nowego mieszkania, okazało się, że mam znacznie więcej rzeczy, niż myślałem. Książki, ubrania, naczynia, stare zeszyty i kable, o których nie wiedziałem, do czego służą. Część oddałem znajomym, część wyrzuciłem, a resztę zapakowałem do kartonów. Niektóre kartony stoją nierozpakowane do dziś.\n\nSieć komputerowa łączy urządzenia, które wymieniają między sobą dane. Wiadomość wysłana z telefonu jest dzielona na małe pakiety, które wędrują różnymi drogami i składają się w całość dopiero u odbiorcy. Dzięki temu awaria jednego połączenia nie przerywa całej rozmowy. Sieć po prostu znajduje inną drogę.\n\nDziadek opowiadał, że kiedy był mały, do szkoły chodził pieszo przez las. Zimą droga zajmowała mu prawie godzinę. W klasie stał piec, w którym palił woźny, a uczniowie przynosili drewno z domu. Mimo to dziadek wspominał szkołę bardzo dobrze. Mówił, że najważniejsze było to, że ktoś go nauczył czytać.\n\nW poniedziałek zaczyna się nowy semestr. Plan zajęć jest już gotowy, choć jak zwykle kilka sal trzeba będzie jeszcze zmienić. Pierwsze tygodnie są zawsze spokojne, potem wszystko przyspiesza. Kolokwia, projekty i prezentacje pojawiają się nagle w tym samym tygodniu. Kto zaczyna wcześniej, ten śpi spokojniej.\n";
 const LITERA_TEKSTY = ["W piątek wieczorem w kinie było pełno ludzi. Wszyscy czekali na nowy film, o którym od tygodnia mówiło całe miasto.", "Kiedy pada śnieg, dzieci wybiegają na podwórko z sankami, a rodzice stoją przy oknie i proszą, żeby założyły czapki.", "Mój brat zawsze gubi klucze. Szuka ich w każdej kieszeni, pod poduszką i w lodówce, a potem znajduje je w drzwiach.", "Najlepsza kawa jest w małej kawiarni na rogu ulicy. Właściciel pamięta, co pijesz, i zaczyna ją robić, gdy tylko wejdziesz.", "Pociąg do Krakowa odjeżdża z peronu drugiego. Podróż trwa niecałe trzy godziny, więc można przeczytać kilka rozdziałów książki.", "Sąsiadka z parteru hoduje na balkonie pomidory, paprykę i zioła. Latem cała klatka schodowa pachnie bazylią i miętą.", "Przed egzaminem warto się dobrze wyspać. Zmęczony mózg gorzej zapamiętuje nowe informacje i łatwiej popełnia proste błędy.", "Na urodziny dostałem od przyjaciół stary aparat fotograficzny. Okazało się, że działa, tylko trzeba było kupić do niego film.", "Każdy program komputerowy zaczyna się od pomysłu, ale kończy na długich godzinach szukania błędów, które ktoś przeoczył.", "W lesie za miastem rosną grzyby. Jesienią przyjeżdżają tu całe rodziny z koszykami i wracają do domu przed zmrokiem.", "Moja koleżanka z pokoju codziennie rano biega po parku. Mówi, że to najlepszy sposób, żeby obudzić się bez kawy.", "Stary zegar w salonie spóźnia się o pięć minut, ale nikt nie chce go naprawić, bo wszyscy już się do tego przyzwyczaili."];
@@ -2007,7 +2230,7 @@ const Ustawienia = (() => {
 
 
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'entropia', 'hick', 'pracownia', 'litera', 'szum', 'kody', 'ustawienia'];
+const WIDOKI = ['start', 'entropia', 'hick', 'pracownia', 'litera', 'szum', 'dna', 'kody', 'ustawienia'];
 const MODULY = { entropia: Entropia, hick: Hick, litera: Litera };
 let biezacy = null;
 function nawiguj() {
@@ -2018,10 +2241,10 @@ function nawiguj() {
   if (MODULY[v] && MODULY[v].wejscie) MODULY[v].wejscie();
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 2 · ćwiczenia', entropia: 'Entropia · W2', kody: 'Huffman i Shannon–Fano · W2', pracownia: 'Pracownia kodów · W2', szum: 'Szum i redundancja · W2', litera: 'Następna litera · W2', hick: 'Hick–Hyman · W2', ustawienia: 'Ustawienia prowadzącego · W2' }[v];
+  document.title = { start: 'Wykład 2 · ćwiczenia', entropia: 'Entropia · W2', kody: 'Huffman i Shannon–Fano · W2', pracownia: 'Pracownia kodów · W2', szum: 'Szum i redundancja · W2', litera: 'Następna litera · W2', dna: 'Kod genetyczny · W2', hick: 'Hick–Hyman · W2', ustawienia: 'Ustawienia prowadzącego · W2' }[v];
 }
 Grupa.init();
-Entropia.init(); Pracownia.init(); Szum.init(); Kody.init(); Hick.init(); Litera.init(); Ustawienia.init();
+Entropia.init(); Pracownia.init(); Szum.init(); Kody.init(); Hick.init(); Litera.init(); Gen.init(); Ustawienia.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
 </script>
