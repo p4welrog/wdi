@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 4 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 4 „Maszyna Turinga i granice obliczalności” (Wprowadzenie do informatyki, SWPS).">
+<style>
+
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+html { scroll-padding-top: 96px; }
+@media (max-width: 560px) { html { scroll-padding-top: 124px; } }
+.home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+
+
+/* ───────── W04: warsztat maszyny Turinga ───────── */
+.defs { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 4px 14px; }
+.defs .field input, .defs .field select { width: 100%; font-family: var(--mono); }
+.defs .field label { font-size: .85rem; color: var(--text-2); }
+.tabsel { display: flex; flex-wrap: wrap; gap: 8px; }
+
+table.delta { border-collapse: collapse; font-size: .92rem; }
+table.delta th, table.delta td { border: 1px solid var(--border); padding: 6px 8px; text-align: center; }
+table.delta thead th { background: var(--surface-2); font-family: var(--mono); }
+table.delta tbody th { background: var(--surface-2); font-family: var(--mono); min-width: 2.6em; }
+table.delta td { min-width: 12.5em; }
+table.delta td .trio { display: flex; gap: 4px; justify-content: center; }
+table.delta td select { min-height: 34px; padding: 4px 6px; font-family: var(--mono); font-size: .92rem; }
+table.delta td.none select.w, table.delta td.none select.m { opacity: .35; }
+table.delta td.active { outline: 3px solid var(--hl); outline-offset: -3px; background: var(--amber-soft); }
+table.delta th.active { background: var(--hl); color: var(--hl-ink); }
+.delta-cap { font-size: .85rem; color: var(--muted); margin-top: 6px; }
+
+.tapebox { overflow-x: auto; position: relative; padding: 4px 0 2px; }
+.tape { display: inline-flex; gap: 3px; padding: 28px 6px 22px; position: relative; }
+.cell { width: 38px; height: 42px; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); font-family: var(--mono); font-size: 1.15rem; position: relative; flex: none; }
+.cell.blank { color: var(--muted); }
+.cell .ix { position: absolute; bottom: -17px; font-size: .62rem; color: var(--muted); font-family: var(--font); }
+.cell.head { background: var(--hl); color: var(--hl-ink); border-color: var(--hl); font-weight: 700; }
+.cell.head::before { content: attr(data-st); position: absolute; top: -27px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: .85rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.cell.head::after { content: "▼"; position: absolute; top: -13px; font-size: .62rem; color: var(--accent); }
+
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0 6px; }
+.ctrl .speed { display: flex; align-items: center; gap: 6px; font-size: .88rem; color: var(--text-2); }
+.ctrl input[type="range"] { width: 110px; }
+.status { font-weight: 600; }
+.status.halt { color: var(--good); }
+.status.stuck { color: var(--bad); }
+.status.limit { color: var(--amber); }
+.lastrule { font-family: var(--mono); font-size: .95rem; color: var(--text-2); min-height: 1.5em; }
+
+table.prog { border-collapse: collapse; font-family: var(--mono); font-size: .88rem; }
+table.prog th, table.prog td { padding: 3px 7px; text-align: center; border-bottom: 1px solid var(--border); }
+table.prog th { font-family: var(--font); color: var(--muted); font-size: .76rem; font-weight: 600; }
+table.prog td.k { color: var(--muted); text-align: right; }
+table.prog td.st { font-weight: 700; color: var(--accent); }
+table.prog td.h { background: var(--hl); color: var(--hl-ink); font-weight: 700; border-radius: 4px; }
+table.prog td.b { color: var(--muted); }
+table.prog tr.cur td { border-bottom: 2px solid var(--accent); }
+.progbox { overflow: auto; max-height: 420px; }
+
+.task { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.task h4 { margin: 0 0 4px; font-size: 1rem; }
+.task p { margin: 0 0 8px; color: var(--text-2); font-size: .94rem; }
+.task .row { margin-top: 6px; }
+.task.done { border-color: var(--good); }
+.task .hint { font-size: .88rem; }
+.res td.okc { color: var(--good); font-weight: 700; }
+.res td.badc { color: var(--bad); font-weight: 700; }
+.res td.mono { font-family: var(--mono); }
+.pill { display: inline-block; font-size: .78rem; padding: 2px 9px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+details.box { margin-top: 12px; }
+details.box summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+details.box textarea { font-family: var(--mono); font-size: .9rem; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 4</a></div>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#warsztat">1. Warsztat maszyny Turinga</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Maszyna Turinga i granice obliczalności: ćwiczenia</h1>
+  <p class="lead">Ćwiczenia do wykładu 4, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają.</p>
+  <div class="grid2">
+    <a class="tile" href="#warsztat"><span class="num">1</span><h3>Warsztat maszyny Turinga</h3><p>Tablica sterująca, taśma i diagram postępu w zapisie z wykładu. Uruchom maszynę krok po kroku, popraw regułę, a potem zbuduj własną maszynę i sprawdź ją na testach.</p><div class="meta">ok. 15 min · slajdy od „Jeden krok maszyny” do „Diagramu postępu pracowitego bobra”</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. WARSZTAT ═══════════════════ -->
+<section id="v-warsztat" hidden>
+  <h2>1. Warsztat maszyny Turinga</h2>
+  <p class="lead">Maszyna w każdym kroku patrzy na parę <em>(stan, odczytany symbol)</em>, znajduje regułę w tablicy, zapisuje symbol, przesuwa głowicę i zmienia stan. Nic więcej. Sprawdź, ile da się z tego zbudować.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <div class="row"><span class="small muted" id="twPresLab">Gotowa maszyna</span>
+        <div class="seg" id="twPres" role="group" aria-labelledby="twPresLab">
+          <button type="button" data-p="inc" aria-pressed="true">Dodawanie 1</button>
+          <button type="button" data-p="bb3">Pracowity bóbr (3 stany)</button>
+          <button type="button" data-p="pusta">Pusta</button>
+        </div>
+      </div>
+    </div>
+    <p class="small muted" id="twPresOpis" style="margin: 10px 0 0"></p>
+  </div>
+
+  <div class="card">
+    <h3>Definicja maszyny</h3>
+    <div class="defs">
+      <div class="field"><label for="twSym">Symbole taśmy Γ (spacja między)</label><input type="text" id="twSym" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="twBlank">Symbol pusty b</label><select id="twBlank"></select></div>
+      <div class="field"><label for="twStates">Stany zwykłe (wiersze tablicy)</label><input type="text" id="twStates" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="twFinal">Stany końcowe F</label><input type="text" id="twFinal" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="twStart">Stan początkowy q₀</label><select id="twStart"></select></div>
+    </div>
+    <div class="row" style="margin-top: 6px"><button type="button" class="btn small" id="twApply">Zastosuj zmiany</button><span class="err" id="twDefErr" role="alert"></span></div>
+
+    <h3 style="margin-top: 16px">Tablica sterująca δ</h3>
+    <div class="scroll-x"><table class="delta" id="twDelta"></table></div>
+    <p class="delta-cap">Wiersze to stany, kolumny to odczytany symbol. Komórka: (zapis, nowy stan, ruch). „—” w polu stanu oznacza brak reguły: maszyna się wtedy zatrzymuje, ale <em>nie</em> w stanie końcowym. Podświetlona komórka to reguła, która zadziała w następnym kroku.</p>
+
+    <details class="box">
+      <summary>Zapis jako lista reguł (kopiuj albo wklej)</summary>
+      <p class="small muted" style="margin-top:8px">Jedna reguła w linii, jak na slajdach: <span class="mono">(A, 0) ↦ (1, B, →)</span>. Ruch można też wpisać literą: L / P (albo R) / N (albo S).</p>
+      <textarea id="twText" spellcheck="false" aria-label="Lista reguł"></textarea>
+      <div class="row" style="margin-top:6px"><button type="button" class="btn small ghost" id="twCopy">Kopiuj</button><button type="button" class="btn small ghost" id="twLoad">Wczytaj z tekstu</button><span class="small" id="twTextMsg" role="status"></span></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Taśma</h3>
+    <div class="row">
+      <div class="field" style="margin:0"><label for="twInput" class="small">Słowo wejściowe</label><input type="text" id="twInput" autocomplete="off" spellcheck="false" style="font-family: var(--mono); width: 14em"></div>
+      <div class="field" style="margin:0"><label for="twLimit" class="small">Limit kroków</label><input type="number" id="twLimit" min="1" max="100000" value="1000" style="width: 8em"></div>
+      <span class="err" id="twInErr" role="alert"></span>
+    </div>
+    <p class="small muted" style="margin:6px 0 0">Na starcie głowica stoi na pierwszym (od lewej) symbolu słowa wejściowego; reszta taśmy to symbole puste.</p>
+
+    <div class="ctrl">
+      <button type="button" class="btn ghost small" id="twReset">⟲ Od początku</button>
+      <button type="button" class="btn ghost small" id="twBack">← Krok wstecz</button>
+      <button type="button" class="btn small" id="twStep">Krok →</button>
+      <button type="button" class="btn small" id="twRun">▶ Uruchom</button>
+      <button type="button" class="btn ghost small" id="twEnd">Do końca ⏭</button>
+      <label class="speed">wolno <input type="range" id="twSpeed" min="0" max="100" value="55" aria-label="Szybkość"> szybko</label>
+    </div>
+
+    <div class="tapebox"><div class="tape" id="twTape" aria-label="Taśma"></div></div>
+    <p class="lastrule" id="twLast" aria-live="polite"></p>
+    <div class="stats">
+      <div class="stat"><div class="k">kroki</div><div class="v" id="twSteps">0</div></div>
+      <div class="stat"><div class="k">konfiguracje</div><div class="v" id="twConfs">1</div></div>
+      <div class="stat"><div class="k">jedynki na taśmie</div><div class="v" id="twOnes">0</div></div>
+      <div class="stat"><div class="k">stan maszyny</div><div class="v status" id="twStatus">gotowa</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Diagram postępu obliczeń</h3>
+    <p class="small muted">Jeden wiersz to jedna konfiguracja: stan i zawartość taśmy; podświetlona klatka to głowica. Wierszy jest zawsze o jeden więcej niż kroków.</p>
+    <div class="progbox"><table class="prog" id="twProg"></table></div>
+    <p class="small muted" id="twProgNote" hidden></p>
+  </div>
+
+  <div class="card">
+    <h3>Zbuduj własną maszynę</h3>
+    <p class="small muted">„Zacznij” wczytuje pustą tablicę z właściwymi symbolami i stanami (stany możesz dodawać). „Sprawdź” uruchamia maszynę na testach. Maszyna musi zatrzymać się w stanie końcowym; liczy się to, co zostaje na taśmie (bez symboli pustych na brzegach), a nie miejsce głowicy.</p>
+    <div id="twTasks"></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Uruchom „Dodawanie 1” na <span class="mono">1</span>, <span class="mono">11</span>, <span class="mono">111</span>. Ile kroków potrzeba dla słowa z <em>n</em> samych jedynek? A dla <span class="mono">1000</span>?</li>
+      <li>W „Dodawaniu 1” ustaw w komórce (B, _) „—”. Na jakich wejściach maszyna nadal działa dobrze? Jak się zatrzymuje na pozostałych?</li>
+      <li>Pracowity bóbr zostawia 6 jedynek po 13 krokach, a rekord kroków dla 3 stanów to 21. Dlaczego rekordy jedynek i kroków to dwie różne rzeczy?</li>
+      <li>Ustaw limit 50 i zbuduj maszynę, która nigdy się nie zatrzymuje. Czy po samym napisie „limit wyczerpany” odróżnisz ją od maszyny, która zatrzymałaby się w kroku 51? Co to ma wspólnego z problemem stopu?</li>
+    </ol>
+  </div>
+  <p class="src">A. M. Turing, <em>On Computable Numbers, with an Application to the Entscheidungsproblem</em>, Proc. London Math. Soc. s2-42 (1936); R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 5; T. Radó, Bell System Tech. J. 41(3), 1962 (pracowity bóbr).</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline i niczego nie wysyła.</p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const el = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids) e.append(k);
+  return e;
+};
+const pamiec = {
+  czytaj(k) { try { return JSON.parse(localStorage.getItem('wdi-w04-' + k)); } catch (e) { return null; } },
+  zapisz(k, v) { try { localStorage.setItem('wdi-w04-' + k, JSON.stringify(v)); } catch (e) { /* tryb prywatny */ } },
+};
+
+/* ═════════════════════ Rdzeń: maszyna Turinga (bez DOM) ═════════════════════ */
+const TM = (() => {
+  const RUCH = { '-1': '←', '1': '→', '0': '↓' };
+  const RUCH_Z = { '←': -1, 'L': -1, '→': 1, 'P': 1, 'R': 1, '↓': 0, 'N': 0, 'S': 0 };
+
+  // Maszyna: { symbols, blank, states, finals, start, rules: { 'A|0': { w, s, m } } }
+  function klucz(st, sym) { return st + '|' + sym; }
+
+  function waliduj(M) {
+    const bl = [];
+    if (!M.symbols.length) bl.push('Podaj co najmniej jeden symbol taśmy.');
+    if (new Set(M.symbols).size !== M.symbols.length) bl.push('Symbole taśmy się powtarzają.');
+    if (M.symbols.some(s => [...s].length !== 1)) bl.push('Każdy symbol taśmy to jeden znak.');
+    if (!M.symbols.includes(M.blank)) bl.push('Symbol pusty musi należeć do Γ.');
+    if (!M.states.length) bl.push('Potrzebny jest co najmniej jeden stan zwykły.');
+    const wsz = [...M.states, ...M.finals];
+    if (new Set(wsz).size !== wsz.length) bl.push('Nazwy stanów (zwykłych i końcowych) muszą być różne.');
+    if (!M.states.includes(M.start)) bl.push('Stan początkowy musi być stanem zwykłym.');
+    return bl;
+  }
+
+  function nowyBieg(M, slowo) {
+    const tasma = new Map();
+    [...slowo].forEach((c, i) => { if (c !== M.blank) tasma.set(i, c); });
+    return { tasma, poz: 0, stan: M.start, kroki: 0, koniec: null, ostatnia: null, minP: 0, maxP: Math.max(0, [...slowo].length - 1) };
+  }
+
+  const czytajT = (M, B, p) => B.tasma.has(p) ? B.tasma.get(p) : M.blank;
+
+  // Jeden krok. Zwraca false, gdy maszyna już stoi.
+  function krok(M, B) {
+    if (B.koniec) return false;
+    if (M.finals.includes(B.stan)) { B.koniec = 'final'; return false; }
+    const sym = czytajT(M, B, B.poz);
+    const r = M.rules[klucz(B.stan, sym)];
+    if (!r) { B.koniec = 'brak'; B.ostatnia = { st: B.stan, sym, brak: true }; return false; }
+    if (r.w === M.blank) B.tasma.delete(B.poz); else B.tasma.set(B.poz, r.w);
+    B.ostatnia = { st: B.stan, sym, w: r.w, s: r.s, m: r.m };
+    B.poz += r.m; B.stan = r.s; B.kroki++;
+    B.minP = Math.min(B.minP, B.poz); B.maxP = Math.max(B.maxP, B.poz);
+    if (M.finals.includes(B.stan)) B.koniec = 'final';
+    return true;
+  }
+
+  function uruchom(M, slowo, limit) {
+    const B = nowyBieg(M, slowo);
+    while (!B.koniec && B.kroki < limit) krok(M, B);
+    if (!B.koniec) B.koniec = 'limit';
+    return B;
+  }
+
+  // Zawartość taśmy bez symboli pustych na brzegach
+  function wynik(M, B) {
+    const p = [...B.tasma.keys()];
+    if (!p.length) return '';
+    const a = Math.min(...p), b = Math.max(...p);
+    let s = '';
+    for (let i = a; i <= b; i++) s += czytajT(M, B, i);
+    return s;
+  }
+  const ileJedynek = (B) => [...B.tasma.values()].filter(c => c === '1').length;
+
+  function doTekstu(M) {
+    const linie = [];
+    for (const st of M.states) for (const sym of M.symbols) {
+      const r = M.rules[klucz(st, sym)];
+      if (r) linie.push(`(${st}, ${sym}) ↦ (${r.w}, ${r.s}, ${RUCH[r.m]})`);
+    }
+    return linie.join('\n');
+  }
+
+  // Zwraca { rules, states, finals, symbols } albo { blad }
+  function zTekstu(tekst, M) {
+    const rules = {}, lewe = [], syms = new Set(M.symbols), cele = [];
+    const linie = tekst.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#') && !l.startsWith('//'));
+    for (const [i, l] of linie.entries()) {
+      const t = l.replace(/->|↦|=>|[(),;]/g, ' ').trim().split(/\s+/);
+      if (t.length !== 5) return { blad: `Linia ${i + 1}: oczekuję 5 elementów (stan, odczyt, zapis, nowy stan, ruch), jest ${t.length}.` };
+      const [st, sym, w, s, mv] = t;
+      const m = RUCH_Z[mv.toUpperCase()] ?? RUCH_Z[mv];
+      if (m === undefined) return { blad: `Linia ${i + 1}: nieznany ruch „${mv}”. Użyj ←, →, ↓ albo L, P, N.` };
+      if ([...sym].length !== 1 || [...w].length !== 1) return { blad: `Linia ${i + 1}: symbol taśmy to jeden znak.` };
+      if (rules[klucz(st, sym)]) return { blad: `Linia ${i + 1}: druga reguła dla pary (${st}, ${sym}) — maszyna ma być deterministyczna.` };
+      rules[klucz(st, sym)] = { w, s, m };
+      if (!lewe.includes(st)) lewe.push(st);
+      cele.push(s); syms.add(sym); syms.add(w);
+    }
+    if (!lewe.length) return { blad: 'Brak reguł.' };
+    const finals = [...new Set(cele.filter(s => !lewe.includes(s)))];
+    const ifinals = finals.length ? finals : M.finals.filter(f => !lewe.includes(f));
+    return { rules, states: lewe, finals: ifinals.length ? ifinals : ['Z'], symbols: [...syms] };
+  }
+
+  return { klucz, waliduj, nowyBieg, krok, uruchom, wynik, ileJedynek, czytajT, doTekstu, zTekstu, RUCH };
+})();
+
+/* ═════════════════════ Dane: gotowe maszyny i zadania ═════════════════════ */
+const R = (w, s, m) => ({ w, s, m });
+const PRESETY = {
+  inc: {
+    opis: 'Dodaje 1 do liczby dwójkowej (slajd „Przykład: dodawanie 1”). Stan A idzie w prawo do końca liczby, stan B dodaje 1 z przeniesieniem.',
+    M: { symbols: ['0', '1', '_'], blank: '_', states: ['A', 'B'], finals: ['Z'], start: 'A',
+      rules: { 'A|0': R('0', 'A', 1), 'A|1': R('1', 'A', 1), 'A|_': R('_', 'B', -1), 'B|0': R('1', 'Z', 0), 'B|1': R('0', 'B', -1), 'B|_': R('1', 'Z', 0) } },
+    wejscie: '1011',
+  },
+  bb3: {
+    opis: 'Kandydat na pracowitego bobra z 3 stanami (slajd „Kandydat dla n = 3”). Startuje na pustej taśmie (same 0).',
+    M: { symbols: ['0', '1'], blank: '0', states: ['A', 'B', 'C'], finals: ['Z'], start: 'A',
+      rules: { 'A|0': R('1', 'B', 1), 'A|1': R('1', 'C', -1), 'B|0': R('1', 'A', -1), 'B|1': R('1', 'B', 1), 'C|0': R('1', 'B', -1), 'C|1': R('1', 'Z', 1) } },
+    wejscie: '',
+  },
+  pusta: {
+    opis: 'Dwa stany zwykłe, stan końcowy Z i pusta tablica. Zaprojektuj coś własnego.',
+    M: { symbols: ['0', '1', '_'], blank: '_', states: ['A', 'B'], finals: ['Z'], start: 'A', rules: {} },
+    wejscie: '',
+  },
+};
+
+const ZADANIA = [
+  {
+    id: 'neg', tytul: 'Negacja bitów', poziom: 'łatwe',
+    tresc: 'Zamień każde 0 na 1 i każde 1 na 0, np. 1011 → 0100. Wystarczy jeden stan zwykły.',
+    wskazowka: 'Idź w prawo i odwracaj; gdy trafisz na symbol pusty, przejdź do Z.',
+    M: { symbols: ['0', '1', '_'], blank: '_', states: ['A'], finals: ['Z'], start: 'A', rules: {} },
+    testy: [['1011', '0100'], ['0', '1'], ['111000', '000111'], ['', '']],
+  },
+  {
+    id: 'par', tytul: 'Bit parzystości', poziom: 'średnie',
+    tresc: 'Dopisz na końcu słowa 0, jeśli liczba jedynek jest parzysta, a 1, jeśli nieparzysta (jak w kodach z W2): 1011 → 10111, 11 → 110.',
+    wskazowka: 'Stan może „pamiętać”, czy do tej pory było parzyście, czy nieparzyście jedynek. Dwa stany zwykłe wystarczą.',
+    M: { symbols: ['0', '1', '_'], blank: '_', states: ['A', 'B'], finals: ['Z'], start: 'A', rules: {} },
+    testy: [['1011', '10111'], ['11', '110'], ['0', '00'], ['100', '1001'], ['', '0']],
+  },
+  {
+    id: 'dec', tytul: 'Odejmij 1', poziom: 'średnie',
+    tresc: 'Odejmij 1 od liczby dwójkowej większej od zera: 1100 → 1011. Wiodące zera w wyniku są dozwolone (1000 → 0111 też jest dobrze).',
+    wskazowka: 'Odwróć „Dodawanie 1”: zamiast przeniesienia jest pożyczka. Które cyfry zmieniają się przy odejmowaniu 1?',
+    M: { symbols: ['0', '1', '_'], blank: '_', states: ['A', 'B'], finals: ['Z'], start: 'A', rules: {} },
+    testy: [['1100', '1011'], ['1', '0'], ['1000', '111'], ['101', '100'], ['10', '1']],
+    porownaj: 'liczba',
+  },
+  {
+    id: 'bb2', tytul: 'Pracowity bóbr z 2 stanami', poziom: 'wyzwanie',
+    tresc: 'Na pustej taśmie (same 0) zostaw jak najwięcej jedynek i zatrzymaj się. Rekord dla 2 stanów to 4 jedynki; rekord kroków to 6.',
+    wskazowka: 'Każda reguła zapisująca 0 to zmarnowana okazja. Spróbuj, by maszyna wracała po własnych śladach.',
+    M: { symbols: ['0', '1'], blank: '0', states: ['A', 'B'], finals: ['Z'], start: 'A', rules: {} },
+    testy: [['', null]],
+    bobr: 4,
+  },
+];
+
+/* ═════════════════════ Ćwiczenie 1: Warsztat ═════════════════════ */
+const Warsztat = (() => {
+  let M = null;            // bieżąca maszyna
+  let B = null;            // bieżący bieg
+  let hist = [];           // migawki do „kroku wstecz” i diagramu postępu
+  let histObcieta = false;
+  let timer = null;
+  let zadanie = null;      // id zadania, nad którym pracuje student
+  const HIST_MAX = 400;
+
+  const klon = (x) => JSON.parse(JSON.stringify(x));
+  const migawka = () => ({ tasma: new Map(B.tasma), poz: B.poz, stan: B.stan, kroki: B.kroki, koniec: B.koniec, ostatnia: B.ostatnia, minP: B.minP, maxP: B.maxP });
+  const przywroc = (s) => { B = { ...s, tasma: new Map(s.tasma) }; };
+
+  /* —— definicja —— */
+  function wypelnijDefinicje() {
+    $('#twSym').value = M.symbols.join(' ');
+    $('#twStates').value = M.states.join(' ');
+    $('#twFinal').value = M.finals.join(' ');
+    const bl = $('#twBlank'); bl.replaceChildren(...M.symbols.map(s => el('option', { value: s, text: s })));
+    bl.value = M.blank;
+    const st = $('#twStart'); st.replaceChildren(...M.states.map(s => el('option', { value: s, text: s })));
+    st.value = M.start;
+    $('#twDefErr').textContent = '';
+  }
+
+  function czytajDefinicje() {
+    const tok = (id) => $(id).value.trim().split(/\s+/).filter(Boolean);
+    const symbols = tok('#twSym'), states = tok('#twStates'), finals = tok('#twFinal');
+    let blank = $('#twBlank').value;
+    if (!symbols.includes(blank)) blank = symbols.includes('_') ? '_' : symbols[symbols.length - 1];
+    let start = $('#twStart').value;
+    if (!states.includes(start)) start = states[0];
+    const N = { symbols, blank, states, finals, start, rules: {} };
+    const bledy = TM.waliduj(N);
+    if (bledy.length) { $('#twDefErr').textContent = bledy[0]; return; }
+    // zachowaj reguły, które nadal mają sens
+    for (const [k, r] of Object.entries(M.rules)) {
+      const [st, sym] = k.split('|');
+      if (states.includes(st) && symbols.includes(sym) && symbols.includes(r.w) && [...states, ...finals].includes(r.s)) N.rules[k] = r;
+    }
+    ustawMaszyne(N, $('#twInput').value);
+  }
+
+  /* —— tablica sterująca —— */
+  function rysujTablice() {
+    const t = $('#twDelta');
+    const cele = [...M.states, ...M.finals];
+    const glowa = el('tr', {}, el('th', { scope: 'col', text: 'stan' }), ...M.symbols.map(s => el('th', { scope: 'col', text: s })));
+    const wiersze = M.states.map(st => {
+      const tr = el('tr', {}, el('th', { scope: 'row', 'data-st': st, text: st }));
+      for (const sym of M.symbols) {
+        const r = M.rules[TM.klucz(st, sym)];
+        const sw = el('select', { class: 'w', 'aria-label': `(${st}, ${sym}): zapisz` }, ...M.symbols.map(s => el('option', { value: s, text: s })));
+        const ss = el('select', { class: 's', 'aria-label': `(${st}, ${sym}): nowy stan` }, el('option', { value: '', text: '—' }), ...cele.map(s => el('option', { value: s, text: s })));
+        const sm = el('select', { class: 'm', 'aria-label': `(${st}, ${sym}): ruch` }, ...[[-1, '←'], [1, '→'], [0, '↓']].map(([v, n]) => el('option', { value: String(v), text: n })));
+        sw.value = r ? r.w : sym; ss.value = r ? r.s : ''; sm.value = r ? String(r.m) : '1';
+        const td = el('td', { 'data-k': TM.klucz(st, sym), class: r ? '' : 'none' }, el('div', { class: 'trio' }, sw, ss, sm));
+        const zmien = () => {
+          const k = TM.klucz(st, sym);
+          if (ss.value === '') { delete M.rules[k]; td.classList.add('none'); }
+          else { M.rules[k] = { w: sw.value, s: ss.value, m: Number(sm.value) }; td.classList.remove('none'); }
+          zapiszPrace();
+          $('#twText').value = TM.doTekstu(M);
+          reset();
+        };
+        for (const s of [sw, ss, sm]) s.addEventListener('change', zmien);
+        tr.append(td);
+      }
+      return tr;
+    });
+    t.replaceChildren(el('thead', {}, glowa), el('tbody', {}, ...wiersze));
+    $('#twText').value = TM.doTekstu(M);
+  }
+
+  function podswietlRegule() {
+    for (const c of $$('#twDelta .active')) c.classList.remove('active');
+    if (B.koniec) return;
+    const sym = TM.czytajT(M, B, B.poz);
+    const td = $(`#twDelta td[data-k="${CSS.escape(TM.klucz(B.stan, sym))}"]`);
+    if (td) td.classList.add('active');
+    const th = $(`#twDelta th[data-st="${CSS.escape(B.stan)}"]`);
+    if (th) th.classList.add('active');
+  }
+
+  /* —— taśma i stan —— */
+  function rysujTasme() {
+    const ile = Math.max(15, B.maxP - B.minP + 5);
+    let a = Math.min(B.minP - 2, B.poz - 7), b = Math.max(B.maxP + 2, B.poz + 7);
+    while (b - a + 1 < ile) { a--; b++; }
+    const kom = [];
+    for (let i = a; i <= b; i++) {
+      const s = TM.czytajT(M, B, i);
+      const c = el('div', { class: 'cell' + (s === M.blank ? ' blank' : '') + (i === B.poz ? ' head' : '') }, s, el('span', { class: 'ix', text: String(i) }));
+      if (i === B.poz) { c.setAttribute('data-st', B.stan); c.setAttribute('aria-label', `głowica, stan ${B.stan}, symbol ${s}`); }
+      kom.push(c);
+    }
+    $('#twTape').replaceChildren(...kom);
+    const h = $('#twTape .head'), box = $('.tapebox');
+    if (h && box.clientWidth) box.scrollLeft = h.offsetLeft - box.clientWidth / 2 + h.offsetWidth / 2;
+  }
+
+  function rysujStan() {
+    $('#twSteps').textContent = B.kroki;
+    $('#twConfs').textContent = B.kroki + 1;
+    $('#twOnes').textContent = TM.ileJedynek(B);
+    const st = $('#twStatus');
+    st.className = 'v status';
+    if (B.koniec === 'final') { st.textContent = `zatrzymana w ${B.stan}`; st.classList.add('halt'); }
+    else if (B.koniec === 'brak') { st.textContent = 'brak reguły'; st.classList.add('stuck'); }
+    else if (B.koniec === 'limit') { st.textContent = 'limit wyczerpany'; st.classList.add('limit'); }
+    else st.textContent = timer ? 'pracuje…' : 'gotowa';
+    const o = B.ostatnia;
+    let opis = '';
+    if (o && o.brak) opis = `Brak reguły dla (${o.st}, ${o.sym}) — maszyna stoi, ale nie w stanie końcowym.`;
+    else if (o) opis = `Ostatni krok: (${o.st}, ${o.sym}) ↦ (${o.w}, ${o.s}, ${TM.RUCH[o.m]})`;
+    if (B.koniec === 'limit') opis += (opis ? ' · ' : '') + `Po ${B.kroki} krokach maszyna nadal pracuje. To nie znaczy, że nigdy się nie zatrzyma.`;
+    $('#twLast').textContent = opis;
+    $('#twBack').disabled = hist.length < 2 || histObcieta || !!timer;
+    $('#twStep').disabled = !!B.koniec || !!timer;
+    $('#twEnd').disabled = !!B.koniec || !!timer;
+    $('#twRun').textContent = timer ? '⏸ Pauza' : '▶ Uruchom';
+    $('#twRun').disabled = !!B.koniec && !timer;
+  }
+
+  function rysujDiagram() {
+    const t = $('#twProg');
+    if (!hist.length) { t.replaceChildren(); return; }
+    let a = Infinity, b = -Infinity;
+    for (const h of hist) { a = Math.min(a, h.minP, h.poz); b = Math.max(b, h.maxP, h.poz); }
+    a--; b++;
+    const glowa = el('tr', {}, el('th', { text: 'krok' }), el('th', { text: 'stan' }));
+    for (let i = a; i <= b; i++) glowa.append(el('th', { text: String(i) }));
+    const wiersze = hist.map((h, idx) => {
+      const tr = el('tr', { class: idx === hist.length - 1 ? 'cur' : '' }, el('td', { class: 'k', text: String(h.kroki) }), el('td', { class: 'st', text: h.stan }));
+      for (let i = a; i <= b; i++) {
+        const s = h.tasma.has(i) ? h.tasma.get(i) : M.blank;
+        tr.append(el('td', { class: (i === h.poz ? 'h' : '') + (s === M.blank && i !== h.poz ? ' b' : ''), text: s }));
+      }
+      return tr;
+    });
+    t.replaceChildren(el('thead', {}, glowa), el('tbody', {}, ...wiersze));
+    const n = $('#twProgNote');
+    n.hidden = !histObcieta;
+    if (histObcieta) n.textContent = `Pokazano pierwsze ${HIST_MAX} konfiguracji; maszyna wykonała ich więcej.`;
+    const box = $('.progbox');
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function rysujWszystko() { rysujTasme(); rysujStan(); rysujDiagram(); podswietlRegule(); }
+
+  /* —— sterowanie —— */
+  function limit() { const v = Math.floor(Number($('#twLimit').value)); return Number.isFinite(v) && v > 0 ? Math.min(v, 100000) : 1000; }
+
+  function sprawdzWejscie(slowo) {
+    const zle = [...slowo].filter(c => !M.symbols.includes(c));
+    $('#twInErr').textContent = zle.length ? `Symbolu „${zle[0]}” nie ma w Γ.` : '';
+    return !zle.length;
+  }
+
+  function reset() {
+    stop();
+    const slowo = $('#twInput').value.trim();
+    if (!sprawdzWejscie(slowo)) { B = TM.nowyBieg(M, ''); hist = [migawka()]; histObcieta = false; rysujWszystko(); return; }
+    B = TM.nowyBieg(M, slowo);
+    hist = [migawka()]; histObcieta = false;
+    rysujWszystko();
+  }
+
+  function jedenKrok() {
+    if (B.koniec) return false;
+    if (B.kroki >= limit()) { B.koniec = 'limit'; return false; }
+    const ok = TM.krok(M, B);
+    if (ok || B.koniec) {
+      if (hist.length < HIST_MAX) hist.push(migawka()); else histObcieta = true;
+    }
+    if (!B.koniec && B.kroki >= limit()) B.koniec = 'limit';
+    return ok;
+  }
+
+  function krokUI() { jedenKrok(); rysujWszystko(); }
+
+  function wstecz() {
+    if (hist.length < 2 || histObcieta) return;
+    hist.pop();
+    przywroc(hist[hist.length - 1]);
+    rysujWszystko();
+  }
+
+  function opoznienie() { const v = Number($('#twSpeed').value); return Math.round(900 * Math.pow(0.955, v)); }
+
+  function stop() { if (timer) { clearTimeout(timer); timer = null; } }
+
+  function uruchom() {
+    if (timer) { stop(); rysujStan(); podswietlRegule(); return; }
+    if (B.koniec) return;
+    const tik = () => {
+      jedenKrok();
+      if (B.koniec) { timer = null; rysujWszystko(); return; }
+      timer = setTimeout(tik, opoznienie());
+      rysujWszystko();
+    };
+    timer = setTimeout(tik, 0);
+    rysujStan();
+  }
+
+  function doKonca() {
+    stop();
+    const lim = limit();
+    while (!B.koniec && B.kroki < lim) jedenKrok();
+    if (!B.koniec) B.koniec = 'limit';
+    rysujWszystko();
+  }
+
+  /* —— maszyna jako całość —— */
+  function ustawMaszyne(N, slowo) {
+    M = klon(N);
+    $('#twTextMsg').textContent = '';
+    wypelnijDefinicje();
+    rysujTablice();
+    $('#twInput').value = slowo;
+    reset();
+  }
+
+  function zapiszPrace() { if (zadanie) pamiec.zapisz('zad-' + zadanie, M); }
+
+  function wybierzPreset(p) {
+    zadanie = null;
+    for (const b of $$('#twPres button')) b.setAttribute('aria-pressed', String(b.dataset.p === p));
+    $('#twPresOpis').textContent = PRESETY[p].opis;
+    ustawMaszyne(PRESETY[p].M, PRESETY[p].wejscie);
+    for (const t of $$('.task')) t.classList.remove('current');
+  }
+
+  /* —— zadania —— */
+  function porownaj(zad, wyn, ocz) {
+    if (zad.porownaj === 'liczba') {
+      const n = (s) => (/^[01]*$/.test(s) ? (s.replace(/^0+/, '') || '0') : null);
+      return n(wyn) !== null && n(wyn) === n(ocz);
+    }
+    return wyn === ocz;
+  }
+
+  function sprawdz(zad, box) {
+    const lim = limit();
+    const wiersze = [];
+    let wszystkie = true;
+    const naszeM = M;
+    for (const [we, ocz] of zad.testy) {
+      const Bt = TM.uruchom(naszeM, we, lim);
+      const wyn = TM.wynik(naszeM, Bt);
+      let ok, oczTxt, wynTxt;
+      if (zad.bobr) {
+        const j = TM.ileJedynek(Bt);
+        ok = Bt.koniec === 'final' && j >= zad.bobr;
+        oczTxt = `${zad.bobr} jedynki, zatrzymanie`;
+        wynTxt = Bt.koniec === 'final' ? `${j} jedynek, ${Bt.kroki} kroków` : '—';
+      } else {
+        ok = Bt.koniec === 'final' && porownaj(zad, wyn, ocz);
+        oczTxt = ocz === '' ? '(pusto)' : ocz;
+        wynTxt = Bt.koniec === 'final' ? (wyn === '' ? '(pusto)' : wyn) : '—';
+      }
+      const powod = Bt.koniec === 'final' ? `${Bt.kroki}` : Bt.koniec === 'brak' ? `brak reguły (${Bt.ostatnia.st}, ${Bt.ostatnia.sym})` : `limit ${lim}`;
+      if (!ok) wszystkie = false;
+      wiersze.push(el('tr', {},
+        el('td', { class: 'mono', 'data-l': 'wejście', text: we === '' ? '(pusto)' : we }),
+        el('td', { class: 'mono', 'data-l': 'oczekiwane', text: oczTxt }),
+        el('td', { class: 'mono', 'data-l': 'wynik', text: wynTxt }),
+        el('td', { 'data-l': 'kroki', text: powod }),
+        el('td', { class: ok ? 'okc' : 'badc', 'data-l': 'test', text: ok ? '✓' : '✗' })));
+    }
+    const tab = el('table', { class: 't res stack' },
+      el('thead', {}, el('tr', {}, ...['wejście', 'oczekiwane', 'wynik', 'kroki', 'test'].map(h => el('th', { text: h })))),
+      el('tbody', {}, ...wiersze));
+    const wyn = box.querySelector('.wyniki');
+    let msg = wszystkie ? 'Wszystkie testy zaliczone.' : 'Nie wszystkie testy przechodzą — kliknij wejście w tabeli, żeby prześledzić je krok po kroku.';
+    if (wszystkie && zad.bobr) {
+      const Bt = TM.uruchom(naszeM, '', lim);
+      msg += Bt.kroki >= 6 ? ` ${Bt.kroki} kroków — to też rekord dla 2 stanów.` : ` Twoja maszyna robi ${Bt.kroki} kroków; rekord kroków to 6 — dasz radę?`;
+    }
+    wyn.replaceChildren(el('div', { class: 'scroll-x' }, tab), el('p', { class: wszystkie ? 'ok small' : 'err', text: msg, role: 'status' }));
+    // klik w wejście ładuje je do symulatora
+    for (const [i, tr] of [...tab.tBodies[0].rows].entries()) {
+      const td = tr.cells[0];
+      td.style.cursor = 'pointer'; td.title = 'Uruchom to wejście w symulatorze';
+      td.addEventListener('click', () => { $('#twInput').value = zad.testy[i][0]; reset(); $('#twTape').scrollIntoView({ block: 'center', behavior: 'smooth' }); });
+    }
+    box.classList.toggle('done', wszystkie);
+    const zal = pamiec.czytaj('zaliczone') || {};
+    if (wszystkie) { zal[zad.id] = true; pamiec.zapisz('zaliczone', zal); }
+    box.querySelector('.pill').className = 'pill' + (wszystkie || zal[zad.id] ? ' ok' : '');
+    box.querySelector('.pill').textContent = wszystkie || zal[zad.id] ? 'zaliczone' : zad.poziom;
+  }
+
+  function rysujZadania() {
+    const zal = pamiec.czytaj('zaliczone') || {};
+    const boxy = ZADANIA.map(zad => {
+      const box = el('div', { class: 'task' + (zal[zad.id] ? ' done' : ''), id: 'zad-' + zad.id });
+      const bZacznij = el('button', { type: 'button', class: 'btn small ghost', text: 'Zacznij' });
+      const bSprawdz = el('button', { type: 'button', class: 'btn small', text: 'Sprawdź na testach' });
+      const det = el('details', { class: 'hint' }, el('summary', { text: 'Wskazówka' }), el('p', { text: zad.wskazowka }));
+      box.append(
+        el('h4', {}, zad.tytul + ' ', el('span', { class: 'pill' + (zal[zad.id] ? ' ok' : ''), text: zal[zad.id] ? 'zaliczone' : zad.poziom })),
+        el('p', { text: zad.tresc }),
+        det,
+        el('div', { class: 'row' }, bZacznij, bSprawdz),
+        el('div', { class: 'wyniki' }));
+      bZacznij.addEventListener('click', () => {
+        for (const b of $$('#twPres button')) b.setAttribute('aria-pressed', 'false');
+        zadanie = zad.id;
+        const zapis = pamiec.czytaj('zad-' + zad.id);
+        $('#twPresOpis').textContent = `Zadanie: ${zad.tytul}. ${zapis ? 'Wczytano Twoją ostatnią wersję.' : 'Pusta tablica — uzupełnij reguły.'}`;
+        ustawMaszyne(zapis && TM.waliduj(zapis).length === 0 ? zapis : zad.M, zad.testy[0][0]);
+        $('#twDelta').scrollIntoView({ block: 'center', behavior: 'smooth' });
+      });
+      bSprawdz.addEventListener('click', () => {
+        if (zadanie !== zad.id) {
+          box.querySelector('.wyniki').replaceChildren(el('p', { class: 'err', text: 'Najpierw kliknij „Zacznij” — testy sprawdzają maszynę z tablicy powyżej, a teraz jest w niej inna maszyna.' }));
+          return;
+        }
+        sprawdz(zad, box);
+      });
+      return box;
+    });
+    $('#twTasks').replaceChildren(...boxy);
+  }
+
+  /* —— lista reguł —— */
+  function wczytajTekst() {
+    const r = TM.zTekstu($('#twText').value, M);
+    const msg = $('#twTextMsg');
+    if (r.blad) { msg.className = 'small err'; msg.textContent = r.blad; return; }
+    const blank = r.symbols.includes(M.blank) ? M.blank : (r.symbols.includes('_') ? '_' : r.symbols[0]);
+    const N = { symbols: r.symbols, blank, states: r.states, finals: r.finals, start: r.states.includes(M.start) ? M.start : r.states[0], rules: r.rules };
+    const bledy = TM.waliduj(N);
+    if (bledy.length) { msg.className = 'small err'; msg.textContent = bledy[0]; return; }
+    const n = Object.keys(r.rules).length;
+    const odm = n === 1 ? 'regułę' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 'reguły' : 'reguł';
+    ustawMaszyne(N, $('#twInput').value);
+    msg.className = 'small ok'; msg.textContent = `Wczytano ${n} ${odm}.`;
+    zapiszPrace();
+  }
+
+  async function kopiuj() {
+    const msg = $('#twTextMsg');
+    try { await navigator.clipboard.writeText($('#twText').value); msg.className = 'small ok'; msg.textContent = 'Skopiowano.'; }
+    catch (e) { $('#twText').select(); msg.className = 'small muted'; msg.textContent = 'Zaznaczono — skopiuj skrótem klawiszowym.'; }
+  }
+
+  function init() {
+    for (const b of $$('#twPres button')) b.addEventListener('click', () => wybierzPreset(b.dataset.p));
+    $('#twApply').addEventListener('click', czytajDefinicje);
+    for (const id of ['#twSym', '#twStates', '#twFinal']) $(id).addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); czytajDefinicje(); } });
+    $('#twBlank').addEventListener('change', czytajDefinicje);
+    $('#twStart').addEventListener('change', czytajDefinicje);
+    $('#twInput').addEventListener('input', reset);
+    $('#twLimit').addEventListener('change', () => { if (B.koniec === 'limit') reset(); });
+    $('#twReset').addEventListener('click', reset);
+    $('#twBack').addEventListener('click', wstecz);
+    $('#twStep').addEventListener('click', krokUI);
+    $('#twRun').addEventListener('click', uruchom);
+    $('#twEnd').addEventListener('click', doKonca);
+    $('#twLoad').addEventListener('click', wczytajTekst);
+    $('#twCopy').addEventListener('click', kopiuj);
+    rysujZadania();
+    wybierzPreset('inc');
+  }
+  function wyjscie() { stop(); if (B) rysujStan(); }
+  return { init, wyjscie };
+})();
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+const WIDOKI = ['start', 'warsztat'];
+let biezacy = null;
+function nawiguj() {
+  const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  if (biezacy === 'warsztat' && v !== 'warsztat') Warsztat.wyjscie();
+  for (const w of WIDOKI) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = { start: 'Wykład 4 · ćwiczenia', warsztat: 'Warsztat maszyny Turinga · W4' }[v];
+}
+Warsztat.init();
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+</script>
+</body>
+</html>
