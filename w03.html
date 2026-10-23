@@ -1,0 +1,1759 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 3 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 3 „Systemy liczbowe i reprezentacja liczb” (Wprowadzenie do informatyki, SWPS).">
+<style>
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+html { scroll-padding-top: 96px; }
+@media (max-width: 560px) { html { scroll-padding-top: 124px; } }
+.home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+
+/* ───────── W03: zegar pozycyjny ───────── */
+.nfields { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 720px) { .nfields { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.nfield { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.nfield label { font-size: .85rem; color: var(--text-2); }
+.nfield label .sub { font-family: var(--mono); color: var(--muted); font-weight: 400; }
+.nfield input { font-family: var(--mono); font-size: 1.1rem; width: 100%; }
+.nfield input.zly { border-color: var(--bad); background: var(--bad-soft); }
+.nfield .err { min-height: 1.2em; font-size: .8rem; }
+.zakres { display: flex; align-items: center; gap: 10px; margin: 10px 0 2px; }
+.zakres input[type="range"] { flex: 1; min-width: 0; accent-color: var(--accent); }
+
+.bitrow { display: flex; justify-content: center; gap: 4px; flex-wrap: nowrap; margin: 16px 0 4px; }
+.nib { display: flex; gap: 2px; padding: 0 3px; }
+.nib + .nib { border-left: 1px dashed var(--border); padding-left: 7px; }
+.bcol { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 0; }
+.bcol .w { font: .7rem/1.1 var(--mono); color: var(--muted); white-space: nowrap; }
+.bcol .w sup { font-size: .62rem; }
+.bcol .wv { font: .68rem/1.1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.bbtn { font: 700 1.25rem var(--mono); width: 2.1rem; height: 2.6rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface-2); color: var(--muted); cursor: pointer; padding: 0; touch-action: manipulation; }
+.bbtn.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.bcol.on .wv { color: var(--accent); font-weight: 700; }
+@media (max-width: 640px) {
+  .bbtn { width: 1.55rem; height: 2.2rem; font-size: 1rem; }
+  .bcol .w, .bcol .wv { font-size: .56rem; }
+  .nib + .nib { padding-left: 4px; }
+  .bitrow { gap: 1px; }
+}
+.suma { text-align: center; font-family: var(--mono); color: var(--text-2); margin: 6px 0 4px; word-break: break-word; }
+.suma b { color: var(--text); }
+
+.grupy { display: grid; gap: 6px; margin-top: 12px; }
+.grupa { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.grupa .k { font-size: .82rem; color: var(--muted); width: 10.5em; }
+.grupa .gg { display: flex; gap: 6px; flex-wrap: wrap; font-family: var(--mono); }
+.gchip { display: inline-flex; flex-direction: column; align-items: center; border: 1px solid var(--border); border-radius: 6px; padding: 2px 7px; background: var(--surface); }
+.gchip .b { font-size: .85rem; letter-spacing: .04em; }
+.gchip .b .pad { color: var(--muted); opacity: .6; }
+.gchip .c { font-weight: 700; color: var(--accent); }
+
+.krokwiz { margin-top: 10px; }
+.krokwiz table.t td { font-family: var(--mono); }
+.krokwiz table.t td.cy { color: var(--accent); font-weight: 700; }
+.krokwiz tr.nowy td { background: var(--accent-soft); }
+.krokwiz tr.ukryty { display: none; }
+.wynik { margin-top: 10px; font-size: 1.05rem; }
+.wynik .mono { background: var(--surface-2); padding: 2px 8px; border-radius: 6px; }
+
+.quiz { display: grid; gap: 10px; }
+.qtask { font-size: 1.15rem; }
+.qtask .mono { background: var(--surface-2); padding: 2px 8px; border-radius: 6px; }
+.qfb { min-height: 1.6em; }
+.qfb.good { color: var(--good); font-weight: 600; }
+.qfb.bad { color: var(--bad); }
+.qfb .hint { display: block; color: var(--text-2); font-weight: 400; margin-top: 4px; }
+.zp sub { font-size: .68em; vertical-align: -.25em; line-height: 0; margin-left: 1px; }
+
+/* ───────── W03: grupuj od prawej ───────── */
+.ciag { display: flex; align-items: stretch; justify-content: center; margin: 12px 0 4px; padding: 10px 4px; background: var(--surface-2); border-radius: var(--radius); min-width: max-content; }
+.ciag .cb { font: 700 1.2rem/1 var(--mono); width: 1.25rem; display: grid; place-items: center; height: 2.4rem; }
+.ciag .cut { width: 14px; border: 0; background: transparent; cursor: pointer; padding: 0; position: relative; touch-action: manipulation; }
+.ciag .cut::after { content: ""; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; border-radius: 1px; background: var(--border); opacity: .6; }
+.ciag .cut:hover::after, .ciag .cut:focus-visible::after { background: var(--accent); opacity: .6; }
+.ciag .cut.on::after { background: var(--accent); opacity: 1; top: 0; bottom: 0; width: 3px; left: 5.5px; }
+.ciag .cut.zly::after { background: var(--bad); }
+.ciag .cut.dobry::after { background: var(--good); }
+.ciag .gval { display: none; }
+.ciag.pokaz .grp { display: inline-flex; flex-direction: column; align-items: center; }
+.grwiz { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 8px; font-family: var(--mono); }
+.sciaga { display: grid; grid-template-columns: repeat(8, auto); gap: 2px 12px; font-family: var(--mono); font-size: .85rem; margin-top: 6px; width: max-content; }
+.sciaga b { color: var(--accent); }
+
+.kolor { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center; margin-top: 10px; }
+@media (max-width: 560px) { .kolor { grid-template-columns: 1fr; } }
+.probka { width: 100%; height: 120px; border-radius: var(--radius); border: 1px solid var(--border); }
+.kanaly { display: grid; gap: 8px; }
+.kanal { display: grid; grid-template-columns: 1.6em 1fr 3.2em auto auto; gap: 10px; align-items: center; }
+@media (max-width: 560px) { .kanal { grid-template-columns: 1.6em 1fr 3em; } .kanal .kb { grid-column: 2 / -1; } }
+.kanal .kl { font-weight: 700; }
+.kanal input[type="range"] { width: 100%; min-width: 0; }
+.kanal .kd { font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+.kanal .kb { font-family: var(--mono); font-size: .88rem; color: var(--text-2); white-space: nowrap; }
+.kanal .kh { font-family: var(--mono); font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 1px 8px; }
+
+table.uprawn td, table.uprawn th { text-align: center; }
+table.uprawn td:first-child, table.uprawn th:first-child { text-align: left; }
+table.uprawn input[type="checkbox"] { width: 1.2rem; height: 1.2rem; accent-color: var(--accent); cursor: pointer; }
+table.uprawn .bits3 { font-family: var(--mono); }
+table.uprawn .oct { font-family: var(--mono); font-weight: 700; color: var(--accent); font-size: 1.1rem; }
+.chsym { background: var(--surface-2); padding: 4px 10px; border-radius: 6px; }
+@media (max-width: 560px) { .ciag .cb { width: 1rem; font-size: 1.05rem; } .ciag .cut { width: 12px; } .ciag .cut::after { left: 5px; } .ciag .cut.on::after { left: 4.5px; } }
+
+/* ───────── W03: licznik U2 ───────── */
+.u2kolo { display: grid; grid-template-columns: minmax(240px, 360px) 1fr; gap: 18px; align-items: start; margin-top: 10px; }
+@media (max-width: 720px) { .u2kolo { grid-template-columns: 1fr; } .u2kolo .chart { max-width: 360px; margin: 0 auto; width: 100%; } }
+.u2kolo svg text { font-family: var(--mono); }
+.u2kolo .tk { fill: var(--muted); font-size: 11px; }
+.u2kolo .tu { fill: var(--text-2); font-size: 12px; }
+.u2kolo .ts { fill: var(--text); font-size: 13px; font-weight: 700; }
+.u2kolo .ts.neg { fill: var(--bad); }
+.u2kolo .pkt { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; cursor: pointer; }
+.u2kolo .pkt.cur { fill: var(--accent); stroke: var(--accent); }
+.u2kolo .ring { fill: none; stroke: var(--grid); stroke-width: 2; }
+.u2kolo .gC { stroke: var(--s1); stroke-width: 4; stroke-linecap: round; }
+.u2kolo .gV { stroke: var(--bad); stroke-width: 4; stroke-linecap: round; }
+.u2kolo .mid { fill: var(--text); font-family: var(--font) !important; }
+.u2kolo .mid.big { font-size: 30px; font-weight: 700; }
+.u2kolo .mid.sm { font-size: 12px; fill: var(--muted); }
+table.odczyty td { font-variant-numeric: tabular-nums; }
+table.odczyty td.v { font-family: var(--mono); font-weight: 700; text-align: right; }
+table.odczyty tr.u2 td { background: var(--accent-soft); }
+.bcol .w.neg { color: var(--bad); font-weight: 700; }
+
+.slup { font-family: var(--mono); display: grid; gap: 2px; margin: 14px auto 6px; width: max-content; font-size: 1.15rem; }
+.slup { --lab: 10rem; --col: 1.95rem; --dec: 9rem; }
+.slup .r { display: grid; grid-template-columns: var(--lab) repeat(var(--n), var(--col)) var(--dec); align-items: center; text-align: center; min-height: 1.6em; }
+@media (max-width: 560px) { .slup { --lab: 5.2rem; --col: 1.45rem; --dec: 5.5rem; font-size: 1rem; } .slup .r .lab { font-size: .68rem; } .slup .r .dec { font-size: .72rem; padding-left: 6px; } }
+.slup .r .lab { font-family: var(--font); font-size: .78rem; color: var(--muted); text-align: right; padding-right: 10px; }
+.slup .r.car { font-size: .8rem; color: var(--s1); }
+.slup .r.car .out { color: #fff; background: var(--s1); border-radius: 4px; }
+.slup .r.car .in { outline: 2px solid var(--bad); outline-offset: -1px; border-radius: 4px; }
+.slup .r.sum { border-top: 2px solid var(--text-2); padding-top: 2px; font-weight: 700; }
+.slup .r .bt { cursor: pointer; border-radius: 4px; }
+.slup .r .bt:hover { background: var(--accent-soft); }
+.slup .r .dec { font-family: var(--font); font-size: .85rem; color: var(--text-2); padding-left: 10px; text-align: left; }
+.flagi { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 8px 0 12px; }
+.flaga { border-radius: 99px; padding: 4px 12px; font-size: .9rem; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-2); }
+.flaga.on.c { background: var(--s1); border-color: var(--s1); color: #fff; }
+.flaga.on.v { background: var(--bad); border-color: var(--bad); color: #fff; }
+#suInterp td.ok { color: var(--good); font-weight: 600; }
+#suInterp td.bad { color: var(--bad); font-weight: 600; }
+#v-u2 .legend { display: flex; gap: 8px 18px; flex-wrap: wrap; font-size: .85rem; color: var(--text-2); margin-top: 10px; }
+#v-u2 .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+table.t th.n { text-align: right; }
+
+/* ───────── W03: mikroskop na oś ───────── */
+.osch svg text.oslab { fill: var(--text-2); font-size: 12px; font-family: var(--font); }
+.osch svg text.osgest { fill: var(--text); font-size: 12px; font-family: var(--font); font-weight: 600; }
+.osch svg text.axt { fill: var(--muted); font-size: 12px; font-family: var(--font); }
+.osch .gridline { stroke: var(--grid); stroke-width: 1; }
+.osch .oscel { stroke: var(--text-2); stroke-width: 1.5; stroke-dasharray: 4 3; }
+#v-os .legend, #v-ieee .legend { display: flex; gap: 8px 18px; flex-wrap: wrap; font-size: .85rem; color: var(--text-2); margin-top: 6px; }
+#v-os .legend i, #v-ieee .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+#osTab td.bad { color: var(--bad); font-weight: 600; }
+
+/* ───────── W03: rentgen IEEE 754 ───────── */
+.ie2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 720px) { .ie2 { grid-template-columns: 1fr; } }
+.iebity { display: flex; flex-wrap: wrap; gap: 10px 14px; margin: 14px 0 6px; align-items: flex-start; }
+.ieblok .ielab { font-size: .75rem; color: var(--muted); margin-bottom: 3px; }
+.iebits { display: flex; flex-wrap: wrap; gap: 2px; max-width: 100%; }
+.ib { font: 700 .92rem var(--mono); width: 1.3rem; height: 1.8rem; padding: 0; border-radius: 4px; border: 1px solid var(--border); background: var(--surface-2); color: var(--muted); cursor: pointer; touch-action: manipulation; }
+.ieblok.zn .ib.on { background: var(--s2); border-color: var(--s2); color: #fff; }
+.ieblok.ce .ib.on { background: var(--s1); border-color: var(--s1); color: #fff; }
+.ieblok.ma .ib.on { background: var(--good); border-color: var(--good); color: #fff; }
+.ieblok.zn .ib { border-color: var(--s2); }
+.ieblok.ce .ib { border-color: color-mix(in srgb, var(--s1) 55%, var(--border)); }
+.ieblok.ma .ib { border-color: color-mix(in srgb, var(--good) 55%, var(--border)); }
+.ieblok.ma { flex: 1 1 420px; }
+@media (max-width: 560px) { .ib { width: 1.1rem; height: 1.6rem; font-size: .8rem; } }
+.iewzor { font-family: var(--mono); font-size: 1.05rem; margin: 10px 0; padding: 8px 12px; background: var(--surface-2); border-radius: 8px; overflow-x: auto; white-space: nowrap; }
+#ieTab th { color: var(--muted); font-weight: 600; font-size: .82rem; vertical-align: top; }
+#ieTab td { word-break: break-word; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 3</a></div>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#pozycyjny">1. Zegar pozycyjny</a>
+    <a href="#grupy">2. Grupuj od prawej</a>
+    <a href="#u2">3. Licznik U2</a>
+    <a href="#os">4. Oś liczb</a>
+    <a href="#ieee">5. IEEE 754</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Systemy liczbowe i reprezentacja liczb: ćwiczenia</h1>
+  <p class="lead">Ćwiczenia do wykładu 3, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają.</p>
+  <div class="grid2">
+    <a class="tile" href="#pozycyjny"><span class="num">1</span><h3>Zegar pozycyjny</h3><p>Jedna liczba naraz w systemach 2, 8, 10 i 16. Klikaj bity, patrz na wagi pozycji, przejdź krok po kroku dzielenie przez podstawę i schemat Hornera, a potem sprawdź się w zadaniach.</p><div class="meta">ok. 8 min · slajdy od „Ta sama liczba, różne zapisy” do „Ósemkowy i szesnastkowy”</div></a>
+    <a class="tile" href="#grupy"><span class="num">2</span><h3>Grupuj od prawej</h3><p>Potnij ciąg bitów na trójki albo czwórki i zamień go na zapis ósemkowy lub szesnastkowy. Do tego kolory CSS i uprawnienia plików (chmod) jako przykłady z życia.</p><div class="meta">ok. 6 min · slajdy „Ósemkowy i szesnastkowy” i „Mini-zadanie: szesnastkowy w praktyce”</div></a>
+    <a class="tile" href="#u2"><span class="num">3</span><h3>Licznik U2</h3><p>Koło liczb 3-, 4- i 5-bitowych z odczytem bez znaku, w ZM, U1 i U2. Sumator kolumnowy z flagami C i OF pokazuje, że przeniesienie i nadmiar to dwie różne rzeczy.</p><div class="meta">ok. 8 min · slajdy od „Kod uzupełnień do dwóch (U2)” do „Jedno słowo — cztery liczby”</div></a>
+    <a class="tile" href="#os"><span class="num">4</span><h3>Mikroskop na oś liczb</h3><p>Wszystkie liczby formatu zabawkowego i stałoprzecinkowego na jednej osi. Przybliżaj, klikaj i porównuj błąd bezwzględny i względny.</p><div class="meta">ok. 7 min · slajdy od „Zapisu stałoprzecinkowego” do „Logarytmicznej osi liczb w głowie”</div></a>
+    <a class="tile" href="#ieee"><span class="num">5</span><h3>Rentgen IEEE 754</h3><p>Bity prawdziwego float i double: znak, cecha, mantysa, wartość dokładna co do cyfry, sąsiednie liczby, wartości specjalne i rozwiązanie zagadki 0.1 + 0.2.</p><div class="meta">ok. 8 min · slajdy od „Standardu IEEE 754” do „Rozwiązania zagadki”</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. ZEGAR POZYCYJNY ═══════════════════ -->
+<section id="v-pozycyjny" hidden>
+  <h2>1. Zegar pozycyjny</h2>
+  <p class="lead">Ta sama liczba w czterech zapisach. Wpisz ją w dowolne pole albo klikaj bity: każdy bit to pytanie „czy ta waga wchodzi do sumy?”. Zmienia się tylko <em>zapis</em>, liczba jest cały czas ta sama.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <div class="row"><span class="small muted" id="pzBitsLab">Liczba bitów</span>
+        <div class="seg" id="pzBits" role="group" aria-labelledby="pzBitsLab">
+          <button type="button" data-b="4">4</button><button type="button" data-b="8" aria-pressed="true">8</button><button type="button" data-b="12">12</button><button type="button" data-b="16">16</button>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn ghost small" id="pzDec" title="Odejmij 1">−1</button>
+        <button class="btn ghost small" id="pzInc" title="Dodaj 1">+1</button>
+        <button class="btn ghost small" id="pzShl" title="Przesuń bity w lewo">×2 (≪)</button>
+        <button class="btn ghost small" id="pzShr" title="Przesuń bity w prawo">÷2 (≫)</button>
+        <button class="btn ghost small" id="pzZero">0</button>
+      </div>
+    </div>
+
+    <div class="zakres"><label for="pzRange" class="small muted">Suwak</label><input id="pzRange" type="range" min="0" max="255" value="53"><span class="small muted mono" id="pzMax"></span></div>
+
+    <div class="nfields" style="margin-top:10px">
+      <div class="nfield"><label for="pz2">Dwójkowy <span class="sub">(2)</span></label><input id="pz2" data-p="2" type="text" inputmode="numeric" autocomplete="off" spellcheck="false"><span class="err" id="pz2e"></span></div>
+      <div class="nfield"><label for="pz8">Ósemkowy <span class="sub">(8)</span></label><input id="pz8" data-p="8" type="text" inputmode="numeric" autocomplete="off" spellcheck="false"><span class="err" id="pz8e"></span></div>
+      <div class="nfield"><label for="pz10">Dziesiętny <span class="sub">(10)</span></label><input id="pz10" data-p="10" type="text" inputmode="numeric" autocomplete="off" spellcheck="false"><span class="err" id="pz10e"></span></div>
+      <div class="nfield"><label for="pz16">Szesnastkowy <span class="sub">(16)</span></label><input id="pz16" data-p="16" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters"><span class="err" id="pz16e"></span></div>
+    </div>
+
+    <div class="scroll-x"><div class="bitrow" id="pzBitRow" aria-label="Bity liczby — kliknij, aby przełączyć"></div></div>
+    <p class="suma" id="pzSuma"></p>
+    <p class="note" id="pzNote" hidden></p>
+
+    <div class="grupy">
+      <div class="grupa"><span class="k">Trójki bitów → ósemkowy</span><span class="gg" id="pzG3"></span></div>
+      <div class="grupa"><span class="k">Czwórki bitów → szesnastkowy</span><span class="gg" id="pzG4"></span></div>
+    </div>
+    <p class="small muted" style="margin-top:8px">Grupy liczymy <strong>od prawej</strong>. Szare zera z lewej to dopełnienie: nie zmieniają wartości.</p>
+  </div>
+
+  <div class="card">
+    <h3>Krok po kroku</h3>
+    <div class="row">
+      <div class="seg" id="pzTryb" role="group" aria-label="Kierunek zamiany">
+        <button type="button" data-t="dz" aria-pressed="true">10 → p: dzielenie przez p</button>
+        <button type="button" data-t="ho">p → 10: schemat Hornera</button>
+      </div>
+      <label for="pzP">p =</label>
+      <select id="pzP"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>12</option><option>16</option></select>
+    </div>
+    <p class="small muted" id="pzOpis" style="margin-top:8px"></p>
+    <div class="krokwiz scroll-x" id="pzKroki"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="pzNext">Następny krok</button>
+      <button class="btn ghost" id="pzAll">Pokaż wszystkie</button>
+      <button class="btn ghost" id="pzReset">Od nowa</button>
+    </div>
+    <div class="wynik" id="pzWynik"></div>
+  </div>
+
+  <div class="card">
+    <h3>Sprawdź się</h3>
+    <div class="quiz">
+      <div class="qtask" id="pzQ"></div>
+      <div class="row">
+        <input id="pzA" type="text" autocomplete="off" spellcheck="false" aria-label="Twoja odpowiedź" style="font-family: var(--mono); flex: 1; min-width: 180px">
+        <button class="btn" id="pzCheck">Sprawdź</button>
+        <button class="btn ghost" id="pzNew">Nowe zadanie</button>
+        <button class="btn ghost" id="pzShow" hidden>Pokaż odpowiedź</button>
+      </div>
+      <div class="qfb" id="pzFb" aria-live="polite"></div>
+      <div class="stats"><div class="stat"><div class="k">Poprawne</div><div class="v" id="pzOk">0</div></div><div class="stat"><div class="k">Zadania</div><div class="v" id="pzAll2">0</div></div></div>
+      <p class="small muted">Spacje, podkreślenia, zera z przodu i przedrostki <span class="mono">0b</span>, <span class="mono">0o</span>, <span class="mono">0x</span> są dozwolone. Wielkość liter w szesnastkowym nie ma znaczenia.</p>
+    </div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Przy dzieleniu przez 2 reszty czytamy od dołu. Która reszta jest cyfrą jedności i dlaczego wychodzi jako pierwsza?</li>
+      <li>Ustaw 8 bitów i liczbę 255, a potem kliknij +1. Co się stało i ilu bitów potrzeba na 256? Ile cyfr ma liczba n w systemie o podstawie p?</li>
+      <li>Kliknij kilka razy „×2 (≪)”. Dlaczego mnożenie przez podstawę to przesunięcie cyfr? Co robi dopisanie zera w systemie dziesiętnym?</li>
+      <li>Dlaczego jedna cyfra szesnastkowa to dokładnie 4 bity, a jednej cyfrze dziesiętnej nie odpowiada żadna stała liczba bitów?</li>
+      <li>Ile mnożeń wykonuje schemat Hornera dla liczby o n cyfrach? Porównaj z liczeniem każdej potęgi od zera.</li>
+    </ol>
+  </div>
+  <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 3; D. E. Knuth, <em>The Art of Computer Programming</em>, t. 2, §4.4 (zamiana podstaw).</p>
+</section>
+
+<!-- ═══════════════════ 2. GRUPUJ OD PRAWEJ ═══════════════════ -->
+<section id="v-grupy" hidden>
+  <h2>2. Grupuj od prawej</h2>
+  <p class="lead">Jedna cyfra ósemkowa to dokładnie 3 bity, a szesnastkowa to 4 bity. Dlatego zamiana sprowadza się do pocięcia ciągu bitów na grupy. Trzeba tylko wiedzieć, <em>od której strony</em> zacząć ciąć.</p>
+
+  <div class="card">
+    <h3>Potnij ciąg bitów</h3>
+    <div class="row" style="justify-content: space-between">
+      <div class="seg" id="grK" role="group" aria-label="System docelowy">
+        <button type="button" data-k="4" aria-pressed="true">szesnastkowy (po 4)</button>
+        <button type="button" data-k="3">ósemkowy (po 3)</button>
+      </div>
+      <div class="row">
+        <button class="btn ghost small" id="grNowy">Nowy ciąg</button>
+        <button class="btn ghost small" id="grSlajd">Ciąg ze slajdu</button>
+      </div>
+    </div>
+    <p class="small muted" style="margin-top:10px">Kliknij szczelinę między bitami, żeby postawić albo usunąć cięcie. Potem sprawdź podział.</p>
+    <div class="scroll-x"><div class="ciag" id="grCiag" aria-label="Ciąg bitów z miejscami cięcia"></div></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="grSprawdz">Sprawdź podział</button>
+      <button class="btn ghost" id="grCzysc">Usuń cięcia</button>
+      <button class="btn ghost" id="grPokaz">Pokaż poprawny podział</button>
+    </div>
+    <div class="qfb" id="grFb" aria-live="polite" style="margin-top:8px"></div>
+
+    <div id="grKrok2" hidden>
+      <div class="field" style="margin-top:6px">
+        <label for="grWynik" id="grWynikLab">Zapisz liczbę w systemie szesnastkowym</label>
+        <div class="row">
+          <input id="grWynik" type="text" autocomplete="off" spellcheck="false" style="font-family: var(--mono); flex: 1; min-width: 160px">
+          <button class="btn" id="grWynikOk">Sprawdź</button>
+        </div>
+      </div>
+      <div class="qfb" id="grFb2" aria-live="polite"></div>
+      <details class="small" style="margin-top:6px"><summary>Ściąga: grupy bitów i cyfry</summary><div class="scroll-x" id="grSciaga"></div></details>
+    </div>
+    <div class="stats" style="margin-top:6px"><div class="stat"><div class="k">Zrobione ciągi</div><div class="v" id="grOk">0</div></div></div>
+  </div>
+
+  <div class="card">
+    <h3>Kolor w CSS: trzy bajty, sześć cyfr</h3>
+    <p class="small muted">Kolor <span class="mono">#RRGGBB</span> to trzy bajty: czerwony, zielony i niebieski. Każdy bajt to 8 bitów, czyli dokładnie 2 cyfry szesnastkowe.</p>
+    <div class="kolor">
+      <div class="probka" id="kolProbka" aria-label="Podgląd koloru"></div>
+      <div class="kanaly" id="kolKanaly"></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <label for="kolHex">Zapis CSS</label>
+      <input id="kolHex" type="text" value="#FF5733" maxlength="7" autocomplete="off" spellcheck="false" style="font-family: var(--mono); width: 9em">
+      <input id="kolPicker" type="color" value="#ff5733" aria-label="Wybierz kolor">
+      <span class="err" id="kolErr"></span>
+    </div>
+    <p class="small muted" id="kolLiczba" style="margin-top:8px"></p>
+  </div>
+
+  <div class="card">
+    <h3>Uprawnienia plików: <span class="mono">chmod</span> i system ósemkowy</h3>
+    <p class="small muted">W systemach uniksowych (Linux, macOS) plik ma 9 bitów uprawnień: czytanie (r), zapis (w) i wykonywanie (x), osobno dla właściciela, grupy i pozostałych. Trzy bity to jedna cyfra ósemkowa.</p>
+    <div class="scroll-x"><table class="t uprawn" id="chTab"></table></div>
+    <div class="row" style="margin-top:10px">
+      <label for="chOct">chmod</label>
+      <input id="chOct" type="text" value="755" maxlength="3" inputmode="numeric" autocomplete="off" spellcheck="false" style="font-family: var(--mono); width: 5em">
+      <span class="mono chsym" id="chSym"></span>
+      <span class="err" id="chErr"></span>
+    </div>
+    <div class="row" id="chPresety" style="margin-top:10px"></div>
+    <p class="small muted" id="chOpis" style="margin-top:8px"></p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Dlaczego zera dopisane z lewej nie zmieniają liczby, a dopisane z prawej zmieniają? Co to mówi o cięciu od lewej?</li>
+      <li>Kolor zajmuje 3 bajty. Ile różnych kolorów da się tak zapisać? Dlaczego w CSS piszemy je szesnastkowo, a nie dziesiętnie?</li>
+      <li>Dlaczego do uprawnień pasuje system ósemkowy, a do kolorów szesnastkowy?</li>
+      <li>Spróbuj zapamiętać ciąg 12 bitów, a potem te same bity jako 3 cyfry szesnastkowe. Co jest łatwiejsze? Porównaj z ćwiczeniem „Bity i kawałki” z wykładu 1.</li>
+    </ol>
+  </div>
+  <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 3; W3C, <em>CSS Color Module Level 4</em> (zapis #RRGGBB); POSIX, opis polecenia <span class="mono">chmod</span>.</p>
+</section>
+
+<!-- ═══════════════════ 3. LICZNIK U2 ═══════════════════ -->
+<section id="v-u2" hidden>
+  <h2>3. Licznik U2</h2>
+  <p class="lead">W kodzie U2 najstarszy bit ma wagę ujemną. Bity można sobie wyobrazić jako licznik kilometrów zwinięty w koło: cofając od 0000, trafiamy na 1111, czyli −1. Tu zobaczysz, gdzie na tym kole leży <em>przeniesienie</em>, a gdzie <em>nadmiar</em>, i dlaczego to nie to samo.</p>
+
+  <div class="card">
+    <h3>Koło liczb</h3>
+    <div class="row" style="justify-content: space-between">
+      <div class="row"><span class="small muted" id="u2NLab">Liczba bitów</span>
+        <div class="seg" id="u2N" role="group" aria-labelledby="u2NLab"><button type="button" data-n="3">3</button><button type="button" data-n="4" aria-pressed="true">4</button><button type="button" data-n="5">5</button></div>
+      </div>
+      <div class="row">
+        <button class="btn ghost small" id="u2Minus">−1</button>
+        <button class="btn ghost small" id="u2Plus">+1</button>
+        <button class="btn ghost small" id="u2Neg">negacja U2 (¬x + 1)</button>
+      </div>
+    </div>
+    <div class="u2kolo">
+      <div class="chart" id="u2Kolo"></div>
+      <div>
+        <div class="scroll-x"><div class="bitrow" id="u2Bity" aria-label="Bity słowa — kliknij, aby przełączyć"></div></div>
+        <table class="t odczyty" id="u2Odczyty"></table>
+        <p class="note" id="u2Note" hidden></p>
+      </div>
+    </div>
+    <div class="legend"><span><i style="background: var(--s1)"></i>granica przeniesienia (1…1 → 0…0): kłopot dla liczb bez znaku</span><span><i style="background: var(--bad)"></i>granica nadmiaru (01…1 → 10…0): kłopot dla U2</span></div>
+  </div>
+
+  <div class="card">
+    <h3>Sumator</h3>
+    <div class="row" style="justify-content: space-between">
+      <div class="row">
+        <div class="seg" id="suN" role="group" aria-label="Długość słowa"><button type="button" data-n="4" aria-pressed="true">4 bity</button><button type="button" data-n="8">8 bitów</button></div>
+        <div class="seg" id="suOp" role="group" aria-label="Działanie"><button type="button" data-op="+" aria-pressed="true">A + B</button><button type="button" data-op="-">A − B</button></div>
+      </div>
+      <div class="row" id="suPresety"></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <label for="suA">A =</label><input id="suA" type="number" style="width:6.5em">
+      <label for="suB">B =</label><input id="suB" type="number" style="width:6.5em">
+      <span class="err" id="suErr"></span>
+    </div>
+    <div class="scroll-x"><div class="slup" id="suSlup"></div></div>
+    <div class="flagi" id="suFlagi"></div>
+    <div class="scroll-x"><table class="t" id="suInterp"></table></div>
+  </div>
+
+  <div class="card">
+    <h3>Sprawdź się</h3>
+    <div class="qtask" id="uqQ"></div>
+    <div class="row" style="margin-top:10px">
+      <label for="uqWynik">Wynik (4 bity)</label>
+      <input id="uqWynik" type="text" maxlength="4" inputmode="numeric" autocomplete="off" spellcheck="false" style="font-family: var(--mono); width: 6em">
+    </div>
+    <div class="row" style="margin-top:8px">
+      <span class="small">Przeniesienie poza słowo (C)?</span>
+      <div class="seg" id="uqC" role="group" aria-label="Przeniesienie"><button type="button" data-v="1">tak</button><button type="button" data-v="0">nie</button></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <span class="small">Nadmiar w U2 (OF)?</span>
+      <div class="seg" id="uqV" role="group" aria-label="Nadmiar"><button type="button" data-v="1">tak</button><button type="button" data-v="0">nie</button></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="uqCheck">Sprawdź</button>
+      <button class="btn ghost" id="uqNew">Nowe zadanie</button>
+      <button class="btn ghost" id="uqSum">Otwórz w sumatorze</button>
+    </div>
+    <div class="qfb" id="uqFb" aria-live="polite" style="margin-top:8px"></div>
+    <div class="stats"><div class="stat"><div class="k">Poprawne</div><div class="v" id="uqOk">0</div></div><div class="stat"><div class="k">Zadania</div><div class="v" id="uqIle">0</div></div></div>
+  </div>
+
+  <div class="card">
+    <h3>Jedno słowo, cztery liczby</h3>
+    <p class="small muted">Te same 8 bitów, cztery umowy. Wpisz, jaką liczbę oznacza słowo w każdym kodzie (jak na slajdzie „Jedno słowo — cztery liczby”).</p>
+    <div class="qtask" id="jsSlowo"></div>
+    <div class="nfields" style="margin-top:10px">
+      <div class="nfield"><label for="jsU">bez znaku</label><input id="jsU" type="text" inputmode="numeric" autocomplete="off"><span class="err" id="jsUe"></span></div>
+      <div class="nfield"><label for="jsZ">znak–moduł (ZM)</label><input id="jsZ" type="text" inputmode="numeric" autocomplete="off"><span class="err" id="jsZe"></span></div>
+      <div class="nfield"><label for="jsD">U2</label><input id="jsD" type="text" inputmode="numeric" autocomplete="off"><span class="err" id="jsDe"></span></div>
+      <div class="nfield"><label for="jsB">z nadmiarem 127</label><input id="jsB" type="text" inputmode="numeric" autocomplete="off"><span class="err" id="jsBe"></span></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="btn" id="jsCheck">Sprawdź</button>
+      <button class="btn ghost" id="jsNew">Nowe słowo</button>
+      <button class="btn ghost" id="jsSlajd">Słowo ze slajdu</button>
+    </div>
+    <div class="qfb" id="jsFb" aria-live="polite" style="margin-top:8px"></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Dlaczego nadmiar może się zdarzyć tylko przy dodawaniu liczb tego samego znaku?</li>
+      <li>Znajdź liczbę różną od 0, której negacja w U2 daje ją samą. Dlaczego zakres U2 jest asymetryczny?</li>
+      <li>Ten sam sumator dodaje liczby bez znaku i liczby w U2. Znajdź przykład, w którym wynik jest dobry w jednej interpretacji, a zły w drugiej.</li>
+      <li>W Pythonie <span class="mono">127 + 1</span> daje 128, a w <span class="mono">numpy.int8</span> daje −128. Skąd ta różnica? Co ma z tym wspólnego Ariane 5?</li>
+    </ol>
+  </div>
+  <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 4; J. G. Brookshear, D. Brylow, <em>Computer Science: An Overview</em>, §1.6 (zapis U2 i nadmiar).</p>
+</section>
+
+<!-- ═══════════════════ 4. MIKROSKOP ═══════════════════ -->
+<section id="v-os" hidden>
+  <h2>4. Mikroskop na oś liczb</h2>
+  <p class="lead">Komputer nie zapisuje dowolnej liczby rzeczywistej, tylko wybraną z <em>skończonego zbioru</em>. Tu widać ten zbiór na osi. Porównaj format zmiennoprzecinkowy z wykładu (<span class="mono">s eee mmmm</span>, nadmiar 3) z zapisem stałoprzecinkowym. Przybliżaj, oddalaj i klikaj w oś.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <div class="row"><span class="small muted">Porównaj z</span>
+        <div class="seg" id="osStaly" role="group" aria-label="Format stałoprzecinkowy">
+          <button type="button" data-f="q44" aria-pressed="true">Q4.4 (też 8 bitów)</button>
+          <button type="button" data-f="q88">Q8.8 (16 bitów, jak na slajdzie)</button>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <span class="small muted">Widok</span>
+      <div class="seg" id="osOkna" role="group" aria-label="Zakres osi"></div>
+      <button class="btn ghost small" id="osZoomIn">przybliż ×2</button>
+      <button class="btn ghost small" id="osZoomOut">oddal ×2</button>
+      <button class="btn ghost small" id="osLewo" aria-label="Przesuń w lewo">←</button>
+      <button class="btn ghost small" id="osPrawo" aria-label="Przesuń w prawo">→</button>
+    </div>
+    <div class="chart osch" id="osOs"></div>
+    <div class="legend"><span><i style="background: var(--s2)"></i>zmiennoprzecinkowy s eee mmmm</span><span><i style="background: var(--s1)"></i><span id="osLegFix">stałoprzecinkowy Q4.4</span></span><span><i style="background: var(--text-2)"></i>liczba, którą chcesz zapisać</span></div>
+    <div class="stats" id="osIle"></div>
+  </div>
+
+  <div class="card">
+    <h3>Zapisz liczbę</h3>
+    <div class="row">
+      <label for="osX">x =</label>
+      <input id="osX" type="text" value="9,25" inputmode="decimal" autocomplete="off" style="font-family: var(--mono); width: 9em">
+      <div class="row" id="osPresety"></div>
+    </div>
+    <p class="err" id="osErr"></p>
+    <div class="scroll-x"><table class="t" id="osTab"></table></div>
+    <p class="small muted" style="margin-top:8px">Zaokrąglamy do najbliższej liczby formatu. Przy remisie wybieramy tę z parzystą ostatnią cyfrą (zasada IEEE 754). Pokazujemy liczby dodatnie; ujemne są lustrzanym odbiciem.</p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Ile liczb ≥ 0 ma każdy z formatów 8-bitowych (statystyka pod osią)? Skoro tyle samo, to czym te formaty się różnią?</li>
+      <li>Gdzie format zmiennoprzecinkowy jest dokładniejszy od Q4.4, a gdzie mniej dokładny? Spójrz na błąd bezwzględny i względny dla 0,1, 5,3 i 30.</li>
+      <li>Dlaczego pomiar czasu w sekundach od uruchomienia (Patriot) to zły pomysł dla formatu, w którym odstępy rosną z wielkością liczby? A dla stałoprzecinkowego?</li>
+      <li>Ułóż w głowie liczby 1, 10, 100 i 1000 na osi od 0 do 1000. Czy Twoje „wewnętrzne odstępy” przypominają któryś z tych formatów? (Most do slajdu o logarytmicznej osi liczb).</li>
+    </ol>
+  </div>
+  <p class="src">IEEE Std 754-2019, §4.3.1 (zaokrąglanie do najbliższej, remis do parzystej); D. Goldberg, <em>What Every Computer Scientist Should Know About Floating-Point Arithmetic</em>, ACM Comput. Surv. 23(1), 1991.</p>
+</section>
+
+<!-- ═══════════════════ 5. RENTGEN IEEE 754 ═══════════════════ -->
+<section id="v-ieee" hidden>
+  <h2>5. Rentgen IEEE 754</h2>
+  <p class="lead">Tak naprawdę zapisany jest <span class="mono">float</span> i <span class="mono">double</span> (w Pythonie <span class="mono">float</span> to <span class="mono">double</span>). Klikaj bity albo wpisz liczbę i zobacz, co komputer przechowuje <em>dokładnie</em>.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <div class="seg" id="ieF" role="group" aria-label="Format"><button type="button" data-f="32" aria-pressed="true">float (32 bity)</button><button type="button" data-f="64">double (64 bity)</button></div>
+      <div class="row">
+        <button class="btn ghost small" id="iePrev" title="Poprzednia liczba formatu">← poprzednia</button>
+        <button class="btn ghost small" id="ieNext" title="Następna liczba formatu">następna →</button>
+      </div>
+    </div>
+    <div class="row" id="iePresety" style="margin-top:10px"></div>
+    <div class="nfields ie2" style="margin-top:10px">
+      <div class="nfield"><label for="ieDec">liczba (dziesiętnie)</label><input id="ieDec" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"><span class="err" id="ieDecE"></span></div>
+      <div class="nfield"><label for="ieHex">bity szesnastkowo</label><input id="ieHex" type="text" autocomplete="off" spellcheck="false"><span class="err" id="ieHexE"></span></div>
+    </div>
+    <div class="iebity" id="ieBity" aria-label="Bity liczby — kliknij, aby przełączyć"></div>
+    <div class="legend"><span><i style="background: var(--s2)"></i>znak</span><span><i style="background: var(--s1)"></i>cecha (z nadmiarem)</span><span><i style="background: var(--good)"></i>mantysa (bez ukrytej jedynki)</span></div>
+    <div class="iewzor" id="ieWzor"></div>
+    <div class="scroll-x"><table class="t" id="ieTab"></table></div>
+    <p class="note" id="ieNote" hidden></p>
+  </div>
+
+  <div class="card">
+    <h3>Dlaczego 0.1 + 0.2 ≠ 0.3</h3>
+    <div class="scroll-x"><table class="t" id="ieSuma"></table></div>
+    <p class="small muted" id="ieSumaOpis" style="margin-top:8px"></p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Kliknij „następna →” przy 1, a potem przy 16 777 216 (float). Jak duży jest odstęp w obu miejscach? Dlaczego <span class="mono">float</span> nie zapisze 16 777 217?</li>
+      <li>Zmień tylko pierwszy bit. Co się dzieje z liczbą? Dlaczego zmiana znaku jest w IEEE 754 taka tania?</li>
+      <li>Ustaw same zera w cesze i jedynkę na ostatnim bicie mantysy. Ile to jest i dlaczego ta liczba nie ma ukrytej jedynki?</li>
+      <li>W tabeli „0.1 + 0.2” suma różni się od 0.3 o ile kroków? Czy <span class="mono">math.isclose(0.1 + 0.2, 0.3)</span> powinno dać <span class="mono">True</span>?</li>
+    </ol>
+  </div>
+  <p class="src">IEEE Std 754-2019, <em>IEEE Standard for Floating-Point Arithmetic</em>, §3.4 (kodowanie formatów binarnych); D. Goldberg, ACM Comput. Surv. 23(1), 1991.</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline i niczego nie wysyła.</p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const fmtInt = (x) => Number(x).toLocaleString('pl-PL');
+function h(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(String(k)));
+  return e;
+}
+const SUB = { 2: '₂', 3: '₃', 4: '₄', 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉', 10: '₁₀', 12: '₁₂', 16: '₁₆' };
+const NAZWA = { 2: 'dwójkowym', 8: 'ósemkowym', 10: 'dziesiętnym', 16: 'szesnastkowym' };
+const CYFRY = '0123456789ABCDEF';
+const zp = (s, p) => h('span', { class: 'zp' }, String(s), h('sub', { text: String(p) }));
+const naP = (n, p) => n.toString(p).toUpperCase();
+const sup = (k) => String(k).split('').map((c) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[+c]).join('');
+
+/** Parsuje zapis w podstawie p. Zwraca {v} albo {err}. Pusty → {pusty:true}. */
+function parsuj(str, p) {
+  let t = String(str).trim().replace(/[\s_]/g, '').toUpperCase();
+  const pref = { 2: '0B', 8: '0O', 16: '0X' }[p];
+  if (pref && t.startsWith(pref)) t = t.slice(2);
+  if (t === '') return { pusty: true };
+  for (const c of t) {
+    const d = CYFRY.indexOf(c);
+    if (d < 0 || d >= p) {
+      const zakres = p <= 10 ? `0–${p - 1}` : `0–9 i A–${CYFRY[p - 1]}`;
+      return { err: `Znak „${c}” nie jest cyfrą w systemie ${NAZWA[p] || 'o podstawie ' + p} (cyfry: ${zakres}).` };
+    }
+  }
+  let v = 0;
+  for (const c of t) v = v * p + CYFRY.indexOf(c);
+  return { v };
+}
+
+/* ═════════════════════ 1. Zegar pozycyjny ═════════════════════ */
+const Pozycyjny = (() => {
+  let nb = 8, v = 53;
+  const maxV = () => 2 ** nb - 1;
+  const pola = [2, 8, 10, 16];
+
+  function ustawBity(n, zachowaj = true) {
+    nb = n;
+    for (const b of $$('#pzBits button')) b.setAttribute('aria-pressed', String(+b.dataset.b === nb));
+    $('#pzRange').max = maxV(); $('#pzMax').textContent = `0 … ${fmtInt(maxV())}`;
+    if (zachowaj && v > maxV()) { v = v & maxV(); notka(`Przy ${nb} bitach mieszczą się liczby od 0 do ${fmtInt(maxV())}. Starsze bity odcięto.`); }
+  }
+  function notka(t) { const n = $('#pzNote'); n.hidden = !t; n.textContent = t || ''; }
+
+  function rysuj(zrodlo = null) {
+    for (const p of pola) {
+      const inp = $('#pz' + p);
+      if (inp !== zrodlo) { inp.value = naP(v, p); inp.classList.remove('zly'); $('#pz' + p + 'e').textContent = ''; }
+    }
+    $('#pzRange').value = v;
+    // bity, pogrupowane po 4 od prawej
+    const row = $('#pzBitRow'); row.innerHTML = '';
+    let nib = null;
+    for (let i = nb - 1; i >= 0; i--) {
+      if ((i + 1) % 4 === 0 || i === nb - 1) { nib = h('div', { class: 'nib' }); row.append(nib); }
+      const on = (v >> i) & 1;
+      const col = h('div', { class: 'bcol' + (on ? ' on' : '') },
+        h('span', { class: 'w', text: '2' + sup(i) }),
+        h('button', { class: 'bbtn' + (on ? ' on' : ''), type: 'button', 'aria-pressed': String(!!on), 'aria-label': `bit o wadze 2 do potęgi ${i}, czyli ${2 ** i}`, text: on ? '1' : '0', onclick: () => { v ^= (1 << i); notka(''); rysuj(); } }),
+        h('span', { class: 'wv', text: fmtInt(2 ** i) }));
+      nib.append(col);
+    }
+    // suma wag
+    const skl = []; for (let i = nb - 1; i >= 0; i--) if ((v >> i) & 1) skl.push(2 ** i);
+    const suma = $('#pzSuma'); suma.innerHTML = '';
+    suma.append(skl.length ? `${skl.map(fmtInt).join(' + ')} = ` : '', h('b', { text: fmtInt(v) }));
+    // grupy
+    grupy('#pzG3', 3, 8); grupy('#pzG4', 4, 16);
+    Kroki.odswiez();
+  }
+  function grupy(sel, k, p) {
+    const bin = v.toString(2);
+    const dl = Math.ceil(bin.length / k) * k;
+    const pad = dl - bin.length;
+    const pelny = '0'.repeat(pad) + bin;
+    const host = $(sel); host.innerHTML = '';
+    for (let j = 0; j < dl; j += k) {
+      const g = pelny.slice(j, j + k);
+      const b = h('span', { class: 'b' });
+      for (let q = 0; q < k; q++) b.append(j + q < pad ? h('span', { class: 'pad', text: g[q] }) : g[q]);
+      host.append(h('span', { class: 'gchip' }, b, h('span', { class: 'c', text: naP(parseInt(g, 2), p) })));
+    }
+    host.append(h('span', { class: 'muted', style: 'align-self:center' }, '= ', zp(naP(v, p), p)));
+  }
+
+  function wpis(e) {
+    const inp = e.target, p = +inp.dataset.p;
+    const r = parsuj(inp.value, p);
+    const er = $('#pz' + p + 'e');
+    if (r.pusty) { er.textContent = ''; inp.classList.remove('zly'); return; }
+    if (r.err) { er.textContent = r.err; inp.classList.add('zly'); return; }
+    if (r.v > 65535) { er.textContent = 'Za duża: tu maksimum to 16 bitów, czyli 65 535.'; inp.classList.add('zly'); return; }
+    er.textContent = ''; inp.classList.remove('zly');
+    const stare = nb; let nowe = nb; while (r.v > 2 ** nowe - 1) nowe += 4;
+    if (nowe !== stare) { ustawBity(nowe, false); notka(`Liczba ${fmtInt(r.v)} nie mieści się w ${stare} bitach (maksimum ${fmtInt(2 ** stare - 1)}), więc dodano miejsca: teraz ${nowe} bitów.`); } else notka('');
+    v = r.v; rysuj(inp);
+  }
+
+  function op(f, opis) {
+    const m = maxV(); const w = f(v);
+    if (w > m) { notka(`${opis}: wynik ${fmtInt(w)} nie mieści się w ${nb} bitach. Najstarszy bit „wypadł” i zostało ${fmtInt(w & m)}. To zapowiedź nadmiaru z dalszej części wykładu.`); v = w & m; }
+    else if (w < 0) { notka(`${opis}: poniżej zera w zapisie bez znaku nic nie ma. Licznik „przekręcił się” na ${fmtInt(m)}, jak licznik kilometrów cofany od 0000.`); v = m; }
+    else { notka(''); v = w; }
+    rysuj();
+  }
+
+  function init() {
+    ustawBity(8);
+    for (const b of $$('#pzBits button')) b.addEventListener('click', () => { notka(''); ustawBity(+b.dataset.b); rysuj(); });
+    for (const p of pola) $('#pz' + p).addEventListener('input', wpis);
+    $('#pzRange').addEventListener('input', (e) => { v = +e.target.value; notka(''); rysuj(); });
+    $('#pzInc').addEventListener('click', () => op((x) => x + 1, '+1'));
+    $('#pzDec').addEventListener('click', () => op((x) => x - 1, '−1'));
+    $('#pzShl').addEventListener('click', () => op((x) => x * 2, '×2'));
+    $('#pzShr').addEventListener('click', () => {
+      const r = v & 1; v = v >> 1; rysuj();
+      notka(r ? 'Przesunięcie w prawo = dzielenie całkowite przez 2. Wypadła jedynka: to reszta z dzielenia, czyli ostatnia cyfra dwójkowa.' : '');
+    });
+    $('#pzZero').addEventListener('click', () => { v = 0; notka(''); rysuj(); });
+    Kroki.init(); Quiz.init();
+    rysuj();
+  }
+  return { init, get v() { return v; } };
+})();
+
+/* ─────────── Krok po kroku: dzielenie i Horner ─────────── */
+const Kroki = (() => {
+  let tryb = 'dz', pokazane = 0, wiersze = [];
+  const P = () => +$('#pzP').value;
+
+  function zbuduj() {
+    const v = Pozycyjny.v, p = P();
+    const host = $('#pzKroki'); host.innerHTML = '';
+    if (tryb === 'dz') {
+      $('#pzOpis').textContent = `Dzielimy całkowicie przez ${p} i zapisujemy resztę. Reszta to kolejna cyfra od prawej, a iloraz dzielimy dalej, aż dojdziemy do 0.`;
+      const rows = []; let n = v;
+      if (n === 0) rows.push({ n: 0, q: 0, r: 0 });
+      while (n > 0) { rows.push({ n, q: Math.floor(n / p), r: n % p }); n = Math.floor(n / p); }
+      wiersze = rows.map((r, i) => h('tr', {}, h('td', { class: 'n', text: String(i + 1) }), h('td', { class: 'n', text: fmtInt(r.n) }), h('td', { class: 'n', text: `÷ ${p} = ${fmtInt(r.q)}` }), h('td', { class: 'n cy', text: CYFRY[r.r] + (p > 10 && r.r > 9 ? ` (${r.r})` : '') }), h('td', { class: 'small muted', text: i === 0 ? 'cyfra jedności (najmłodsza)' : `cyfra o wadze ${p}${sup(i)}` })));
+      host.append(h('table', { class: 't' }, h('thead', {}, h('tr', {}, h('th', { class: 'n', text: 'krok' }), h('th', { class: 'n', text: 'liczba' }), h('th', { class: 'n', text: 'iloraz' }), h('th', { class: 'n', text: 'reszta' }), h('th', { text: '' }))), h('tbody', {}, wiersze)));
+    } else {
+      const cyfry = naP(v, p).split('');
+      $('#pzOpis').textContent = `Czytamy cyfry zapisu ${naP(v, p)} (podstawa ${p}) od lewej. Zaczynamy od 0 i w każdym kroku: wynik = wynik · ${p} + kolejna cyfra. Żadnych potęg.`;
+      let w = 0;
+      wiersze = cyfry.map((c, i) => { const d = CYFRY.indexOf(c); const przed = w; w = w * p + d; return h('tr', {}, h('td', { class: 'n', text: String(i + 1) }), h('td', { class: 'n cy', text: c }), h('td', { class: 'n', text: `${fmtInt(przed)} · ${p} + ${d}` }), h('td', { class: 'n', text: `= ${fmtInt(w)}` })); });
+      host.append(h('table', { class: 't' }, h('thead', {}, h('tr', {}, h('th', { class: 'n', text: 'krok' }), h('th', { class: 'n', text: 'cyfra' }), h('th', { class: 'n', text: 'obliczenie' }), h('th', { class: 'n', text: 'wynik' }))), h('tbody', {}, wiersze)));
+    }
+    pokazane = 0; pokaz();
+  }
+  function pokaz() {
+    wiersze.forEach((r, i) => { r.classList.toggle('ukryty', i >= pokazane); r.classList.toggle('nowy', i === pokazane - 1); });
+    const kon = pokazane >= wiersze.length;
+    $('#pzNext').disabled = kon; $('#pzAll').disabled = kon;
+    const w = $('#pzWynik'); w.innerHTML = '';
+    if (!kon) return;
+    const v = Pozycyjny.v, p = P();
+    if (tryb === 'dz') {
+      w.append('Reszty czytane ', h('strong', { text: 'od dołu do góry' }), ': ', h('span', { class: 'mono' }, zp(v, 10), ' = ', zp(naP(v, p), p)));
+    } else {
+      const n = naP(v, p).length;
+      w.append(h('span', { class: 'mono' }, zp(naP(v, p), p), ' = ', zp(v, 10)), h('span', { class: 'small muted', text: ` · ${n} ${n === 1 ? 'cyfra' : n < 5 ? 'cyfry' : 'cyfr'}, ${Math.max(0, n - 1)} istotnych mnożeń (pierwsze to 0 · ${p})` }));
+    }
+  }
+  function init() {
+    for (const b of $$('#pzTryb button')) b.addEventListener('click', () => { tryb = b.dataset.t; for (const x of $$('#pzTryb button')) x.setAttribute('aria-pressed', String(x === b)); zbuduj(); });
+    $('#pzP').addEventListener('change', zbuduj);
+    $('#pzNext').addEventListener('click', () => { pokazane++; pokaz(); });
+    $('#pzAll').addEventListener('click', () => { pokazane = wiersze.length; pokaz(); });
+    $('#pzReset').addEventListener('click', () => { pokazane = 0; pokaz(); });
+  }
+  return { init, odswiez: () => { if ($('#pzKroki')) zbuduj(); } };
+})();
+
+/* ─────────── Sprawdź się ─────────── */
+const Quiz = (() => {
+  let z = null, proby = 0, ok = 0, ile = 0, zaliczone = false;
+  const los = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const norm = (s, p) => {
+    let t = String(s).trim().replace(/[\s_]/g, '').toUpperCase();
+    const pref = { 2: '0B', 8: '0O', 16: '0X' }[p]; if (pref && t.startsWith(pref)) t = t.slice(2);
+    t = t.replace(/^0+(?=.)/, ''); return t;
+  };
+  function nowe() {
+    const typ = los(0, 5); let v, z1, z2;
+    if (typ === 0) { v = los(20, 255); [z1, z2] = [10, 2]; }
+    else if (typ === 1) { v = los(20, 255); [z1, z2] = [2, 10]; }
+    else if (typ === 2) { do { v = los(256, 4095); } while (v.toString(2).length % 4 === 0); [z1, z2] = [2, 16]; }
+    else if (typ === 3) { do { v = los(256, 4095); } while (!/[0-7]/.test(naP(v, 16).slice(1))); [z1, z2] = [16, 2]; }
+    else if (typ === 4) { do { v = los(64, 1023); } while (v.toString(2).length % 3 === 0); [z1, z2] = [2, 8]; }
+    else { v = los(100, 4095); [z1, z2] = [10, 16]; }
+    z = { v, z1, z2 }; proby = 0; zaliczone = false; ile++;
+    const q = $('#pzQ'); q.innerHTML = '';
+    q.append('Zapisz ', h('span', { class: 'mono' }, zp(naP(v, z1), z1)), ` w systemie ${NAZWA[z2]}.`);
+    $('#pzA').value = ''; $('#pzFb').className = 'qfb'; $('#pzFb').textContent = ''; $('#pzShow').hidden = true;
+    $('#pzAll2').textContent = ile;
+  }
+  /** Rozpoznawanie typowych błędów. Zwraca podpowiedź albo null. */
+  function diagnoza(odp) {
+    const { v, z1, z2 } = z; const dobra = naP(v, z2);
+    if (odp.length > 1 && odp === dobra.split('').reverse().join('') && odp !== dobra) return z1 === 10 ? 'Masz dobre cyfry w odwrotnej kolejności. Reszty z dzielenia czyta się od dołu: pierwsza reszta to cyfra jedności.' : 'Masz dobre cyfry w odwrotnej kolejności. Najmłodsza cyfra stoi po prawej.';
+    if (z1 === 2 && (z2 === 16 || z2 === 8)) {
+      const k = z2 === 16 ? 4 : 3; const b = v.toString(2);
+      const zLewej = (padP) => { let w = ''; for (let i = 0; i < b.length; i += k) { let g = b.slice(i, i + k); if (padP) g = g.padEnd(k, '0'); w += naP(parseInt(g, 2), z2); } return w.replace(/^0+(?=.)/, ''); };
+      if (odp === zLewej(true) || odp === zLewej(false)) return `Grupujesz od lewej. Grupy po ${k} bity tworzymy od prawej (od najmłodszego bitu), a niepełną grupę uzupełniamy zerami z lewej strony.`;
+    }
+    if (z1 === 16 && z2 === 2) {
+      const bez = naP(v, 16).split('').map((c) => parseInt(c, 16).toString(2)).join('').replace(/^0+(?=.)/, '');
+      if (odp === bez) return 'Każda cyfra szesnastkowa to dokładnie 4 bity. Cyfry w środku trzeba uzupełnić zerami z lewej: 2 → 0010, a nie 10.';
+    }
+    if (z1 === 2 && z2 === 10) {
+      const odw = parseInt(v.toString(2).split('').reverse().join(''), 2);
+      if (odp === String(odw)) return 'Wagi idą od prawej: najmłodszy (prawy) bit ma wagę 2⁰ = 1.';
+      if (odp === String(2 * v)) return 'Wynik jest 2 razy za duży. Najmłodszy bit ma wagę 2⁰ = 1, a nie 2.';
+    }
+    if (z2 === 2 && /^[01]+$/.test(odp)) {
+      const w = parseInt(odp, 2); if (Math.abs(w - v) && (w ^ v) && ((w ^ v) & ((w ^ v) - 1)) === 0) return 'Jeden bit się nie zgadza. Sprawdź sumę wag.';
+    }
+    return null;
+  }
+  function sprawdz() {
+    if (!z || zaliczone) return;
+    const odp = norm($('#pzA').value, z.z2); if (!odp) return;
+    const r = parsuj(odp, z.z2); const fb = $('#pzFb'); fb.innerHTML = '';
+    if (r.err) { fb.className = 'qfb bad'; fb.textContent = r.err; return; }
+    if (r.v === z.v) {
+      zaliczone = true; ok++; $('#pzOk').textContent = ok;
+      fb.className = 'qfb good'; fb.append('Dobrze: ', zp(naP(z.v, z.z1), z.z1), ' = ', zp(naP(z.v, z.z2), z.z2), '.');
+      return;
+    }
+    proby++; fb.className = 'qfb bad';
+    fb.append('Jeszcze nie.', h('span', { class: 'hint', text: diagnoza(odp) || 'Wpisz tę liczbę w kalkulator powyżej i porównaj zapisy albo przejdź zamianę krok po kroku.' }));
+    if (proby >= 2) $('#pzShow').hidden = false;
+  }
+  function init() {
+    $('#pzCheck').addEventListener('click', sprawdz);
+    $('#pzA').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); zaliczone ? nowe() : sprawdz(); } });
+    $('#pzNew').addEventListener('click', nowe);
+    $('#pzShow').addEventListener('click', () => {
+      zaliczone = true; const fb = $('#pzFb'); fb.className = 'qfb'; fb.innerHTML = ''; fb.append('Odpowiedź: ', zp(naP(z.v, z.z2), z.z2), `. Wpisz ${naP(z.v, 10)} w pole „Dziesiętny” powyżej, żeby zobaczyć, skąd się bierze.`);
+    });
+    nowe(); ile = 1; $('#pzAll2').textContent = ile;
+  }
+  return { init };
+})();
+
+
+/* ═════════════════════ 2. Grupuj od prawej ═════════════════════ */
+const Grupy = (() => {
+  const SLAJD = '111010100010101011110101010101';
+  let s = '', k = 4, cuts = new Set(), sprawdzone = false, rozwiazane = false, podpowiedz = false, zrobione = 0;
+  const P = () => (k === 4 ? 16 : 8);
+  const dobreCiecia = () => { const w = new Set(); for (let c = s.length - k; c > 0; c -= k) w.add(c); return w; };
+  const zLewej = () => { const w = new Set(); for (let c = k; c < s.length; c += k) w.add(c); return w; };
+  const rowne = (a, b) => a.size === b.size && [...a].every((x) => b.has(x));
+  const los = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+
+  function nowy(ciag) {
+    if (ciag) s = ciag;
+    else { let n; do { n = los(10, 22); } while (n % k === 0); s = '1' + Array.from({ length: n - 1 }, () => (Math.random() < 0.5 ? '0' : '1')).join(''); }
+    cuts = new Set(); sprawdzone = false; rozwiazane = false; podpowiedz = false;
+    $('#grFb').className = 'qfb'; $('#grFb').textContent = ''; $('#grKrok2').hidden = true; $('#grFb2').textContent = ''; $('#grWynik').value = '';
+    rysuj();
+    const sc = $('#grCiag').parentElement; requestAnimationFrame(() => { sc.scrollLeft = sc.scrollWidth; });
+  }
+  function rysuj() {
+    const host = $('#grCiag'); host.innerHTML = '';
+    const dobre = dobreCiecia();
+    for (let i = 0; i < s.length; i++) {
+      if (i > 0) {
+        const on = cuts.has(i);
+        const kl = 'cut' + (on ? ' on' : '') + (sprawdzone && on ? (dobre.has(i) ? ' dobry' : ' zly') : '');
+        host.append(h('button', { class: kl, type: 'button', 'aria-pressed': String(on), 'aria-label': `cięcie przed bitem ${i + 1}`, onclick: () => { if (rozwiazane) return; on ? cuts.delete(i) : cuts.add(i); sprawdzone = false; $('#grFb').textContent = ''; $('#grKrok2').hidden = true; rysuj(); } }));
+      }
+      host.append(h('span', { class: 'cb', text: s[i] }));
+    }
+  }
+  function grupyZ(ciecia) {
+    const c = [0, ...[...ciecia].sort((a, b) => a - b), s.length];
+    const g = []; for (let i = 0; i + 1 < c.length; i++) g.push(s.slice(c[i], c[i + 1])); return g;
+  }
+  function sprawdz() {
+    sprawdzone = true; rysuj();
+    const fb = $('#grFb'); fb.innerHTML = '';
+    const dobre = dobreCiecia();
+    if (rowne(cuts, dobre)) {
+      fb.className = 'qfb good';
+      const pierwsza = grupyZ(cuts)[0];
+      fb.append(`Dobrze: grupy po ${k} bity od prawej.`, ...(pierwsza.length < k ? [h('span', { class: 'hint', text: `Pierwsza grupa ma tylko ${pierwsza.length} ${pierwsza.length === 1 ? 'bit' : 'bity'}. Dopisz w myślach zera z lewej: ${'0'.repeat(k - pierwsza.length)}${pierwsza}. Liczba się nie zmienia.` })] : []));
+      $('#grKrok2').hidden = false; $('#grWynik').focus();
+      return;
+    }
+    fb.className = 'qfb bad';
+    const v = parseInt(s, 2);
+    if (cuts.size && rowne(cuts, zLewej())) {
+      const g = grupyZ(cuts); const ost = g[g.length - 1];
+      const zle = parseInt(g.map((x) => x.padEnd(k, '0')).join(''), 2);
+      fb.append('Tniesz od lewej.', h('span', { class: 'hint', text: `Ostatnia grupa (${ost}) ma ${ost.length} ${ost.length === 1 ? 'bit' : 'bity'}. Żeby była pełna, trzeba by dopisać zera z prawej, a to zmienia liczbę: ${fmtInt(v)} zamieniłoby się w ${fmtInt(zle)}. Tnij od prawej, od najmłodszego bitu.` }));
+      return;
+    }
+    const g = grupyZ(cuts);
+    const zaDuza = g.findIndex((x) => x.length > k);
+    const zaKrotka = g.findIndex((x, i) => i > 0 && x.length < k);
+    if (!cuts.size) fb.append('Nie ma jeszcze żadnego cięcia.', h('span', { class: 'hint', text: `Zacznij od prawej: pierwsze cięcie stawiasz ${k} bity od prawego końca.` }));
+    else if (zaKrotka >= 0) fb.append(`Grupa nr ${zaKrotka + 1} od lewej ma ${g[zaKrotka].length} ${g[zaKrotka].length === 1 ? 'bit' : 'bity'}.`, h('span', { class: 'hint', text: `Tylko pierwsza grupa z lewej może być krótsza niż ${k}. Wszystkie pozostałe mają dokładnie ${k} bity.` }));
+    else if (zaDuza >= 0) fb.append(`Grupa nr ${zaDuza + 1} od lewej ma ${g[zaDuza].length} bitów.`, h('span', { class: 'hint', text: `Jedna cyfra ${P() === 16 ? 'szesnastkowa' : 'ósemkowa'} to dokładnie ${k} bity. Dołóż cięcie.` }));
+    else fb.append('Coś się nie zgadza.', h('span', { class: 'hint', text: 'Czerwone cięcia stoją w złym miejscu.' }));
+  }
+  function pokaz() { cuts = dobreCiecia(); podpowiedz = true; sprawdz(); }
+
+  function wynik() {
+    if (rozwiazane) return;
+    const p = P(); const fb = $('#grFb2'); fb.innerHTML = '';
+    let t = $('#grWynik').value.trim().replace(/[\s_]/g, '').toUpperCase();
+    const pref = p === 16 ? '0X' : '0O'; if (t.startsWith(pref)) t = t.slice(2);
+    t = t.replace(/^0+(?=.)/, ''); if (!t) return;
+    const r = parsuj(t, p);
+    if (r.err) { fb.className = 'qfb bad'; fb.textContent = r.err; return; }
+    const v = parseInt(s, 2), dobra = naP(v, p);
+    if (r.v === v) {
+      rozwiazane = true; if (!podpowiedz) { zrobione++; $('#grOk').textContent = zrobione; }
+      fb.className = 'qfb good';
+      const wiz = h('div', { class: 'grwiz' });
+      for (const g of grupyZ(cuts)) {
+        const pad = k - g.length; const b = h('span', { class: 'b' });
+        if (pad > 0) b.append(h('span', { class: 'pad', text: '0'.repeat(pad) }));
+        b.append(g);
+        wiz.append(h('span', { class: 'gchip' }, b, h('span', { class: 'c', text: naP(parseInt(g, 2), p) })));
+      }
+      fb.append('Dobrze: ', zp(s, 2), ' = ', zp(dobra, p), ` = ${fmtInt(v)} dziesiętnie.`, wiz);
+      return;
+    }
+    fb.className = 'qfb bad';
+    const g = grupyZ(cuts); const cyfry = g.map((x) => naP(parseInt(x, 2), p));
+    if (t === cyfry.slice().reverse().join('')) fb.append('Cyfry są dobre, ale w odwrotnej kolejności.', h('span', { class: 'hint', text: 'Każdą grupę zamieniasz na cyfrę w tej samej kolejności, w jakiej grupy stoją: od lewej do prawej.' }));
+    else {
+      const zle = g.findIndex((x, i) => cyfry[i] !== (t.padStart(cyfry.length, '0')[i]));
+      fb.append('Jeszcze nie.', h('span', { class: 'hint', text: zle >= 0 && t.length === cyfry.length ? `Sprawdź grupę nr ${zle + 1}: ${g[zle].padStart(k, '0')}. Policz jej wartość: wagi to ${k === 4 ? '8, 4, 2, 1' : '4, 2, 1'}.` : `Wynik ma tyle cyfr, ile jest grup, czyli ${g.length}.` }));
+    }
+  }
+  function sciaga() {
+    const host = $('#grSciaga'); host.innerHTML = '';
+    const grid = h('div', { class: 'sciaga', style: `grid-template-columns: repeat(${k === 4 ? 4 : 4}, auto)` });
+    for (let i = 0; i < 2 ** k; i++) grid.append(h('span', {}, i.toString(2).padStart(k, '0'), ' → ', h('b', { text: naP(i, 16) })));
+    host.append(grid);
+  }
+  function ustawK(nk) {
+    k = nk;
+    for (const b of $$('#grK button')) b.setAttribute('aria-pressed', String(+b.dataset.k === k));
+    $('#grWynikLab').textContent = `Zapisz liczbę w systemie ${k === 4 ? 'szesnastkowym' : 'ósemkowym'}`;
+    sciaga();
+  }
+
+  /* ─── kolory ─── */
+  const kol = [255, 87, 51];
+  function rysujKolor(zr = null) {
+    const hex = '#' + kol.map((c) => naP(c, 16).padStart(2, '0')).join('');
+    $('#kolProbka').style.background = hex;
+    if (zr !== 'hex') $('#kolHex').value = hex;
+    if (zr !== 'pick') $('#kolPicker').value = hex.toLowerCase();
+    $('#kolErr').textContent = '';
+    const host = $('#kolKanaly');
+    ['R', 'G', 'B'].forEach((n, i) => {
+      const row = host.children[i];
+      if (zr !== 'range' + i) row.querySelector('input').value = kol[i];
+      row.querySelector('.kd').textContent = kol[i];
+      const b = kol[i].toString(2).padStart(8, '0');
+      row.querySelector('.kb').textContent = b.slice(0, 4) + ' ' + b.slice(4);
+      row.querySelector('.kh').textContent = naP(kol[i], 16).padStart(2, '0');
+    });
+    const liczba = h('span', {}, h('span', { class: 'mono', text: hex }), ` = czerwony ${kol[0]}, zielony ${kol[1]}, niebieski ${kol[2]}. Jako jedna liczba 24-bitowa: ${fmtInt(kol[0] * 65536 + kol[1] * 256 + kol[2])}.`);
+    const lp = $('#kolLiczba'); lp.innerHTML = ''; lp.append(liczba);
+  }
+  function initKolor() {
+    const host = $('#kolKanaly'); const nazwy = ['czerwony', 'zielony', 'niebieski'];
+    ['R', 'G', 'B'].forEach((n, i) => {
+      const inp = h('input', { type: 'range', min: 0, max: 255, value: kol[i], 'aria-label': `Składowa ${nazwy[i]}`, style: `accent-color: ${['#d33', '#2a2', '#36f'][i]}` });
+      inp.addEventListener('input', () => { kol[i] = +inp.value; rysujKolor('range' + i); });
+      host.append(h('div', { class: 'kanal' }, h('span', { class: 'kl', text: n }), inp, h('span', { class: 'kd' }), h('span', { class: 'kb' }), h('span', { class: 'kh' })));
+    });
+    $('#kolHex').addEventListener('input', (e) => {
+      const t = e.target.value.trim().replace(/^#/, '');
+      if (!/^[0-9a-fA-F]{6}$/.test(t)) { $('#kolErr').textContent = /[^0-9a-fA-F]/.test(t) ? 'Dozwolone są tylko cyfry 0–9 i litery A–F.' : (t.length < 6 ? '' : 'Potrzeba dokładnie 6 cyfr szesnastkowych.'); return; }
+      for (let i = 0; i < 3; i++) kol[i] = parseInt(t.slice(2 * i, 2 * i + 2), 16);
+      rysujKolor('hex');
+    });
+    $('#kolPicker').addEventListener('input', (e) => { const t = e.target.value.slice(1); for (let i = 0; i < 3; i++) kol[i] = parseInt(t.slice(2 * i, 2 * i + 2), 16); rysujKolor('pick'); });
+    rysujKolor();
+  }
+
+  /* ─── chmod ─── */
+  let ch = [7, 5, 5];
+  const PRESETY = [
+    ['755', 'Programy i katalogi: właściciel może wszystko, pozostali czytają i uruchamiają.'],
+    ['644', 'Zwykły plik: właściciel czyta i zapisuje, pozostali tylko czytają.'],
+    ['700', 'Prywatny katalog: dostęp ma tylko właściciel.'],
+    ['600', 'Plik z sekretem, np. klucz SSH: tylko właściciel czyta i zapisuje.'],
+    ['777', 'Każdy może wszystko. Prawie zawsze zły pomysł.'],
+  ];
+  function rysujCh(zr = null) {
+    const tab = $('#chTab'); tab.innerHTML = '';
+    tab.append(h('thead', {}, h('tr', {}, h('th', { text: '' }), h('th', { text: 'r (4)' }), h('th', { text: 'w (2)' }), h('th', { text: 'x (1)' }), h('th', { text: 'bity' }), h('th', { text: 'cyfra' }))));
+    const tb = h('tbody');
+    ['właściciel', 'grupa', 'pozostali'].forEach((kto, i) => {
+      const tr = h('tr', {}, h('td', { text: kto }));
+      [4, 2, 1].forEach((w, j) => {
+        const cb = h('input', { type: 'checkbox', 'aria-label': `${kto}: ${['czytanie', 'zapis', 'wykonywanie'][j]}` });
+        cb.checked = !!(ch[i] & w);
+        cb.addEventListener('change', () => { ch[i] ^= w; rysujCh(); });
+        tr.append(h('td', {}, cb));
+      });
+      tr.append(h('td', { class: 'bits3', text: ch[i].toString(2).padStart(3, '0') }), h('td', { class: 'oct', text: String(ch[i]) }));
+      tb.append(tr);
+    });
+    tab.append(tb);
+    const kod = ch.join('');
+    if (zr !== 'oct') $('#chOct').value = kod;
+    $('#chErr').textContent = '';
+    $('#chSym').textContent = '-' + ch.map((c) => (c & 4 ? 'r' : '-') + (c & 2 ? 'w' : '-') + (c & 1 ? 'x' : '-')).join('');
+    const p = PRESETY.find((x) => x[0] === kod);
+    $('#chOpis').textContent = p ? p[1] : `chmod ${kod} = ${ch.map((c) => c.toString(2).padStart(3, '0')).join(' ')}₂. Tak samo wygląda kolumna uprawnień w ls -l.`;
+    for (const b of $$('#chPresety button')) b.setAttribute('aria-pressed', String(b.textContent === kod));
+  }
+  function initCh() {
+    const host = $('#chPresety');
+    const seg = h('div', { class: 'seg', role: 'group', 'aria-label': 'Typowe ustawienia' });
+    for (const [kod] of PRESETY) seg.append(h('button', { type: 'button', text: kod, onclick: () => { ch = kod.split('').map(Number); rysujCh(); } }));
+    host.append(seg);
+    $('#chOct').addEventListener('input', (e) => {
+      const t = e.target.value.trim();
+      if (!/^[0-7]{0,3}$/.test(t)) { $('#chErr').textContent = 'Cyfry ósemkowe to 0–7.'; return; }
+      if (t.length < 3) { $('#chErr').textContent = ''; return; }
+      ch = t.split('').map(Number); rysujCh('oct');
+    });
+    rysujCh();
+  }
+
+  function init() {
+    for (const b of $$('#grK button')) b.addEventListener('click', () => { ustawK(+b.dataset.k); nowy(s && s === SLAJD ? SLAJD : null); });
+    $('#grNowy').addEventListener('click', () => nowy());
+    $('#grSlajd').addEventListener('click', () => nowy(SLAJD));
+    $('#grSprawdz').addEventListener('click', sprawdz);
+    $('#grCzysc').addEventListener('click', () => { if (rozwiazane) return; cuts = new Set(); sprawdzone = false; $('#grFb').textContent = ''; $('#grKrok2').hidden = true; rysuj(); });
+    $('#grPokaz').addEventListener('click', () => { if (!rozwiazane) pokaz(); });
+    $('#grWynikOk').addEventListener('click', wynik);
+    $('#grWynik').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); rozwiazane ? nowy() : wynik(); } });
+    ustawK(4); nowy(SLAJD); initKolor(); initCh();
+  }
+  return { init };
+})();
+
+const SVGNS = 'http://www.w3.org/2000/svg';
+function s(tag, attrs = {}) { const e = document.createElementNS(SVGNS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); return e; }
+
+/* ═════════════════════ 3. Licznik U2 ═════════════════════ */
+const U2 = (() => {
+  const bits = (x, n) => (x & (2 ** n - 1)).toString(2).padStart(n, '0');
+  const zU2 = (x, n) => { x &= 2 ** n - 1; return x >= 2 ** (n - 1) ? x - 2 ** n : x; };
+  const zZM = (x, n) => { const m = x & (2 ** (n - 1) - 1); return (x >> (n - 1)) & 1 ? -m : m; };
+  const zU1 = (x, n) => ((x >> (n - 1)) & 1 ? -((~x) & (2 ** n - 1)) : x);
+  const znak = (v) => (v < 0 ? '−' + Math.abs(v) : String(v));
+  const zeroZnak = (v, x, n) => (v === 0 && (x >> (n - 1)) & 1 ? '−0' : znak(v));
+
+  /* ─── koło ─── */
+  let n = 4, x = 0b1101;
+  function notka(t) { const e = $('#u2Note'); e.hidden = !t; e.textContent = t || ''; }
+  function rysujKolo() {
+    const N = 2 ** n, W = 360, c = W / 2, R = n === 5 ? 128 : 122;
+    const svg = s('svg', { viewBox: `0 0 ${W} ${W}`, role: 'img', 'aria-label': `Koło ${N} słów ${n}-bitowych z wartościami w U2` });
+    svg.append(s('circle', { cx: c, cy: c, r: R, class: 'ring' }));
+    const kat = (k) => -Math.PI / 2 + (2 * Math.PI * k) / N;
+    const pt = (k, r) => [c + r * Math.cos(kat(k)), c + r * Math.sin(kat(k))];
+    const granica = (k, kl) => { const a = -Math.PI / 2 + (2 * Math.PI * (k + 0.5)) / N; svg.append(s('line', { x1: c + (R - 12) * Math.cos(a), y1: c + (R - 12) * Math.sin(a), x2: c + (R + 12) * Math.cos(a), y2: c + (R + 12) * Math.sin(a), class: kl })); };
+    granica(N - 1, 'gC'); granica(N / 2 - 1, 'gV');
+    for (let k = 0; k < N; k++) {
+      const etyk = n < 5 || k % 2 === 0 || k === x || k === N / 2 || k === N / 2 - 1 || k === N - 1;
+      const [px, py] = pt(k, R);
+      const p = s('circle', { cx: px, cy: py, r: k === x ? 8 : 5.5, class: 'pkt' + (k === x ? ' cur' : '') });
+      p.addEventListener('click', () => { x = k; notka(''); rysuj(); });
+      const t = s('title'); t.textContent = `${bits(k, n)} · bez znaku ${k} · U2 ${znak(zU2(k, n))}`; p.append(t);
+      svg.append(p);
+      if (!etyk) continue;
+      const [bx, by] = pt(k, R + 24); const tb = s('text', { x: bx, y: by + 4, 'text-anchor': 'middle', class: 'tk' }); tb.textContent = bits(k, n); svg.append(tb);
+      const [sx, sy] = pt(k, R - 24); const v = zU2(k, n); const ts = s('text', { x: sx, y: sy + 4, 'text-anchor': 'middle', class: 'ts' + (v < 0 ? ' neg' : '') }); ts.textContent = znak(v); svg.append(ts);
+    }
+    const m1 = s('text', { x: c, y: c + 6, 'text-anchor': 'middle', class: 'mid big' }); m1.textContent = znak(zU2(x, n)); svg.append(m1);
+    const m2 = s('text', { x: c, y: c + 28, 'text-anchor': 'middle', class: 'mid sm' }); m2.textContent = `U2 · bez znaku: ${x}`; svg.append(m2);
+    const host = $('#u2Kolo'); host.innerHTML = ''; host.append(svg);
+  }
+  function rysujBity() {
+    const row = $('#u2Bity'); row.innerHTML = '';
+    const nib = h('div', { class: 'nib' }); row.append(nib);
+    for (let i = n - 1; i >= 0; i--) {
+      const on = (x >> i) & 1; const msb = i === n - 1;
+      nib.append(h('div', { class: 'bcol' + (on ? ' on' : '') },
+        h('span', { class: 'w' + (msb ? ' neg' : ''), text: (msb ? '−2' : '2') + sup(i) }),
+        h('button', { class: 'bbtn' + (on ? ' on' : ''), type: 'button', 'aria-pressed': String(!!on), 'aria-label': `bit ${i}`, text: on ? '1' : '0', onclick: () => { x ^= 1 << i; notka(''); rysuj(); } }),
+        h('span', { class: 'wv', text: msb ? '−' + 2 ** i : String(2 ** i) })));
+    }
+  }
+  function rysujOdczyty() {
+    const t = $('#u2Odczyty'); t.innerHTML = '';
+    const b = bits(x, n), msb = b[0] === '1', reszta = x & (2 ** (n - 1) - 1);
+    const wagi = (pomin) => { const a = []; for (let i = n - 2; i >= 0; i--) if ((x >> i) & 1) a.push(2 ** i); return a.length ? a.join(' + ') : '0'; };
+    const rows = [
+      ['bez znaku', String(x), `${n} bitów jak zwykle: ${[...b].map((c, i) => (c === '1' ? 2 ** (n - 1 - i) : null)).filter((v) => v != null).join(' + ') || '0'}`],
+      ['znak–moduł (ZM)', zeroZnak(zZM(x, n), x, n), `znak ${msb ? '−' : '+'}, moduł ${b.slice(1)}₂ = ${reszta}`],
+      ['U1', zeroZnak(zU1(x, n), x, n), msb ? `odwróć bity: ${bits(~x, n)}₂ = ${(~x) & (2 ** n - 1)}, więc −${(~x) & (2 ** n - 1)}` : 'najstarszy bit 0: jak bez znaku'],
+      ['U2', znak(zU2(x, n)), msb ? `−${2 ** (n - 1)} + ${wagi()} = ${znak(zU2(x, n))}` : `0 + ${wagi()} = ${zU2(x, n)}`],
+    ];
+    t.append(h('thead', {}, h('tr', {}, h('th', { text: `słowo ${b}` }), h('th', { class: 'n', text: 'wartość' }), h('th', { text: 'skąd' }))));
+    t.append(h('tbody', {}, rows.map((r) => h('tr', { class: r[0] === 'U2' ? 'u2' : '' }, h('td', { text: r[0] }), h('td', { class: 'v', text: r[1] }), h('td', { class: 'small muted', text: r[2] })))));
+  }
+  function rysuj() { rysujKolo(); rysujBity(); rysujOdczyty(); }
+  function krok(d) {
+    const N = 2 ** n, stary = x; x = (x + d + N) % N;
+    const su = (k) => k, s2 = (k) => znak(zU2(k, n));
+    if (d === 1 && stary === N - 1) notka(`Przeniesienie: bez znaku ${su(stary)} + 1 = ${N} nie mieści się w ${n} bitach, wychodzi 0. W U2 to zupełnie poprawne: −1 + 1 = 0.`);
+    else if (d === -1 && stary === 0) notka(`Bez znaku 0 − 1 nie istnieje (pożyczka), wychodzi ${N - 1}. W U2 to poprawne: 0 − 1 = −1.`);
+    else if (d === 1 && stary === N / 2 - 1) notka(`Nadmiar w U2: ${s2(stary)} + 1 dało ${s2(x)}. Bez znaku wszystko gra: ${stary} → ${x}.`);
+    else if (d === -1 && stary === N / 2) notka(`Nadmiar w U2: ${s2(stary)} − 1 dało ${s2(x)}. Bez znaku wszystko gra: ${stary} → ${x}.`);
+    else notka('');
+    rysuj();
+  }
+  function negacja() {
+    const N = 2 ** n, stary = x, odw = (~x) & (N - 1); x = (odw + 1) & (N - 1);
+    if (stary === N / 2) notka(`¬${bits(stary, n)} = ${bits(odw, n)}, +1 = ${bits(x, n)}. Wyszło znowu ${znak(zU2(x, n))}: liczba ${N / 2} nie mieści się w ${n}-bitowym U2 (zakres ${znak(-N / 2)} … ${N / 2 - 1}).`);
+    else notka(`¬${bits(stary, n)} = ${bits(odw, n)}, +1 = ${bits(x, n)}: ${znak(zU2(stary, n))} → ${znak(zU2(x, n))}.`);
+    rysuj();
+  }
+
+  /* ─── sumator ─── */
+  let sn = 4, op = '+', A = 7, B = 2;
+  const zakres = () => [-(2 ** (sn - 1)), 2 ** (sn - 1) - 1];
+  function liczSuma() {
+    const M = 2 ** sn - 1, a = A & M, b0 = B & M;
+    const b = op === '+' ? b0 : (~b0) & M, cin = op === '+' ? 0 : 1;
+    const car = [cin]; let r = 0;
+    for (let i = 0; i < sn; i++) { const t = ((a >> i) & 1) + ((b >> i) & 1) + car[i]; r |= (t & 1) << i; car.push(t >> 1); }
+    return { a, b0, b, cin, car, r, C: car[sn], V: car[sn] ^ car[sn - 1] };
+  }
+  function rysujSum() {
+    const w = liczSuma(); const host = $('#suSlup'); host.innerHTML = '';
+    const kom = (lab, wartosci, kl = '', dec = '', bitKlik = null) => {
+      const r = h('div', { class: 'r ' + kl, style: `--n: ${sn + 1}` }, h('span', { class: 'lab', text: lab }));
+      wartosci.forEach((v, j) => { const e = h('span', { class: (bitKlik ? 'bt ' : '') + (v.kl || ''), text: v.t }); if (bitKlik && v.i != null) e.addEventListener('click', () => bitKlik(v.i)); r.append(e); });
+      r.append(h('span', { class: 'dec', text: dec })); host.append(r);
+    };
+    const kol = (x, i0 = sn - 1) => { const a = []; for (let i = i0; i >= 0; i--) a.push({ t: String((x >> i) & 1), i }); return a; };
+    // przeniesienia: pozycja sn (wyjście) … 1; car[0] to przeniesienie wejściowe
+    const cr = [{ t: w.car[sn] ? '1' : '', kl: w.car[sn] ? 'out' : '' }];
+    for (let i = sn - 1; i >= 0; i--) cr.push({ t: w.car[i] ? '1' : '', kl: (i === sn - 1 && w.V) ? 'in' : '' });
+    kom('przeniesienia', cr, 'car', op === '-' ? '(+1 na wejściu)' : '');
+    const togA = (i) => { A = zU2((A ^ (1 << i)), sn); syncPola(); rysujSum(); };
+    const togB = (i) => { B = zU2((B ^ (1 << i)), sn); syncPola(); rysujSum(); };
+    kom('A', [{ t: '' }, ...kol(w.a)], '', `= ${znak(A)}`, togA);
+    if (op === '+') kom('B', [{ t: '+' }, ...kol(w.b0)], '', `= ${znak(B)}`, togB);
+    else kom('¬B (B odwrócone)', [{ t: '+' }, ...kol(w.b)], '', `B = ${bits(w.b0, sn)} = ${znak(B)}`, (i) => togB(i));
+    kom('wynik w słowie', [{ t: w.C ? '1' : '', kl: w.C ? 'muted' : '' }, ...kol(w.r)], 'sum', `= ${znak(zU2(w.r, sn))} (U2)`);
+    const f = $('#suFlagi'); f.innerHTML = '';
+    f.append(h('span', { class: 'flaga c' + (w.C ? ' on' : ''), text: op === '+' ? `C = ${w.C}: ${w.C ? 'bit wypadł poza słowo' : 'nic nie wypadło poza słowo'}` : `C = ${w.C}: ${w.C ? 'sumator dał przeniesienie, czyli A ≥ B bez znaku' : 'brak przeniesienia, czyli pożyczka: A < B bez znaku'}` }),
+      h('span', { class: 'flaga v' + (w.V ? ' on' : ''), text: `OF = ${w.V}: ${w.V ? 'nadmiar, znak wyniku jest zły' : 'brak nadmiaru'}` }));
+    const t = $('#suInterp'); t.innerHTML = '';
+    const au = w.a, bu = w.b0, rs = zU2(w.r, sn);
+    const mat = op === '+' ? A + B : A - B;
+    const matU = op === '+' ? au + bu : au - bu;
+    const okU = matU === w.r, okS = mat === rs;
+    t.append(h('thead', {}, h('tr', {}, h('th', { text: 'te same bity jako…' }), h('th', { class: 'n', text: 'A' }), h('th', { class: 'n', text: 'B' }), h('th', { class: 'n', text: `A ${op === '+' ? '+' : '−'} B naprawdę` }), h('th', { class: 'n', text: 'w słowie' }), h('th', { text: '' }))),
+      h('tbody', {},
+        h('tr', {}, h('td', { text: 'liczby bez znaku' }), h('td', { class: 'n', text: String(au) }), h('td', { class: 'n', text: String(bu) }), h('td', { class: 'n', text: znak(matU) }), h('td', { class: 'n', text: String(w.r) }), h('td', { class: okU ? 'ok' : 'bad', text: okU ? 'dobrze' : (op === '+' ? 'źle: wynik za duży' : 'źle: wynik ujemny') })),
+        h('tr', {}, h('td', { text: 'U2' }), h('td', { class: 'n', text: znak(A) }), h('td', { class: 'n', text: znak(B) }), h('td', { class: 'n', text: znak(mat) }), h('td', { class: 'n', text: znak(rs) }), h('td', { class: okS ? 'ok' : 'bad', text: okS ? 'dobrze' : 'źle: nadmiar' }))));
+  }
+  function syncPola() { $('#suA').value = A; $('#suB').value = B; $('#suErr').textContent = ''; }
+  function ustawSn(k) {
+    sn = k; for (const b of $$('#suN button')) b.setAttribute('aria-pressed', String(+b.dataset.n === sn));
+    const [lo, hi] = zakres(); for (const id of ['#suA', '#suB']) { $(id).min = lo; $(id).max = hi; }
+    A = Math.min(hi, Math.max(lo, A)); B = Math.min(hi, Math.max(lo, B));
+  }
+  function ustawOp(o) { op = o; for (const b of $$('#suOp button')) b.setAttribute('aria-pressed', String(b.dataset.op === op)); }
+  function wpisz() {
+    const [lo, hi] = zakres(); const a = Number($('#suA').value), b = Number($('#suB').value);
+    if (!Number.isInteger(a) || !Number.isInteger(b) || $('#suA').value === '' || $('#suB').value === '') return;
+    if (a < lo || a > hi || b < lo || b > hi) { $('#suErr').textContent = `W ${sn}-bitowym U2 mieszczą się liczby od ${znak(lo)} do ${hi}.`; return; }
+    $('#suErr').textContent = ''; A = a; B = b; rysujSum();
+  }
+
+  /* ─── quiz ─── */
+  let q = null, odpC = null, odpV = null, ok = 0, ile = 0, zal = false;
+  function noweQ() {
+    const los = () => Math.floor(Math.random() * 16) - 8;
+    let a, b; const chcemyV = Math.random() < 0.4;
+    do { a = los(); b = los(); } while (chcemyV !== (a + b > 7 || a + b < -8));
+    q = { a, b }; odpC = odpV = null; zal = false; ile++;
+    for (const id of ['#uqC', '#uqV']) for (const x of $$(id + ' button')) x.setAttribute('aria-pressed', 'false');
+    const t = $('#uqQ'); t.innerHTML = '';
+    t.append('Dodaj w 4 bitach: ', h('span', { class: 'mono', text: `${bits(a, 4)} + ${bits(b, 4)}` }), h('span', { class: 'small muted', text: `  (w U2: ${znak(a)} + ${znak(b)})` }));
+    $('#uqWynik').value = ''; $('#uqFb').className = 'qfb'; $('#uqFb').textContent = ''; $('#uqIle').textContent = ile;
+  }
+  function sprawdzQ() {
+    if (!q || zal) return;
+    const fb = $('#uqFb'); fb.innerHTML = '';
+    const wy = $('#uqWynik').value.trim();
+    if (!/^[01]{4}$/.test(wy) || odpC === null || odpV === null) { fb.className = 'qfb bad'; fb.textContent = 'Wpisz 4 bity wyniku i zaznacz obie odpowiedzi (C i OF).'; return; }
+    const M = 15, a = q.a & M, b = q.b & M, sum = a + b, r = sum & M, C = sum >> 4;
+    const V = ((a & 8) === (b & 8)) && ((r & 8) !== (a & 8)) ? 1 : 0;
+    const okR = wy === bits(r, 4), okC = odpC === C, okV = odpV === V;
+    if (okR && okC && okV) { zal = true; ok++; $('#uqOk').textContent = ok; fb.className = 'qfb good'; fb.textContent = `Dobrze: ${bits(a, 4)} + ${bits(b, 4)} = ${bits(r, 4)}, C = ${C}, OF = ${V}. ${V ? `W U2 wynik ${znak(zU2(r, 4))} zamiast ${znak(q.a + q.b)}.` : `W U2: ${znak(q.a)} + ${znak(q.b)} = ${znak(zU2(r, 4))}.`}`; return; }
+    fb.className = 'qfb bad'; fb.append('Jeszcze nie.');
+    const hint = (t) => fb.append(h('span', { class: 'hint', text: t }));
+    if (!okR) hint(`Wynik: dodaj kolumnami od prawej i zapisz tylko 4 najmłodsze bity. Bit, który wypada na piątą pozycję, to właśnie przeniesienie C.`);
+    if (!okC && !okV && C !== V) hint('Zamieniłeś przeniesienie z nadmiarem. C mówi, czy jakiś bit wypadł poza słowo. OF mówi, czy wynik ma zły znak w U2.');
+    else {
+      if (!okC) hint(C ? 'Przeniesienie jest: suma bez znaku wynosi ' + sum + ', a to więcej niż 15.' : 'Przeniesienia nie ma: suma bez znaku wynosi ' + sum + ', mieści się w 4 bitach.');
+      if (!okV) hint(V ? 'Nadmiar jest: oba składniki mają ten sam znak, a wynik ma przeciwny.' : ((a & 8) !== (b & 8) ? 'Nadmiaru nie ma: przy różnych znakach składników nadmiar jest niemożliwy.' : 'Nadmiaru nie ma: znak wyniku zgadza się ze znakiem składników.'));
+    }
+  }
+
+  function init() {
+    for (const b of $$('#u2N button')) b.addEventListener('click', () => { n = +b.dataset.n; for (const z of $$('#u2N button')) z.setAttribute('aria-pressed', String(z === b)); x &= 2 ** n - 1; notka(''); rysuj(); });
+    $('#u2Plus').addEventListener('click', () => krok(1));
+    $('#u2Minus').addEventListener('click', () => krok(-1));
+    $('#u2Neg').addEventListener('click', negacja);
+    rysuj();
+    for (const b of $$('#suN button')) b.addEventListener('click', () => { ustawSn(+b.dataset.n); syncPola(); rysujSum(); });
+    for (const b of $$('#suOp button')) b.addEventListener('click', () => { ustawOp(b.dataset.op); rysujSum(); });
+    $('#suA').addEventListener('input', wpisz); $('#suB').addEventListener('input', wpisz);
+    const PRES = [[4, '+', 7, 2, '7 + 2'], [4, '+', -4, -5, '−4 + (−5)'], [4, '+', -3, -2, '−3 + (−2)'], [4, '+', 5, -4, '5 + (−4)'], [4, '-', 0, -8, '0 − (−8)'], [8, '+', 127, 1, '127 + 1 (int8)']];
+    for (const [k, o, a, b, lab] of PRES) $('#suPresety').append(h('button', { class: 'btn ghost small', type: 'button', text: lab, onclick: () => { ustawSn(k); ustawOp(o); A = a; B = b; syncPola(); rysujSum(); } }));
+    ustawSn(4); ustawOp('+'); syncPola(); rysujSum();
+    for (const [id, set] of [['#uqC', (v) => { odpC = v; }], ['#uqV', (v) => { odpV = v; }]]) for (const b of $$(id + ' button')) b.addEventListener('click', () => { set(+b.dataset.v); for (const z of $$(id + ' button')) z.setAttribute('aria-pressed', String(z === b)); });
+    $('#uqCheck').addEventListener('click', sprawdzQ);
+    $('#uqWynik').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); zal ? noweQ() : sprawdzQ(); } });
+    $('#uqNew').addEventListener('click', noweQ);
+    $('#uqSum').addEventListener('click', () => { ustawSn(4); ustawOp('+'); A = q.a; B = q.b; syncPola(); rysujSum(); $('#suSlup').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+    noweQ(); ile = 1; $('#uqIle').textContent = ile;
+  }
+  return { init, wejscie: () => rysujKolo() };
+})();
+
+
+/* ─────────── 3b. Jedno słowo, cztery liczby ─────────── */
+const JednoSlowo = (() => {
+  let w = 0b10110111;
+  const pola = [['U', 'bez znaku'], ['Z', 'ZM'], ['D', 'U2'], ['B', 'z nadmiarem 127']];
+  const wart = (x) => ({ U: x, Z: (x & 128 ? -(x & 127) : x), D: (x & 128 ? x - 256 : x), B: x - 127 });
+  const zn = (v) => (v < 0 ? '−' + Math.abs(v) : String(v));
+  function nowe(x) {
+    w = x ?? (128 + Math.floor(Math.random() * 128)) ^ (Math.random() < 0.25 ? 128 : 0);
+    const t = $('#jsSlowo'); t.innerHTML = '';
+    t.append('Słowo: ', h('span', { class: 'mono', text: w.toString(2).padStart(8, '0').replace(/(....)(....)/, '$1 $2') }));
+    for (const [k] of pola) { const i = $('#js' + k); i.value = ''; i.classList.remove('zly'); $('#js' + k + 'e').textContent = ''; }
+    $('#jsFb').className = 'qfb'; $('#jsFb').textContent = '';
+  }
+  function sprawdz() {
+    const v = wart(w), msb = w & 128, mod = w & 127; let dobrych = 0;
+    for (const [k] of pola) {
+      const inp = $('#js' + k), er = $('#js' + k + 'e');
+      const t = inp.value.trim().replace('−', '-').replace(/\s/g, '');
+      if (t === '') { er.textContent = ''; inp.classList.remove('zly'); continue; }
+      const u = Number(t);
+      if (!Number.isInteger(u) && !(k === 'Z' && t === '-0')) { er.textContent = 'Wpisz liczbę całkowitą.'; inp.classList.add('zly'); continue; }
+      const ok = k === 'Z' && w === 128 ? (t === '-0' || u === 0) : u === v[k];
+      inp.classList.toggle('zly', !ok);
+      if (ok) { er.textContent = ''; dobrych++; continue; }
+      let hint = 'Jeszcze nie.';
+      if (k === 'D' && msb && u === v.Z) hint = 'To odczyt jak w ZM. W U2 najstarszy bit to −128, a reszta dodaje się normalnie.';
+      else if (k === 'D' && msb && u === -(256 - w) - 1) hint = 'To odczyt jak w U1. W U2 po odwróceniu bitów trzeba jeszcze dodać 1.';
+      else if (k === 'Z' && msb && u === v.D) hint = 'To odczyt jak w U2. W ZM najstarszy bit to tylko znak, a moduł to pozostałe 7 bitów.';
+      else if (k === 'B' && u === 127 - w) hint = 'Odwrotnie: liczba = wartość słowa − 127.';
+      else if (k === 'B' && u === w + 127) hint = 'Nadmiar się odejmuje, a nie dodaje: liczba = wartość słowa − 127.';
+      else if (k === 'U' && u === mod) hint = 'Bez znaku liczy się wszystkie 8 bitów, także najstarszy (128).';
+      er.textContent = hint;
+    }
+    const fb = $('#jsFb');
+    if (dobrych === 4) { fb.className = 'qfb good'; fb.textContent = `Wszystko dobrze: ${v.U}, ${zn(v.Z)}${w === 128 ? ' (−0)' : ''}, ${zn(v.D)}, ${zn(v.B)}. Te same bity, cztery różne liczby.`; }
+    else { fb.className = 'qfb'; fb.textContent = `Dobrze: ${dobrych} z 4.`; }
+  }
+  function init() {
+    $('#jsCheck').addEventListener('click', sprawdz);
+    $('#jsNew').addEventListener('click', () => nowe());
+    $('#jsSlajd').addEventListener('click', () => nowe(0b10110111));
+    for (const [k] of pola) $('#js' + k).addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); sprawdz(); } });
+    nowe(0b10110111);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ 4. Mikroskop na oś liczb ═════════════════════ */
+const Os = (() => {
+  const fmtD = (x, d = 10) => Number(x).toLocaleString('pl-PL', { maximumFractionDigits: d, useGrouping: false });
+  // format zabawkowy: s eee mmmm, nadmiar 3, ukryta jedynka (tylko dodatnie, bez zera)
+  const TOY = []; for (let e = 0; e < 8; e++) for (let m = 0; m < 16; m++) TOY.push({ v: (1 + m / 16) * 2 ** (e - 3), e, m });
+  const TOYMAX = TOY[TOY.length - 1].v, TOYMIN = TOY[0].v;
+  const FIX = { q44: { sc: 16, kmax: 127, nazwa: 'Q4.4', bity: 8 }, q88: { sc: 256, kmax: 32767, nazwa: 'Q8.8', bity: 16 } };
+  let fix = 'q44', lo = 0, hi = 32, x = 9.25;
+
+  function zaokrToy(x) {
+    if (x >= TOYMAX + 0.5) return { nad: true }; // połowa odstępu przy maksimum (odstęp 1)
+    if (x <= TOYMIN) return { ...TOY[0], pod: x < TOYMIN };
+    let i = 0; while (i + 1 < TOY.length && TOY[i + 1].v <= x) i++;
+    const a = TOY[i], b = TOY[i + 1]; if (!b) return a;
+    const da = x - a.v, db = b.v - x;
+    if (da < db) return a; if (db < da) return b;
+    return a.m % 2 === 0 ? a : b;
+  }
+  function zaokrFix(x) {
+    const f = FIX[fix]; const k = x * f.sc;
+    if (k >= f.kmax + 0.5) return { nad: true };
+    let r = Math.floor(k); const fr = k - r;
+    if (fr > 0.5 || (fr === 0.5 && r % 2 === 1)) r++;
+    r = Math.min(r, f.kmax);
+    return { v: r / f.sc, k: r };
+  }
+  const odstepToy = (x) => { const t = zaokrToy(Math.min(Math.max(x, TOYMIN), TOYMAX)); return 2 ** (t.e - 3) / 16; };
+
+  function rysuj() {
+    const host = $('#osOs'); host.innerHTML = '';
+    const W = Math.round(Math.max(320, Math.min(1000, host.clientWidth || 900))), H = 176, m = { l: 18, r: 18 };
+    const pw = W - m.l - m.r, X = (v) => m.l + ((v - lo) / (hi - lo)) * pw;
+    const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': `Oś liczb od ${lo} do ${hi}` });
+    const rows = [{ y: 46, kol: 's2', nazwa: 'zmiennoprzecinkowy', vals: TOY.map((t) => t.v) }];
+    const f = FIX[fix]; const fv = []; const k0 = Math.max(0, Math.ceil(lo * f.sc)), k1 = Math.min(f.kmax, Math.floor(hi * f.sc));
+    rows.push({ y: 106, kol: 's1', nazwa: f.nazwa, vals: null, k0, k1, sc: f.sc });
+    for (const r of rows) {
+      svg.append(s('line', { x1: m.l, x2: W - m.r, y1: r.y, y2: r.y, class: 'gridline' }));
+      const lab = s('text', { x: m.l, y: r.y - 20, class: 'oslab' }); lab.textContent = r.nazwa; svg.append(lab);
+      const vals = r.vals ? r.vals.filter((v) => v >= lo && v <= hi) : null;
+      const ile = vals ? vals.length : Math.max(0, r.k1 - r.k0 + 1);
+      if (ile > pw) {
+        const a = vals ? X(Math.max(lo, vals[0])) : X(r.k0 / r.sc), b = vals ? X(vals[vals.length - 1]) : X(r.k1 / r.sc);
+        svg.append(s('rect', { x: a, y: r.y - 9, width: Math.max(2, b - a), height: 18, fill: `var(--${r.kol})`, 'fill-opacity': 0.35, rx: 3 }));
+        const napis = `gęsto: ${fmtInt(ile)} liczb, przybliż`, szer = napis.length * 6.4;
+        const tx = Math.max(m.l + szer / 2, Math.min(W - m.r - szer / 2, (a + b) / 2));
+        const t = s('text', { x: tx, y: r.y + 24, 'text-anchor': 'middle', class: 'osgest' }); t.textContent = napis; svg.append(t);
+      } else {
+        const lst = vals || Array.from({ length: ile }, (_, i) => (r.k0 + i) / r.sc);
+        const sw = Math.max(1, Math.min(2, pw / Math.max(1, ile) * 0.6));
+        for (const v of lst) svg.append(s('line', { x1: X(v), x2: X(v), y1: r.y - 9, y2: r.y + 9, stroke: `var(--${r.kol})`, 'stroke-width': sw }));
+      }
+    }
+    // podziałka
+    const krokP = niceStep((hi - lo) / Math.max(4, Math.floor(pw / 80)));
+    for (let v = Math.ceil(lo / krokP) * krokP; v <= hi + 1e-12; v += krokP) {
+      svg.append(s('line', { x1: X(v), x2: X(v), y1: 132, y2: 138, class: 'gridline' }));
+      const t = s('text', { x: X(v), y: 154, 'text-anchor': 'middle', class: 'axt' }); t.textContent = fmtD(v, 6); svg.append(t);
+    }
+    // cel
+    if (x >= lo && x <= hi) {
+      svg.append(s('line', { x1: X(x), x2: X(x), y1: 18, y2: 128, class: 'oscel' }));
+      const ty = zaokrToy(x), tf = zaokrFix(x);
+      if (!ty.nad && ty.v >= lo && ty.v <= hi) svg.append(s('circle', { cx: X(ty.v), cy: 46, r: 5.5, fill: 'var(--s2)', stroke: 'var(--surface)', 'stroke-width': 2 }));
+      if (!tf.nad && tf.v >= lo && tf.v <= hi) svg.append(s('circle', { cx: X(tf.v), cy: 106, r: 5.5, fill: 'var(--s1)', stroke: 'var(--surface)', 'stroke-width': 2 }));
+    }
+    const hit = s('rect', { x: m.l, y: 10, width: pw, height: 140, fill: 'transparent', style: 'cursor: crosshair' });
+    hit.addEventListener('click', (e) => {
+      const r = svg.getBoundingClientRect(); const px = ((e.clientX - r.left) / r.width) * W;
+      const v = lo + ((px - m.l) / pw) * (hi - lo); const d = Math.max(0, Math.ceil(-Math.log10((hi - lo) / 2000)));
+      x = Math.max(0, Number(v.toFixed(d))); $('#osX').value = fmtD(x, d); $('#osErr').textContent = ''; rysuj(); tabela();
+    });
+    svg.append(hit);
+    host.append(svg); host.__rerender = rysuj;
+    const ileT = TOY.filter((t) => t.v >= lo && t.v <= hi).length, ileF = Math.max(0, k1 - k0 + 1);
+    const st = $('#osIle'); st.innerHTML = '';
+    st.append(h('div', { class: 'stat' }, h('div', { class: 'k', text: 'ile liczb w widoku: zmiennoprzecinkowy' }), h('div', { class: 'v', text: fmtInt(ileT) })),
+      h('div', { class: 'stat' }, h('div', { class: 'k', text: `ile liczb w widoku: ${f.nazwa}` }), h('div', { class: 'v', text: fmtInt(ileF) })),
+      h('div', { class: 'stat' }, h('div', { class: 'k', text: `wszystkie liczby ≥ 0: zmiennoprzecinkowy i ${f.nazwa}` }), h('div', { class: 'v', text: `${TOY.length} i ${fmtInt(f.kmax + 1)}` })));
+    for (const b of $$('#osOkna button')) b.setAttribute('aria-pressed', String(+b.dataset.lo === lo && +b.dataset.hi === hi));
+  }
+  function niceStep(r) { const p = 10 ** Math.floor(Math.log10(r)); const q = r / p; return (q < 1.5 ? 1 : q < 3.5 ? 2 : q < 7.5 ? 5 : 10) * p; }
+
+  function tabela() {
+    const t = $('#osTab'); t.innerHTML = '';
+    const f = FIX[fix];
+    const wiersz = (nazwa, bity, r, odst, kod) => {
+      if (r.nad) return h('tr', {}, h('td', { text: nazwa }), h('td', { class: 'n', text: bity }), h('td', { colspan: 4, class: 'bad', text: 'poza zakresem (nadmiar)' }));
+      const bl = Math.abs(r.v - x), wzg = x !== 0 ? bl / x : 0;
+      return h('tr', {}, h('td', { text: nazwa }), h('td', { class: 'n', text: bity }), h('td', { class: 'n mono', text: kod }), h('td', { class: 'n', text: fmtD(r.v) + (r.pod ? ' (poniżej zakresu)' : '') }),
+        h('td', { class: 'n', text: bl === 0 ? '0 (dokładnie)' : fmtD(bl, 8) }), h('td', { class: 'n', text: bl === 0 ? '0%' : fmtD(wzg * 100, 3) + '%' }), h('td', { class: 'n', text: fmtD(odst, 8) }));
+    };
+    const ty = zaokrToy(x), tf = zaokrFix(x);
+    const kodT = ty.nad ? '' : `0 ${ty.e.toString(2).padStart(3, '0')} ${ty.m.toString(2).padStart(4, '0')}`;
+    const kodF = tf.nad ? '' : (() => { const b = tf.k.toString(2).padStart(f.bity, '0'); return b.slice(0, f.bity / 2) + '.' + b.slice(f.bity / 2); })();
+    t.append(h('thead', {}, h('tr', {}, h('th', { text: 'format' }), h('th', { class: 'n', text: 'bity' }), h('th', { class: 'n', text: 'zapis' }), h('th', { class: 'n', text: 'zapisana wartość' }), h('th', { class: 'n', text: 'błąd' }), h('th', { class: 'n', text: 'błąd względny' }), h('th', { class: 'n', text: 'odstęp w okolicy' }))),
+      h('tbody', {}, wiersz('zmiennoprzecinkowy', '8', ty, odstepToy(x), kodT), wiersz(f.nazwa, String(f.bity), tf, 1 / f.sc, kodF)));
+  }
+  function wpis() {
+    const t = $('#osX').value.trim().replace(',', '.').replace(/\s/g, '');
+    let v;
+    if (/^\d+\/\d+$/.test(t)) { const [a, b] = t.split('/').map(Number); v = a / b; } else v = Number(t);
+    if (t === '' || !Number.isFinite(v)) { $('#osErr').textContent = 'Wpisz liczbę, np. 9,25, 0,1 albo ułamek 1/3.'; return; }
+    if (v < 0) { $('#osErr').textContent = 'Pokazujemy liczby dodatnie; ujemne są lustrzanym odbiciem.'; return; }
+    $('#osErr').textContent = ''; x = v;
+    if (x > hi || x < lo) { const sz = hi - lo; lo = Math.max(0, Math.min(128 - sz, x - sz / 2)); hi = lo + sz; }
+    rysuj(); tabela();
+  }
+  function okno(a, b) { lo = Math.max(0, a); hi = Math.min(128, b); if (hi - lo < 1 / 64) hi = lo + 1 / 64; rysuj(); }
+  function init() {
+    const OKNA = [[0, 32], [0, 8], [0, 1], [4, 8], [16, 32]];
+    for (const [a, b] of OKNA) $('#osOkna').append(h('button', { type: 'button', 'data-lo': a, 'data-hi': b, text: `${a}–${b}`, onclick: () => okno(a, b) }));
+    for (const b of $$('#osStaly button')) b.addEventListener('click', () => { fix = b.dataset.f; for (const z of $$('#osStaly button')) z.setAttribute('aria-pressed', String(z === b)); $('#osLegFix').textContent = `stałoprzecinkowy ${FIX[fix].nazwa}`; rysuj(); tabela(); });
+    $('#osZoomIn').addEventListener('click', () => { const c = x >= lo && x <= hi ? x : (lo + hi) / 2, sz = (hi - lo) / 2; okno(Math.max(0, c - sz / 2), Math.max(0, c - sz / 2) + sz); });
+    $('#osZoomOut').addEventListener('click', () => { const c = (lo + hi) / 2, sz = Math.min(128, (hi - lo) * 2); const a = Math.max(0, Math.min(128 - sz, c - sz / 2)); okno(a, a + sz); });
+    $('#osLewo').addEventListener('click', () => { const sz = hi - lo, a = Math.max(0, lo - sz / 2); okno(a, a + sz); });
+    $('#osPrawo').addEventListener('click', () => { const sz = hi - lo, a = Math.min(128 - sz, lo + sz / 2); okno(a, a + sz); });
+    for (const p of ['0,1', '9,25', '5,3', '30', '1/3', '0,2']) $('#osPresety').append(h('button', { class: 'btn ghost small', type: 'button', text: p, onclick: () => { $('#osX').value = p; wpis(); } }));
+    $('#osX').addEventListener('input', wpis);
+    rysuj(); tabela();
+  }
+  return { init, wejscie: () => rysuj() };
+})();
+
+/* ═════════════════════ 5. Rentgen IEEE 754 ═════════════════════ */
+const IEEE = (() => {
+  const FMT = { 32: { eb: 8, mb: 23, bias: 127 }, 64: { eb: 11, mb: 52, bias: 1023 } };
+  let f = 32, raw = 0x3DCCCCCDn; // 0.1f
+  const dv = new DataView(new ArrayBuffer(8));
+  const B = (n) => BigInt(n);
+  const total = () => f;
+  const mask = () => (1n << B(f)) - 1n;
+
+  function zLiczby(v) {
+    if (f === 32) { dv.setFloat32(0, v); return B(dv.getUint32(0)); }
+    dv.setFloat64(0, v); return dv.getBigUint64(0);
+  }
+  function naLiczbe(r) {
+    if (f === 32) { dv.setUint32(0, Number(r)); return dv.getFloat32(0); }
+    dv.setBigUint64(0, r); return dv.getFloat64(0);
+  }
+  function pola(r) {
+    const { eb, mb } = FMT[f];
+    return { s: Number(r >> B(f - 1)), E: Number((r >> B(mb)) & ((1n << B(eb)) - 1n)), F: r & ((1n << B(mb)) - 1n) };
+  }
+  function klasa(p) {
+    const Emax = 2 ** FMT[f].eb - 1;
+    if (p.E === Emax) return p.F === 0n ? 'inf' : 'nan';
+    if (p.E === 0) return p.F === 0n ? 'zero' : 'sub';
+    return 'norm';
+  }
+  /** m · 2^e (dokładnie) jako para BigInt */
+  function m2e(p) {
+    const { mb, bias } = FMT[f];
+    if (p.E === 0) return { m: p.F, e: 1 - bias - mb };
+    return { m: p.F + (1n << B(mb)), e: p.E - bias - mb };
+  }
+  function dokladnie(p) {
+    const { m, e } = m2e(p);
+    let txt;
+    if (e >= 0) txt = (m << B(e)).toString();
+    else {
+      const k = -e; const num = (m * 5n ** B(k)).toString().padStart(k + 1, '0');
+      const ip = num.slice(0, num.length - k), fp = num.slice(num.length - k).replace(/0+$/, '');
+      txt = fp ? `${ip},${fp}` : ip;
+    }
+    return (p.s ? '−' : '') + txt;
+  }
+  function najkrotszy(v) {
+    if (Number.isNaN(v)) return 'NaN';
+    if (!Number.isFinite(v)) return v > 0 ? '∞' : '−∞';
+    if (v === 0) return Object.is(v, -0) ? '−0' : '0';
+    if (f === 64) return String(v);
+    for (let p = 1; p <= 9; p++) { const t = v.toPrecision(p); if (Math.fround(Number(t)) === v) return String(Number(t)); }
+    return String(v);
+  }
+  /** Czy wpisany zapis dziesiętny jest dokładnie równy wartości bitów? */
+  function czyDokladnie(tekst, p) {
+    const m0 = /^([+-]?)(\d*)(?:\.(\d*))?(?:e([+-]?\d+))?$/i.exec(tekst); if (!m0) return null;
+    const cyfry = (m0[2] || '') + (m0[3] || ''); if (!cyfry) return null;
+    let N = BigInt(cyfry); let d = (m0[3] || '').length - Number(m0[4] || 0); // wartość = N · 10^(−d)
+    const k = klasa(p); if (k !== 'norm' && k !== 'sub') return k === 'zero' ? N === 0n : null;
+    const { m, e } = m2e(p);
+    // N · 10^(−d) == m · 2^e ?
+    let L = N, R = m;
+    if (d >= 0) R *= 10n ** B(d); else L *= 10n ** B(-d);
+    if (e >= 0) R <<= B(e); else L <<= B(-e);
+    return L === R;
+  }
+  const hexStr = (r) => r.toString(16).toUpperCase().padStart(f / 4, '0');
+  const fmtSci = (x) => { if (x === 0) return '0'; const a = Math.abs(x); return a >= 1e-4 && a < 1e7 ? x.toLocaleString('pl-PL', { maximumSignificantDigits: 8 }) : x.toExponential(4).replace('.', ',').replace('e', ' · 10^').replace('+', '').replace('^-', '^−'); };
+
+  function sasiad(kier) {
+    const p = pola(raw), k = klasa(p);
+    if (k === 'nan') return null;
+    const mag = raw & (mask() >> 1n), sgn = raw >> B(f - 1);
+    const infMag = B(2 ** FMT[f].eb - 1) << B(FMT[f].mb);
+    if (mag === 0n) return kier > 0 ? 1n : (1n << B(f - 1)) | 1n;
+    const wGore = (sgn === 0n) === (kier > 0);
+    if (wGore) { if (mag === infMag) return null; return raw + 1n; }
+    return raw - 1n;
+  }
+
+  function rysuj(zrodlo = null) {
+    const { eb, mb, bias } = FMT[f];
+    const p = pola(raw), k = klasa(p), v = naLiczbe(raw);
+    if (zrodlo !== 'hex') { $('#ieHex').value = hexStr(raw); $('#ieHexE').textContent = ''; }
+    if (zrodlo !== 'dec') { $('#ieDec').value = najkrotszy(v).replace('.', ','); $('#ieDecE').textContent = ''; }
+    // bity
+    const host = $('#ieBity'); host.innerHTML = '';
+    const blok = (kl, lab, od, ile) => {
+      const b = h('div', { class: 'ieblok ' + kl }, h('div', { class: 'ielab', text: lab }));
+      const rz = h('div', { class: 'iebits' });
+      for (let i = od; i > od - ile; i--) {
+        const on = (raw >> B(i)) & 1n;
+        rz.append(h('button', { class: 'ib' + (on ? ' on' : ''), type: 'button', 'aria-label': `bit ${i}`, 'aria-pressed': String(!!on), text: on ? '1' : '0', onclick: () => { raw ^= 1n << B(i); notka(''); rysuj(); } }));
+      }
+      b.append(rz); host.append(b);
+    };
+    blok('zn', 'znak', f - 1, 1); blok('ce', `cecha (${eb} b)`, f - 2, eb); blok('ma', `mantysa (${mb} b)`, mb - 1, mb);
+    // wzór
+    const wz = $('#ieWzor'); wz.innerHTML = '';
+    const mantBin = p.F.toString(2).padStart(mb, '0').replace(/0+$/, '') || '0';
+    const sk = (t) => (t.length > 26 ? t.slice(0, 8) + '…' + t.slice(-14) : t);
+    const mn = (x) => (x < 0 ? '−' + Math.abs(x) : String(x));
+    if (k === 'norm') wz.append(`(−1)`, h('sup', { text: String(p.s) }), ` · 1,${sk(mantBin)}`, h('sub', { text: '2' }), ' · 2', h('sup', { text: `${p.E} − ${bias} = ${mn(p.E - bias)}` }));
+    else if (k === 'sub') wz.append(`(−1)`, h('sup', { text: String(p.s) }), ` · 0,${sk(p.F.toString(2).padStart(mb, '0').replace(/0+$/, ''))}`, h('sub', { text: '2' }), ' · 2', h('sup', { text: mn(1 - bias) }), h('span', { class: 'small muted', text: '   (zdenormalizowana: bez ukrytej jedynki)' }));
+    else wz.append(h('span', { class: 'muted', text: { zero: 'cecha i mantysa same zera → zero (ze znakiem)', inf: 'cecha same jedynki, mantysa zera → nieskończoność', nan: 'cecha same jedynki, mantysa ≠ 0 → NaN' }[k] }));
+    // tabela
+    const t = $('#ieTab'); t.innerHTML = '';
+    const KL = { norm: 'znormalizowana', sub: 'zdenormalizowana', zero: p.s ? 'zero ujemne (−0)' : 'zero', inf: p.s ? '−∞' : '+∞', nan: (p.F >> B(mb - 1)) & 1n ? 'NaN (cichy, quiet)' : 'NaN (sygnalizujący, signaling)' };
+    const rows = [['rodzaj', KL[k]]];
+    rows.push(['cecha', `${p.E.toString(2).padStart(eb, '0')}₂ = ${p.E}${k === 'norm' ? ` → wykładnik ${p.E} − ${bias} = ${mn(p.E - bias)}` : k === 'sub' ? ` → wykładnik ustalony: ${mn(1 - bias)}` : ''}`]);
+    if (k === 'norm' || k === 'sub') {
+      const { m, e } = m2e(p);
+      const dok = dokladnie(p);
+      const dokEl = dok.length > 90 ? h('span', {}, h('span', { class: 'mono', text: dok.slice(0, 80) + '…' }), h('details', { class: 'small' }, h('summary', { text: `całość (${dok.length} znaków)` }), h('div', { class: 'mono', style: 'word-break: break-all', text: dok }))) : h('span', { class: 'mono', style: 'word-break: break-all', text: dok });
+      rows.push(['wartość dokładnie', dokEl]);
+      rows.push(['najkrótszy zapis', h('span', { class: 'mono', text: najkrotszy(v) + (f === 32 ? '' : '') })]);
+      const mm = m === 0n ? 0n : m; let mmr = mm, ee = e; while (mmr > 0n && (mmr & 1n) === 0n) { mmr >>= 1n; ee++; }
+      rows.push(['jako ułamek', ee >= 0 ? `${p.s ? '−' : ''}${mmr} · 2^${ee}` : `${p.s ? '−' : ''}${mmr.toString().length > 20 ? mmr.toString().slice(0, 18) + '…' : mmr} / 2^${-ee}`]);
+      const nx = sasiad(1); const nv = nx != null ? naLiczbe(nx) : NaN;
+      rows.push(['odstęp do następnej', Number.isFinite(nv) ? fmtSci(Math.abs(nv - v)) + (v !== 0 ? `  (względnie ${fmtSci(Math.abs(nv - v) / Math.abs(v))})` : '') : '—']);
+    }
+    t.append(h('tbody', {}, rows.map(([a, b]) => h('tr', {}, h('th', { text: a, style: 'width: 11em' }), h('td', {}, b)))));
+    $('#ieNext').disabled = sasiad(1) == null; $('#iePrev').disabled = sasiad(-1) == null;
+  }
+  function notka(t) { const e = $('#ieNote'); e.hidden = !t; e.textContent = t || ''; }
+  function parsujDec(t) {
+    const u = t.trim().replace(/\s/g, '').replace(',', '.').replace('−', '-').toLowerCase();
+    if (['inf', '+inf', 'infinity', '∞', '+∞'].includes(u)) return { v: Infinity, u };
+    if (['-inf', '-infinity', '-∞'].includes(u)) return { v: -Infinity, u };
+    if (u === 'nan') return { v: NaN, u };
+    if (!/^[+-]?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$/.test(u)) return { err: 'Wpisz liczbę, np. 0,1, −5,75, 1e-40, inf albo nan.' };
+    // Uwaga: dla float najpierw zaokrąglamy do double, potem do float (Math.fround). W rzadkich przypadkach „remisowych” może to dać wynik inny o 1 krok niż bezpośrednie zaokrąglenie.
+    const v = Number(u); return { v: f === 32 ? Math.fround(v) : v, u };
+  }
+  function ustawF(nf) {
+    const v = naLiczbe(raw); f = nf; raw = zLiczby(v);
+    for (const b of $$('#ieF button')) b.setAttribute('aria-pressed', String(+b.dataset.f === f));
+    rysujSume(); rysujPresety();
+  }
+  function rysujPresety() {
+    const host = $('#iePresety'); host.innerHTML = '';
+    const P = [['0,1', '0.1'], ['0,3', '0.3'], ['1', '1'], ['−5,75', '-5.75'], ['100', '100'],
+      f === 32 ? ['16 777 217', '16777217'] : ['2⁵³ + 1', '9007199254740993'],
+      ['największa', f === 32 ? '3.4028234663852886e38' : '1.7976931348623157e308'], ['najmn. znorm.', f === 32 ? '1.1754943508222875e-38' : '2.2250738585072014e-308'], ['najmn. zdenorm.', f === 32 ? '1.401298464324817e-45' : '5e-324'],
+      ['−0', '-0'], ['∞', 'inf'], ['NaN', 'nan']];
+    for (const [lab, val] of P) host.append(h('button', { class: 'btn ghost small', type: 'button', text: lab, onclick: () => { $('#ieDec').value = val.replace('.', ','); wpisDec(); } }));
+  }
+  function wpisDec() {
+    const t = $('#ieDec').value; const r = parsujDec(t); const er = $('#ieDecE');
+    if (r.err) { er.textContent = r.err; return; }
+    er.textContent = '';
+    if (Number.isNaN(r.v)) { const { eb, mb } = FMT[f]; raw = (B(2 ** eb - 1) << B(mb)) | (1n << B(mb - 1)); notka(''); rysuj('dec'); return; }
+    raw = zLiczby(r.v); if (Object.is(r.v, -0)) raw = 1n << B(f - 1);
+    const p = pola(raw); const k = klasa(p);
+    const dok = czyDokladnie(r.u.replace(/^\+/, ''), p);
+    if (k === 'inf' && Number.isFinite(Number(r.u))) notka(`Ta liczba jest za duża dla formatu ${f === 32 ? 'float' : 'double'}: nadmiar, zapisano ${p.s ? '−' : '+'}∞.`);
+    else if (k === 'zero' && Number(r.u) !== 0) notka('Ta liczba jest bliżej zera niż najmniejsza liczba zdenormalizowana: niedomiar, zapisano 0.');
+    else if (dok === false) notka(`Liczba ${t.trim()} nie ma dokładnego zapisu w tym formacie. Przechowywana jest najbliższa: ${dokladnie(p).slice(0, 60)}${dokladnie(p).length > 60 ? '…' : ''}`);
+    else if (dok === true) notka(`Liczba ${t.trim()} jest zapisana dokładnie.`);
+    else notka('');
+    rysuj('dec');
+  }
+  function wpisHex() {
+    let t = $('#ieHex').value.trim().replace(/\s/g, ''); if (/^0x/i.test(t)) t = t.slice(2);
+    const er = $('#ieHexE');
+    if (!/^[0-9a-f]*$/i.test(t)) { er.textContent = 'Dozwolone: cyfry 0–9 i A–F.'; return; }
+    if (t.length !== f / 4) { er.textContent = t.length > f / 4 ? `Za dużo cyfr: ${f} bitów to ${f / 4} cyfr szesnastkowych.` : ''; return; }
+    er.textContent = ''; raw = BigInt('0x' + t); notka(''); rysuj('hex');
+  }
+  function rysujSume() {
+    const fl = (x) => (f === 32 ? Math.fround(x) : x);
+    const a = fl(0.1), b = fl(0.2), sm = fl(a + b), c = fl(0.3);
+    const rS = zLiczby(sm), rC = zLiczby(c);
+    const krot = (x) => { const r = zLiczby(x); const d = dokladnie(pola(r)); return d.length > 32 ? d.slice(0, 30) + '…' : d; };
+    const t = $('#ieSuma'); t.innerHTML = '';
+    t.append(h('thead', {}, h('tr', {}, h('th', { text: '' }), h('th', { text: 'bity (hex)' }), h('th', { text: 'przechowywana wartość' }))),
+      h('tbody', {}, [['0.1', a], ['0.2', b], ['0.1 + 0.2', sm], ['0.3', c]].map(([lab, x]) => h('tr', {}, h('td', { class: 'mono', text: lab }), h('td', { class: 'mono', text: zLiczby(x).toString(16).toUpperCase().padStart(f / 4, '0') }), h('td', { class: 'mono', text: krot(x) })))));
+    const d = Number(rS - rC);
+    $('#ieSumaOpis').textContent = d === 0
+      ? `W formacie float suma akurat trafia w tę samą liczbę co 0.3, więc 0.1 + 0.2 == 0.3 daje tu True. To przypadek, a nie zasada: obie strony są zaokrągleniami. Przełącz na double.`
+      : `Suma różni się od zapisanego 0.3 o ${Math.abs(d)} ${Math.abs(d) === 1 ? 'krok' : 'kroki'} (sąsiednia liczba formatu). Dlatego w double 0.1 + 0.2 == 0.3 daje False, a math.isclose daje True.`;
+  }
+  function init() {
+    for (const b of $$('#ieF button')) b.addEventListener('click', () => { ustawF(+b.dataset.f); notka(''); rysuj(); });
+    $('#ieNext').addEventListener('click', () => { const n = sasiad(1); if (n != null) { raw = n; notka(''); rysuj(); } });
+    $('#iePrev').addEventListener('click', () => { const n = sasiad(-1); if (n != null) { raw = n; notka(''); rysuj(); } });
+    $('#ieDec').addEventListener('change', wpisDec);
+    $('#ieDec').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); wpisDec(); } });
+    $('#ieHex').addEventListener('input', wpisHex);
+    rysujPresety(); rysujSume(); rysuj();
+    $('#ieDec').value = '0,1'; wpisDec();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+const WIDOKI = ['start', 'pozycyjny', 'grupy', 'u2', 'os', 'ieee'];
+const MODULY = { u2: U2, os: Os };
+let biezacy = null;
+function nawiguj() {
+  const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  for (const w of WIDOKI) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (MODULY[v] && MODULY[v].wejscie) MODULY[v].wejscie();
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = { start: 'Wykład 3 · ćwiczenia', pozycyjny: 'Zegar pozycyjny · W3', grupy: 'Grupuj od prawej · W3', u2: 'Licznik U2 · W3', os: 'Mikroskop na oś liczb · W3', ieee: 'Rentgen IEEE 754 · W3' }[v];
+}
+Pozycyjny.init(); Grupy.init(); U2.init(); JednoSlowo.init(); Os.init(); IEEE.init();
+let resizeT = null;
+window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(() => { if (biezacy === 'os') Os.wejscie(); }, 150); });
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+</script>
+</body>
+</html>
