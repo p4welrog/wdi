@@ -243,6 +243,11 @@ td.muted { color: var(--muted); }
 .stack3 .sQ { background: var(--muted); }
 .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .88rem; color: var(--text-2); margin-top: 6px; }
 .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+/* ───────── W04: przekora ───────── */
+ol.kroki li { margin: 6px 0; }
+ol.kroki li.zle { color: var(--bad); font-weight: 600; }
+ol.latki { margin: 10px 0 0; padding-left: 1.2em; font-size: .94rem; }
+ol.latki li { margin: 4px 0; }
 </style>
 </head>
 <body>
@@ -257,6 +262,7 @@ td.muted { color: var(--muted); }
     <a href="#warsztat">1. Warsztat maszyny Turinga</a>
     <a href="#wyscig">2. Wyścig bobrów</a>
     <a href="#stop">3. Czy to się zatrzyma?</a>
+    <a href="#przekora">4. Przekora</a>
   </nav>
 </header>
 
@@ -270,6 +276,7 @@ td.muted { color: var(--muted); }
     <a class="tile" href="#warsztat"><span class="num">1</span><h3>Warsztat maszyny Turinga</h3><p>Tablica sterująca, taśma i diagram postępu w zapisie z wykładu. Uruchom maszynę krok po kroku, popraw regułę, a potem zbuduj własną maszynę i sprawdź ją na testach.</p><div class="meta">ok. 15 min · slajdy od „Jeden krok maszyny” do „Diagramu postępu pracowitego bobra”</div></a>
     <a class="tile" href="#wyscig"><span class="num">2</span><h3>Wyścig bobrów</h3><p>Zbuduj maszynę z 2 lub 3 stanami, która zostawi najwięcej jedynek albo zrobi najwięcej kroków — i się zatrzyma. Osobne rankingi Σ i S, przeszukanie wszystkich 20 736 maszyn 2-stanowych i (na wykładzie) wspólny ranking sali.</p><div class="meta">ok. 15 min · slajdy od „Problemu pracowitego bobra” do „Dlaczego bóbr jest ważny”</div></a>
     <a class="tile" href="#stop"><span class="num">3</span><h3>Czy to się zatrzyma?</h3><p>Dwanaście krótkich programów w Pythonie i jedno pytanie: zakończy się czy nie? Mierzymy trafność i czas odpowiedzi. Na końcu dwa programy, o których nie wie tego nikt.</p><div class="meta">ok. 10 min · slajdy „Problem stopu”, „Nierozstrzygalny ≠ beznadziejny” i „Czy umysł jest maszyną Turinga?”</div></a>
+    <a class="tile" href="#przekora"><span class="num">4</span><h3>Przekora</h3><p>Wybierz sposób wykrywania pętli nieskończonych i sprawdź go na zwykłych programach. Potem zbuduj program, który go oszuka — dla każdego detektora, nawet po kolejnych łatkach. Argument Turinga krok po kroku.</p><div class="meta">ok. 10 min · slajdy „Problem stopu” i „Nierozstrzygalny ≠ beznadziejny”</div></a>
   </div>
 </section>
 
@@ -491,6 +498,62 @@ td.muted { color: var(--muted); }
     </ol>
   </div>
   <p class="src">A. M. Turing, Proc. London Math. Soc. s2-42 (1936) — nierozstrzygalność problemu stopu; T. Oliveira e Silva, S. Herzog, S. Pardi, <em>Empirical verification of the even Goldbach conjecture and computation of prime gaps up to 4·10¹⁸</em>, Math. Comp. 83 (2014), s. 2033–2060; P. Ochem, M. Rao, <em>Odd perfect numbers are greater than 10¹⁵⁰⁰</em>, Math. Comp. 81 (2012), s. 1869–1877.</p>
+</section>
+
+<!-- ═══════════════════ 4. PRZEKORA ═══════════════════ -->
+<section id="v-przekora" hidden>
+  <h2>4. Przekora</h2>
+  <p class="lead">Wybierz sposób, w jaki program-detektor <span class="mono">D(p, d)</span> ma rozstrzygać, czy program <span class="mono">p</span> na danych <span class="mono">d</span> się zatrzyma. Najpierw zobacz, jak radzi sobie ze zwykłymi programami. Potem zbudujemy dla niego <em>przekorę</em> — program, na którym <em>musi</em> się pomylić. I tak dla każdego detektora, nawet po łatkach.</p>
+
+  <div class="card">
+    <h3>Krok 1. Wybierz detektor</h3>
+    <div class="seg" id="pkD" role="group" aria-label="Detektor">
+      <button type="button" data-d="opt" aria-pressed="true">Optymista</button>
+      <button type="button" data-d="pes">Pesymista</button>
+      <button type="button" data-d="wt">Szukam „while True”</button>
+      <button type="button" data-d="lim">Limit kroków</button>
+    </div>
+    <p id="pkDOpis" style="margin: 10px 0 0"></p>
+    <div class="row" id="pkLimWrap" hidden style="margin-top: 6px">
+      <label for="pkLim" class="small">Limit T obrotów pętli:</label>
+      <input type="range" id="pkLim" min="0" max="6" step="1" value="2" aria-describedby="pkLimV">
+      <span class="mono" id="pkLimV"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Krok 2. Zwykłe programy</h3>
+    <p class="small muted">Programy z ćwiczenia 3 (bez dwóch otwartych problemów). Prawdziwą odpowiedź znamy z rozumowania; detektor odpowiada według swojej reguły.</p>
+    <div class="scroll-x"><table class="t stack" id="pkTab"></table></div>
+    <p id="pkTabSum" class="small"></p>
+  </div>
+
+  <div class="card">
+    <h3>Krok 3. Przekora dla <span class="mono" id="pkNazwa">D</span></h3>
+    <p class="small muted">Przekora pyta detektor o samą siebie i robi na odwrót. Działa tak samo dla <em>każdego</em> detektora — wystarczy wstawić jego nazwę.</p>
+    <pre class="kod" id="pkKod"></pre>
+    <p><strong>Co się stanie po uruchomieniu</strong> <span class="mono" id="pkWyw"></span><strong>?</strong></p>
+    <ol class="kroki" id="pkKroki"></ol>
+    <div class="row"><button type="button" class="btn" id="pkDalej">Pokaż następny krok</button></div>
+  </div>
+
+  <div class="card" id="pkLatkaCard" hidden>
+    <h3>Krok 4. Załatajmy detektor</h3>
+    <p>Skoro <span class="mono" id="pkL1"></span> myli się na swojej przekorze, dopiszmy mu wyjątek: „dla tej jednej przekory odpowiadaj odwrotnie”. Nowy detektor jest już poprawny na starej przekorze… ale to inny program, więc ma <em>własną</em> przekorę.</p>
+    <div class="row"><button type="button" class="btn" id="pkLatka">Dodaj łatkę</button><button type="button" class="btn ghost small" id="pkReset">Od początku</button></div>
+    <ol class="latki" id="pkLatki"></ol>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Każdy z czterech detektorów myli się już na zwykłych programach. Czy da się zbudować taki, który na wszystkich dziesięciu odpowie dobrze? (Tak — jak?) Dlaczego to nie przeczy twierdzeniu Turinga?</li>
+      <li>Ustaw duży limit T. Dlaczego detektor z limitem i tak myli się na swojej przekorze? Co musi zrobić, żeby zasymulować <span class="mono">przekora(przekora)</span>?</li>
+      <li>Po kilku łatkach detektor zna już kilka przekor. Dlaczego żadna skończona liczba łatek nie wystarczy?</li>
+      <li>Rozumowanie z kroku 3 nie korzystało z tego, <em>jak</em> działa detektor — tylko z tego, że zawsze kończy pracę i odpowiada „tak” albo „nie”. Dlaczego to wystarcza, by udowodnić, że poprawny detektor nie istnieje?</li>
+    </ol>
+  </div>
+  <p class="src">A. M. Turing, <em>On Computable Numbers, with an Application to the Entscheidungsproblem</em>, Proc. London Math. Soc. s2-42 (1936), §8; wersja z programami: M. Sipser, <em>Introduction to the Theory of Computation</em>, 3rd ed., rozdz. 4.2. Na wykładzie: slajd „Problem stopu”.</p>
 </section>
 
 <!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
@@ -1447,7 +1510,7 @@ const PROGRAMY_STOP = [
   { id: 'p2', nazwa: 'i −= 1, warunek i < 10', klucz: 'N', kod: 'i = 0\nwhile i < 10:\n    i -= 1',
     wyj: 'i maleje: 0, −1, −2, … i zawsze jest mniejsze od 10. W Pythonie liczby całkowite nie mają dolnej granicy. (W języku C z 32-bitowym int po ok. 2 mld krokach nastąpiłby nadmiar i „zawinięcie” — por. U2 z wykładu 3.)' },
   { id: 'p3', nazwa: 'n // 2 aż do 1', klucz: 'T', kod: 'n = 100\nwhile n > 1:\n    n = n // 2',
-    wyj: '100 → 50 → 25 → 12 → 6 → 3 → 1: siedem obrotów. Dzielenie przez 2 szybko zbija n do 1 (około log₂ n kroków).' },
+    wyj: '100 → 50 → 25 → 12 → 6 → 3 → 1: sześć obrotów. Dzielenie przez 2 szybko zbija n do 1 (około log₂ n kroków).' },
   { id: 'p4', nazwa: 'i −= 3 aż do zera', klucz: 'N', kod: 'i = 10\nwhile i != 0:\n    i -= 3',
     wyj: '10 → 7 → 4 → 1 → −2 → … „przeskakuje” zero, bo 10 nie dzieli się przez 3. Warunek != jest groźniejszy niż > — wystarczy minąć cel.' },
   { id: 'p5', nazwa: 'for i z i = i − 1', klucz: 'T', kod: 'for i in range(10):\n    i = i - 1',
@@ -1636,6 +1699,117 @@ const Stop = (() => {
   return { init, wejscie, wyjscie };
 })();
 
+
+/* ═════════════════════ Ćwiczenie 4: Przekora ═════════════════════ */
+const Przekora = (() => {
+  // Liczba obrotów pętli dla programów, które się zatrzymują (sprawdzone w Pythonie)
+  const OBROTY = { p1: 10, p3: 6, p5: 10, p7: 111, p9: 2 ** 64, p10: 76 };
+  const LIMITY = [5, 10, 50, 100, 1000, 10 ** 6, 10 ** 9];
+  const fmtL = (x) => x >= 1e6 ? `10${x === 1e6 ? '⁶' : '⁹'}` : x.toLocaleString('pl-PL');
+  const DETEKTORY = {
+    opt: { nazwa: 'optymista', opis: 'Zawsze odpowiada „zatrzyma się”. Najprostszy możliwy detektor.',
+      ocen: () => true },
+    pes: { nazwa: 'pesymista', opis: 'Zawsze odpowiada „nie zatrzyma się”.',
+      ocen: () => false },
+    wt: { nazwa: 'szukacz', opis: 'Czyta kod: jeśli zawiera „while True”, odpowiada „nie zatrzyma się”, w przeciwnym razie „zatrzyma się”. Programu nie uruchamia.',
+      ocen: (p) => !p.kod.includes('while True') },
+    lim: { nazwa: 'stoper', opis: 'Uruchamia program i czeka najwyżej T obrotów pętli. Jeśli program skończył — „zatrzyma się”; jeśli nie — „nie zatrzyma się”.',
+      ocen: (p, T) => p.id in OBROTY && OBROTY[p.id] <= T },
+  };
+  let d = 'opt', krok = 0, latki = 0;
+  const T = () => LIMITY[Number($('#pkLim').value)];
+  const nazwaD = (k = latki) => k === 0 ? `D_${DETEKTORY[d].nazwa}` : `D_${DETEKTORY[d].nazwa}_${k + 1}`;
+  const TN = (b) => b ? 'zatrzyma się' : 'nie zatrzyma się';
+
+  function rysujTabele() {
+    const progs = PROGRAMY_STOP.filter(p => p.klucz !== 'O');
+    let ok = 0;
+    const wiersze = progs.map((p) => {
+      const prawda = p.klucz === 'T', odp = DETEKTORY[d].ocen(p, T());
+      if (odp === prawda) ok++;
+      return el('tr', {},
+        el('td', { 'data-l': 'program', text: p.nazwa }),
+        el('td', { 'data-l': 'naprawdę', text: TN(prawda) }),
+        el('td', { 'data-l': 'detektor', text: TN(odp) }),
+        el('td', { 'data-l': '', class: odp === prawda ? 'okc' : 'badc', text: odp === prawda ? '✓' : '✗' }));
+    });
+    $('#pkTab').replaceChildren(
+      el('thead', {}, el('tr', {}, ...['program', 'naprawdę', `odpowiedź ${nazwaD(0)}`, ''].map(h => el('th', { text: h })))),
+      el('tbody', {}, ...wiersze));
+    $('#pkTabSum').textContent = `Trafnie: ${ok} z ${progs.length}.` + (d === 'lim' ? ' Większy limit pomaga na zwykłych programach — ale odliczanie od 2⁶⁴ zawsze go przerośnie.' : '');
+  }
+
+  function kodPrzekory() {
+    const D = nazwaD();
+    const w = [`    if ${D}(p, p):`, '        while True:', '            pass', '    else:', '        return'];
+    const k = [`# ${D} twierdzi: p(p) się zatrzyma`, '# więc się zapętlam', '', `# ${D} twierdzi: p(p) się nie zatrzyma`, '# więc kończę'];
+    const sz = Math.max(...w.map(x => x.length)) + 2;
+    return `def przekora_${latki + 1}(p):\n` + w.map((x, i) => k[i] ? x.padEnd(sz) + k[i] : x).join('\n');
+  }
+
+  // Kroki rozumowania dla bieżącej przekory
+  function kroki() {
+    const D = nazwaD(), P = `przekora_${latki + 1}`;
+    const odpTak = d === 'opt';
+    let dlaczego;
+    if (latki > 0) dlaczego = `${P} to nowy program (wywołuje ${D}, a nie wcześniejsze wersje), więc żadna łatka go nie dotyczy i ${D} stosuje swoją podstawową regułę: `;
+    else dlaczego = '';
+    if (d === 'opt') dlaczego += 'optymista zawsze mówi „zatrzyma się”.';
+    else if (d === 'pes') dlaczego += 'pesymista zawsze mówi „nie zatrzyma się”.';
+    else if (d === 'wt') dlaczego += `w kodzie ${P} jest „while True”, więc szukacz mówi „nie zatrzyma się”.`;
+    else dlaczego += `żeby zobaczyć, czy ${P}(${P}) się kończy, stoper musi ją uruchomić — a ona w środku woła ${D}(${P}, ${P}), czyli znów stoper, który znów uruchamia ${P}… Już sam wewnętrzny stoper zużywa co najmniej T obrotów, więc w limicie T = ${fmtL(T())} zewnętrzna symulacja nie zdąży się skończyć (intuicyjnie, bez dowodu) i stoper mówi „nie zatrzyma się”.`;
+    return [
+      `${D}(${P}, ${P}) odpowiada „${TN(odpTak)}”, bo ${dlaczego}`,
+      odpTak ? `${P} dostaje „tak”, więc wchodzi w while True i kręci się w nieskończoność.` : `${P} dostaje „nie”, więc wykonuje return i od razu się kończy.`,
+      odpTak ? `Czyli ${P}(${P}) się NIE zatrzymuje, a ${D} twierdził, że się zatrzyma. Detektor się pomylił.` : `Czyli ${P}(${P}) SIĘ zatrzymuje, a ${D} twierdził, że nie. Detektor się pomylił.`,
+    ];
+  }
+
+  function rysujPrzekore() {
+    $('#pkNazwa').textContent = nazwaD();
+    $('#pkKod').textContent = kodPrzekory();
+    $('#pkWyw').textContent = `przekora_${latki + 1}(przekora_${latki + 1})`;
+    const k = kroki();
+    $('#pkKroki').replaceChildren(...k.slice(0, krok).map((t, i) => el('li', { class: i === 2 ? 'zle' : '', text: t })));
+    $('#pkDalej').hidden = krok >= k.length;
+    $('#pkDalej').textContent = krok === 0 ? 'Zapytaj detektor' : 'Pokaż następny krok';
+    $('#pkLatkaCard').hidden = krok < k.length && latki === 0;
+    $('#pkL1').textContent = nazwaD();
+    $('#pkLatka').disabled = krok < k.length;
+  }
+
+  function wybierz(nd) {
+    d = nd; krok = 0; latki = 0;
+    for (const b of $$('#pkD button')) b.setAttribute('aria-pressed', String(b.dataset.d === d));
+    $('#pkDOpis').textContent = DETEKTORY[d].opis;
+    $('#pkLimWrap').hidden = d !== 'lim';
+    $('#pkLatki').replaceChildren();
+    rysujTabele(); rysujPrzekore();
+  }
+
+  function latka() {
+    const stary = nazwaD(), P = `przekora_${latki + 1}`;
+    const odpTak = d === 'opt';
+    latki++;
+    $('#pkLatki').append(el('li', {}, el('span', { class: 'mono', text: nazwaD() }), ` = ${stary} + wyjątek: dla ${P} odpowiadaj „${TN(!odpTak)}”. Na ${P} już się nie myli.`));
+    krok = 0;
+    rysujPrzekore();
+    $('#pkKod').scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  function init() {
+    for (const b of $$('#pkD button')) b.addEventListener('click', () => wybierz(b.dataset.d));
+    const pokazLim = () => { $('#pkLimV').textContent = `T = ${fmtL(T())}`; };
+    $('#pkLim').addEventListener('input', () => { pokazLim(); rysujTabele(); krok = Math.min(krok, 3); rysujPrzekore(); });
+    pokazLim();
+    $('#pkDalej').addEventListener('click', () => { krok++; rysujPrzekore(); });
+    $('#pkLatka').addEventListener('click', latka);
+    $('#pkReset').addEventListener('click', () => wybierz(d));
+    wybierz('opt');
+  }
+  return { init };
+})();
+
 /* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
 const Ustawienia = (() => {
   let roboczy = null;
@@ -1718,7 +1892,7 @@ const Ustawienia = (() => {
 })();
 
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'warsztat', 'wyscig', 'stop', 'ustawienia'];
+const WIDOKI = ['start', 'warsztat', 'wyscig', 'stop', 'przekora', 'ustawienia'];
 let biezacy = null;
 function nawiguj() {
   const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
@@ -1731,12 +1905,13 @@ function nawiguj() {
   for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 4 · ćwiczenia', warsztat: 'Warsztat maszyny Turinga · W4', wyscig: 'Wyścig bobrów · W4', stop: 'Czy to się zatrzyma? · W4', ustawienia: 'Ustawienia prowadzącego · W4' }[v];
+  document.title = { start: 'Wykład 4 · ćwiczenia', warsztat: 'Warsztat maszyny Turinga · W4', wyscig: 'Wyścig bobrów · W4', stop: 'Czy to się zatrzyma? · W4', przekora: 'Przekora · W4', ustawienia: 'Ustawienia prowadzącego · W4' }[v];
 }
 Grupa.init();
 Warsztat.init();
 Bobry.init();
 Stop.init();
+Przekora.init();
 Ustawienia.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
