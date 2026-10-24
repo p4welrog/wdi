@@ -148,7 +148,7 @@ table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-spac
 }
 
 
-/* ───────── W03: zegar pozycyjny ───────── */
+/* ───────── W03: jedna liczba, cztery zapisy ───────── */
 .nfields { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 @media (max-width: 720px) { .nfields { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .nfield { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
@@ -321,7 +321,7 @@ table.t th.n { text-align: right; }
   </div>
   <nav class="wrap tabs" aria-label="Ćwiczenia">
     <a href="#start">Start</a>
-    <a href="#pozycyjny">1. Zegar pozycyjny</a>
+    <a href="#pozycyjny">1. Jedna liczba, cztery zapisy</a>
     <a href="#grupy">2. Grupuj od prawej</a>
     <a href="#u2">3. Licznik U2</a>
     <a href="#os">4. Oś liczb</a>
@@ -336,7 +336,7 @@ table.t th.n { text-align: right; }
   <h1>Systemy liczbowe i reprezentacja liczb: ćwiczenia</h1>
   <p class="lead">Ćwiczenia do wykładu 3, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają.</p>
   <div class="grid2">
-    <a class="tile" href="#pozycyjny"><span class="num">1</span><h3>Zegar pozycyjny</h3><p>Jedna liczba naraz w systemach 2, 8, 10 i 16. Klikaj bity, patrz na wagi pozycji, przejdź krok po kroku dzielenie przez podstawę i schemat Hornera, a potem sprawdź się w zadaniach.</p><div class="meta">ok. 8 min · slajdy od „Ta sama liczba, różne zapisy” do „Ósemkowy i szesnastkowy”</div></a>
+    <a class="tile" href="#pozycyjny"><span class="num">1</span><h3>Jedna liczba, cztery zapisy</h3><p>Ta sama liczba w systemach 2, 8, 10 i 16. Klikaj bity, patrz na wagi pozycji, przejdź krok po kroku dzielenie przez podstawę i schemat Hornera, a potem sprawdź się w zadaniach.</p><div class="meta">ok. 8 min · slajdy od „Ta sama liczba, różne zapisy” do „Ósemkowy i szesnastkowy”</div></a>
     <a class="tile" href="#grupy"><span class="num">2</span><h3>Grupuj od prawej</h3><p>Potnij ciąg bitów na trójki albo czwórki i zamień go na zapis ósemkowy lub szesnastkowy. Do tego kolory CSS i uprawnienia plików (chmod) jako przykłady z życia.</p><div class="meta">ok. 6 min · slajdy „Ósemkowy i szesnastkowy” i „Mini-zadanie: szesnastkowy w praktyce”</div></a>
     <a class="tile" href="#u2"><span class="num">3</span><h3>Licznik U2</h3><p>Koło liczb 3-, 4- i 5-bitowych z odczytem bez znaku, w ZM, U1 i U2. Sumator kolumnowy z flagami C i OF pokazuje, że przeniesienie i nadmiar to dwie różne rzeczy.</p><div class="meta">ok. 8 min · slajdy od „Kod uzupełnień do dwóch (U2)” do „Jedno słowo — cztery liczby”</div></a>
     <a class="tile" href="#os"><span class="num">4</span><h3>Mikroskop na oś liczb</h3><p>Wszystkie liczby formatu zabawkowego i stałoprzecinkowego na jednej osi. Przybliżaj, klikaj i porównuj błąd bezwzględny i względny.</p><div class="meta">ok. 7 min · slajdy od „Zapisu stałoprzecinkowego” do „Logarytmicznej osi liczb w głowie”</div></a>
@@ -346,7 +346,7 @@ table.t th.n { text-align: right; }
 
 <!-- ═══════════════════ 1. ZEGAR POZYCYJNY ═══════════════════ -->
 <section id="v-pozycyjny" hidden>
-  <h2>1. Zegar pozycyjny</h2>
+  <h2>1. Jedna liczba, cztery zapisy</h2>
   <p class="lead">Ta sama liczba w czterech zapisach. Wpisz ją w dowolne pole albo klikaj bity: każdy bit to pytanie „czy ta waga wchodzi do sumy?”. Zmienia się tylko <em>zapis</em>, liczba jest cały czas ta sama.</p>
 
   <div class="card">
@@ -762,7 +762,7 @@ function parsuj(str, p) {
   return { v };
 }
 
-/* ═════════════════════ 1. Zegar pozycyjny ═════════════════════ */
+/* ═════════════════════ 1. Jedna liczba, cztery zapisy ═════════════════════ */
 const Pozycyjny = (() => {
   let nb = 8, v = 53;
   const maxV = () => 2 ** nb - 1;
@@ -1747,7 +1747,7 @@ function nawiguj() {
   if (MODULY[v] && MODULY[v].wejscie) MODULY[v].wejscie();
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 3 · ćwiczenia', pozycyjny: 'Zegar pozycyjny · W3', grupy: 'Grupuj od prawej · W3', u2: 'Licznik U2 · W3', os: 'Mikroskop na oś liczb · W3', ieee: 'Rentgen IEEE 754 · W3' }[v];
+  document.title = { start: 'Wykład 3 · ćwiczenia', pozycyjny: 'Jedna liczba, cztery zapisy · W3', grupy: 'Grupuj od prawej · W3', u2: 'Licznik U2 · W3', os: 'Mikroskop na oś liczb · W3', ieee: 'Rentgen IEEE 754 · W3' }[v];
 }
 Pozycyjny.init(); Grupy.init(); U2.init(); JednoSlowo.init(); Os.init(); IEEE.init();
 let resizeT = null;
