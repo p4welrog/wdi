@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 5 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 5 „Architektura von Neumanna i procesor” (Wprowadzenie do informatyki, SWPS).">
+<style>
+
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+html { scroll-padding-top: 96px; }
+@media (max-width: 560px) { html { scroll-padding-top: 124px; } }
+.home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+
+
+/* ───────── W05: symulator PMC ───────── */
+textarea.prog { font-family: var(--mono); font-size: .95rem; min-height: 300px; line-height: 1.45; }
+.dirty { color: var(--amber); font-size: .88rem; }
+.errlist { margin: 6px 0 0; padding-left: 1.2em; color: var(--bad); font-size: .9rem; }
+
+.regs { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+.reg { border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; background: var(--surface-2); transition: background .25s; }
+.reg.zm { background: var(--amber-soft); border-color: var(--amber); }
+.reg .nm { font-size: .8rem; color: var(--muted); }
+.reg .nm b { color: var(--accent); font-family: var(--mono); font-size: .95rem; margin-right: 4px; }
+.reg .dec { font-family: var(--mono); font-size: 1.45rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.reg .bin { font-family: var(--mono); font-size: .86rem; letter-spacing: .02em; white-space: nowrap; }
+.reg .dis { font-family: var(--mono); font-size: .9rem; color: var(--text-2); min-height: 1.4em; }
+.f-x { color: var(--muted); }
+.f-c { color: var(--s2); font-weight: 700; }
+.f-m { color: var(--good); font-weight: 700; }
+.f-a { color: var(--s1); font-weight: 700; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: .82rem; color: var(--text-2); margin-top: 6px; }
+
+.phases { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 14px 0 4px; }
+@media (max-width: 640px) { .phases { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ph { border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: .84rem; background: var(--surface); }
+.ph b { display: block; font-size: .9rem; }
+.ph .rtl { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+.ph.next { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.ph.done { background: var(--accent-soft); }
+.lastop { font-family: var(--mono); font-size: .92rem; color: var(--text-2); min-height: 1.5em; margin: 6px 0; }
+.alert { border-radius: 8px; padding: 8px 12px; font-size: .92rem; margin: 6px 0; }
+.alert.bad { background: var(--bad-soft); color: var(--bad); }
+.alert.warn { background: var(--amber-soft); color: var(--amber); }
+
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 6px; }
+.ctrl .speed { display: flex; align-items: center; gap: 6px; font-size: .88rem; color: var(--text-2); }
+.ctrl input[type="range"] { width: 110px; }
+.status.halt { color: var(--good); }
+.status.stuck { color: var(--bad); }
+.status.limit { color: var(--amber); }
+
+table.mem { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.mem th, table.mem td { padding: 4px 8px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+table.mem th { color: var(--muted); font-size: .78rem; font-weight: 600; }
+table.mem td.a { font-family: var(--mono); text-align: right; color: var(--muted); }
+table.mem td.b, table.mem td.d, table.mem td.r { font-family: var(--mono); }
+table.mem td.d { text-align: right; }
+table.mem td.r.dane { color: var(--muted); }
+table.mem tr.pc td { background: var(--accent-soft); }
+table.mem tr.pc td.a::before { content: "PC ▶ "; color: var(--accent); font-weight: 700; }
+table.mem tr.rd td.d, table.mem tr.rd td.r { box-shadow: inset 0 -2px 0 var(--s1); }
+table.mem tr.wr td { background: var(--amber-soft); }
+table.mem tr.wr.kod td { background: var(--bad-soft); }
+table.mem tr.gap td { color: var(--muted); text-align: center; font-size: .8rem; }
+.tag { display: inline-block; font-size: .7rem; padding: 1px 6px; border-radius: 99px; background: var(--surface-2); color: var(--muted); margin-left: 6px; font-family: var(--font); }
+.tag.k { background: var(--accent-soft); color: var(--accent); }
+
+table.trace { border-collapse: collapse; width: 100%; font-size: .88rem; }
+table.trace th, table.trace td { padding: 4px 8px; border-bottom: 1px solid var(--border); text-align: left; }
+table.trace th { color: var(--muted); font-size: .78rem; font-weight: 600; }
+table.trace td.m { font-family: var(--mono); }
+table.trace td.n { text-align: right; font-family: var(--mono); }
+.tracebox { overflow: auto; max-height: 380px; }
+
+.task { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.task h4 { margin: 0 0 4px; font-size: 1rem; }
+.task p { margin: 0 0 8px; color: var(--text-2); font-size: .94rem; }
+.task.done { border-color: var(--good); }
+.task .hint { font-size: .88rem; }
+.res td.okc { color: var(--good); font-weight: 700; }
+.res td.badc { color: var(--bad); font-weight: 700; }
+.res td.mono { font-family: var(--mono); }
+.pill { display: inline-block; font-size: .78rem; padding: 2px 9px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+details.ref { margin-top: 10px; }
+details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 5</a></div>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#pmc">1. Symulator PMC</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Architektura von Neumanna i procesor: ćwiczenia</h1>
+  <p class="lead">Ćwiczenia do wykładu 5, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają.</p>
+  <div class="grid2">
+    <a class="tile" href="#pmc"><span class="num">1</span><h3>Symulator PMC</h3><p>Przykładowa Maszyna Cyfrowa w działaniu: rejestry AC, OR, PC, IR, pamięć i cykl pobierz–dekoduj–operand–wykonaj, faza po fazie. Programy z wykładu, pułapka STORE @ 7 i zadania sprawdzane testami.</p><div class="meta">ok. 20 min · slajdy od „PMC: model dydaktyczny” do „Mini-zadania: pętla w PMC”</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. SYMULATOR PMC ═══════════════════ -->
+<section id="v-pmc" hidden>
+  <h2>1. Symulator PMC</h2>
+  <p class="lead">Program i dane leżą w tej samej pamięci jako 16-bitowe słowa. Procesor w kółko pobiera słowo spod adresu z PC, dekoduje je, wyznacza operand i wykonuje rozkaz. Prześledź to faza po fazie.</p>
+
+  <div class="card">
+    <div class="row"><span class="small muted" id="pmPresLab">Program z wykładu</span>
+      <div class="seg" id="pmPres" role="group" aria-labelledby="pmPresLab">
+        <button type="button" data-p="suma" aria-pressed="true">2 · (a + b)</button>
+        <button type="button" data-p="pulapka">Pułapka: STORE @ 7</button>
+        <button type="button" data-p="petla">Pętla</button>
+        <button type="button" data-p="tryby">Tryby adresowania</button>
+        <button type="button" data-p="slowo">Liczba czy rozkaz?</button>
+      </div>
+    </div>
+    <p class="small muted" id="pmPresOpis" style="margin: 10px 0 0"></p>
+  </div>
+
+  <div class="card">
+    <h3>Program</h3>
+    <p class="small muted">Jedna komórka pamięci w linii, od adresu 0. Rozkaz: <span class="mono">LOAD @ 5</span> (tryby: <span class="mono">$</span> natychmiastowy, <span class="mono">@</span> bezpośredni, <span class="mono">&amp;</span> pośredni, <span class="mono">+</span> indeksowy). Dane: liczba, np. <span class="mono">21</span>. Adres można podać jawnie: <span class="mono">10: 3</span>. Komentarz po średniku.</p>
+    <textarea class="prog" id="pmSrc" spellcheck="false" aria-label="Program PMC"></textarea>
+    <div class="row" style="margin-top: 8px"><button type="button" class="btn small" id="pmAsm">Wczytaj do pamięci</button><span class="dirty" id="pmDirty" hidden>Program zmieniony — wczytaj go, żeby uruchomić nową wersję.</span></div>
+    <ul class="errlist" id="pmErr" role="alert"></ul>
+    <details class="ref">
+      <summary>Lista rozkazów</summary>
+      <div class="scroll-x" style="margin-top: 8px"><table class="t" id="pmRef"></table></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Procesor</h3>
+    <div class="regs">
+      <div class="reg" id="rAC"><div class="nm"><b>AC</b>akumulator</div><div class="dec"></div><div class="bin"></div></div>
+      <div class="reg" id="rOR"><div class="nm"><b>OR</b>rejestr operandu</div><div class="dec"></div><div class="bin"></div></div>
+      <div class="reg" id="rPC"><div class="nm"><b>PC</b>licznik rozkazów</div><div class="dec"></div><div class="bin"></div></div>
+      <div class="reg" id="rIR"><div class="nm"><b>IR</b>rejestr rozkazu</div><div class="dis"></div><div class="bin"></div></div>
+    </div>
+    <div class="legend"><span><span class="f-x">■</span> bit 15 (wolny)</span><span><span class="f-c">■</span> code</span><span><span class="f-m">■</span> mode</span><span><span class="f-a">■</span> arg</span></div>
+
+    <div class="phases" id="pmPhases">
+      <div class="ph" data-f="0"><b>1. Pobranie</b><span class="rtl">IR ← MEM[PC]; PC ← PC + 1</span></div>
+      <div class="ph" data-f="1"><b>2. Dekodowanie</b><span class="rtl">code, mode, arg ← pola IR</span></div>
+      <div class="ph" data-f="2"><b>3. Operand</b><span class="rtl">OR ← według trybu</span></div>
+      <div class="ph" data-f="3"><b>4. Wykonanie</b><span class="rtl">działanie według code</span></div>
+    </div>
+    <p class="lastop" id="pmLast" aria-live="polite"></p>
+    <div id="pmAlerts"></div>
+
+    <div class="ctrl">
+      <button type="button" class="btn ghost small" id="pmReset">⟲ Od początku</button>
+      <button type="button" class="btn ghost small" id="pmBack">← Wstecz</button>
+      <button type="button" class="btn ghost small" id="pmPhase">Faza →</button>
+      <button type="button" class="btn small" id="pmStep">Rozkaz →</button>
+      <button type="button" class="btn small" id="pmRun">▶ Uruchom</button>
+      <button type="button" class="btn ghost small" id="pmEnd">Do końca ⏭</button>
+      <label class="speed">wolno <input type="range" id="pmSpeed" min="0" max="100" value="45" aria-label="Szybkość"> szybko</label>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="k">wykonane rozkazy</div><div class="v" id="pmCount">0</div></div>
+      <div class="stat"><div class="k">limit rozkazów</div><div class="v"><input type="number" id="pmLimit" min="1" max="100000" value="1000" style="width: 7em; font-size: 1rem" aria-label="Limit rozkazów"></div></div>
+      <div class="stat"><div class="k">stan maszyny</div><div class="v status" id="pmStatus">gotowa</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Pamięć</h3>
+    <p class="small muted">Pokazane są komórki używane przez program i te, których dotknął procesor; pozostałe z 512 zawierają 0. To samo słowo widać jako liczbę (U2) i jako rozkaz — o znaczeniu decyduje to, czy procesor je <em>pobierze</em>, czy <em>użyje jako danych</em>. <span class="tag k">kod</span> = komórka wczytana z linii z rozkazem.</p>
+    <div class="scroll-x"><table class="mem" id="pmMem"></table></div>
+  </div>
+
+  <div class="card">
+    <h3>Śledzenie wykonania</h3>
+    <p class="small muted">Jeden wiersz to jeden rozkaz — tak jak w tabeli na slajdzie.</p>
+    <div class="tracebox"><table class="trace" id="pmTrace"></table></div>
+  </div>
+
+  <div class="card">
+    <h3>Napisz własny program</h3>
+    <p class="small muted">„Zacznij” wczytuje szkielet z danymi. „Sprawdź” uruchamia Twój program kilka razy, za każdym razem z innymi danymi wejściowymi, i porównuje wynik w komórce 20. Program musi zakończyć się rozkazem STOP.</p>
+    <div id="pmTasks"></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>W „2 · (a + b)” przejdź jeden rozkaz fazami. W której fazie zmienia się PC? Dlaczego po wykonaniu rozkazu z komórki 3 PC wynosi 4?</li>
+      <li>Uruchom „Pułapkę”. Co jest w komórce 0 po zakończeniu i dlaczego wynik nie trafił do komórki 7? Co by się stało, gdyby po STORE był skok do 0?</li>
+      <li>W „Pętli” zmień n w komórce 10 na 0, a potem na 5. Ile rozkazów wykona maszyna? Wyprowadź wzór zależny od n.</li>
+      <li>W „Liczbie czy rozkazie?” komórka 0 zawiera liczbę 2565. Co zrobił z nią procesor? Co by się stało, gdyby w komórce 0 była liczba −1?</li>
+    </ol>
+  </div>
+  <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (PMC). Szczegóły nieopisane w modelu przyjęto tak: działania na liczbach 16-bitowych w U2 z zawinięciem przy nadmiarze, DIV zaokrągla iloraz w stronę zera, przesunięcia SHZ są logiczne, bit 15 rozkazu jest pomijany.</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline i niczego nie wysyła.</p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const el = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids) e.append(k);
+  return e;
+};
+const pamiec = {
+  czytaj(k) { try { return JSON.parse(localStorage.getItem('wdi-w05-' + k)); } catch (e) { return null; } },
+  zapisz(k, v) { try { localStorage.setItem('wdi-w05-' + k, JSON.stringify(v)); } catch (e) { /* tryb prywatny */ } },
+};
+
+/* ═════════════════════ Rdzeń: PMC (bez DOM) ═════════════════════ */
+const PMC = (() => {
+  const ROZKAZY = ['STOP', 'LOAD', 'STORE', 'JUMP', 'JNEG', 'JZERO', 'ADD', 'SUB', 'MULT', 'DIV', 'AND', 'OR', 'NOT', 'CMP', 'SHZ', 'SHC'];
+  const TRYBY = ['$', '@', '&', '+'];
+  const OPIS = [
+    'zatrzymaj maszynę', 'AC ← OR', 'MEM[OR] ← AC', 'PC ← OR', 'jeśli AC < 0, to PC ← OR', 'jeśli AC = 0, to PC ← OR',
+    'AC ← AC + OR', 'AC ← AC − OR', 'AC ← AC · OR', 'AC ← AC div OR', 'AC ← AC & OR', 'AC ← AC | OR', 'AC ← ~OR',
+    'AC ← −1, jeśli AC = OR; inaczej 0', 'OR > 0: AC << OR; OR < 0: AC >> |OR| (zera)', 'jak SHZ, ale cyklicznie',
+  ];
+  const ROZMIAR = 512;
+  const s16 = (x) => { x = ((x % 65536) + 65536) % 65536; return x >= 32768 ? x - 65536 : x; };
+  const u16 = (x) => ((x % 65536) + 65536) % 65536;
+  const slowo = (code, mode, arg) => s16((code << 11) | (mode << 9) | arg);
+  const pola = (w) => { const u = u16(w); return { b15: u >> 15, code: (u >> 11) & 15, mode: (u >> 9) & 3, arg: u & 511 }; };
+  const bin16 = (w) => u16(w).toString(2).padStart(16, '0');
+  function deasembluj(w) {
+    const p = pola(w);
+    const t = ROZKAZY[p.code] + (p.code === 0 && p.mode === 0 && p.arg === 0 ? '' : ` ${TRYBY[p.mode]} ${p.arg}`);
+    return p.b15 ? t + ' (bit 15 = 1)' : t;
+  }
+
+  // Asembler: zwraca { mem, kod: Set adresów rozkazów, uzyte: Set, bledy: [] }
+  function asembluj(tekst) {
+    const mem = new Array(ROZMIAR).fill(0), kod = new Set(), uzyte = new Set(), bledy = [];
+    let adr = 0;
+    tekst.split('\n').forEach((surowa, i) => {
+      const nr = i + 1;
+      let l = surowa.replace(/[;#].*$/, '').trim();
+      if (!l) return;
+      const ma = l.match(/^(?:MEM\s*\[\s*(\d+)\s*\]|(\d+))\s*:\s*(.*)$/i);
+      if (ma) { adr = Number(ma[1] ?? ma[2]); l = ma[3].trim(); if (!l) { bledy.push(`Linia ${nr}: po adresie brakuje zawartości.`); return; } }
+      if (adr >= ROZMIAR) { bledy.push(`Linia ${nr}: adres ${adr} jest poza pamięcią (0–511).`); return; }
+      if (uzyte.has(adr)) bledy.push(`Linia ${nr}: komórka ${adr} jest już zajęta przez wcześniejszą linię.`);
+      if (/^[+-]?\d+$/.test(l) || /^0b[01]+$/i.test(l)) {
+        const v = /^0b/i.test(l) ? parseInt(l.slice(2), 2) : Number(l);
+        if (v < -32768 || v > 65535) { bledy.push(`Linia ${nr}: liczba ${l} nie mieści się w 16 bitach.`); return; }
+        mem[adr] = s16(v); uzyte.add(adr); adr++; return;
+      }
+      const mr = l.match(/^([A-Za-z]+)\s*(?:([$@&+])\s*(\d+))?$/);
+      if (!mr) { bledy.push(`Linia ${nr}: nie rozumiem „${l}”. Oczekuję np. „ADD @ 6” albo liczby.`); return; }
+      const code = ROZKAZY.indexOf(mr[1].toUpperCase());
+      if (code < 0) { bledy.push(`Linia ${nr}: nieznany rozkaz „${mr[1]}”.`); return; }
+      if (!mr[2] && code !== 0) { bledy.push(`Linia ${nr}: rozkaz ${ROZKAZY[code]} potrzebuje trybu i argumentu, np. ${ROZKAZY[code]} @ 5.`); return; }
+      const mode = mr[2] ? TRYBY.indexOf(mr[2]) : 0, arg = mr[3] ? Number(mr[3]) : 0;
+      if (arg > 511) { bledy.push(`Linia ${nr}: argument ${arg} nie mieści się w 9 bitach (0–511).`); return; }
+      mem[adr] = slowo(code, mode, arg); kod.add(adr); uzyte.add(adr); adr++;
+    });
+    return { mem, kod, uzyte, bledy };
+  }
+
+  function nowa(mem) {
+    return { mem: mem.slice(), AC: 0, OR: 0, PC: 0, IR: 0, faza: 0, rozkazy: 0, koniec: null, blad: null,
+      czytane: [], pisane: [], zmiany: [], opis: '', alerty: [], slad: null, odczytOR: '' };
+  }
+
+  const okAdr = (a) => Number.isInteger(a) && a >= 0 && a < ROZMIAR;
+
+  // Jedna faza cyklu. Zwraca false, gdy maszyna stoi.
+  function faza(S, kod) {
+    if (S.koniec) return false;
+    S.czytane = []; S.pisane = []; S.zmiany = []; S.alerty = [];
+    const stop = (blad) => { S.koniec = 'blad'; S.blad = blad; S.opis = blad; return true; };
+    if (S.faza === 0) {
+      if (!okAdr(S.PC)) return stop(`PC = ${S.PC} wskazuje poza pamięć (0–511).`);
+      S.slad = { pc: S.PC };
+      S.IR = S.mem[S.PC]; S.czytane = [S.PC];
+      S.opis = `IR ← MEM[${S.PC}] = ${S.IR};  PC ← ${S.PC} + 1 = ${S.PC + 1}`;
+      S.PC = S.PC + 1; S.zmiany = ['IR', 'PC'];
+      if (!kod.has(S.PC - 1)) S.alerty.push({ typ: 'warn', t: `Komórka ${S.PC - 1} została wpisana jako dane, a procesor właśnie pobrał ją jako rozkaz: ${deasembluj(S.IR)}.` });
+      S.faza = 1; return true;
+    }
+    const p = pola(S.IR);
+    if (S.faza === 1) {
+      S.opis = `code = ${p.code.toString(2).padStart(4, '0')} (${ROZKAZY[p.code]}), mode = ${p.mode.toString(2).padStart(2, '0')} (${TRYBY[p.mode]}), arg = ${p.arg}`;
+      S.slad.ir = deasembluj(S.IR);
+      S.faza = 2; return true;
+    }
+    if (S.faza === 2) {
+      let v, opis;
+      if (p.mode === 0) { v = p.arg; opis = 'arg'; S.opis = `OR ← arg = ${v}`; }
+      else if (p.mode === 1) { v = S.mem[p.arg]; S.czytane = [p.arg]; opis = `MEM[${p.arg}]`; S.opis = `OR ← MEM[${p.arg}] = ${v}`; }
+      else if (p.mode === 2) {
+        const a = S.mem[p.arg];
+        if (!okAdr(a)) return stop(`Tryb pośredni: MEM[${p.arg}] = ${a} nie jest adresem w pamięci (0–511).`);
+        v = S.mem[a]; S.czytane = [p.arg, a]; opis = `MEM[MEM[${p.arg}]] = MEM[${a}]`; S.opis = `OR ← MEM[MEM[${p.arg}]] = MEM[${a}] = ${v}`;
+      } else {
+        const a = S.AC + p.arg;
+        if (!okAdr(a)) return stop(`Tryb indeksowy: AC + arg = ${S.AC} + ${p.arg} = ${a} jest poza pamięcią (0–511).`);
+        v = S.mem[a]; S.czytane = [a]; opis = `MEM[AC + ${p.arg}] = MEM[${a}]`; S.opis = `OR ← MEM[AC + ${p.arg}] = MEM[${S.AC} + ${p.arg}] = MEM[${a}] = ${v}`;
+      }
+      S.OR = v; S.zmiany = ['OR']; S.slad.orOpis = opis; S.slad.or = v;
+      S.faza = 3; return true;
+    }
+    // faza 3: wykonanie
+    const c = p.code, AC = S.AC, OR = S.OR;
+    let skutek = '';
+    const ustawAC = (x, wzor) => {
+      const w = s16(x);
+      if (w !== x) S.alerty.push({ typ: 'warn', t: `Nadmiar: dokładny wynik ${x} nie mieści się w 16 bitach (U2, od −32 768 do 32 767); zapisano ${w}.` });
+      S.AC = w; S.zmiany = ['AC']; S.opis = `AC ← ${wzor} = ${w}`;
+    };
+    const skok = (war, opisW) => {
+      if (war) { S.PC = OR; S.zmiany = ['PC']; S.opis = `${opisW}: tak → PC ← OR = ${OR}`; skutek = `skok: PC = ${OR}`; }
+      else { S.opis = `${opisW}: nie → PC bez zmian (${S.PC})`; skutek = 'bez skoku'; }
+    };
+    switch (c) {
+      case 0: S.koniec = 'stop'; S.opis = 'STOP — maszyna się zatrzymuje.'; skutek = 'koniec'; break;
+      case 1: ustawAC(OR, 'OR'); break;
+      case 2:
+        if (!okAdr(OR)) return stop(`STORE: OR = ${OR} nie jest adresem w pamięci (0–511).`);
+        S.mem[OR] = AC; S.pisane = [OR]; S.opis = `MEM[OR] = MEM[${OR}] ← AC = ${AC}`; skutek = `MEM[${OR}] ← ${AC}`;
+        if (kod.has(OR)) S.alerty.push({ typ: 'bad', t: `Uwaga: komórka ${OR} zawierała rozkaz programu — dane właśnie nadpisały program.` });
+        break;
+      case 3: S.PC = OR; S.zmiany = ['PC']; S.opis = `PC ← OR = ${OR}`; skutek = `skok: PC = ${OR}`; break;
+      case 4: skok(AC < 0, `AC = ${AC} < 0?`); break;
+      case 5: skok(AC === 0, `AC = ${AC} = 0?`); break;
+      case 6: ustawAC(AC + OR, `AC + OR = ${AC} + ${OR}`); break;
+      case 7: ustawAC(AC - OR, `AC − OR = ${AC} − ${OR}`); break;
+      case 8: ustawAC(AC * OR, `AC · OR = ${AC} · ${OR}`); break;
+      case 9:
+        if (OR === 0) return stop('DIV: dzielenie przez zero.');
+        ustawAC(Math.trunc(AC / OR), `AC div OR = ${AC} div ${OR}`); break;
+      case 10: ustawAC(s16(u16(AC) & u16(OR)), 'AC & OR'); break;
+      case 11: ustawAC(s16(u16(AC) | u16(OR)), 'AC | OR'); break;
+      case 12: ustawAC(s16(~u16(OR)), '~OR'); break;
+      case 13: ustawAC(AC === OR ? -1 : 0, `(AC = OR ? −1 : 0), AC = ${AC}, OR = ${OR}`); break;
+      case 14: {
+        const k = Math.abs(OR), u = u16(AC);
+        const w = k >= 16 ? 0 : (OR >= 0 ? (u << k) & 0xffff : u >>> k);
+        ustawAC(s16(w), OR >= 0 ? `AC << ${k}` : `AC >> ${k}`); break;
+      }
+      case 15: {
+        const k = ((Math.abs(OR) % 16) + 16) % 16, u = u16(AC);
+        const w = k === 0 ? u : (OR >= 0 ? ((u << k) | (u >>> (16 - k))) & 0xffff : ((u >>> k) | (u << (16 - k))) & 0xffff);
+        ustawAC(s16(w), OR >= 0 ? `AC obrót w lewo o ${k}` : `AC obrót w prawo o ${k}`); break;
+      }
+    }
+    if (!skutek) skutek = c === 2 ? skutek : `AC = ${S.AC}`;
+    S.slad.skutek = skutek + (c !== 0 && c !== 3 && c !== 4 && c !== 5 ? `; PC = ${S.PC}` : '');
+    S.slad.ac = S.AC; S.slad.fin = true;
+    S.rozkazy++;
+    S.faza = 0;
+    return true;
+  }
+
+  // Cały rozkaz (do końca fazy wykonania)
+  function rozkaz(S, kod) {
+    if (S.koniec) return false;
+    do { faza(S, kod); } while (!S.koniec && S.faza !== 0);
+    return true;
+  }
+
+  function uruchom(mem, kod, limit) {
+    const S = nowa(mem);
+    while (!S.koniec && S.rozkazy < limit) rozkaz(S, kod);
+    if (!S.koniec) S.koniec = 'limit';
+    return S;
+  }
+
+  return { ROZKAZY, TRYBY, OPIS, ROZMIAR, s16, u16, pola, bin16, deasembluj, asembluj, nowa, faza, rozkaz, uruchom };
+})();
+
+/* ═════════════════════ Dane: programy i zadania ═════════════════════ */
+const PRESETY = {
+  suma: {
+    opis: 'Program ze slajdu „Program: oblicz 2 · (a + b)”: a = 21 w komórce 5, b = 34 w komórce 6, wynik w komórce 7.',
+    src: 'LOAD @ 5    ; AC ← a\nADD @ 6     ; AC ← a + b\nMULT $ 2    ; AC ← 2 · AC\nSTORE $ 7   ; MEM[7] ← AC\nSTOP\n21          ; a\n34          ; b\n0           ; wynik',
+  },
+  pulapka: {
+    opis: 'Ten sam program, ale z STORE @ 7 zamiast STORE $ 7. Sprawdź, gdzie trafi wynik.',
+    src: 'LOAD @ 5    ; AC ← a\nADD @ 6     ; AC ← a + b\nMULT $ 2    ; AC ← 2 · AC\nSTORE @ 7   ; ??? \nSTOP\n21          ; a\n34          ; b\n0           ; wynik',
+  },
+  petla: {
+    opis: 'Mini-zadanie ze slajdu „Pętla w PMC”: n w komórce 10, suma w komórce 11. Najpierw policz na kartce, potem sprawdź.',
+    src: 'LOAD @ 10   ; AC ← n\nJZERO $ 8   ; n = 0 → koniec\nADD @ 11    ; AC ← n + s\nSTORE $ 11  ; s ← AC\nLOAD @ 10\nSUB $ 1\nSTORE $ 10  ; n ← n − 1\nJUMP $ 0\nSTOP\n10: 3       ; n\n11: 0       ; s',
+  },
+  tryby: {
+    opis: 'Cztery tryby adresowania na jednych danych. Przed każdym rozkazem przewiduj, co trafi do OR.',
+    src: 'LOAD $ 7    ; natychmiastowy: OR ← 7\nLOAD @ 7    ; bezpośredni: OR ← MEM[7]\nLOAD & 7    ; pośredni: OR ← MEM[MEM[7]]\nLOAD $ 1    ; AC ← 1 (indeks)\nLOAD + 20   ; indeksowy: OR ← MEM[AC + 20]\nSTOP\n7: 20       ; adres zapisany w pamięci\n20: 3\n21: 99',
+  },
+  slowo: {
+    opis: 'Zagadka z początku wykładu: komórka 0 zawiera liczbę 2565 (0000 1010 0000 0101). Co zrobi z nią procesor?',
+    src: '2565        ; liczba czy rozkaz?\nSTOP\n5: 42',
+  },
+};
+
+const ZADANIA = [
+  {
+    id: 'abs', tytul: 'Wartość bezwzględna', poziom: 'łatwe',
+    tresc: 'MEM[20] ← |MEM[21]|. Np. dla −7 wynik 7, dla 5 wynik 5.',
+    wskazowka: 'JNEG pozwala ominąć fragment programu. Liczbę przeciwną do x da 0 − x: LOAD $ 0, potem SUB @ 21.',
+    szkielet: '; MEM[20] ← |MEM[21]|\n; Twój program od adresu 0\n\nSTOP\n\n20: 0    ; wynik\n21: -7   ; x',
+    testy: [{ 21: -7 }, { 21: 5 }, { 21: 0 }, { 21: -32767 }],
+    wzorzec: (d) => Math.abs(d[21]),
+  },
+  {
+    id: 'max', tytul: 'Większa z dwóch liczb', poziom: 'średnie',
+    tresc: 'MEM[20] ← max(MEM[21], MEM[22]).',
+    wskazowka: 'Policz a − b i sprawdź znak rozkazem JNEG. Pamiętaj, że po odejmowaniu w AC nie ma już a.',
+    szkielet: '; MEM[20] ← max(MEM[21], MEM[22])\n\nSTOP\n\n20: 0    ; wynik\n21: 4    ; a\n22: 9    ; b',
+    testy: [{ 21: 4, 22: 9 }, { 21: 9, 22: 4 }, { 21: -3, 22: -8 }, { 21: 6, 22: 6 }],
+    wzorzec: (d) => Math.max(d[21], d[22]),
+  },
+  {
+    id: 'mul', tytul: 'Mnożenie bez MULT', poziom: 'wyzwanie',
+    tresc: 'MEM[20] ← MEM[21] · MEM[22] dla liczb nieujemnych, bez rozkazu MULT — tylko dodawaniem w pętli.',
+    wskazowka: 'Wzoruj się na programie „Pętla”: licznik w osobnej komórce, JZERO na wyjście, JUMP na początek.',
+    szkielet: '; MEM[20] ← MEM[21] · MEM[22], bez MULT\n\nSTOP\n\n20: 0    ; wynik\n21: 3    ; a\n22: 4    ; b',
+    testy: [{ 21: 3, 22: 4 }, { 21: 0, 22: 5 }, { 21: 7, 22: 0 }, { 21: 1, 22: 1 }, { 21: 12, 22: 11 }],
+    wzorzec: (d) => d[21] * d[22],
+    zakaz: 8,
+  },
+];
+
+/* ═════════════════════ Ćwiczenie 1: Symulator PMC ═════════════════════ */
+const Symulator = (() => {
+  let wsad = null;          // wynik asemblera
+  let S = null;             // stan maszyny
+  let hist = [];            // migawki do „wstecz”
+  let slad = [];            // wiersze śledzenia
+  let dotkniete = new Set();
+  let zdarzenia = [];       // ostrzeżenia z całego przebiegu
+  let poprzednie = {};      // rejestry przed fazą (do podświetlenia)
+  let timer = null;
+  let zadanie = null;
+  const HIST_MAX = 3000;
+
+  const klon = (x) => ({ ...x, mem: x.mem.slice(), slad: x.slad ? { ...x.slad } : null, alerty: x.alerty.slice(), czytane: x.czytane.slice(), pisane: x.pisane.slice(), zmiany: x.zmiany.slice() });
+  const migawka = () => ({ S: klon(S), n: slad.length, z: zdarzenia.length, dot: new Set(dotkniete) });
+
+  /* —— lista rozkazów —— */
+  function rysujListe() {
+    const t = $('#pmRef');
+    t.replaceChildren(
+      el('thead', {}, el('tr', {}, ...['kod', 'rozkaz', 'działanie'].map(h => el('th', { text: h })))),
+      el('tbody', {}, ...PMC.ROZKAZY.map((r, i) => el('tr', {}, el('td', { class: 'n', text: `${i} (${i.toString(2).padStart(4, '0')})` }), el('td', { class: 'mono', text: r }), el('td', { text: PMC.OPIS[i] })))));
+  }
+
+  /* —— asembler —— */
+  function wczytaj() {
+    stop();
+    const w = PMC.asembluj($('#pmSrc').value);
+    const err = $('#pmErr');
+    err.replaceChildren(...w.bledy.slice(0, 6).map(b => el('li', { text: b })));
+    if (w.bledy.length > 6) err.append(el('li', { text: `… i ${w.bledy.length - 6} dalszych błędów.` }));
+    $('#pmDirty').hidden = true;
+    if (w.bledy.length) return false;
+    wsad = w;
+    if (zadanie) pamiec.zapisz('zad-' + zadanie, $('#pmSrc').value);
+    reset();
+    return true;
+  }
+
+  function reset() {
+    stop();
+    if (!wsad) return;
+    S = PMC.nowa(wsad.mem);
+    slad = []; zdarzenia = []; dotkniete = new Set(); poprzednie = {};
+    hist = [migawka()];
+    rysuj();
+  }
+
+  /* —— rysowanie —— */
+  function binPola(w, zIR) {
+    const b = PMC.bin16(w);
+    if (!zIR) return el('span', { text: `${b.slice(0, 4)} ${b.slice(4, 8)} ${b.slice(8, 12)} ${b.slice(12)}` });
+    return el('span', {}, el('span', { class: 'f-x', text: b[0] }), ' ', el('span', { class: 'f-c', text: b.slice(1, 5) }), ' ', el('span', { class: 'f-m', text: b.slice(5, 7) }), ' ', el('span', { class: 'f-a', text: b.slice(7) }));
+  }
+
+  function rysujRejestry() {
+    for (const r of ['AC', 'OR', 'PC', 'IR']) {
+      const box = $('#r' + r);
+      box.classList.toggle('zm', S.zmiany.includes(r));
+      if (r === 'IR') {
+        box.querySelector('.dis').textContent = S.faza === 0 && hist.length === 1 ? '—' : PMC.deasembluj(S.IR);
+        box.querySelector('.bin').replaceChildren(binPola(S.IR, true));
+      } else {
+        box.querySelector('.dec').textContent = S[r];
+        box.querySelector('.bin').replaceChildren(binPola(S[r], false));
+      }
+    }
+  }
+
+  function rysujFazy() {
+    const zrobiona = hist.length > 1 && !S.blad ? (S.faza + 3) % 4 : -1;
+    for (const ph of $$('#pmPhases .ph')) {
+      const f = Number(ph.dataset.f);
+      ph.classList.toggle('next', !S.koniec && f === S.faza);
+      ph.classList.toggle('done', f === zrobiona && hist.length > 1);
+    }
+    $('#pmLast').textContent = hist.length > 1 || S.blad ? S.opis : 'Gotowa: PC = 0, następna faza to pobranie rozkazu.';
+    const al = $('#pmAlerts');
+    const pokaz = zdarzenia.slice(-4);
+    al.replaceChildren(...pokaz.map(a => el('div', { class: 'alert ' + a.typ, text: `Rozkaz ${a.nr}: ${a.t}` })));
+    if (zdarzenia.length > 4) al.prepend(el('p', { class: 'small muted', text: `Ostrzeżeń w tym przebiegu: ${zdarzenia.length}; pokazano ostatnie 4.` }));
+    if (S.blad) al.append(el('div', { class: 'alert bad', text: 'Błąd wykonania: ' + S.blad }));
+    if (S.koniec === 'limit') al.append(el('div', { class: 'alert warn', text: `Wykonano ${S.rozkazy} rozkazów i maszyna nadal pracuje. Może jest w nieskończonej pętli — a może potrzebuje więcej czasu.` }));
+  }
+
+  function rysujStan() {
+    $('#pmCount').textContent = S.rozkazy;
+    const st = $('#pmStatus');
+    st.className = 'v status';
+    if (S.koniec === 'stop') { st.textContent = 'STOP'; st.classList.add('halt'); }
+    else if (S.koniec === 'blad') { st.textContent = 'błąd'; st.classList.add('stuck'); }
+    else if (S.koniec === 'limit') { st.textContent = 'limit'; st.classList.add('limit'); }
+    else st.textContent = timer ? 'pracuje…' : 'gotowa';
+    const stoi = !!S.koniec;
+    $('#pmBack').disabled = hist.length < 2 || !!timer;
+    $('#pmPhase').disabled = stoi || !!timer;
+    $('#pmStep').disabled = stoi || !!timer;
+    $('#pmEnd').disabled = stoi || !!timer;
+    $('#pmRun').textContent = timer ? '⏸ Pauza' : '▶ Uruchom';
+    $('#pmRun').disabled = stoi && !timer;
+  }
+
+  function rysujPamiec() {
+    const adr = new Set([...wsad.uzyte, ...dotkniete]);
+    if (!S.koniec || S.koniec === 'stop') adr.add(Math.min(Math.max(S.PC, 0), PMC.ROZMIAR - 1));
+    for (const a of [...S.czytane, ...S.pisane]) adr.add(a);
+    for (let a = 0; a < 8; a++) adr.add(a);
+    const lista = [...adr].filter(a => a >= 0 && a < PMC.ROZMIAR).sort((a, b) => a - b);
+    const wiersze = [];
+    let pop = -1;
+    for (const a of lista) {
+      if (a > pop + 1 && pop >= 0) wiersze.push(el('tr', { class: 'gap' }, el('td', { colspan: '4', text: `⋯ komórki ${pop + 1}–${a - 1}: 0` })));
+      const w = S.mem[a];
+      const kl = [];
+      if (a === S.PC && !S.koniec) kl.push('pc');
+      if (S.czytane.includes(a)) kl.push('rd');
+      if (S.pisane.includes(a)) { kl.push('wr'); if (wsad.kod.has(a)) kl.push('kod'); }
+      const tdA = el('td', { class: 'a', text: String(a) });
+      const tdR = el('td', { class: 'r' + (wsad.kod.has(a) ? '' : ' dane'), text: PMC.deasembluj(w) });
+      if (wsad.kod.has(a)) tdR.append(el('span', { class: 'tag k', text: 'kod' }));
+      wiersze.push(el('tr', { class: kl.join(' ') }, tdA, el('td', { class: 'b' }, binPola(w, false)), el('td', { class: 'd', text: String(w) }), tdR));
+      pop = a;
+    }
+    if (pop < PMC.ROZMIAR - 1) wiersze.push(el('tr', { class: 'gap' }, el('td', { colspan: '4', text: `⋯ komórki ${pop + 1}–511: 0` })));
+    $('#pmMem').replaceChildren(
+      el('thead', {}, el('tr', {}, ...['adres', 'bity', 'jako liczba (U2)', 'jako rozkaz'].map(h => el('th', { text: h })))),
+      el('tbody', {}, ...wiersze));
+  }
+
+  function rysujSlad() {
+    const t = $('#pmTrace');
+    const wiersze = slad.map(r => el('tr', {},
+      el('td', { class: 'n', text: String(r.pc) }), el('td', { class: 'm', text: r.ir }), el('td', { class: 'm', text: r.orOpis }),
+      el('td', { class: 'n', text: String(r.or) }), el('td', { class: 'n', text: String(r.ac) }), el('td', { class: 'm', text: r.skutek })));
+    t.replaceChildren(
+      el('thead', {}, el('tr', {}, ...['PC przed', 'IR', 'wyznaczenie OR', 'OR', 'AC', 'skutek'].map(h => el('th', { text: h })))),
+      el('tbody', {}, ...wiersze));
+    const box = $('.tracebox'); box.scrollTop = box.scrollHeight;
+  }
+
+  function rysuj() { rysujRejestry(); rysujFazy(); rysujStan(); rysujPamiec(); rysujSlad(); }
+
+  /* —— sterowanie —— */
+  function limit() { const v = Math.floor(Number($('#pmLimit').value)); return Number.isFinite(v) && v > 0 ? Math.min(v, 100000) : 1000; }
+
+  function jednaFaza() {
+    if (S.koniec) return false;
+    if (S.faza === 0 && S.rozkazy >= limit()) { S.koniec = 'limit'; S.alerty = []; return false; }
+    const f0 = S.faza;
+    PMC.faza(S, wsad.kod);
+    for (const a of [...S.czytane, ...S.pisane]) dotkniete.add(a);
+    if (f0 === 3 && S.slad && S.slad.fin) slad.push({ ...S.slad });
+    for (const a of S.alerty) zdarzenia.push({ ...a, nr: S.rozkazy + (S.faza === 0 ? 0 : 1) });
+    if (hist.length >= HIST_MAX) hist.splice(1, 1);
+    hist.push(migawka());
+    return true;
+  }
+
+  function jedenRozkaz() {
+    if (S.koniec) return;
+    do { jednaFaza(); } while (!S.koniec && S.faza !== 0);
+  }
+
+  function wstecz() {
+    if (hist.length < 2) return;
+    hist.pop();
+    const h = hist[hist.length - 1];
+    S = klon(h.S); slad = slad.slice(0, h.n); zdarzenia = zdarzenia.slice(0, h.z); dotkniete = new Set(h.dot);
+    rysuj();
+  }
+
+  function opoznienie() { const v = Number($('#pmSpeed').value); return Math.round(1100 * Math.pow(0.95, v)); }
+  function stop() { if (timer) { clearTimeout(timer); timer = null; } }
+
+  function uruchom() {
+    if (timer) { stop(); rysujStan(); return; }
+    if (S.koniec) return;
+    const tik = () => {
+      jedenRozkaz();
+      if (S.koniec) { timer = null; rysuj(); return; }
+      timer = setTimeout(tik, opoznienie());
+      rysuj();
+    };
+    timer = setTimeout(tik, 0);
+    rysujStan();
+  }
+
+  function doKonca() {
+    stop();
+    const lim = limit();
+    while (!S.koniec && !(S.faza === 0 && S.rozkazy >= lim)) jednaFaza();
+    if (!S.koniec) { S.koniec = 'limit'; S.alerty = []; }
+    rysuj();
+  }
+
+  /* —— programy —— */
+  function wybierzPreset(p) {
+    zadanie = null;
+    for (const b of $$('#pmPres button')) b.setAttribute('aria-pressed', String(b.dataset.p === p));
+    $('#pmPresOpis').textContent = PRESETY[p].opis;
+    $('#pmSrc').value = PRESETY[p].src;
+    wczytaj();
+  }
+
+  /* —— zadania —— */
+  function sprawdz(zad, box) {
+    const wyn = box.querySelector('.wyniki');
+    const w = PMC.asembluj($('#pmSrc').value);
+    if (w.bledy.length) { wyn.replaceChildren(el('p', { class: 'err', text: 'Program ma błędy składni — popraw je i wczytaj program.' })); return; }
+    if (zad.zakaz !== undefined && [...w.kod].some(a => PMC.pola(w.mem[a]).code === zad.zakaz)) {
+      wyn.replaceChildren(el('p', { class: 'err', text: `W tym zadaniu nie wolno używać rozkazu ${PMC.ROZKAZY[zad.zakaz]}.` })); return;
+    }
+    const lim = limit();
+    let wszystkie = true;
+    const wiersze = zad.testy.map((dane) => {
+      const mem = w.mem.slice();
+      for (const [a, v] of Object.entries(dane)) mem[a] = PMC.s16(v);
+      const T = PMC.uruchom(mem, w.kod, lim);
+      const ocz = PMC.s16(zad.wzorzec(dane));
+      const ok = T.koniec === 'stop' && T.mem[20] === ocz;
+      if (!ok) wszystkie = false;
+      const stanT = T.koniec === 'stop' ? String(T.mem[20]) : T.koniec === 'blad' ? 'błąd: ' + T.blad : `brak STOP po ${lim} rozkazach`;
+      return el('tr', {},
+        el('td', { class: 'mono', 'data-l': 'dane', text: Object.entries(dane).map(([a, v]) => `MEM[${a}] = ${v}`).join(', ') }),
+        el('td', { class: 'mono', 'data-l': 'oczekiwane', text: String(ocz) }),
+        el('td', { class: 'mono', 'data-l': 'MEM[20]', text: stanT }),
+        el('td', { 'data-l': 'rozkazy', text: String(T.rozkazy) }),
+        el('td', { class: ok ? 'okc' : 'badc', 'data-l': 'test', text: ok ? '✓' : '✗' }));
+    });
+    const tab = el('table', { class: 't res stack' },
+      el('thead', {}, el('tr', {}, ...['dane', 'oczekiwane', 'MEM[20]', 'rozkazy', 'test'].map(h => el('th', { text: h })))),
+      el('tbody', {}, ...wiersze));
+    wyn.replaceChildren(el('div', { class: 'scroll-x' }, tab), el('p', { class: wszystkie ? 'ok small' : 'err', role: 'status', text: wszystkie ? 'Wszystkie testy zaliczone.' : 'Nie wszystkie testy przechodzą. Wpisz dane z nieudanego testu do programu i prześledź go fazami.' }));
+    box.classList.toggle('done', wszystkie);
+    const zal = pamiec.czytaj('zaliczone') || {};
+    if (wszystkie) { zal[zad.id] = true; pamiec.zapisz('zaliczone', zal); }
+    const pill = box.querySelector('.pill');
+    pill.className = 'pill' + (zal[zad.id] ? ' ok' : ''); pill.textContent = zal[zad.id] ? 'zaliczone' : zad.poziom;
+  }
+
+  function rysujZadania() {
+    const zal = pamiec.czytaj('zaliczone') || {};
+    $('#pmTasks').replaceChildren(...ZADANIA.map(zad => {
+      const box = el('div', { class: 'task' + (zal[zad.id] ? ' done' : ''), id: 'zad-' + zad.id });
+      const bZ = el('button', { type: 'button', class: 'btn small ghost', text: 'Zacznij' });
+      const bS = el('button', { type: 'button', class: 'btn small', text: 'Sprawdź na testach' });
+      box.append(
+        el('h4', {}, zad.tytul + ' ', el('span', { class: 'pill' + (zal[zad.id] ? ' ok' : ''), text: zal[zad.id] ? 'zaliczone' : zad.poziom })),
+        el('p', { text: zad.tresc }),
+        el('details', { class: 'hint' }, el('summary', { text: 'Wskazówka' }), el('p', { text: zad.wskazowka })),
+        el('div', { class: 'row' }, bZ, bS),
+        el('div', { class: 'wyniki' }));
+      bZ.addEventListener('click', () => {
+        for (const b of $$('#pmPres button')) b.setAttribute('aria-pressed', 'false');
+        zadanie = zad.id;
+        const zapis = pamiec.czytaj('zad-' + zad.id);
+        $('#pmPresOpis').textContent = `Zadanie: ${zad.tytul}. ${zapis ? 'Wczytano Twoją ostatnią wersję.' : 'Wczytano szkielet — dopisz program od adresu 0.'}`;
+        $('#pmSrc').value = typeof zapis === 'string' ? zapis : zad.szkielet;
+        wczytaj();
+        $('#pmSrc').scrollIntoView({ block: 'center', behavior: 'smooth' });
+      });
+      bS.addEventListener('click', () => {
+        if (zadanie !== zad.id) { box.querySelector('.wyniki').replaceChildren(el('p', { class: 'err', text: 'Najpierw kliknij „Zacznij” — testy sprawdzają program z edytora powyżej.' })); return; }
+        pamiec.zapisz('zad-' + zad.id, $('#pmSrc').value);
+        sprawdz(zad, box);
+      });
+      return box;
+    }));
+  }
+
+  function init() {
+    rysujListe();
+    for (const b of $$('#pmPres button')) b.addEventListener('click', () => wybierzPreset(b.dataset.p));
+    $('#pmAsm').addEventListener('click', wczytaj);
+    $('#pmSrc').addEventListener('input', () => { $('#pmDirty').hidden = false; });
+    $('#pmReset').addEventListener('click', reset);
+    $('#pmBack').addEventListener('click', wstecz);
+    $('#pmPhase').addEventListener('click', () => { jednaFaza(); rysuj(); });
+    $('#pmStep').addEventListener('click', () => { jedenRozkaz(); rysuj(); });
+    $('#pmRun').addEventListener('click', uruchom);
+    $('#pmEnd').addEventListener('click', doKonca);
+    $('#pmLimit').addEventListener('change', () => { if (S && S.koniec === 'limit') reset(); });
+    rysujZadania();
+    wybierzPreset('suma');
+  }
+  function wyjscie() { stop(); if (S) rysujStan(); }
+  return { init, wyjscie };
+})();
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+const WIDOKI = ['start', 'pmc'];
+let biezacy = null;
+function nawiguj() {
+  const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  if (biezacy === 'pmc' && v !== 'pmc') Symulator.wyjscie();
+  for (const w of WIDOKI) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = { start: 'Wykład 5 · ćwiczenia', pmc: 'Symulator PMC · W5' }[v];
+}
+Symulator.init();
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+</script>
+</body>
+</html>
