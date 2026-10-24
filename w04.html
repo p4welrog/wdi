@@ -248,6 +248,10 @@ ol.kroki li { margin: 6px 0; }
 ol.kroki li.zle { color: var(--bad); font-weight: 600; }
 ol.latki { margin: 10px 0 0; padding-left: 1.2em; font-size: .94rem; }
 ol.latki li { margin: 4px 0; }
+/* ───────── W04: wieże Knutha ───────── */
+.knwzor { font-size: 1.35rem; font-weight: 600; margin: 0 0 6px; word-break: break-word; }
+.stat .v.sm { font-size: 1.05rem; }
+.kncyfry { max-height: 260px; overflow: auto; font-size: .8rem; word-break: break-all; background: var(--surface-2); border-radius: 8px; padding: 10px; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -263,6 +267,7 @@ ol.latki li { margin: 4px 0; }
     <a href="#wyscig">2. Wyścig bobrów</a>
     <a href="#stop">3. Czy to się zatrzyma?</a>
     <a href="#przekora">4. Przekora</a>
+    <a href="#wieze">5. Wieże Knutha</a>
   </nav>
 </header>
 
@@ -277,6 +282,7 @@ ol.latki li { margin: 4px 0; }
     <a class="tile" href="#wyscig"><span class="num">2</span><h3>Wyścig bobrów</h3><p>Zbuduj maszynę z 2 lub 3 stanami, która zostawi najwięcej jedynek albo zrobi najwięcej kroków — i się zatrzyma. Osobne rankingi Σ i S, przeszukanie wszystkich 20 736 maszyn 2-stanowych i (na wykładzie) wspólny ranking sali.</p><div class="meta">ok. 15 min · slajdy od „Problemu pracowitego bobra” do „Dlaczego bóbr jest ważny”</div></a>
     <a class="tile" href="#stop"><span class="num">3</span><h3>Czy to się zatrzyma?</h3><p>Dwanaście krótkich programów w Pythonie i jedno pytanie: zakończy się czy nie? Mierzymy trafność i czas odpowiedzi. Na końcu dwa programy, o których nie wie tego nikt.</p><div class="meta">ok. 10 min · slajdy „Problem stopu”, „Nierozstrzygalny ≠ beznadziejny” i „Czy umysł jest maszyną Turinga?”</div></a>
     <a class="tile" href="#przekora"><span class="num">4</span><h3>Przekora</h3><p>Wybierz sposób wykrywania pętli nieskończonych i sprawdź go na zwykłych programach. Potem zbuduj program, który go oszuka — dla każdego detektora, nawet po kolejnych łatkach. Argument Turinga krok po kroku.</p><div class="meta">ok. 10 min · slajdy „Problem stopu” i „Nierozstrzygalny ≠ beznadziejny”</div></a>
+    <a class="tile" href="#wieze"><span class="num">5</span><h3>Wieże Knutha</h3><p>Kalkulator notacji strzałkowej: a↑b, a↑↑b, a↑↑↑b. Liczba cyfr, porównanie z liczbą atomów we Wszechświecie i z pamięcią komputera — aż do liczb, których nie da się nawet opisać cyframi.</p><div class="meta">ok. 5 min · slajdy „Czy to rekord? Znane wartości” i „Co znaczy 2↑↑↑5?”</div></a>
   </div>
 </section>
 
@@ -554,6 +560,58 @@ ol.latki li { margin: 4px 0; }
     </ol>
   </div>
   <p class="src">A. M. Turing, <em>On Computable Numbers, with an Application to the Entscheidungsproblem</em>, Proc. London Math. Soc. s2-42 (1936), §8; wersja z programami: M. Sipser, <em>Introduction to the Theory of Computation</em>, 3rd ed., rozdz. 4.2. Na wykładzie: slajd „Problem stopu”.</p>
+</section>
+
+<!-- ═══════════════════ 5. WIEŻE KNUTHA ═══════════════════ -->
+<section id="v-wieze" hidden>
+  <h2>5. Wieże Knutha</h2>
+  <p class="lead">Mnożenie to powtarzane dodawanie, potęgowanie — powtarzane mnożenie. Każda kolejna strzałka w zapisie Knutha powtarza działanie o poziom niżej. Sprawdź, jak szybko liczby przestają mieścić się w komputerze, we Wszechświecie, a w końcu nawet w opisie.</p>
+
+  <div class="card">
+    <div class="row" style="gap: 14px">
+      <div class="field" style="margin:0"><label for="knA" class="small">podstawa a</label><select id="knA"></select></div>
+      <div class="field" style="margin:0"><span class="small" id="knKLab">liczba strzałek</span>
+        <div class="seg" id="knK" role="group" aria-labelledby="knKLab">
+          <button type="button" data-k="1" aria-pressed="true">↑</button><button type="button" data-k="2">↑↑</button><button type="button" data-k="3">↑↑↑</button><button type="button" data-k="4">↑↑↑↑</button>
+        </div>
+      </div>
+      <div class="field" style="margin:0"><label for="knB" class="small">b</label><select id="knB"></select></div>
+    </div>
+    <div class="row" style="margin-top: 10px"><span class="small muted">Przykłady:</span><span id="knPresety" class="row" style="gap: 6px"></span></div>
+  </div>
+
+  <div class="card">
+    <p class="knwzor" id="knWzor" aria-live="polite"></p>
+    <p class="mono small" id="knRozw"></p>
+    <div class="stats" id="knStats"></div>
+    <p id="knUwaga" class="note" hidden></p>
+    <p class="small" id="knPy"></p>
+    <details id="knCyfryBox" hidden><summary>Pokaż wszystkie cyfry</summary><div class="kncyfry mono" id="knCyfry"></div></details>
+  </div>
+
+  <div class="card">
+    <h3>Ściąga</h3>
+    <div class="scroll-x"><table class="t">
+      <thead><tr><th>zapis</th><th>znaczenie</th><th>przykład</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">a↑b</td><td>mnożenie powtórzone b razy: a<sup>b</sup></td><td class="mono">2↑5 = 32</td></tr>
+        <tr><td class="mono">a↑↑b</td><td>potęgowanie powtórzone: wieża b wykładników, liczona od góry</td><td class="mono">2↑↑4 = 2^2^2^2 = 2^16 = 65 536</td></tr>
+        <tr><td class="mono">a↑↑↑b</td><td>budowanie wież powtórzone: a↑↑(a↑↑(…))</td><td class="mono">2↑↑↑3 = 2↑↑(2↑↑2) = 2↑↑4 = 65 536</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted" style="margin-top:8px">Wartości „≈” są liczone na logarytmach — dokładnie tylko do 100 000 cyfr. Zapis 10^10^…^x czytaj od góry.</p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Policz 2↑2, 2↑↑2, 2↑↑↑2 i 2↑↑↑↑2. Dlaczego dla a = b = 2 wynik jest zawsze ten sam?</li>
+      <li>W Pythonie <span class="mono">2 ** 3 ** 2</span> daje 512, a nie 64. Dlaczego taka kolejność jest wygodna dla wież potęg?</li>
+      <li>2↑↑5 Python liczy w ułamku sekundy, a 2↑↑6 nie zmieści się w pamięci żadnego komputera. Ile razy większy jest wykładnik w 2↑↑6 niż w 2↑↑5?</li>
+      <li>Wiadomo, że pracowity bóbr z 6 stanami robi więcej niż 2↑↑↑5 kroków. Co to mówi o próbie ustalenia S(6) przez zwykłe uruchomienie maszyn?</li>
+    </ol>
+  </div>
+  <p class="src">D. E. Knuth, <em>Mathematics and Computer Science: Coping with Finiteness</em>, Science 194 (1976), s. 1235–1242; S(6) &gt; 2↑↑↑5: rekord z czerwca 2025 r., wiki.bbchallenge.org/wiki/BB(6) (dostęp 24.10.2026).</p>
 </section>
 
 <!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
@@ -1810,6 +1868,191 @@ const Przekora = (() => {
   return { init };
 })();
 
+
+/* ═════════════════════ Rdzeń: notacja strzałkowa Knutha (bez DOM) ═════════════════════ */
+// Reprezentacje liczby:
+//   { t: 'e', v: BigInt }        — dokładnie
+//   { t: 'l', L, x }             — 10^10^…^x (L razy 10^), x < 1e10; przybliżenie
+//   { t: 'w', a, h }             — wieża a^a^…^a o wysokości h (h: dowolna reprezentacja)
+//   { t: 's', txt }              — za duża nawet na wieżę; tylko zapis symboliczny
+const Knuth = (() => {
+  const MAX_CYFR = 100000;     // do tylu cyfr liczymy dokładnie
+  const MAX_ITER = 1000000;    // najwyższa wieża budowana piętro po piętrze
+  const lg = Math.log10;
+
+  function cyfry(v) { return v.toString().length; }
+  function log10Big(v) {
+    const s = v.toString();
+    const glowa = Number(s.slice(0, 17)) / 10 ** (Math.min(17, s.length) - 1);
+    return s.length - 1 + lg(glowa);
+  }
+  function norm(L, x) {
+    if (!Number.isFinite(x)) throw new Error('przepełnienie reprezentacji');
+    while (x >= 1e10) { x = lg(x); L++; }
+    while (L > 0 && x < 300 && 10 ** x < 1e10) { x = 10 ** x; L--; }
+    return { t: 'l', L, x };
+  }
+  function doL(r) {
+    if (r.t === 'e') { const v = r.v; return v < 10n ** 10n ? { t: 'l', L: 0, x: Number(v) } : norm(1, log10Big(v)); }
+    return r;
+  }
+  // log10(liczba) jako reprezentacja (do porównań i opisów); null dla wież i symboli
+  function log10R(r) {
+    if (r.t === 'e') return { t: 'l', L: 0, x: log10Big(r.v) };
+    if (r.t === 'l') return r.L === 0 ? { t: 'l', L: 0, x: lg(r.x) } : { t: 'l', L: r.L - 1, x: r.x };
+    return null;
+  }
+
+  // a^y
+  function pot(a, y) {
+    const A = BigInt(a), la = lg(a);
+    if (y.t === 'e') {
+      if (y.v >= 10n ** 15n) return pot(a, doL(y));
+      if (Number(y.v) * la <= MAX_CYFR) return { t: 'e', v: A ** y.v };
+      return norm(1, Number(y.v) * la);
+    }
+    if (y.t === 'l') {
+      if (y.L === 0) return norm(1, y.x * la);
+      if (y.L === 1) return norm(2, y.x + lg(la));
+      return norm(y.L + 1, y.x);           // mnożenie przez log10(a) jest tu niezauważalne
+    }
+    if (y.t === 'w') return { t: 'w', a, h: plus1(y.h) };
+    return { t: 's', txt: `${a}^(${y.txt})` };
+  }
+  function plus1(h) { return h.t === 'e' ? { t: 'e', v: h.v + 1n } : h; }
+
+  // a↑↑h: wieża a o wysokości h
+  function wieza(a, h) {
+    if (h.t === 'e' && h.v <= BigInt(MAX_ITER)) {
+      let r = { t: 'e', v: BigInt(a) };
+      for (let i = 1n; i < h.v; i++) {
+        r = pot(a, r);
+        if (r.t === 'l' && r.L > MAX_ITER) return { t: 'w', a, h };
+      }
+      return r;
+    }
+    return { t: 'w', a, h };
+  }
+
+  // a ↑^k b, b — reprezentacja
+  function strz(k, a, b) {
+    if (k === 1) return pot(a, b);
+    if (k === 2) return wieza(a, b);
+    if (b.t !== 'e' || b.v > 60n) return { t: 's', txt: `${a}${'↑'.repeat(k)}${b.t === 'e' || b.t === 'w' ? opis(b, true) : '(' + opis(b, true) + ')'}` };
+    let r = { t: 'e', v: BigInt(a) };
+    for (let i = 1n; i < b.v; i++) r = strz(k - 1, a, r);
+    return r;
+  }
+
+  const grupuj = (s) => s.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  function fmtX(x) { return x >= 1e6 ? grupuj(String(Math.round(x))) : x.toLocaleString('pl-PL', { maximumFractionDigits: x < 10 ? 3 : 1 }); }
+
+  // Krótki opis wielkości
+  function opis(r, krotko = false) {
+    if (r.t === 'e') return grupuj(r.v.toString().length > 30 ? `(liczba o ${grupuj(String(cyfry(r.v)))} cyfrach)` : r.v.toString());
+    if (r.t === 'l') {
+      if (r.L === 0) return fmtX(r.x);
+      if (r.L === 1) return `≈ 10^${fmtX(r.x)}`;
+      if (r.L === 2) return `≈ 10^10^${fmtX(r.x)}`;
+      return `≈ 10^10^…^${fmtX(r.x)} (${grupuj(String(r.L))} razy „10 do potęgi”)`;
+    }
+    if (r.t === 'w') return krotko ? `(${r.a}↑↑${r.h.t === 'l' ? '(' + opis(r.h, true) + ')' : opis(r.h, true)})` : `wieża ${r.a}^${r.a}^…^${r.a} o wysokości ${opis(r.h, true)}`;
+    return r.txt;
+  }
+
+  // Fakty o wielkości: cyfry, atomy, pamięć
+  function fakty(r) {
+    const ATOMY = 80;                       // ~10^80 atomów
+    const BITY_16GB = 16 * 8 * 2 ** 30;     // ≈ 1,37·10^11 bitów
+    if (r.t === 'e') {
+      const c = cyfry(r.v), lgv = log10Big(r.v);
+      return { cyfry: grupuj(String(c)), atomy: lgv > ATOMY, pamiec: true, bity: grupuj(String(r.v.toString(2).length)) };
+    }
+    if (r.t === 'l') {
+      const l = log10R(r);                  // log10 v
+      if (l.L === 0) {
+        const bity = l.x * Math.log2(10);
+        return { cyfry: l.x < 1e15 ? `ok. ${grupuj(String(Math.floor(l.x) + 1))}` : `ok. 10^${fmtX(lg(l.x))}`, atomy: l.x > ATOMY, pamiec: bity <= BITY_16GB, bity: bity < 1e15 ? `ok. ${grupuj(String(Math.round(bity)))}` : `ok. 10^${fmtX(lg(bity))}` };
+      }
+      return { cyfry: opis(l), atomy: true, pamiec: false, bity: 'nieopisywalnie dużo' };
+    }
+    return { cyfry: 'tak dużo, że nawet liczby cyfr nie da się zapisać', atomy: true, pamiec: false, bity: 'nieopisywalnie dużo' };
+  }
+
+  // Rozwinięcie definicji (jeden poziom) dla małych b
+  function rozwin(k, a, b) {
+    const S = '↑'.repeat(k), S1 = '↑'.repeat(k - 1);
+    if (b === 1) return `${a}${S}1 = ${a}`;
+    if (k === 1) return `${a}↑${b} = ${Array(b).fill(a).join(' · ')}`;
+    const kopie = Array(b).fill(a);
+    if (k === 2) return `${a}↑↑${b} = ${kopie.join('^')}   (liczymy od góry)`;
+    let t = String(a);
+    for (let i = 1; i < b; i++) t = `${a}${S1}(${t})`;
+    return `${a}${S}${b} = ${t}`;
+  }
+
+  return { strz, opis, fakty, rozwin, pot, wieza, log10Big, cyfry, grupuj };
+})();
+
+/* ═════════════════════ Ćwiczenie 5: Wieże Knutha ═════════════════════ */
+const Wieze = (() => {
+  const PRESETY_K = [[2, 1, 5], [2, 2, 4], [3, 2, 3], [2, 2, 5], [2, 2, 6], [2, 3, 3], [2, 3, 4], [3, 3, 3], [2, 3, 5], [3, 4, 3]];
+  let a = 2, k = 1, b = 5;
+  const zap = (aa, kk, bb) => `${aa}${'↑'.repeat(kk)}${bb}`;
+
+  function przelicz() {
+    for (const x of $$('#knK button')) x.setAttribute('aria-pressed', String(Number(x.dataset.k) === k));
+    $('#knA').value = String(a); $('#knB').value = String(b);
+    const r = Knuth.strz(k, a, { t: 'e', v: BigInt(b) });
+    const f = Knuth.fakty(r);
+    let op = Knuth.opis(r);
+    if (op.length > 140) op = 'tak wielka, że nie da się jej opisać nawet jako wieży wież — zostaje tylko zapis strzałkowy';
+    $('#knWzor').replaceChildren(el('span', { class: 'mono', text: zap(a, k, b) }), ' = ', el('span', { class: 'mono', text: op }));
+    $('#knRozw').textContent = Knuth.rozwin(k, a, b);
+    const stat = (kk, v) => el('div', { class: 'stat' }, el('div', { class: 'k', text: kk }), el('div', { class: 'v sm', text: v }));
+    $('#knStats').replaceChildren(
+      stat('liczba cyfr', f.cyfry),
+      stat('więcej niż atomów we Wszechświecie (~10⁸⁰)?', f.atomy ? 'tak' : 'nie'),
+      stat('zmieści się w 16 GB pamięci?', f.pamiec ? 'tak' : 'nie'),
+      stat('bitów potrzeba', f.bity));
+    const uw = $('#knUwaga');
+    const ten = (aa, kk, bb) => a === aa && k === kk && b === bb;
+    let u = '';
+    if (ten(2, 3, 5)) u = 'Tyle co najmniej kroków robi obecny rekordzista wśród pracowitych bobrów z 6 stanami (czerwiec 2025). Żadnego komputera nie dałoby się zbudować tak, by wykonał tyle kroków.';
+    else if (ten(3, 2, 3)) u = 'To odpowiedź na pytanie ze slajdu: 3↑3 = 27, a 3↑↑3 = 3^27 — o 11 rzędów wielkości więcej.';
+    else if (a === 2 && b === 2) u = 'Dla a = b = 2 każda liczba strzałek daje 4: 2↑↑↑2 = 2↑↑(2↑↑↑1) = 2↑↑2 = 2↑(2↑↑1) = 2↑2 = 4 — i tak samo przy większej liczbie strzałek.';
+    else if (ten(2, 2, 6)) u = 'Wykładnik 2↑↑5 ma 19 729 cyfr. Sama liczba 2↑↑6 ma tyle cyfr, że ich zapisanie wymagałoby ok. 10^19 728 bitów — więcej, niż jest atomów we Wszechświecie.';
+    uw.hidden = !u; uw.textContent = u;
+    let py = '';
+    if (k === 1) py = `Python: ${a} ** ${b}`;
+    else if (k === 2 && f.pamiec) py = `Python: ${Array(b).fill(a).join(' ** ')}   (operator ** jest prawostronnie łączny — liczy od góry wieży, tak jak trzeba)`;
+    else if (!f.pamiec) py = 'Python: liczby całkowite nie mają w nim górnej granicy, ale tej nie zapisze — nie starczy pamięci.';
+    $('#knPy').textContent = py;
+    const box = $('#knCyfryBox');
+    if (r.t === 'e' && r.v.toString().length > 30) {
+      box.hidden = false; box.open = false;
+      const s = r.v.toString();
+      $('#knCyfry').textContent = Knuth.grupuj(s);
+      box.querySelector('summary').textContent = `Pokaż wszystkie ${Knuth.grupuj(String(s.length))} cyfr`;
+    } else box.hidden = true;
+  }
+
+  function init() {
+    $('#knA').replaceChildren(...Array.from({ length: 9 }, (_, i) => el('option', { value: String(i + 2), text: String(i + 2) })));
+    $('#knB').replaceChildren(...Array.from({ length: 10 }, (_, i) => el('option', { value: String(i + 1), text: String(i + 1) })));
+    $('#knA').addEventListener('change', () => { a = Number($('#knA').value); przelicz(); });
+    $('#knB').addEventListener('change', () => { b = Number($('#knB').value); przelicz(); });
+    for (const x of $$('#knK button')) x.addEventListener('click', () => { k = Number(x.dataset.k); przelicz(); });
+    $('#knPresety').replaceChildren(...PRESETY_K.map(([aa, kk, bb]) => {
+      const btn = el('button', { type: 'button', class: 'btn small ghost mono', text: zap(aa, kk, bb) });
+      btn.addEventListener('click', () => { a = aa; k = kk; b = bb; przelicz(); });
+      return btn;
+    }));
+    przelicz();
+  }
+  return { init };
+})();
+
 /* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
 const Ustawienia = (() => {
   let roboczy = null;
@@ -1892,7 +2135,7 @@ const Ustawienia = (() => {
 })();
 
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'warsztat', 'wyscig', 'stop', 'przekora', 'ustawienia'];
+const WIDOKI = ['start', 'warsztat', 'wyscig', 'stop', 'przekora', 'wieze', 'ustawienia'];
 let biezacy = null;
 function nawiguj() {
   const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
@@ -1905,13 +2148,14 @@ function nawiguj() {
   for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 4 · ćwiczenia', warsztat: 'Warsztat maszyny Turinga · W4', wyscig: 'Wyścig bobrów · W4', stop: 'Czy to się zatrzyma? · W4', przekora: 'Przekora · W4', ustawienia: 'Ustawienia prowadzącego · W4' }[v];
+  document.title = { start: 'Wykład 4 · ćwiczenia', warsztat: 'Warsztat maszyny Turinga · W4', wyscig: 'Wyścig bobrów · W4', stop: 'Czy to się zatrzyma? · W4', przekora: 'Przekora · W4', wieze: 'Wieże Knutha · W4', ustawienia: 'Ustawienia prowadzącego · W4' }[v];
 }
 Grupa.init();
 Warsztat.init();
 Bobry.init();
 Stop.init();
 Przekora.init();
+Wieze.init();
 Ustawienia.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
