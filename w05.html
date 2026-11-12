@@ -266,6 +266,20 @@ table.opmem td.cz2.v { box-shadow: inset 0 0 0 2px var(--good); }
 .fbline.zle { color: var(--bad); }
 .opbtn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
 .opbtn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+/* ───────── Panel grupy ───────── */
+.group { border: 1px solid var(--s1); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; background: var(--surface); }
+.group h3 { display: flex; gap: 8px; align-items: center; }
+.group .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; }
+
+/* ───────── W05: bądź procesorem ───────── */
+.prgrid { display: grid; grid-template-columns: minmax(200px, 1fr) 2fr; gap: 18px; margin: 10px 0 14px; align-items: start; }
+@media (max-width: 640px) { .prgrid { grid-template-columns: 1fr; } }
+table.prlist { border-collapse: collapse; font-size: 1.05rem; }
+table.prlist td { padding: 3px 10px; border-bottom: 1px solid var(--border); }
+table.prlist td.a { color: var(--muted); font-family: var(--mono); font-size: .85rem; text-align: right; }
+.prpyt { font-size: 1.3rem; font-weight: 600; margin: 8px 0 12px; }
+.card.most { border-left: 4px solid var(--good); }
+.card.most h3 { color: var(--good); }
 </style>
 </head>
 <body>
@@ -273,12 +287,14 @@ table.opmem td.cz2.v { box-shadow: inset 0 0 0 2px var(--good); }
 <header class="top">
   <div class="wrap bar">
     <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 5</a></div>
+    <a id="groupBadge" class="badge" href="#ustawienia" hidden></a>
   </div>
   <nav class="wrap tabs" aria-label="Ćwiczenia">
     <a href="#start">Start</a>
     <a href="#pmc">1. Symulator PMC</a>
     <a href="#rentgen">2. Rentgen słowa</a>
     <a href="#operand">3. Skąd operand?</a>
+    <a href="#procesor">4. Bądź procesorem</a>
   </nav>
 </header>
 
@@ -292,6 +308,7 @@ table.opmem td.cz2.v { box-shadow: inset 0 0 0 2px var(--good); }
     <a class="tile" href="#pmc"><span class="num">1</span><h3>Symulator PMC</h3><p>Przykładowa Maszyna Cyfrowa w działaniu: rejestry AC, OR, PC, IR, pamięć i cykl pobierz–dekoduj–operand–wykonaj, faza po fazie. Programy z wykładu, pułapka STORE @ 7 i zadania sprawdzane testami.</p><div class="meta">ok. 20 min · slajdy od „PMC: model dydaktyczny” do „Mini-zadania: pętla w PMC”</div></a>
     <a class="tile" href="#rentgen"><span class="num">2</span><h3>Rentgen słowa</h3><p>Szesnaście bitów i pięć odczytów naraz: liczba bez znaku, liczba w U2, znak, wartość logiczna i rozkaz PMC. Klikaj bity, wpisuj liczby albo rozkazy i rozwiąż zagadki.</p><div class="meta">ok. 10 min · slajdy „Liczba czy rozkaz?”, „Słowo jako dane” i „Słowo jako rozkaz”</div></a>
     <a class="tile" href="#operand"><span class="num">3</span><h3>Skąd operand?</h3><p>Seria 10 pytań z losowym stanem pamięci: co trafi do OR w trybie $, @, &amp; i +, dokąd zapisze STORE, dokąd skoczy JUMP. Po każdej odpowiedzi — droga przez pamięć i nazwa popełnionej pomyłki.</p><div class="meta">ok. 10 min · slajdy „Tryby adresowania” i „Śledzenie wykonania”</div></a>
+    <a class="tile" href="#procesor"><span class="num">4</span><h3>Bądź procesorem</h3><p>Osiem krótkich programów PMC do wykonania w głowie, bez kartki — z coraz większą liczbą wartości do śledzenia. Czas, trafność i (na wykładzie) wyniki całej sali: pamięć robocza kontra rejestry.</p><div class="meta">ok. 15 min · slajdy „Cykl pracy PMC”, „Mini-zadanie: pętla w PMC” i „Trzy poziomy opisu”</div></a>
   </div>
 </section>
 
@@ -506,11 +523,133 @@ table.opmem td.cz2.v { box-shadow: inset 0 0 0 2px var(--good); }
   <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (tryby adresowania PMC). Na wykładzie: slajd „Tryby adresowania: skąd wziąć operand?”.</p>
 </section>
 
+<!-- ═══════════════════ 4. BĄDŹ PROCESOREM ═══════════════════ -->
+<section id="v-procesor" hidden>
+  <h2>4. Bądź procesorem</h2>
+  <p class="lead">Procesor PMC trzyma bieżący wynik w jednym rejestrze, a resztę zapisuje w pamięci. Ty masz pamięć roboczą. Wykonaj w głowie osiem krótkich programów — bez kartki — i sprawdź, co się dzieje, gdy trzeba śledzić coraz więcej wartości naraz.</p>
+
+  <div class="card" id="prIntro">
+    <h3>Zasady</h3>
+    <ul>
+      <li>Każdy program ma 8 rozkazów i kończy się STOP. Stan początkowy: AC = 0, a pamięć — jak w tabelce.</li>
+      <li>Programy różnią się liczbą wartości do śledzenia: od 1 (tylko AC) do 4 (AC i trzy komórki wyniku).</li>
+      <li>Gdy znasz stan końcowy, kliknij „Gotowe”. Program zniknie, a my zapytamy o <em>jedną</em> ze śledzonych wartości — nie wiesz wcześniej, o którą.</li>
+      <li>Nie zapisuj niczego. Mierzymy czas wykonania i trafność.</li>
+    </ul>
+    <button type="button" class="btn" id="prStart">Zaczynamy</button>
+  </div>
+
+  <div class="card" id="prProba" hidden>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="prNr"></span><span class="small muted" id="prTimer" aria-hidden="true"></span></div>
+    <div id="prProg">
+      <div class="prgrid">
+        <div><div class="small muted">Program</div><table class="prlist" id="prLista"></table></div>
+        <div><div class="small muted">Pamięć na początku</div><table class="opmem" id="prMem"></table><p class="small muted" style="margin-top:8px">AC = 0. Śledzisz: <span id="prSledz"></span>.</p></div>
+      </div>
+      <button type="button" class="btn" id="prGotowe">Gotowe — znam stan końcowy</button>
+    </div>
+    <div id="prPyt" hidden>
+      <p class="prpyt"><span id="prPytTxt"></span></p>
+      <div class="row"><input type="text" inputmode="numeric" id="prOdp" style="width: 7em; font-family: var(--mono); font-size: 1.2rem" aria-label="Twoja odpowiedź" autocomplete="off"><button type="button" class="btn" id="prWyslij">Odpowiedz</button></div>
+    </div>
+    <div id="prFb" hidden>
+      <p class="fbline" id="prFbLine" role="status"></p>
+      <details><summary>Przebieg krok po kroku</summary><div class="scroll-x"><table class="t" id="prSlad"></table></div></details>
+      <button type="button" class="btn" id="prDalej" style="margin-top: 10px">Dalej →</button>
+    </div>
+  </div>
+
+  <div class="card" id="prWynik" hidden>
+    <h3>Twój wynik</h3>
+    <div class="hbars" id="prWykres"></div>
+    <p class="small" id="prWniosek"></p>
+    <button type="button" class="btn ghost small" id="prJeszcze">Jeszcze raz</button>
+  </div>
+
+  <div id="grupa-procesor"></div>
+
+  <div class="card most">
+    <h3>Psychologia ↔ informatyka: pamięć robocza a rejestry</h3>
+    <ul>
+      <li>Pamięć robocza to system, który przez krótki czas przechowuje informacje i jednocześnie na nich operuje — np. przy liczeniu w pamięci (Baddeley i Hitch 1974).</li>
+      <li>Jej pojemność ocenia się dziś na ok. 3–5 porcji informacji (Cowan 2001), mniej niż „7 ± 2” Millera (1956).</li>
+      <li>Procesor PMC ma jeden rejestr roboczy, a resztę odkłada do pamięci, z której nic nie znika. Ty nie masz gdzie odłożyć — dlatego każda dodatkowa śledzona wartość kosztuje.</li>
+      <li><strong>To analogia, nie model.</strong> Rejestr przechowuje dokładnie jedną liczbę, a porcja w pamięci roboczej może być większą całością. Wynik sali to pokaz, nie eksperyment: mała próba, różne programy, a do tego zmęczenie i rachunki.</li>
+    </ul>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Przy ilu śledzonych wartościach zacząłeś się mylić? Jak to się ma do szacunku Cowana?</li>
+      <li>Jakich strategii używałeś (powtarzanie w myślach, grupowanie liczb, „zgadywanie” na końcu)? Który odpowiednik ma to w komputerze?</li>
+      <li>Wszystkie programy mają tyle samo rozkazów. Co jeszcze — poza liczbą śledzonych wartości — mogło utrudniać trudniejsze poziomy?</li>
+      <li>Współczesne procesory mają kilkanaście–kilkadziesiąt rejestrów ogólnego przeznaczenia (W5). Po co tyle, skoro wszystko można trzymać w pamięci?</li>
+    </ol>
+  </div>
+  <p class="src">A. D. Baddeley, G. Hitch, <em>Working memory</em>, w: G. H. Bower (red.), Psychology of Learning and Motivation 8 (1974), s. 47–89; N. Cowan, <em>The magical number 4 in short-term memory</em>, Behav. Brain Sci. 24 (2001), s. 87–114; G. A. Miller, Psychol. Rev. 63 (1956), s. 81–97; R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (PMC).</p>
+</section>
+
+<!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
+<section id="v-ustawienia" hidden>
+  <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
+  <p class="lead">Ćwiczenie 4 („Bądź procesorem”) może wysyłać anonimowe wyniki do Formularza Google i pokazywać wyniki całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła. Można użyć tego samego formularza co w wykładach 1, 2 i 4.</p>
+
+  <div class="card">
+    <h3>Jednorazowe przygotowanie (ok. 10 min)</h3>
+    <ol>
+      <li>Utwórz nowy Formularz Google z <strong>czterema pytaniami typu „Krótka odpowiedź”</strong> o nazwach dokładnie: <code>aplikacja</code>, <code>sesja</code>, <code>wariant</code>, <code>wynik</code>. Żadne nie powinno być wymagane.</li>
+      <li>W <strong>Ustawieniach → Odpowiedzi</strong> wyłącz zbieranie adresów e-mail i <strong>ograniczenie do użytkowników SWPS</strong>. Nie włączaj „Ogranicz do 1 odpowiedzi”. Inaczej wysyłka ze strony nie zadziała.</li>
+      <li>W zakładce <strong>Odpowiedzi</strong> kliknij „Połącz z Arkuszami” i utwórz nowy arkusz.</li>
+      <li>W arkuszu: <strong>Plik → Udostępnij → Opublikuj w internecie</strong>. Wybierz arkusz z odpowiedziami i format <strong>CSV</strong>, opublikuj i skopiuj link.</li>
+      <li>W formularzu: <strong>⋮ → Pobierz link wstępnie wypełniony</strong>. Wpisz w pola kolejno <code>APLIKACJA</code>, <code>SESJA</code>, <code>WARIANT</code>, <code>WYNIK</code>, kliknij „Pobierz link” i skopiuj go.</li>
+      <li>Wklej oba linki poniżej, nadaj nazwę sesji i kliknij „Sprawdź”.</li>
+    </ol>
+    <p class="small muted">Wysyłane są tylko: nazwa ćwiczenia, nazwa sesji, liczba śledzonych wartości, trafność (0/1) i czas w ms — po jednym wierszu na program. Opublikowany CSV jest publiczny, więc nie dodawaj do formularza pytań o dane osobowe.</p>
+  </div>
+
+  <div class="card">
+    <h3>Konfiguracja</h3>
+    <div class="field">
+      <label for="sPrefill">Link wstępnie wypełniony z formularza</label>
+      <textarea id="sPrefill" style="min-height:70px" placeholder="https://docs.google.com/forms/d/e/…/viewform?usp=pp_url&amp;entry.…=APLIKACJA&amp;…"></textarea>
+      <span id="sPrefillInfo" class="small"></span>
+    </div>
+    <div class="field">
+      <label for="sCsv">Link do opublikowanego arkusza (CSV)</label>
+      <input id="sCsv" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=…&amp;single=true&amp;output=csv">
+    </div>
+    <div class="field">
+      <label for="sSes">Nazwa sesji</label>
+      <input id="sSes" type="text" maxlength="60" style="max-width: 320px">
+      <span class="small muted">Wykresy pokazują tylko wyniki z tej sesji. Na kolejne zajęcia lub grupę zmień nazwę; formularz zostaje ten sam.</span>
+    </div>
+    <div class="field">
+      <label for="sBase">Adres strony w sieci (do linku dla studentów)</label>
+      <input id="sBase" type="url" placeholder="https://login.github.io/wdi/w05.html">
+      <span class="small muted" id="sBaseInfo"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="btn" id="sCheck">Sprawdź</button>
+      <button type="button" class="btn ghost" id="sSave">Zapisz w tej przeglądarce</button>
+      <button type="button" class="btn ghost" id="sForget">Usuń z tej przeglądarki</button>
+    </div>
+    <div id="sOut" class="small" style="margin-top:10px" aria-live="polite"></div>
+  </div>
+
+  <div class="card" id="sLinksCard" hidden>
+    <h3>Link dla studentów (tryb grupowy)</h3>
+    <p class="small muted">Ten link włącza wysyłanie wyników i wykresy sali. Pokaż ten link na slajdzie (najlepiej jako kod QR). Zwykły adres strony, bez parametru <code>cfg</code>, działa bez wysyłania.</p>
+    <div class="field"><label for="sLinkP">Bądź procesorem</label><div class="row"><input id="sLinkP" type="text" readonly style="flex:1"><button type="button" class="btn small" data-copy="sLinkP">Kopiuj</button></div></div>
+  </div>
+</section>
+
 </main>
 
 <footer>
   <div class="wrap">
-    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline i niczego nie wysyła.</p>
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline. Wysyła dane wyłącznie w trybie grupowym, i to tylko anonimowe wyniki.</p>
+    <p><a href="#ustawienia">Dla prowadzącego: wspólne wyniki grupy</a></p>
   </div>
 </footer>
 
@@ -1315,21 +1454,376 @@ const Operand = (() => {
   return { init, pytanie };
 })();
 
+/* ═════════════════════ Tryb grupowy (jak w W01–W02) ═════════════════════ */
+const CFG_KEY = 'wdi-w05-grupa';
+function b64e(str) { const b = new TextEncoder().encode(str); let bin = ''; b.forEach((x) => { bin += String.fromCharCode(x); }); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64d(str) { let t = str.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; const bin = atob(t); return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))); }
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* brak dostępu */ } },
+};
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) { return false; }
+}
+function cfgPoprawna(c) {
+  return c && typeof c === 'object' && /^https?:\/\//.test(c.f || '') && /^https?:\/\//.test(c.c || '') &&
+    c.e && ['a', 's', 'w', 'v'].every((k) => /^entry\.\d+$/.test(c.e[k] || '')) && typeof c.s === 'string' && c.s.trim().length > 0 && c.s.length <= 60;
+}
+function parseCSV(text) {
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(f); f = ''; }
+    else if (ch === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (ch !== '\r') f += ch;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x !== ''));
+}
+const Grupa = {
+  cfg: null, zrodlo: null,
+  init() {
+    const p = new URLSearchParams(location.search).get('cfg');
+    if (p) { try { const c = JSON.parse(b64d(p)); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'url'; } } catch (e) { /* zły parametr: tryb samodzielny */ } }
+    if (!this.cfg) { const raw = store.get(CFG_KEY); if (raw) { try { const c = JSON.parse(raw); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'local'; } } catch (e) { /* ignoruj */ } } }
+    const b = $('#groupBadge');
+    if (this.cfg) { b.hidden = false; b.textContent = `Tryb grupowy · ${this.cfg.s}`; b.title = this.zrodlo === 'local' ? 'Konfiguracja zapisana w tej przeglądarce' : 'Konfiguracja z linku'; }
+  },
+  aktywna() { return !!this.cfg; },
+  async wyslij(aplikacja, wariant, wynik, cfg = this.cfg) {
+    const body = new URLSearchParams();
+    body.set(cfg.e.a, aplikacja); body.set(cfg.e.s, cfg.s); body.set(cfg.e.w, wariant); body.set(cfg.e.v, String(wynik));
+    await fetch(cfg.f, { method: 'POST', mode: 'no-cors', body });
+  },
+  async pobierz(cfg = this.cfg) {
+    const r = await fetch(cfg.c, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`serwer odpowiedział kodem ${r.status}`);
+    const rows = parseCSV(await r.text());
+    if (rows.length === 0) return { rows: [], kol: null };
+    const head = rows[0].map((x) => x.trim().toLowerCase());
+    const idx = (n, fb) => { const i = head.indexOf(n); return i >= 0 ? i : fb; };
+    const kol = { a: idx('aplikacja', 1), s: idx('sesja', 2), w: idx('wariant', 3), v: idx('wynik', 4), znalezione: ['aplikacja', 'sesja', 'wariant', 'wynik'].every((n) => head.includes(n)) };
+    const out = rows.slice(1).map((r) => ({ a: (r[kol.a] || '').trim(), s: (r[kol.s] || '').trim(), w: (r[kol.w] || '').trim(), v: Number(String(r[kol.v] || '').replace(',', '.').trim()) }));
+    return { rows: out, kol };
+  },
+};
+
+
+/* ═════════════════════ Ćwiczenie 4: Bądź procesorem ═════════════════════ */
+// Generator programów: k = liczba wartości, które trzeba śledzić naraz (AC + k−1 komórek wyniku).
+const Procesor = (() => {
+  const DLUGOSC = 8;            // rozkazów przed STOP — tyle samo na każdym poziomie
+  const WEJ = [10, 11, 12];     // komórki z danymi (tylko do odczytu)
+  const WYN = [20, 21, 22];     // komórki, do których program zapisuje
+  const losuj = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const wybierz = (t) => t[Math.floor(Math.random() * t.length)];
+  const tasuj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+
+  function generuj(k) {
+    const cele = WYN.slice(0, k - 1);
+    for (let proba = 0; proba < 5000; proba++) {
+      const dane = Object.fromEntries(WEJ.map(a => [a, losuj(1, 9)]));
+      const zapisane = new Set(), linie = [];
+      let ac = null, czytanoZapis = false, ok = true, poprz = null;
+      const mem = { ...dane };
+      for (const a of cele) mem[a] = 0;
+      for (let i = 0; i < DLUGOSC; i++) {
+        let op;
+        if (i === 0) op = ['LOAD', '@', wybierz(WEJ)];
+        else {
+          const zost = DLUGOSC - i, brak = cele.filter(c => !zapisane.has(c));
+          const mozliwe = [];
+          if (brak.length && poprz[0] !== 'STORE' && (zost <= brak.length + 1 || Math.random() < 0.35)) mozliwe.push(['STORE', '$', wybierz(brak)]);
+          else {
+            mozliwe.push(['ADD', '$', losuj(1, 9)], ['SUB', '$', losuj(1, 9)], ['ADD', '@', wybierz(WEJ)]);
+            if (zapisane.size) mozliwe.push(['ADD', '@', wybierz([...zapisane])]);
+            // LOAD tylko zaraz po STORE: inaczej wcześniejszy rachunek w AC przepadłby bez śladu
+            if (poprz && poprz[0] === 'STORE') {
+              mozliwe.push(['LOAD', '@', wybierz(WEJ)]);
+              const inne = [...zapisane].filter(c => c !== poprz[2]);
+              if (inne.length) mozliwe.push(['LOAD', '@', wybierz(inne)]);
+            }
+            if (zapisane.size && i > 2 && poprz && poprz[0] !== 'STORE') mozliwe.push(['STORE', '$', wybierz([...zapisane])]);
+          }
+          op = wybierz(mozliwe);
+        }
+        const [r, t, a] = op;
+        const v = t === '$' ? a : mem[a];
+        if (r === 'LOAD') ac = v; else if (r === 'ADD') ac += v; else if (r === 'SUB') ac -= v; else { mem[a] = ac; zapisane.add(a); }
+        if (t === '@' && cele.includes(a)) czytanoZapis = true;
+        if (ac < 0 || ac > 60) { ok = false; break; }
+        linie.push(`${r} ${t} ${a}`);
+        poprz = op;
+      }
+      if (!ok || zapisane.size !== cele.length) continue;
+      if (k >= 2 && !czytanoZapis) continue;
+      // każda śledzona wartość musi się różnić od stanu początkowego i od pozostałych
+      const koniec = [ac, ...cele.map(c => mem[c])];
+      if (cele.some(c => mem[c] === 0) || new Set(koniec).size !== koniec.length) continue;
+      const pytania = [{ co: 'AC', ile: ac }, ...cele.map(c => ({ co: `MEM[${c}]`, ile: mem[c] }))];
+      return { k, dane, cele, linie, pytanie: wybierz(pytania), wszystko: pytania };
+    }
+    return null;
+  }
+  return { generuj, DLUGOSC, WEJ, WYN, tasuj };
+})();
+
+const BadzProcesorem = (() => {
+  const APLIKACJA = 'procesor';
+  const POZIOMY = [1, 1, 2, 2, 3, 3, 4, 4];
+  let proby = [], nr = 0, wyniki = [], t0 = 0, tick = null, czas = 0, panel = null, faza = '';
+
+  function pokazProbe() {
+    const g = proby[nr];
+    faza = 'program';
+    $('#prNr').textContent = `Program ${nr + 1} z ${proby.length} · do śledzenia: ${g.k} ${g.k === 1 ? 'wartość' : 'wartości'}`;
+    $('#prLista').replaceChildren(...[...g.linie, 'STOP'].map((l, i) => el('tr', {}, el('td', { class: 'a', text: String(i) }), el('td', { class: 'mono', text: l }))));
+    const adr = [...Procesor.WEJ, ...g.cele];
+    $('#prMem').replaceChildren(el('tbody', {},
+      el('tr', {}, el('th', { text: 'adres' }), ...adr.map(a => el('td', { class: 'a', text: String(a) }))),
+      el('tr', {}, el('th', { text: 'MEM' }), ...adr.map(a => el('td', { class: 'v', text: String(a in g.dane ? g.dane[a] : 0) })))));
+    $('#prSledz').textContent = ['AC', ...g.cele.map(c => `MEM[${c}]`)].join(', ');
+    $('#prProg').hidden = false; $('#prPyt').hidden = true; $('#prFb').hidden = true;
+    t0 = performance.now();
+    clearInterval(tick);
+    tick = setInterval(() => { $('#prTimer').textContent = ((performance.now() - t0) / 1000).toFixed(0) + ' s'; }, 250);
+    $('#prGotowe').focus();
+  }
+
+  function gotowe() {
+    if (faza !== 'program') return;
+    faza = 'pytanie';
+    czas = Math.round(performance.now() - t0);
+    clearInterval(tick);
+    const g = proby[nr];
+    $('#prProg').hidden = true; $('#prPyt').hidden = false;
+    $('#prPytTxt').textContent = `Ile wynosi ${g.pytanie.co} po zakończeniu programu?`;
+    $('#prOdp').value = ''; $('#prOdp').focus();
+  }
+
+  function slad(g) {
+    const src = g.linie.join('\n') + '\nSTOP\n' + Object.entries(g.dane).map(([a, v]) => `${a}: ${v}`).join('\n') + '\n' + g.cele.map(c => `${c}: 0`).join('\n');
+    const w = PMC.asembluj(src), S = PMC.nowa(w.mem), wiersze = [];
+    while (!S.koniec && S.rozkazy < 20) {
+      const pc = S.PC; PMC.rozkaz(S, w.kod);
+      if (S.koniec === 'stop') break;
+      wiersze.push(el('tr', {}, el('td', { class: 'mono', text: `${pc}: ${g.linie[pc]}` }), el('td', { class: 'mono', text: String(S.AC) }),
+        el('td', { class: 'mono', text: S.pisane.length ? `MEM[${S.pisane[0]}] ← ${S.mem[S.pisane[0]]}` : '' })));
+    }
+    return [el('thead', {}, el('tr', {}, el('th', { text: 'rozkaz' }), el('th', { text: 'AC po' }), el('th', { text: 'zapis' }))), el('tbody', {}, ...wiersze)];
+  }
+
+  function odpowiedz() {
+    if (faza !== 'pytanie') return;
+    const t = $('#prOdp').value.trim().replace('−', '-');
+    if (!/^-?\d+$/.test(t)) { $('#prOdp').focus(); return; }
+    faza = 'fb';
+    const g = proby[nr], ok = Number(t) === g.pytanie.ile;
+    wyniki.push({ k: g.k, ok, czas });
+    $('#prPyt').hidden = true; $('#prFb').hidden = false;
+    const line = $('#prFbLine');
+    line.className = 'fbline ' + (ok ? 'dobrze' : 'zle');
+    line.textContent = (ok ? 'Dobrze! ' : `Nie — ${g.pytanie.co} = ${g.pytanie.ile}. `) + `Stan końcowy: ${g.wszystko.map(p => `${p.co} = ${p.ile}`).join(', ')}. Czas: ${(czas / 1000).toFixed(1)} s.`;
+    $('#prSlad').replaceChildren(...slad(g));
+    $('#prDalej').textContent = nr === proby.length - 1 ? 'Zobacz wynik →' : 'Dalej →';
+    $('#prDalej').focus();
+  }
+
+  const sek = (ms) => Number.isFinite(ms) ? (ms / 1000).toLocaleString('pl-PL', { maximumFractionDigits: 1 }) + ' s' : '—';
+  const mediana = (t) => { const s = [...t].sort((a, b) => a - b); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : NaN; };
+
+  function wykres(host, dane) {
+    host.replaceChildren(...[1, 2, 3, 4].map(k => {
+      const x = dane.filter(d => d.k === k);
+      const pc = x.length ? 100 * x.filter(d => d.ok).length / x.length : 0;
+      return el('div', { class: 'hbar' },
+        el('div', { class: 'lab', text: `${k} ${k === 1 ? 'wartość' : 'wartości'} do śledzenia` }),
+        el('div', { class: 'track' }, el('div', { class: 'fill', style: `width: ${pc * 0.45}%` }),
+          el('span', { class: 'val', style: `left: calc(${pc * 0.45}% + 6px)`, text: x.length ? `${Math.round(pc)}% trafnych · mediana ${sek(mediana(x.map(d => d.czas)))} · n = ${x.length}` : 'brak danych' })));
+    }));
+  }
+
+  function podsumuj() {
+    $('#prProba').hidden = true; $('#prWynik').hidden = false;
+    wykres($('#prWykres'), wyniki);
+    const traf = (k) => wyniki.filter(w => w.k === k && w.ok).length;
+    const pierwszyBlad = [1, 2, 3, 4].find(k => traf(k) < 2);
+    $('#prWniosek').textContent = pierwszyBlad === undefined ? 'Wszystko bezbłędnie — imponująca pamięć robocza (albo kartka pod stołem).' : `Pierwsze pomyłki przy ${pierwszyBlad} ${pierwszyBlad === 1 ? 'wartości' : 'wartościach'} do śledzenia. Porównaj z wynikami sali.`;
+    if (panel) panel.gotowe(wyniki);
+  }
+
+  function start() {
+    proby = Procesor.tasuj([...POZIOMY]).map(k => Procesor.generuj(k));
+    nr = 0; wyniki = [];
+    $('#prIntro').hidden = true; $('#prWynik').hidden = true; $('#prProba').hidden = false;
+    pokazProbe();
+  }
+
+  function dalej() { if (nr < proby.length - 1) { nr++; pokazProbe(); } else podsumuj(); }
+
+  function panelGrupy(host) {
+    if (!Grupa.aktywna()) return null;
+    let paczka = null, timer = null, aktywny = false;
+    const status = el('span', { class: 'small muted', 'aria-live': 'polite' });
+    const send = el('button', { type: 'button', class: 'btn', text: 'Wyślij moje wyniki do grupy' });
+    send.disabled = true;
+    const wyk = el('div', { class: 'hbars' });
+    const meta = el('p', { class: 'small muted' });
+    const statsP = el('p', { class: 'small' });
+    const refresh = el('button', { type: 'button', class: 'btn ghost small', text: 'Odśwież' });
+    host.append(el('div', { class: 'group' },
+      el('h3', {}, el('span', { class: 'dot' }), `Wyniki sali · sesja „${Grupa.cfg.s}”`),
+      el('div', { class: 'row' }, send, status), statsP, wyk, el('div', { class: 'row' }, refresh, meta)));
+    send.addEventListener('click', async () => {
+      if (!paczka) return;
+      send.disabled = true; status.textContent = 'Wysyłanie…';
+      try {
+        for (const w of paczka) await Grupa.wyslij(APLIKACJA, `k${w.k}|${w.ok ? 1 : 0}`, w.czas);
+        status.textContent = 'Wysłano. Wyniki pojawią się na wykresie po odświeżeniu arkusza (zwykle w ciągu kilku minut).';
+        paczka = null; setTimeout(odswiez, 4000);
+      } catch (e) { status.textContent = 'Nie udało się wysłać (brak internetu?). Spróbuj ponownie.'; send.disabled = false; }
+    });
+    async function odswiez() {
+      meta.textContent = 'Pobieranie…';
+      try {
+        const { rows } = await Grupa.pobierz();
+        const dane = rows.filter(r => r.a === APLIKACJA && r.s === Grupa.cfg.s && Number.isFinite(r.v) && /^k[1-4]\|[01]$/.test(r.w))
+          .map(r => ({ k: Number(r.w[1]), ok: r.w.endsWith('1'), czas: r.v }));
+        wykres(wyk, dane);
+        statsP.textContent = dane.length ? `Prób: ${dane.length} (ok. ${Math.round(dane.length / POZIOMY.length)} osób).` : 'Nikt jeszcze nie wysłał wyników.';
+        meta.textContent = `Aktualizacja: ${new Date().toLocaleTimeString('pl-PL')}. Opublikowany arkusz odświeża się z opóźnieniem do kilku minut.`;
+      } catch (e) { meta.textContent = `Wyniki sali są chwilowo niedostępne (${e.message || 'błąd sieci'}).`; }
+    }
+    refresh.addEventListener('click', odswiez);
+    return {
+      gotowe(w) { paczka = w; send.disabled = false; status.textContent = ''; },
+      start() { aktywny = true; odswiez(); clearInterval(timer); timer = setInterval(() => { if (aktywny && !document.hidden) odswiez(); }, 20000); },
+      stop() { aktywny = false; clearInterval(timer); },
+    };
+  }
+
+  function init() {
+    panel = panelGrupy($('#grupa-procesor'));
+    $('#prStart').addEventListener('click', start);
+    $('#prJeszcze').addEventListener('click', start);
+    $('#prGotowe').addEventListener('click', gotowe);
+    $('#prWyslij').addEventListener('click', odpowiedz);
+    $('#prOdp').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); odpowiedz(); } });
+    $('#prDalej').addEventListener('click', dalej);
+  }
+  function wejscie() {
+    if (panel) panel.start();
+    if (faza === 'program') { t0 = performance.now() - czas; }
+  }
+  function wyjscie() { if (panel) panel.stop(); if (faza === 'program') { czas = performance.now() - t0; } }
+  return { init, wejscie, wyjscie };
+})();
+
+/* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
+const Ustawienia = (() => {
+  let roboczy = null;
+  function domyslnaSesja() { const d = new Date(); return `W05-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+  function parsujPrefill(link) {
+    let u; try { u = new URL(link.trim()); } catch (e) { throw new Error('To nie wygląda na adres internetowy.'); }
+    if (!/\/forms\/.+\/(viewform|formResponse)$/.test(u.pathname)) throw new Error('To nie jest link do Formularza Google (powinien kończyć się na /viewform?…).');
+    const f = u.origin + u.pathname.replace(/\/viewform$/, '/formResponse');
+    const e = {}; const MAP = { APLIKACJA: 'a', SESJA: 's', WARIANT: 'w', WYNIK: 'v' };
+    for (const [k, v] of u.searchParams) if (/^entry\.\d+$/.test(k) && MAP[v.trim().toUpperCase()]) e[MAP[v.trim().toUpperCase()]] = k;
+    const brak = Object.entries(MAP).filter(([, kk]) => !e[kk]).map(([nm]) => nm);
+    if (brak.length) throw new Error(`W linku brakuje pól: ${brak.join(', ')}. Wpisz te słowa w pola formularza przed pobraniem linku.`);
+    return { f, e };
+  }
+  function zbierz() {
+    const { f, e } = parsujPrefill($('#sPrefill').value);
+    const c = $('#sCsv').value.trim();
+    if (!/^https?:\/\//.test(c)) throw new Error('Podaj link do opublikowanego arkusza (CSV).');
+    const sesja = $('#sSes').value.trim();
+    if (!sesja) throw new Error('Podaj nazwę sesji.');
+    return { v: 1, f, e, c, s: sesja };
+  }
+  function baza() { return location.protocol === 'file:' ? $('#sBase').value.trim() : location.origin + location.pathname; }
+  function linki(cfg) {
+    const b = baza(); const card = $('#sLinksCard');
+    if (!b) { card.hidden = true; return; }
+    $('#sLinkP').value = `${b}?cfg=${b64e(JSON.stringify(cfg))}#procesor`; card.hidden = false;
+  }
+  function wypelnij(cfg) {
+    if (!cfg) return;
+    const u = new URL(cfg.f.replace(/\/formResponse$/, '/viewform'));
+    u.searchParams.set('usp', 'pp_url'); u.searchParams.set(cfg.e.a, 'APLIKACJA'); u.searchParams.set(cfg.e.s, 'SESJA'); u.searchParams.set(cfg.e.w, 'WARIANT'); u.searchParams.set(cfg.e.v, 'WYNIK');
+    $('#sPrefill').value = u.toString(); $('#sCsv').value = cfg.c; $('#sSes').value = cfg.s;
+  }
+  function out(...kids) { $('#sOut').replaceChildren(...kids); }
+  async function sprawdz() {
+    let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+    roboczy = cfg; linki(cfg);
+    const lista = el('ul');
+    const pkt = (ok, t) => lista.append(el('li', { class: ok ? 'ok' : 'err', text: `${ok ? '✓' : '✗'} ${t}` }));
+    out(lista);
+    pkt(true, 'Link formularza rozpoznany, wszystkie cztery pola znalezione.');
+    try { await Grupa.wyslij('test', 'test', 0, cfg); pkt(true, 'Wpis testowy wysłany (aplikacja = test). Przeglądarka nie potwierdza odbioru: sprawdź, czy pojawił się w arkuszu.'); }
+    catch (e) { pkt(false, `Wysyłka nie powiodła się: ${e.message}`); }
+    try {
+      const { rows, kol } = await Grupa.pobierz(cfg);
+      pkt(true, `Arkusz CSV odczytany: ${rows.length} wierszy odpowiedzi.`);
+      if (kol && !kol.znalezione) pkt(false, 'Nie znaleziono kolumn o nazwach aplikacja, sesja, wariant, wynik. Używam kolejności kolumn 2–5. Sprawdź nazwy pytań.');
+      const testy = rows.filter((r) => r.a === 'test' && r.s === cfg.s).length;
+      lista.append(el('li', { class: 'muted', text: `Wpisów testowych w tej sesji: ${testy}. Nowy wpis może pojawić się w CSV dopiero po kilku minutach; kliknij „Sprawdź” ponownie.` }));
+    } catch (e) { pkt(false, `Nie udało się odczytać CSV: ${e.message}. Sprawdź, czy arkusz jest opublikowany jako CSV.`); }
+    if (location.protocol === 'file:' && !$('#sBase').value.trim()) lista.append(el('li', { class: 'muted', text: 'Strona jest otwarta z dysku. Żeby wygenerować link dla studentów, wpisz adres strony w sieci (GitHub Pages).' }));
+  }
+  function init() {
+    $('#sSes').value = domyslnaSesja();
+    if (location.protocol === 'file:') $('#sBaseInfo').textContent = 'Strona jest otwarta z dysku, więc link musi wskazywać kopię w sieci.';
+    else { $('#sBase').value = location.origin + location.pathname; $('#sBase').readOnly = true; $('#sBaseInfo').textContent = 'Adres tej strony.'; }
+    const zapisana = store.get(CFG_KEY); if (zapisana) { try { wypelnij(JSON.parse(zapisana)); } catch (e) { /* ignoruj */ } }
+    else if (Grupa.cfg) wypelnij(Grupa.cfg);
+    $('#sPrefill').addEventListener('input', () => {
+      const i = $('#sPrefillInfo');
+      if (!$('#sPrefill').value.trim()) { i.textContent = ''; return; }
+      try { const { e } = parsujPrefill($('#sPrefill').value); i.className = 'small ok'; i.textContent = `✓ Pola: aplikacja = ${e.a}, sesja = ${e.s}, wariant = ${e.w}, wynik = ${e.v}`; }
+      catch (err) { i.className = 'small err'; i.textContent = err.message; }
+    });
+    $('#sPrefill').dispatchEvent(new Event('input'));
+    $('#sCheck').addEventListener('click', sprawdz);
+    $('#sBase').addEventListener('input', () => { if (roboczy) linki(roboczy); });
+    $('#sSave').addEventListener('click', () => {
+      let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+      const ok = store.set(CFG_KEY, JSON.stringify(cfg)); linki(cfg);
+      out(el('p', { class: ok ? 'ok' : 'err', text: ok ? 'Zapisano. W tej przeglądarce tryb grupowy będzie włączony także bez parametru w linku. Odśwież stronę, żeby go uruchomić.' : 'Ta przeglądarka nie pozwala zapisywać ustawień. Używaj linku dla studentów.' }));
+    });
+    $('#sForget').addEventListener('click', () => { store.del(CFG_KEY); out(el('p', { text: 'Usunięto zapisaną konfigurację. Po odświeżeniu strona będzie działać samodzielnie (chyba że otworzysz link z parametrem cfg).' })); });
+    for (const b of $$('[data-copy]')) b.addEventListener('click', async () => { const ok = await copyText($('#' + b.dataset.copy).value); b.textContent = ok ? 'Skopiowano' : 'Zaznacz i skopiuj'; setTimeout(() => { b.textContent = 'Kopiuj'; }, 1600); });
+    if (Grupa.cfg) linki(Grupa.cfg);
+  }
+  return { init };
+})();
+
+
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'pmc', 'rentgen', 'operand'];
+const WIDOKI = ['start', 'pmc', 'rentgen', 'operand', 'procesor', 'ustawienia'];
 let biezacy = null;
 function nawiguj() {
   const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
   if (biezacy === 'pmc' && v !== 'pmc') Symulator.wyjscie();
+  if (biezacy === 'procesor' && v !== 'procesor') BadzProcesorem.wyjscie();
+  if (v === 'procesor' && biezacy !== 'procesor') BadzProcesorem.wejscie();
   for (const w of WIDOKI) $('#v-' + w).hidden = w !== v;
   for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 5 · ćwiczenia', pmc: 'Symulator PMC · W5', rentgen: 'Rentgen słowa · W5', operand: 'Skąd operand? · W5' }[v];
+  document.title = { start: 'Wykład 5 · ćwiczenia', pmc: 'Symulator PMC · W5', rentgen: 'Rentgen słowa · W5', operand: 'Skąd operand? · W5', procesor: 'Bądź procesorem · W5', ustawienia: 'Ustawienia prowadzącego · W5' }[v];
 }
+Grupa.init();
 Symulator.init();
 Rentgen.init();
 Operand.init();
+BadzProcesorem.init();
+Ustawienia.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
 </script>
