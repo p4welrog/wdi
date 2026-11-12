@@ -246,6 +246,26 @@ ol.zag li { margin: 6px 0; }
 ol.zag li .stan { font-size: .88rem; }
 ol.zag li.teraz .stan { color: var(--good); font-weight: 600; }
 ol.zag li.bylo .stan { color: var(--muted); }
+/* ───────── W05: skąd operand? ───────── */
+.opstan { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin: 12px 0; }
+.opreg { border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 14px; background: var(--surface-2); text-align: center; }
+.opreg .k { font-size: .8rem; color: var(--muted); font-family: var(--mono); font-weight: 700; }
+.opreg .v { font-size: 1.5rem; font-weight: 700; }
+table.opmem { border-collapse: collapse; font-family: var(--mono); }
+table.opmem th { font-family: var(--font); font-size: .78rem; color: var(--muted); font-weight: 600; padding: 4px 8px; text-align: right; }
+table.opmem td { border: 1px solid var(--border); padding: 6px 8px; text-align: center; min-width: 2.6em; }
+table.opmem td.a { color: var(--muted); font-size: .85rem; background: var(--surface-2); }
+table.opmem td.v { font-size: 1.1rem; font-weight: 600; }
+table.opmem td.cz { background: var(--amber-soft); }
+table.opmem td.cz.v { box-shadow: inset 0 0 0 2px var(--amber); }
+table.opmem td.cz2.v { box-shadow: inset 0 0 0 2px var(--good); }
+.oprozkaz { font-size: 1.6rem; font-weight: 700; margin: 6px 0; }
+.opbtn { min-width: 6em; font-family: var(--mono); }
+.fbline { font-weight: 600; font-size: 1.1rem; margin: 12px 0 4px; }
+.fbline.dobrze { color: var(--good); }
+.fbline.zle { color: var(--bad); }
+.opbtn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
+.opbtn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
 </style>
 </head>
 <body>
@@ -258,6 +278,7 @@ ol.zag li.bylo .stan { color: var(--muted); }
     <a href="#start">Start</a>
     <a href="#pmc">1. Symulator PMC</a>
     <a href="#rentgen">2. Rentgen słowa</a>
+    <a href="#operand">3. Skąd operand?</a>
   </nav>
 </header>
 
@@ -270,6 +291,7 @@ ol.zag li.bylo .stan { color: var(--muted); }
   <div class="grid2">
     <a class="tile" href="#pmc"><span class="num">1</span><h3>Symulator PMC</h3><p>Przykładowa Maszyna Cyfrowa w działaniu: rejestry AC, OR, PC, IR, pamięć i cykl pobierz–dekoduj–operand–wykonaj, faza po fazie. Programy z wykładu, pułapka STORE @ 7 i zadania sprawdzane testami.</p><div class="meta">ok. 20 min · slajdy od „PMC: model dydaktyczny” do „Mini-zadania: pętla w PMC”</div></a>
     <a class="tile" href="#rentgen"><span class="num">2</span><h3>Rentgen słowa</h3><p>Szesnaście bitów i pięć odczytów naraz: liczba bez znaku, liczba w U2, znak, wartość logiczna i rozkaz PMC. Klikaj bity, wpisuj liczby albo rozkazy i rozwiąż zagadki.</p><div class="meta">ok. 10 min · slajdy „Liczba czy rozkaz?”, „Słowo jako dane” i „Słowo jako rozkaz”</div></a>
+    <a class="tile" href="#operand"><span class="num">3</span><h3>Skąd operand?</h3><p>Seria 10 pytań z losowym stanem pamięci: co trafi do OR w trybie $, @, &amp; i +, dokąd zapisze STORE, dokąd skoczy JUMP. Po każdej odpowiedzi — droga przez pamięć i nazwa popełnionej pomyłki.</p><div class="meta">ok. 10 min · slajdy „Tryby adresowania” i „Śledzenie wykonania”</div></a>
   </div>
 </section>
 
@@ -414,6 +436,74 @@ ol.zag li.bylo .stan { color: var(--muted); }
     </ol>
   </div>
   <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (PMC: typy danych i format rozkazu); kody znaków: ANSI X3.4-1986 (ASCII). Bit 15 rozkazu jest w tym modelu nieużywany; symulator go pomija.</p>
+</section>
+
+<!-- ═══════════════════ 3. SKĄD OPERAND? ═══════════════════ -->
+<section id="v-operand" hidden>
+  <h2>3. Skąd operand?</h2>
+  <p class="lead">Ten sam argument w rozkazie może oznaczać liczbę, adres liczby albo adres adresu. Przy każdym pytaniu masz stan pamięci i akumulatora; wyznacz, co trafi do rejestru OR. Seria to 10 pytań z losowymi danymi.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <div class="row"><span class="small muted" id="opTrLab">Tryby w serii</span>
+        <div class="seg" id="opTr" role="group" aria-labelledby="opTrLab">
+          <button type="button" data-t="all" aria-pressed="true">wszystkie</button>
+          <button type="button" data-t="0">$ natychmiastowy</button>
+          <button type="button" data-t="1">@ bezpośredni</button>
+          <button type="button" data-t="2">&amp; pośredni</button>
+          <button type="button" data-t="3">+ indeksowy</button>
+        </div>
+      </div>
+      <button type="button" class="btn small ghost" id="opNowa">Nowa seria</button>
+    </div>
+    <details class="ref" style="margin-top: 10px"><summary>Ściąga: tryby adresowania</summary>
+      <div class="scroll-x" style="margin-top: 8px"><table class="t">
+        <thead><tr><th>znak</th><th>tryb</th><th>OR ←</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">$</td><td>natychmiastowy</td><td class="mono">arg</td></tr>
+          <tr><td class="mono">@</td><td>bezpośredni</td><td class="mono">MEM[arg]</td></tr>
+          <tr><td class="mono">&amp;</td><td>pośredni</td><td class="mono">MEM[MEM[arg]]</td></tr>
+          <tr><td class="mono">+</td><td>indeksowy</td><td class="mono">MEM[AC + arg]</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">STORE zapisuje AC pod adres OR, a JUMP ustawia PC na OR — więc i tam liczy się wyznaczony operand.</p>
+    </details>
+  </div>
+
+  <div class="card" id="opKarta">
+    <div class="row" style="justify-content: space-between"><span class="pill" id="opNr"></span><span class="small muted" id="opWynikMini"></span></div>
+    <div class="opstan">
+      <div class="opreg"><div class="k">AC</div><div class="v mono" id="opAC"></div></div>
+      <div class="scroll-x" style="flex: 1"><table class="opmem" id="opMem"></table></div>
+    </div>
+    <p class="oprozkaz"><span class="mono" id="opRozkaz"></span></p>
+    <p id="opPyt"></p>
+    <div class="row" id="opOdp"></div>
+    <div id="opFb" hidden>
+      <p class="fbline" id="opFbLine" role="status"></p>
+      <p class="mono small" id="opDroga"></p>
+      <p class="small" id="opBlad"></p>
+      <button type="button" class="btn" id="opDalej">Dalej →</button>
+    </div>
+  </div>
+
+  <div class="card" id="opPods" hidden>
+    <h3>Wynik serii</h3>
+    <div class="stats" id="opStats"></div>
+    <p id="opWniosek"></p>
+    <button type="button" class="btn" id="opJeszcze">Jeszcze jedna seria</button>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Ile odczytów pamięci potrzebuje procesor, żeby wyznaczyć operand w każdym z czterech trybów? Który tryb jest więc najszybszy?</li>
+      <li>Dlaczego w trybie natychmiastowym nie da się podać liczby ujemnej ani większej niż 511?</li>
+      <li>Tryb indeksowy przydaje się do tablic: arg to początek tablicy, AC — numer elementu. Jak przejść po wszystkich elementach tablicy w pętli?</li>
+      <li>W trybie pośrednim komórka pamięci zawiera adres innej komórki. Gdzie spotkasz tę samą ideę w Pythonie (podpowiedź: lista w liście)?</li>
+    </ol>
+  </div>
+  <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (tryby adresowania PMC). Na wykładzie: slajd „Tryby adresowania: skąd wziąć operand?”.</p>
 </section>
 
 </main>
@@ -1074,8 +1164,159 @@ const Rentgen = (() => {
   return { init };
 })();
 
+
+/* ═════════════════════ Ćwiczenie 3: Skąd operand? ═════════════════════ */
+const Operand = (() => {
+  const SERIA = 10;
+  const TRYB = ['natychmiastowy', 'bezpośredni', 'pośredni', 'indeksowy'];
+  const losuj = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const tasuj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+
+  // Generator jednego pytania. Zwraca stan, rozkaz, poprawną odpowiedź i odpowiedzi błędne z opisem pomyłki.
+  function pytanie(tryb) {
+    for (let proba = 0; proba < 200; proba++) {
+      const start = losuj(10, 40), N = 10;
+      const adresy = Array.from({ length: N }, (_, i) => start + i);
+      const mem = {};
+      for (const a of adresy) mem[a] = losuj(0, 60);
+      const AC = tryb === 3 ? losuj(1, 5) : losuj(0, 60);
+      const arg = tryb === 3 ? losuj(start, start + N - 1 - AC) : losuj(start, start + N - 1);
+      if (tryb === 2) mem[arg] = adresy[losuj(0, N - 1)];           // komórka z adresem
+      const M = (a) => (a in mem ? mem[a] : null);
+      const rozkaz = tasuj(['LOAD', 'ADD', 'SUB', 'STORE', 'JUMP'])[0];
+      let ok, droga;
+      const zle = [];   // [wartość, opis pomyłki]
+      if (tryb === 0) {
+        ok = arg; droga = `$ ${arg} → OR = arg = ${arg}`;
+        zle.push([M(arg), 'wzięto zawartość komórki arg — to tryb bezpośredni (@)'], [M(M(arg)), 'potraktowano arg jak adres adresu — to tryb pośredni (&)'], [AC + arg, 'dodano AC — to byłby adres w trybie indeksowym'], [AC, 'wzięto zawartość akumulatora zamiast operandu']);
+      } else if (tryb === 1) {
+        ok = M(arg); droga = `@ ${arg} → OR = MEM[${arg}] = ${ok}`;
+        zle.push([arg, 'wzięto sam argument — to tryb natychmiastowy ($)'], [M(M(arg)), 'sięgnięto o jeden poziom za daleko — to tryb pośredni (&)'], [M(arg + 1), 'odczytano sąsiednią komórkę'], [AC, 'wzięto zawartość akumulatora zamiast operandu']);
+      } else if (tryb === 2) {
+        ok = M(M(arg)); droga = `& ${arg} → MEM[${arg}] = ${M(arg)} → OR = MEM[${M(arg)}] = ${ok}`;
+        zle.push([M(arg), 'zatrzymano się po pierwszym kroku — to tryb bezpośredni (@)'], [arg, 'wzięto sam argument — to tryb natychmiastowy ($)'], [M(arg) + arg, 'dodano adres do argumentu zamiast sięgnąć do pamięci'], [AC, 'wzięto zawartość akumulatora zamiast operandu']);
+      } else {
+        ok = M(AC + arg); droga = `+ ${arg} → adres = AC + arg = ${AC} + ${arg} = ${AC + arg} → OR = MEM[${AC + arg}] = ${ok}`;
+        zle.push([M(arg), 'pominięto AC — to tryb bezpośredni (@)'], [AC + arg, 'podano adres zamiast zawartości komórki'], [M(arg) + AC, 'dodano AC do zawartości zamiast do adresu'], [AC, 'wzięto zawartość akumulatora zamiast operandu']);
+      }
+      if ((rozkaz === 'STORE' || rozkaz === 'JUMP') && (ok === null || ok < 0 || ok > 511)) continue;
+      const dystr = [];
+      for (const [v, o] of zle) if (v !== null && v !== ok && !dystr.some(d => d[0] === v)) dystr.push([v, o]);
+      if (ok === null || dystr.length < 3) continue;
+      const czytane = tryb === 0 ? [] : tryb === 1 ? [arg] : tryb === 2 ? [arg, M(arg)] : [AC + arg];
+      return { tryb, start, adresy, mem, AC, arg, rozkaz, ok, droga, dystr, czytane };
+    }
+    return null;
+  }
+
+  let seria = [], nr = 0, odp = [], czekam = false, filtr = 'all';
+
+  function nowaSeria() {
+    const tryby = filtr === 'all' ? tasuj([0, 0, 1, 1, 1, 2, 2, 2, 3, 3]) : Array(SERIA).fill(Number(filtr));
+    seria = tryby.map(t => pytanie(t));
+    nr = 0; odp = [];
+    $('#opPods').hidden = true; $('#opKarta').hidden = false;
+    pokaz();
+  }
+
+  function trescPytania(q) {
+    if (q.rozkaz === 'STORE') return 'Pod jaki adres rozkaz STORE zapisze zawartość AC?';
+    if (q.rozkaz === 'JUMP') return 'Jaką wartość będzie miał PC po wykonaniu skoku?';
+    return 'Jaka wartość trafi do rejestru OR?';
+  }
+
+  function rysujPamiec(q, podswietl) {
+    const kol = (a) => {
+      const i = podswietl ? podswietl.indexOf(a) : -1;
+      return i >= 0 ? `cz cz${i + 1}` : '';
+    };
+    $('#opMem').replaceChildren(
+      el('tbody', {},
+        el('tr', {}, el('th', { text: 'adres' }), ...q.adresy.map(a => el('td', { class: 'a ' + kol(a), text: String(a) }))),
+        el('tr', {}, el('th', { text: 'MEM' }), ...q.adresy.map(a => el('td', { class: 'v ' + kol(a), text: String(q.mem[a]) })))));
+  }
+
+  function pokaz() {
+    const q = seria[nr];
+    czekam = true;
+    $('#opNr').textContent = `Pytanie ${nr + 1} z ${SERIA} · tryb ${TRYB[q.tryb]}`;
+    $('#opWynikMini').textContent = odp.length ? `trafnie: ${odp.filter(o => o.ok).length} / ${odp.length}` : '';
+    $('#opAC').textContent = q.AC;
+    rysujPamiec(q, null);
+    $('#opRozkaz').textContent = `${q.rozkaz} ${PMC.TRYBY[q.tryb]} ${q.arg}`;
+    $('#opPyt').textContent = trescPytania(q);
+    const opcje = tasuj([[q.ok, null], ...q.dystr.slice(0, 3)]);
+    $('#opOdp').replaceChildren(...opcje.map(([v, o], i) => {
+      const b = el('button', { type: 'button', class: 'btn opbtn', 'data-v': String(v), text: `${i + 1} · ${v}` });
+      b.addEventListener('click', () => odpowiedz(v, o));
+      return b;
+    }));
+    $('#opFb').hidden = true;
+  }
+
+  function odpowiedz(v, opisBledu) {
+    if (!czekam) return;
+    czekam = false;
+    const q = seria[nr], ok = v === q.ok;
+    odp.push({ tryb: q.tryb, ok, blad: ok ? null : opisBledu });
+    for (const b of $$('#opOdp button')) {
+      b.disabled = true;
+      if (Number(b.dataset.v) === q.ok) b.classList.add('dobra');
+      else if (Number(b.dataset.v) === v) b.classList.add('zla');
+    }
+    const line = $('#opFbLine');
+    line.className = 'fbline ' + (ok ? 'dobrze' : 'zle');
+    line.textContent = ok ? 'Dobrze!' : `Nie — poprawnie: ${q.ok}.`;
+    $('#opDroga').textContent = q.droga + (q.rozkaz === 'STORE' ? `; STORE zapisze AC pod adres ${q.ok}` : q.rozkaz === 'JUMP' ? `; PC ← ${q.ok}` : '');
+    $('#opBlad').textContent = ok ? '' : `Twoja odpowiedź: ${opisBledu}.`;
+    rysujPamiec(q, q.czytane);
+    $('#opFb').hidden = false;
+    $('#opDalej').textContent = nr === SERIA - 1 ? 'Zobacz wynik →' : 'Dalej →';
+    $('#opDalej').focus();
+  }
+
+  function podsumuj() {
+    $('#opKarta').hidden = true;
+    const stat = (k, v) => el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v', text: v }));
+    const wTrybie = [0, 1, 2, 3].map(t => { const x = odp.filter(o => o.tryb === t); return x.length ? `${x.filter(o => o.ok).length}/${x.length}` : '—'; });
+    $('#opStats').replaceChildren(stat('trafnie', `${odp.filter(o => o.ok).length} / ${SERIA}`), ...['$', '@', '&', '+'].map((z, i) => stat(`tryb ${z}`, wTrybie[i])));
+    const bledy = odp.filter(o => !o.ok).map(o => o.blad);
+    const licz = {};
+    for (const b of bledy) licz[b] = (licz[b] || 0) + 1;
+    const naj = Object.entries(licz).sort((a, b) => b[1] - a[1])[0];
+    $('#opWniosek').textContent = !bledy.length ? 'Bez pomyłek — tryby adresowania masz opanowane.' : `Najczęstsza pomyłka (${naj[1]}×): ${naj[0]}.`;
+    $('#opPods').hidden = false;
+    const hist = pamiec.czytaj('operand') || [];
+    hist.push({ ok: odp.filter(o => o.ok).length, t: Date.now() });
+    pamiec.zapisz('operand', hist.slice(-20));
+  }
+
+  function dalej() { if (nr < SERIA - 1) { nr++; pokaz(); } else podsumuj(); }
+
+  function init() {
+    for (const b of $$('#opTr button')) b.addEventListener('click', () => {
+      filtr = b.dataset.t;
+      for (const x of $$('#opTr button')) x.setAttribute('aria-pressed', String(x === b));
+      nowaSeria();
+    });
+    $('#opNowa').addEventListener('click', nowaSeria);
+    $('#opJeszcze').addEventListener('click', nowaSeria);
+    $('#opDalej').addEventListener('click', dalej);
+    document.addEventListener('keydown', (e) => {
+      if (biezacy !== 'operand' || e.ctrlKey || e.metaKey || e.altKey) return;
+      const t = document.activeElement;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
+      const i = Number(e.key) - 1;
+      const btns = $$('#opOdp button');
+      if (czekam && i >= 0 && i < btns.length) { e.preventDefault(); btns[i].click(); }
+    });
+    nowaSeria();
+  }
+  return { init, pytanie };
+})();
+
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'pmc', 'rentgen'];
+const WIDOKI = ['start', 'pmc', 'rentgen', 'operand'];
 let biezacy = null;
 function nawiguj() {
   const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
@@ -1084,10 +1325,11 @@ function nawiguj() {
   for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 5 · ćwiczenia', pmc: 'Symulator PMC · W5', rentgen: 'Rentgen słowa · W5' }[v];
+  document.title = { start: 'Wykład 5 · ćwiczenia', pmc: 'Symulator PMC · W5', rentgen: 'Rentgen słowa · W5', operand: 'Skąd operand? · W5' }[v];
 }
 Symulator.init();
 Rentgen.init();
+Operand.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
 </script>
