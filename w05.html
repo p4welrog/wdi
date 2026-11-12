@@ -223,6 +223,29 @@ table.trace td.n { text-align: right; font-family: var(--mono); }
 .pill.ok { background: var(--good-soft); color: var(--good); }
 details.ref { margin-top: 10px; }
 details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+/* ───────── W05: rentgen słowa ───────── */
+.bits { display: flex; flex-wrap: wrap; gap: 4px; align-items: stretch; margin: 4px 0 8px; }
+.bits .gap { width: 8px; }
+.bit { width: 40px; min-height: 56px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--surface); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; padding: 2px 0; font: inherit; }
+.bit .bv { font-family: var(--mono); font-size: 1.35rem; font-weight: 700; color: var(--muted); }
+.bit .bi { font-size: .66rem; color: var(--muted); }
+.bit.on .bv { color: inherit; }
+.bit.on { border-color: currentColor; background: var(--surface-2); }
+.bit.f-x.on, .bit.f-c.on, .bit.f-m.on, .bit.f-a.on { font-weight: 700; }
+@media (max-width: 560px) { .bit { width: 30px; min-height: 48px; } .bit .bv { font-size: 1.1rem; } .bits .gap { width: 3px; } }
+.rgin { gap: 12px; margin-top: 10px; }
+.rgin .field { margin: 0; }
+.rgin input { width: 9em; font-family: var(--mono); }
+.rggrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin: 16px 0; }
+.rggrid .card { margin: 0; }
+.card.rg .k { font-size: .8rem; color: var(--muted); }
+.card.rg .v { font-size: 1.6rem; font-weight: 600; margin: 2px 0 4px; word-break: break-word; }
+.card.rg p { margin: 2px 0; }
+.card.rg.szer { grid-column: 1 / -1; }
+ol.zag li { margin: 6px 0; }
+ol.zag li .stan { font-size: .88rem; }
+ol.zag li.teraz .stan { color: var(--good); font-weight: 600; }
+ol.zag li.bylo .stan { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -234,6 +257,7 @@ details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
   <nav class="wrap tabs" aria-label="Ćwiczenia">
     <a href="#start">Start</a>
     <a href="#pmc">1. Symulator PMC</a>
+    <a href="#rentgen">2. Rentgen słowa</a>
   </nav>
 </header>
 
@@ -245,6 +269,7 @@ details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
   <p class="lead">Ćwiczenia do wykładu 5, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają.</p>
   <div class="grid2">
     <a class="tile" href="#pmc"><span class="num">1</span><h3>Symulator PMC</h3><p>Przykładowa Maszyna Cyfrowa w działaniu: rejestry AC, OR, PC, IR, pamięć i cykl pobierz–dekoduj–operand–wykonaj, faza po fazie. Programy z wykładu, pułapka STORE @ 7 i zadania sprawdzane testami.</p><div class="meta">ok. 20 min · slajdy od „PMC: model dydaktyczny” do „Mini-zadania: pętla w PMC”</div></a>
+    <a class="tile" href="#rentgen"><span class="num">2</span><h3>Rentgen słowa</h3><p>Szesnaście bitów i pięć odczytów naraz: liczba bez znaku, liczba w U2, znak, wartość logiczna i rozkaz PMC. Klikaj bity, wpisuj liczby albo rozkazy i rozwiąż zagadki.</p><div class="meta">ok. 10 min · slajdy „Liczba czy rozkaz?”, „Słowo jako dane” i „Słowo jako rozkaz”</div></a>
   </div>
 </section>
 
@@ -341,6 +366,54 @@ details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
     </ol>
   </div>
   <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (PMC). Szczegóły nieopisane w modelu przyjęto tak: działania na liczbach 16-bitowych w U2 z zawinięciem przy nadmiarze, DIV zaokrągla iloraz w stronę zera, przesunięcia SHZ są logiczne, bit 15 rozkazu jest pomijany.</p>
+</section>
+
+<!-- ═══════════════════ 2. RENTGEN SŁOWA ═══════════════════ -->
+<section id="v-rentgen" hidden>
+  <h2>2. Rentgen słowa</h2>
+  <p class="lead">Szesnaście bitów nie wie, czym są. To samo słowo w pamięci PMC jest jednocześnie liczbą bez znaku, liczbą w U2, znakiem, wartością logiczną i rozkazem — o tym, który odczyt się liczy, decyduje to, <em>jak procesor go użyje</em>. Klikaj bity i patrz, co się zmienia.</p>
+
+  <div class="card">
+    <div class="bits" id="rgBits" role="group" aria-label="Bity słowa, od 15 do 0"></div>
+    <div class="legend"><span><span class="f-x">■</span> bit 15 (w rozkazie wolny)</span><span><span class="f-c">■</span> code (14–11)</span><span><span class="f-m">■</span> mode (10–9)</span><span><span class="f-a">■</span> arg (8–0)</span></div>
+    <div class="row rgin">
+      <div class="field"><label for="rgDec" class="small">dziesiętnie (U2)</label><input type="text" id="rgDec" inputmode="numeric" autocomplete="off"></div>
+      <div class="field"><label for="rgUns" class="small">bez znaku</label><input type="text" id="rgUns" inputmode="numeric" autocomplete="off"></div>
+      <div class="field"><label for="rgHex" class="small">szesnastkowo</label><input type="text" id="rgHex" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="rgAsm" class="small">rozkaz PMC</label><input type="text" id="rgAsm" autocomplete="off" spellcheck="false" placeholder="np. ADD @ 6"></div>
+    </div>
+    <p class="err small" id="rgErr" role="alert"></p>
+    <div class="row" style="gap: 6px">
+      <span class="small muted">Działania:</span>
+      <button type="button" class="btn small ghost" data-op="not">NOT (odwróć bity)</button>
+      <button type="button" class="btn small ghost" data-op="neg">−x (U2)</button>
+      <button type="button" class="btn small ghost" data-op="inc">+1</button>
+      <button type="button" class="btn small ghost" data-op="shl">≪ 1</button>
+      <button type="button" class="btn small ghost" data-op="shr">≫ 1</button>
+      <button type="button" class="btn small ghost" data-op="zero">wyzeruj</button>
+    </div>
+    <div class="row" style="gap: 6px; margin-top: 8px"><span class="small muted">Przykłady:</span><span id="rgPres" class="row" style="gap: 6px"></span></div>
+  </div>
+
+  <div class="rggrid" id="rgOdczyty"></div>
+  <p class="small" id="rgZdarz" aria-live="polite"></p>
+
+  <div class="card">
+    <h3>Zagadki</h3>
+    <p class="small muted">Ustaw bity tak, żeby warunek był spełniony. Zaliczenie widać od razu.</p>
+    <ol class="zag" id="rgZag"></ol>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Kliknij „NOT”, a potem „+1”. Porównaj z „−x”. Dlaczego to to samo (W3: negacja w U2)?</li>
+      <li>Ustaw 32767 i kliknij „+1”. Co się stało z liczbą w U2, a co z liczbą bez znaku? Który odczyt „ma rację”?</li>
+      <li>Słowa z zagadki 2 — znak „A” i liczba ujemna jednocześnie — jest ich 128. Dlaczego akurat tyle?</li>
+      <li>Słowo 0 to jednocześnie liczba 0, „fałsz”, znak NUL i rozkaz STOP. Co by się stało, gdyby program w PMC „wyjechał” poza swój kod na wyzerowaną pamięć?</li>
+    </ol>
+  </div>
+  <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (PMC: typy danych i format rozkazu); kody znaków: ANSI X3.4-1986 (ASCII). Bit 15 rozkazu jest w tym modelu nieużywany; symulator go pomija.</p>
 </section>
 
 </main>
@@ -874,8 +947,135 @@ const Symulator = (() => {
   return { init, wyjscie };
 })();
 
+
+/* ═════════════════════ Ćwiczenie 2: Rentgen słowa ═════════════════════ */
+const Rentgen = (() => {
+  const STER = ['NUL', 'SOH', 'STX', 'ETX', 'EOT', 'ENQ', 'ACK', 'BEL', 'BS', 'HT (tabulator)', 'LF (nowa linia)', 'VT', 'FF', 'CR (powrót karetki)', 'SO', 'SI',
+    'DLE', 'DC1', 'DC2', 'DC3', 'DC4', 'NAK', 'SYN', 'ETB', 'CAN', 'EM', 'SUB', 'ESC', 'FS', 'GS', 'RS', 'US'];
+  const TRYB_NAZWA = ['natychmiastowy', 'bezpośredni', 'pośredni', 'indeksowy'];
+  const PRZYKLADY = [['2565', 2565], ['„A”', 65], ['−1', -1], ['0', 0], ['32767', 32767], ['−32768', -32768], ['LOAD @ 5', null], ['STORE $ 7', null]];
+  const ZAGADKI = [
+    { t: 'Ustaw rozkaz ADD @ 6. Jaką liczbą dziesiętną jest to słowo?', ok: (w) => w === 12806, po: 'ADD @ 6 = 12 806.' },
+    { t: 'Znajdź słowo, które jest jednocześnie znakiem „A” i liczbą ujemną (U2).', ok: (w) => (PMC.u16(w) & 255) === 65 && w < 0, po: 'Młodszy bajt = 65, najstarszy bit = 1.' },
+    { t: 'Znajdź liczbę ujemną, którą procesor wykona jako LOAD $ 0.', ok: (w) => w < 0 && PMC.pola(w).code === 1 && PMC.pola(w).mode === 0 && PMC.pola(w).arg === 0, po: '−30 720: bit 15 = 1 jest w rozkazie pomijany.' },
+    { t: 'Znajdź słowo, które jako rozkaz to STOP, a jako znak — litera „Z”.', ok: (w) => PMC.pola(w).code === 0 && (PMC.u16(w) & 255) === 90, po: 'Kod 0 = STOP; argument 90 nie ma znaczenia, a młodszy bajt to 90 = „Z”.' },
+    { t: 'Znajdź słowo, dla którego odczyt bez znaku i odczyt U2 różnią się o dokładnie 65 536.', ok: (w) => w < 0, po: 'Każde słowo z bitem 15 = 1: bez znaku = U2 + 65 536.' },
+  ];
+  let w = 2565;
+
+  const bityDiv = () => $('#rgBits');
+  function klasaBitu(i) { return i === 15 ? 'f-x' : i >= 11 ? 'f-c' : i >= 9 ? 'f-m' : 'f-a'; }
+
+  function rysujBity() {
+    const u = PMC.u16(w);
+    const kids = [];
+    for (let i = 15; i >= 0; i--) {
+      const on = (u >> i) & 1;
+      const b = el('button', { type: 'button', class: `bit ${klasaBitu(i)}${on ? ' on' : ''}`, 'aria-pressed': String(!!on), 'aria-label': `bit ${i}, waga ${i === 15 ? '−32768 w U2, 32768 bez znaku' : 2 ** i}` },
+        el('span', { class: 'bv', text: String(on) }), el('span', { class: 'bi', text: String(i) }));
+      b.addEventListener('click', () => ustaw(PMC.s16(u ^ (1 << i))));
+      kids.push(b);
+      if (i % 4 === 0 && i > 0) kids.push(el('span', { class: 'gap' }));
+    }
+    bityDiv().replaceChildren(...kids);
+  }
+
+  function znak(lo) {
+    if (lo < 32) return { z: STER[lo], opis: 'znak sterujący (niewidoczny)' };
+    if (lo === 32) return { z: '␠', opis: 'spacja' };
+    if (lo === 127) return { z: 'DEL', opis: 'znak sterujący' };
+    if (lo > 127) return { z: '—', opis: 'poza ASCII (kody 128–255 zależą od strony kodowej)' };
+    return { z: String.fromCharCode(lo), opis: `kod ${lo}` };
+  }
+
+  function karta(tytul, wartosc, ...opis) { return el('div', { class: 'card rg' }, el('div', { class: 'k', text: tytul }), el('div', { class: 'v', text: wartosc }), ...opis.map(o => el('p', { class: 'small muted', text: o }))); }
+
+  function rysujOdczyty() {
+    const u = PMC.u16(w), p = PMC.pola(w);
+    const wagi = [];
+    for (let i = 15; i >= 0; i--) if ((u >> i) & 1) wagi.push(i);
+    const sumaBz = wagi.length ? wagi.map(i => fmtL(2 ** i)).join(' + ') : '0';
+    const sumaU2 = wagi.length ? wagi.map(i => i === 15 ? '−32 768' : fmtL(2 ** i)).join(' + ').replace('+ −', '− ') : '0';
+    const lo = u & 255, hi = u >> 8, zn = znak(lo);
+    $('#rgOdczyty').replaceChildren(
+      karta('liczba bez znaku (0 … 65 535)', fmtL(u), wagi.length > 1 ? `= ${sumaBz}` : ''),
+      karta('liczba całkowita w U2 (−32 768 … 32 767)', fmtL(w), wagi.length > 1 || p.b15 ? `= ${sumaU2}` : '', p.b15 ? 'Bit 15 ma w U2 wagę ujemną: −32 768.' : ''),
+      karta('znak (kod ASCII w młodszym bajcie)', zn.z, zn.opis + '.', hi ? `Starszy bajt (${hi}) jest przy tym odczycie pomijany.` : ''),
+      karta('wartość logiczna', w === 0 ? 'fałsz' : 'prawda', w === 0 ? 'Tylko same zera oznaczają fałsz.' : 'Każdy układ inny niż same zera to prawda.', w === -1 ? 'Dokładnie tyle zwraca CMP dla równych liczb: same jedynki.' : ''),
+      el('div', { class: 'card rg szer' },
+        el('div', { class: 'k', text: 'rozkaz PMC' }),
+        el('div', { class: 'v mono', text: PMC.deasembluj(w) }),
+        el('p', { class: 'small' }, el('span', { class: 'f-c', text: `code = ${p.code.toString(2).padStart(4, '0')} (${p.code})` }), ' → ', PMC.ROZKAZY[p.code], ': ', PMC.OPIS[p.code]),
+        el('p', { class: 'small' }, el('span', { class: 'f-m', text: `mode = ${p.mode.toString(2).padStart(2, '0')}` }), ` → tryb ${TRYB_NAZWA[p.mode]} (${PMC.TRYBY[p.mode]})`),
+        el('p', { class: 'small' }, el('span', { class: 'f-a', text: `arg = ${p.arg.toString(2).padStart(9, '0')} (${p.arg})` }), p.b15 ? ' · bit 15 = 1 — w rozkazie pomijany' : '')));
+  }
+  function fmtL(x) { return String(x).replace('-', '−').replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+
+  function rysujPola(zrodlo) {
+    const u = PMC.u16(w);
+    if (zrodlo !== 'dec') $('#rgDec').value = String(w);
+    if (zrodlo !== 'uns') $('#rgUns').value = String(u);
+    if (zrodlo !== 'hex') $('#rgHex').value = u.toString(16).toUpperCase().padStart(4, '0');
+    if (zrodlo !== 'asm') $('#rgAsm').value = PMC.deasembluj(w).replace(/ \(bit 15 = 1\)$/, '');
+  }
+
+  function rysujZagadki() {
+    $('#rgZag').replaceChildren(...ZAGADKI.map((z, i) => {
+      const ok = z.ok(w);
+      if (ok) { const zal = pamiec.czytaj('rentgen') || {}; if (!zal[i]) { zal[i] = true; pamiec.zapisz('rentgen', zal); } }
+      const zal = (pamiec.czytaj('rentgen') || {})[i];
+      return el('li', { class: ok ? 'teraz' : zal ? 'bylo' : '' }, z.t, ' ', el('span', { class: 'stan', text: ok ? `✓ ${z.po}` : zal ? '(rozwiązana wcześniej)' : '' }));
+    }));
+  }
+
+  function ustaw(nowe, zrodlo) {
+    const stare = w;
+    w = PMC.s16(nowe);
+    $('#rgErr').textContent = '';
+    rysujBity(); rysujOdczyty(); rysujPola(zrodlo); rysujZagadki();
+    return stare;
+  }
+
+  function dzialanie(op) {
+    const u = PMC.u16(w);
+    let msg = '';
+    if (op === 'not') ustaw(PMC.s16(~u));
+    else if (op === 'neg') { const st = w; ustaw(-w); if (st === -32768) msg = '−(−32 768) nie mieści się w 16 bitach: wynik to znowu −32 768 (nadmiar, W3).'; }
+    else if (op === 'inc') { const st = w; ustaw(w + 1); if (st === 32767) msg = 'Nadmiar: 32 767 + 1 w U2 daje −32 768. Bez znaku to po prostu 32 768.'; else if (st === -1) msg = '−1 + 1 = 0: same jedynki plus jeden „przewijają” licznik do zera, a przeniesienie wypada poza słowo.'; }
+    else if (op === 'shl') { const st = w; ustaw(PMC.s16((u << 1) & 0xffff)); if (st !== 0 && (u & 0x8000)) msg = 'Najstarszy bit wypadł poza słowo.'; else if (Math.sign(st) !== Math.sign(w) && st !== 0) msg = 'Przesunięcie zmieniło znak liczby U2.'; else msg = 'Przesunięcie w lewo o 1 = mnożenie przez 2 (dopóki nic nie wypada).'; }
+    else if (op === 'shr') { ustaw(PMC.s16(u >>> 1)); msg = 'Przesunięcie logiczne w prawo (z zerem na początku, jak SHZ) = dzielenie bez znaku przez 2.'; }
+    else if (op === 'zero') ustaw(0);
+    $('#rgZdarz').textContent = msg;
+  }
+
+  function init() {
+    $('#rgPres').replaceChildren(...PRZYKLADY.map(([t, v]) => {
+      const b = el('button', { type: 'button', class: 'btn small ghost', text: t });
+      b.addEventListener('click', () => {
+        if (v === null) { const a = PMC.asembluj(t); ustaw(a.mem[0]); } else ustaw(v);
+        $('#rgZdarz').textContent = t === '2565' ? 'Słowo z zagadki na początku wykładu.' : '';
+      });
+      return b;
+    }));
+    for (const b of $$('#v-rentgen [data-op]')) b.addEventListener('click', () => dzialanie(b.dataset.op));
+    const wpis = (id, zrodlo, parse) => $(id).addEventListener('input', () => {
+      const s = $(id).value.trim();
+      if (!s) return;
+      const v = parse(s);
+      if (v === null) { $('#rgErr').textContent = { dec: 'Podaj liczbę od −32 768 do 32 767.', uns: 'Podaj liczbę od 0 do 65 535.', hex: 'Podaj od 1 do 4 cyfr szesnastkowych (0–9, A–F).', asm: 'Nie rozumiem rozkazu — np. „ADD @ 6”, „STOP”.' }[zrodlo]; return; }
+      ustaw(v, zrodlo); $('#rgZdarz').textContent = '';
+    });
+    wpis('#rgDec', 'dec', (s) => { const t = s.replace('−', '-').replace(/\s/g, ''); return /^[+-]?\d+$/.test(t) && Number(t) >= -32768 && Number(t) <= 32767 ? Number(t) : null; });
+    wpis('#rgUns', 'uns', (s) => { const t = s.replace(/\s/g, ''); return /^\d+$/.test(t) && Number(t) <= 65535 ? Number(t) : null; });
+    wpis('#rgHex', 'hex', (s) => { const t = s.replace(/^0x/i, ''); return /^[0-9a-f]{1,4}$/i.test(t) ? parseInt(t, 16) : null; });
+    wpis('#rgAsm', 'asm', (s) => { if (/^\s*[+-]?\d/.test(s)) return null; const a = PMC.asembluj(s); return a.bledy.length || !a.kod.has(0) ? null : a.mem[0]; });
+    ustaw(2565);
+  }
+  return { init };
+})();
+
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'pmc'];
+const WIDOKI = ['start', 'pmc', 'rentgen'];
 let biezacy = null;
 function nawiguj() {
   const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
@@ -884,9 +1084,10 @@ function nawiguj() {
   for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 5 · ćwiczenia', pmc: 'Symulator PMC · W5' }[v];
+  document.title = { start: 'Wykład 5 · ćwiczenia', pmc: 'Symulator PMC · W5', rentgen: 'Rentgen słowa · W5' }[v];
 }
 Symulator.init();
+Rentgen.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
 </script>
