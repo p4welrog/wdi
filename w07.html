@@ -415,6 +415,7 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
       <li>Żeby zrozumieć zdanie z zagnieżdżonym zdaniem podrzędnym, trzeba pamiętać wszystkie otwarte, niedokończone zdania; ostatnie otwarte zamyka się pierwsze — jak nawiasy na stosie.</li>
       <li>Jedno zagnieżdżenie rozumiemy bez trudu, dwa sprawiają kłopot, trzy są dla większości ludzi niezrozumiałe (Miller i Chomsky 1963). W korpusach tekstów pisanych zdarzają się najwyżej trzy poziomy, w mowie dwa (Karlsson 2007).</li>
       <li>Zdania „doczepiane na końcu” niosą tę samą treść, ale każde zdanie zamyka się od razu — wystarczy stała pamięć.</li>
+      <li>W zdaniach występują imiona, nie zawody. Przy „Listonosz, którego kierowca…” słowo „którego” łatwo wziąć za „czyj” (kierowca listonosza) — taka dwuznaczność utrudniałaby tylko zdania zagnieżdżone i zafałszowała porównanie.</li>
       <li><strong>Model, nie mechanizm.</strong> Stos opisuje strukturę zadania; nie wynika z tego, że mózg ma stos. Wynik sali to pokaz, nie eksperyment: mała próba i tylko trzy zdania na poziom.</li>
     </ul>
   </div>
@@ -422,7 +423,7 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
     <h3>Do przemyślenia</h3>
     <ol>
       <li>Jak zmieniały się Twoja trafność i czas czytania wraz z głębokością zagnieżdżenia?</li>
-      <li>Zapisz zdanie z dwoma zagnieżdżeniami w postaci nawiasów, np. [Listonosz, (którego sąsiad, {którego lekarz zawołał}, zobaczył), zasnął]. Gdzie leży wierzch stosu przy słowie „zawołał”?</li>
+      <li>Zapisz zdanie z dwoma zagnieżdżeniami w postaci nawiasów, np. [Adam, (którego Bartek, {którego Tomek zawołał}, zobaczył), zasnął]. Gdzie leży wierzch stosu przy słowie „zawołał”?</li>
       <li>Czy umiałbyś przerobić zdanie z dwoma zagnieżdżeniami tak, by miało tę samą treść, a nie wymagało stosu?</li>
     </ol>
   </div>
@@ -991,7 +992,9 @@ function panelGrupy(host, o) {
 /* ═════════════════════ Ćwiczenie 2B: Zdania jak nawiasy ═════════════════════ */
 const Zdania = (() => {
   const APLIKACJA = 'zdania';
-  const OSOBY = [['sąsiad', 'sąsiada'], ['lekarz', 'lekarza'], ['student', 'studenta'], ['listonosz', 'listonosza'], ['kelner', 'kelnera'], ['policjant', 'policjanta'], ['malarz', 'malarza'], ['nauczyciel', 'nauczyciela'], ['kierowca', 'kierowcę'], ['sprzedawca', 'sprzedawcę']];
+  // Imiona, nie zawody: przy „którego kierowca” czytelnik bierze „którego” za „czyj” (kierowca listonosza),
+  // co dokłada dwuznaczność tylko zdaniom zagnieżdżonym. „Adam, którego Bartek…” takiej pułapki nie ma.
+  const OSOBY = [['Adam', 'Adama'], ['Bartek', 'Bartka'], ['Tomek', 'Tomka'], ['Michał', 'Michała'], ['Piotr', 'Piotra'], ['Marek', 'Marka'], ['Janek', 'Janka'], ['Wojtek', 'Wojtka'], ['Kuba', 'Kubę'], ['Łukasz', 'Łukasza']];
   const PRZECH = ['zawołał', 'zobaczył', 'minął', 'obudził', 'rozśmieszył', 'przestraszył', 'zaczepił', 'pozdrowił'];
   const NIEPRZECH = ['wyszedł', 'zasnął', 'zniknął', 'odpoczął', 'westchnął'];
   const GL = [0, 0, 0, 1, 1, 1, 2, 2, 2];
