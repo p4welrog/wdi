@@ -225,6 +225,7 @@ input[type="range"].szeroki { width: min(420px, 100%); }
 table.wz { table-layout: fixed; min-width: 560px; }
 table.wz th.n { text-align: right; }
 table.wz td.f { font-family: var(--mono); white-space: nowrap; }
+table.wz td.czas { white-space: normal; overflow-wrap: anywhere; }
 table.wz th:last-child, table.wz td.bar { padding-left: 18px; }
 .wzbar { height: 14px; border-radius: 0 4px 4px 0; background: var(--s1); min-width: 2px; }
 .wzbar.poza { border-radius: 0; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 25%, calc(100% - 8px) 50%, 100% 75%, calc(100% - 8px) 100%, 0 100%); }
@@ -633,6 +634,14 @@ const seg = (host, cb) => {
 const parsujInt = (t) => { const s = String(t).trim().replace(/[\s _]/g, ''); return /^\d+$/.test(s) ? s : null; };
 
 // Wykładnik dziesiętny i czytelny zapis dużych liczb podanych logarytmem dziesiętnym
+// Dokładna liczba całkowita: do 15 cyfr w całości, dłuższa jako m · 10^w; „≈” tylko, gdy zaokrąglamy
+function zapisDokladny(x) {
+  const t = x.toString();
+  if (t.length <= 15) return liczba(t);
+  let w = t.length - 1, m = Math.round(Number(t[0] + '.' + t.slice(1, 4)) * 100) / 100;
+  if (m >= 10) { m /= 10; w += 1; }
+  return `${/^0*$/.test(t.slice(3)) ? '' : '≈ '}${ulamek(m, 2)} · 10<sup>${liczba(w)}</sup>`;
+}
 function zapisNaukowy(log10) {
   if (log10 < 15) return liczba(Math.round(10 ** log10));
   const w = Math.floor(log10), m = 10 ** (log10 - w);
@@ -649,7 +658,11 @@ function zapisCzasu(log10s) {
   if (log10s < Math.log10(86400)) return `${ulamek(10 ** log10s / 3600, 1)} h`;
   if (log10s < Math.log10(86400 * 365.25)) return `${ulamek(10 ** log10s / 86400, 1)} dni`;
   const lata = log10s - Math.log10(86400 * 365.25);
-  if (log10s < Math.log10(WIEK_WSZECHSWIATA)) return lata < 6 ? `${liczba(Math.round(10 ** lata))} lat` : `${zapisNaukowy(lata)} lat`;
+  if (log10s < Math.log10(WIEK_WSZECHSWIATA)) {
+    if (lata >= 6) return `${zapisNaukowy(lata)} lat`;
+    const l = Math.round(10 ** lata), j = l % 10, d = l % 100;
+    return `${liczba(l)} ${l === 1 ? 'rok' : j >= 2 && j <= 4 && (d < 10 || d >= 20) ? 'lata' : 'lat'}`;
+  }
   return `${zapisNaukowy(log10s - Math.log10(WIEK_WSZECHSWIATA))} × wiek Wszechświata`;
 }
 
@@ -983,9 +996,9 @@ const Wzrost = (() => {
   const MAXLOG = 30; // zakres słupków: 10^0 … 10^30 operacji
   const F = [
     { f: 'log₂ n', lg: (n) => Math.log10(Math.max(Math.log2(n), 1e-9)), zero: (n) => n === 1 },
-    { f: 'n', lg: (n) => Math.log10(n) },
+    { f: 'n', lg: (n) => Math.log10(n), dokl: (n) => BigInt(n) },
     { f: 'n log₂ n', lg: (n) => Math.log10(n * Math.log2(n)), zero: (n) => n === 1 },
-    { f: 'n²', lg: (n) => 2 * Math.log10(n) },
+    { f: 'n²', lg: (n) => 2 * Math.log10(n), dokl: (n) => BigInt(n) * BigInt(n) },
     { f: '2ⁿ', lg: (n) => n * Math.log10(2) },
   ];
   let n = 1000;
@@ -1001,20 +1014,20 @@ const Wzrost = (() => {
       const zero = r.zero && r.zero(n);
       const lg = zero ? -Infinity : r.lg(n);
       const v = 10 ** lg;
-      const ops = zero ? '0' : lg >= 15 ? zapisNaukowy(lg) : v >= 100 ? liczba(Math.round(v)) : ulamek(v, 1);
+      const ops = zero ? '0' : r.dokl ? zapisDokladny(r.dokl(n)) : lg >= 15 ? zapisNaukowy(lg) : v >= 100 ? liczba(Math.round(v)) : ulamek(v, 1);
       const czasLg = lg - OPS;
       const kl = czasLg > Math.log10(WIEK_WSZECHSWIATA) ? 'nigdy' : czasLg > 0 ? 'wolno' : '';
       const poza = !zero && lg > MAXLOG;
       const szer = zero ? 0 : Math.max(0.5, 100 * (lg + 0.0001) / MAXLOG);
       return el('tr', {},
         el('td', { class: 'f', text: r.f }),
-        el('td', { class: 'n', html: ops }),
-        el('td', { class: 'n ' + kl, html: zero ? '0' : zapisCzasu(czasLg) }),
+        el('td', { class: 'n czas', html: ops }),
+        el('td', { class: 'n czas ' + kl, html: zero ? '0' : zapisCzasu(czasLg) }),
         el('td', { class: 'bar' }, poza
           ? el('div', { class: 'wzpoza', title: 'Słupek nie mieści się w skali — rzeczywista długość byłaby wielokrotnie większa.' }, el('div', { class: `wzbar poza ${kl}` }), el('span', { text: 'poza skalą →' }))
           : el('div', { class: 'wzbar ' + kl, style: `width: ${szer}%` })));
     });
-    const kol = el('colgroup', {}, el('col', { style: 'width: 16%' }), el('col', { style: 'width: 22%' }), el('col', { style: 'width: 30%' }), el('col', { style: 'width: 32%' }));
+    const kol = el('colgroup', {}, el('col', { style: 'width: 15%' }), el('col', { style: 'width: 24%' }), el('col', { style: 'width: 31%' }), el('col', { style: 'width: 30%' }));
     $('#wzTab').replaceChildren(kol, el('thead', {}, el('tr', {}, el('th', { text: 'operacji' }), el('th', { class: 'n', text: 'liczba' }), el('th', { class: 'n', text: 'czas przy 10⁹/s' }), el('th', { text: 'skala log.' }))), el('tbody', {}, ...wiersze));
     const a = 100 * n, b = n * n;
     $('#wzStale').innerHTML = `<b>Stałe mają znaczenie dla małych n.</b> Algorytm A wykonuje 100n operacji (O(n)), algorytm B — n² (O(n²)). Dla n = ${liczba(n)}: A = ${liczba(a)}, B = ${liczba(b)}. ` +
