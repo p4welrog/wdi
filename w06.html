@@ -222,9 +222,16 @@ ul.hist { margin: 6px 0 0; padding-left: 1.2em; font-size: .85rem; color: var(--
 /* ───────── W06: wyścig wzrostu ───────── */
 .wz-n { font-family: var(--mono); font-size: 1.4rem; font-weight: 600; }
 input[type="range"].szeroki { width: min(420px, 100%); }
+table.wz { table-layout: fixed; min-width: 560px; }
+table.wz th.n { text-align: right; }
 table.wz td.f { font-family: var(--mono); white-space: nowrap; }
-table.wz td.bar { width: 38%; min-width: 120px; }
+table.wz th:last-child, table.wz td.bar { padding-left: 18px; }
 .wzbar { height: 14px; border-radius: 0 4px 4px 0; background: var(--s1); min-width: 2px; }
+.wzbar.poza { border-radius: 0; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 25%, calc(100% - 8px) 50%, 100% 75%, calc(100% - 8px) 100%, 0 100%); }
+.wzpoza { display: flex; align-items: center; gap: 8px; }
+.wzpoza .wzbar { flex: 1 1 auto; }
+.wzpoza span { flex: none; }
+.wzpoza span { font-size: .78rem; color: var(--bad); font-weight: 600; white-space: nowrap; }
 .wzbar.wolno { background: var(--amber); }
 .wzbar.nigdy { background: var(--bad); }
 td.wolno { color: var(--amber); font-weight: 600; }
@@ -379,7 +386,7 @@ table.otw td { font-family: var(--mono); }
     </div>
     <div class="row" style="margin-top: 6px"><span class="small muted">Wartości ze slajdu:</span><button type="button" class="btn ghost small" data-n="10">10</button><button type="button" class="btn ghost small" data-n="1000">1000</button><button type="button" class="btn ghost small" data-n="1000000">10⁶</button></div>
     <div class="scroll-x" style="margin-top: 10px"><table class="t wz" id="wzTab"></table></div>
-    <p class="small muted">Słupki w skali logarytmicznej (cała szerokość to 10<sup>30</sup> operacji). Pomarańczowe: dłużej niż sekunda; czerwone: dłużej niż wiek Wszechświata (ok. 4,4 · 10<sup>17</sup> s).</p>
+    <p class="small muted">Słupki w skali logarytmicznej: cała szerokość to 10<sup>30</sup> operacji. Słupek zakończony ząbkiem i napisem „poza skalą” jest w rzeczywistości dłuższy — dla 2ⁿ dzieje się tak od n = 100. Pomarańczowe: dłużej niż sekunda; czerwone: dłużej niż wiek Wszechświata (ok. 4,4 · 10<sup>17</sup> s).</p>
     <div class="note" id="wzStale"></div>
   </div>
 
@@ -997,14 +1004,18 @@ const Wzrost = (() => {
       const ops = zero ? '0' : lg >= 15 ? zapisNaukowy(lg) : v >= 100 ? liczba(Math.round(v)) : ulamek(v, 1);
       const czasLg = lg - OPS;
       const kl = czasLg > Math.log10(WIEK_WSZECHSWIATA) ? 'nigdy' : czasLg > 0 ? 'wolno' : '';
-      const szer = zero ? 0 : Math.min(100, Math.max(0.5, 100 * (lg + 0.0001) / MAXLOG));
+      const poza = !zero && lg > MAXLOG;
+      const szer = zero ? 0 : Math.max(0.5, 100 * (lg + 0.0001) / MAXLOG);
       return el('tr', {},
         el('td', { class: 'f', text: r.f }),
         el('td', { class: 'n', html: ops }),
         el('td', { class: 'n ' + kl, html: zero ? '0' : zapisCzasu(czasLg) }),
-        el('td', { class: 'bar' }, el('div', { class: 'wzbar ' + kl, style: `width: ${szer}%` })));
+        el('td', { class: 'bar' }, poza
+          ? el('div', { class: 'wzpoza', title: 'Słupek nie mieści się w skali — rzeczywista długość byłaby wielokrotnie większa.' }, el('div', { class: `wzbar poza ${kl}` }), el('span', { text: 'poza skalą →' }))
+          : el('div', { class: 'wzbar ' + kl, style: `width: ${szer}%` })));
     });
-    $('#wzTab').replaceChildren(el('thead', {}, el('tr', {}, el('th', { text: 'operacji' }), el('th', { text: 'liczba' }), el('th', { text: 'czas przy 10⁹/s' }), el('th', { text: 'skala log.' }))), el('tbody', {}, ...wiersze));
+    const kol = el('colgroup', {}, el('col', { style: 'width: 16%' }), el('col', { style: 'width: 22%' }), el('col', { style: 'width: 30%' }), el('col', { style: 'width: 32%' }));
+    $('#wzTab').replaceChildren(kol, el('thead', {}, el('tr', {}, el('th', { text: 'operacji' }), el('th', { class: 'n', text: 'liczba' }), el('th', { class: 'n', text: 'czas przy 10⁹/s' }), el('th', { text: 'skala log.' }))), el('tbody', {}, ...wiersze));
     const a = 100 * n, b = n * n;
     $('#wzStale').innerHTML = `<b>Stałe mają znaczenie dla małych n.</b> Algorytm A wykonuje 100n operacji (O(n)), algorytm B — n² (O(n²)). Dla n = ${liczba(n)}: A = ${liczba(a)}, B = ${liczba(b)}. ` +
       (a > b ? 'Szybszy jest <b>B</b>, choć jest kwadratowy.' : a < b ? 'Szybszy jest <b>A</b>.' : 'Remis — to dokładnie punkt przecięcia.') + ' Granica: n = 100.';
