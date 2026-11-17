@@ -1,0 +1,1562 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 7 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 7 „Struktury danych i techniki projektowania” (Wprowadzenie do informatyki, SWPS).">
+<style>
+
+
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+html { scroll-padding-top: 96px; }
+@media (max-width: 560px) { html { scroll-padding-top: 124px; } }
+.home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+
+/* ───────── Wspólne elementy (jak w W05) ───────── */
+.dirty { color: var(--amber); font-size: .88rem; }
+.errlist { margin: 6px 0 0; padding-left: 1.2em; color: var(--bad); font-size: .9rem; }
+.alert { border-radius: 8px; padding: 8px 12px; font-size: .92rem; margin: 6px 0; }
+.alert.bad { background: var(--bad-soft); color: var(--bad); }
+.alert.warn { background: var(--amber-soft); color: var(--amber); }
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 6px; }
+.ctrl .speed { display: flex; align-items: center; gap: 6px; font-size: .88rem; color: var(--text-2); }
+.ctrl input[type="range"] { width: 110px; }
+.status.halt { color: var(--good); }
+.status.stuck { color: var(--bad); }
+.status.limit { color: var(--amber); }
+.task { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.task h4 { margin: 0 0 4px; font-size: 1rem; }
+.task p { margin: 0 0 8px; color: var(--text-2); font-size: .94rem; }
+.task.done { border-color: var(--good); }
+.task .hint { font-size: .88rem; }
+.res td.okc { color: var(--good); font-weight: 700; }
+.res td.badc { color: var(--bad); font-weight: 700; }
+.res td.mono { font-family: var(--mono); }
+.pill { display: inline-block; font-size: .78rem; padding: 2px 9px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+details.ref { margin-top: 10px; }
+details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.fbline { font-weight: 600; font-size: 1.1rem; margin: 12px 0 4px; }
+.fbline.dobrze { color: var(--good); }
+.fbline.zle { color: var(--bad); }
+.group { border: 1px solid var(--s1); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; background: var(--surface); }
+.group h3 { display: flex; gap: 8px; align-items: center; }
+.group .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; }
+.card.most { border-left: 4px solid var(--good); }
+.card.most h3 { color: var(--good); }
+
+/* ───────── W07: elementy wspólne z W06 ───────── */
+.sk-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 720px) { .sk-grid { grid-template-columns: minmax(0, 1fr); } }
+pre.kod { font-family: var(--mono); font-size: .92rem; line-height: 1.55; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 0; margin: 0 0 10px; overflow-x: auto; }
+pre.kod span { display: block; padding: 0 12px; white-space: pre; }
+pre.kod span.cur { background: var(--hl); color: var(--hl-ink); }
+input.liczba { width: 9em; font-family: var(--mono); }
+.prpyt { font-size: 1.15rem; font-weight: 600; margin: 8px 0 10px; }
+.opbtn { min-width: 6em; }
+.opbtn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
+.opbtn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+
+/* ───────── W07: stos i kolejka ───────── */
+.stos { display: flex; flex-direction: column; gap: 4px; min-height: 60px; padding: 8px; border: 2px solid var(--border); border-top: 0; border-radius: 0 0 10px 10px; max-width: 220px; }
+.kolejka { display: flex; flex-wrap: wrap; gap: 4px; min-height: 52px; padding: 8px; border: 2px solid var(--border); border-left: 0; border-right: 0; align-items: center; }
+.el { font-family: var(--mono); font-weight: 700; padding: 6px 12px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); text-align: center; border: 1.5px solid transparent; }
+.el.wierzch { border-color: var(--accent); }
+.el.nowy { background: var(--hl); color: var(--hl-ink); }
+.pusty { color: var(--muted); font-size: .85rem; font-style: italic; padding: 4px; }
+.ops { font-size: 1rem; line-height: 1.7; background: var(--surface-2); padding: 8px 12px; border-radius: 8px; }
+
+/* ───────── W07: nawiasy i zdania ───────── */
+.znaki { display: flex; flex-wrap: wrap; gap: 3px; margin: 12px 0; }
+.znak { font-family: var(--mono); font-size: 1.3rem; min-width: 30px; text-align: center; padding: 4px 0; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); }
+.znak.byl { opacity: .45; }
+.znak.cur { background: var(--hl); color: var(--hl-ink); border-color: var(--amber); opacity: 1; }
+.znak.zly { background: var(--bad-soft); border-color: var(--bad); opacity: 1; }
+.stospoz { display: flex; gap: 4px; min-height: 46px; padding: 6px; border: 2px solid var(--border); border-right: 0; border-radius: 10px 0 0 10px; min-width: 120px; align-items: center; }
+.zdanie { font-size: 1.35rem; line-height: 1.5; margin: 14px 0 16px; max-width: 46ch; }
+
+/* ───────── W07: pamięć ───────── */
+.mem { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
+.kom { border: 1.5px solid var(--border); border-radius: 8px; min-width: 64px; text-align: center; padding: 3px 4px; background: var(--surface); }
+.kom .ad { font-size: .7rem; color: var(--muted); font-family: var(--mono); }
+.kom .wa { font-family: var(--mono); font-weight: 700; font-size: 1.05rem; }
+.kom .nx { font-family: var(--mono); font-size: .75rem; color: var(--s1); }
+.kom.wolna { opacity: .35; border-style: dashed; }
+.kom.ruch { background: var(--amber-soft); border-color: var(--amber); }
+.kom.nowa { background: var(--hl); color: var(--hl-ink); border-color: var(--amber); }
+.kom.nowa .ad, .kom.nowa .nx { color: var(--hl-ink); }
+.kom.czyt { box-shadow: inset 0 0 0 2px var(--good); }
+.kom.glowa { border-color: var(--accent); }
+.koszt { font-size: .95rem; margin: 4px 0 0; color: var(--text-2); min-height: 1.4em; }
+.koszt b { color: var(--text); }
+
+/* ───────── W07: drzewo wywołań ───────── */
+svg.drzewo { display: block; min-width: 560px; width: 100%; height: auto; margin-top: 8px; }
+svg.drzewo line { stroke: var(--border); stroke-width: 1.5; }
+svg.drzewo .w circle { fill: var(--surface); stroke: var(--muted); stroke-width: 1.5; }
+svg.drzewo .w text { fill: var(--text); font: 600 12px var(--mono); }
+svg.drzewo .w.ukryty { opacity: .15; }
+svg.drzewo .w.stos circle { fill: var(--accent-soft); stroke: var(--accent); }
+svg.drzewo .w.cur circle { fill: var(--hl); stroke: var(--amber); stroke-width: 2.5; }
+svg.drzewo .w.cur text { fill: var(--hl-ink); }
+svg.drzewo .w.done circle { fill: var(--good-soft); stroke: var(--good); }
+svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-dasharray: 3 2; }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: -1px; border: 1.5px solid; margin-right: 5px; }
+#v-rekurencja .legend { gap: 6px 22px; margin-top: 10px; }
+.sw-cur { background: var(--hl); border-color: var(--amber); }
+.sw-stos { background: var(--accent-soft); border-color: var(--accent); }
+.sw-done { background: var(--good-soft); border-color: var(--good); }
+.sw-mem { background: var(--surface-2); border-color: var(--s2); border-style: dashed; }
+
+/* ───────── W07: kasjer ───────── */
+.wynikduzy { font-family: var(--mono); font-size: 1.05rem; margin: 0; }
+.wynikduzy b { font-size: 1.4rem; }
+.dpcells { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.dp { border: 1.5px solid var(--border); border-radius: 8px; min-width: 48px; text-align: center; padding: 3px 4px; background: var(--surface); }
+.dp .s { font-size: .7rem; color: var(--muted); font-family: var(--mono); }
+.dp .m { font-family: var(--mono); font-weight: 700; font-size: 1.15rem; }
+.dp .c { font-size: .7rem; color: var(--s1); font-family: var(--mono); min-height: 1.1em; }
+.dp.puste .m { color: var(--muted); }
+.dp.teraz { background: var(--hl); border-color: var(--amber); color: var(--hl-ink); }
+.dp.teraz .s, .dp.teraz .c { color: var(--hl-ink); }
+.dp.zrodlo { box-shadow: inset 0 0 0 2px var(--s1); }
+.dp.cel { border-color: var(--accent); border-width: 2.5px; }
+
+/* ───────── W07: plan sali ───────── */
+.plan { position: relative; margin: 12px 0 4px; }
+.plan .os { position: relative; height: 22px; margin-left: 34px; border-bottom: 1px solid var(--border); }
+.plan .os span { position: absolute; transform: translateX(-50%); font-size: .75rem; color: var(--muted); font-family: var(--mono); }
+.plan .wiersz { display: flex; align-items: center; height: 34px; }
+.plan .nm { width: 34px; font-weight: 700; font-family: var(--mono); color: var(--text-2); }
+.plan .tor { position: relative; flex: 1; height: 26px; background: repeating-linear-gradient(90deg, var(--surface-2) 0 1px, transparent 1px calc(100% / var(--godz))); border-radius: 4px; }
+.plan button.zaj { position: absolute; top: 2px; height: 22px; border-radius: 6px; border: 1.5px solid var(--accent); background: var(--surface); color: var(--accent); font: 600 .78rem var(--mono); cursor: pointer; padding: 0 4px; overflow: hidden; white-space: nowrap; }
+.plan button.zaj[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.plan button.zaj.kol { background: var(--bad); border-color: var(--bad); color: #fff; }
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 7</a></div>
+    <a id="groupBadge" class="badge" href="#ustawienia" hidden></a>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#struktury">1. Stos czy kolejka?</a>
+    <a href="#nawiasy">2. Nawiasy i zdania</a>
+    <a href="#pamiec">3. Pamięć pod lupą</a>
+    <a href="#rekurencja">4. Drzewo wywołań</a>
+    <a href="#reszta">5. Kasjer</a>
+    <a href="#plan">6. Plan sali</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Struktury danych i techniki projektowania: ćwiczenia</h1>
+  <p class="lead">Ćwiczenia do wykładu 7, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
+  <div class="grid2">
+    <a class="tile" href="#struktury"><span class="num">1</span><h3>Stos czy kolejka?</h3><p>Wkładaj i wyjmuj elementy, a stos i kolejka pokażą, co z nich wychodzi. Potem sześć zagadek: przewidź wyjście albo rozpoznaj strukturę po tym, co z niej wyszło.</p><div class="meta">ok. 6 min · slajdy od „Cofnij i drukuj” do „Mini-zadania: stos czy kolejka?”</div></a>
+    <a class="tile" href="#nawiasy"><span class="num">2</span><h3>Nawiasy i zdania</h3><p>Sprawdzanie nawiasów krok po kroku ze stosem na widoku. Potem pomiar: zdania z coraz głębiej zagnieżdżonymi zdaniami podrzędnymi — trafność i czas czytania, także dla całej sali.</p><div class="meta">ok. 8 min · slajdy „Przykład: czy nawiasy są poprawne?” i „Zdania jak nawiasy”</div></a>
+    <a class="tile" href="#pamiec"><span class="num">3</span><h3>Pamięć pod lupą</h3><p>Ta sama lista liczb jako tablica i jako lista wiązana, komórka po komórce, z adresami jak w PMC. Licznik pokazuje, ile kosztuje każda operacja.</p><div class="meta">ok. 6 min · slajdy od „Częstych błędów” do „Tablicy a listy wiązanej”</div></a>
+    <a class="tile" href="#rekurencja"><span class="num">4</span><h3>Drzewo wywołań</h3><p>Rekurencyjne fib(n) jako drzewo: przejdź je krok po kroku ze stosem wywołań obok i zobacz, ile razy liczy to samo. Potem ta sama funkcja z pamięcią.</p><div class="meta">ok. 6 min · slajdy od „Rekurencji i stosu wywołań” do „Zapamiętaj, zamiast liczyć ponownie”</div></a>
+    <a class="tile" href="#reszta"><span class="num">5</span><h3>Kasjer</h3><p>Wydawanie reszty dla dowolnych nominałów: metoda zachłanna kontra programowanie dynamiczne, tabela M(s) wypełniana komórka po komórce i poszukiwanie najmniejszego kontrprzykładu.</p><div class="meta">ok. 7 min · slajdy od „Bierz to, co teraz najlepsze” do „Mini-zadania: policz tabelę”</div></a>
+    <a class="tile" href="#plan"><span class="num">6</span><h3>Plan sali</h3><p>Ułóż w jednej sali jak najwięcej zajęć. Trzy plany, czas i porównanie z trzema regułami zachłannymi. Czy szukasz optimum, czy zadowalasz się „wystarczająco dobrym”?</p><div class="meta">ok. 7 min · slajdy „Plan sali”, „Wynik: trzy reguły zachłanne” i „Ograniczona racjonalność”</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. STOS CZY KOLEJKA ═══════════════════ -->
+<section id="v-struktury" hidden>
+  <h2>1. Stos czy kolejka?</h2>
+  <p class="lead">Te same operacje trafiają naraz do stosu (LIFO) i do kolejki (FIFO). Porównaj, co z nich wychodzi.</p>
+
+  <div class="card">
+    <div class="row">
+      <label for="stWart">Element</label><input id="stWart" class="liczba" type="text" style="width: 6em" autocomplete="off">
+      <button type="button" class="btn" id="stWloz">Włóż</button>
+      <button type="button" class="btn ghost" id="stWyjmij">Wyjmij</button>
+      <button type="button" class="btn ghost small" id="stCzysc">Wyczyść</button>
+    </div>
+    <div class="sk-grid" style="margin-top: 14px">
+      <div>
+        <h3>Stos <span class="small muted">— <span class="mono">append</span> / <span class="mono">pop()</span></span></h3>
+        <div class="stos" id="stStos" aria-live="polite"></div>
+        <p class="small">Wyszło: <span class="mono" id="stStosOut">—</span></p>
+      </div>
+      <div>
+        <h3>Kolejka <span class="small muted">— <span class="mono">append</span> / <span class="mono">popleft()</span></span></h3>
+        <div class="kolejka" id="stKol" aria-live="polite"></div>
+        <p class="small">Wyszło: <span class="mono" id="stKolOut">—</span></p>
+      </div>
+    </div>
+    <p class="err" id="stErr" role="alert"></p>
+  </div>
+
+  <div class="card">
+    <h3>Zagadki</h3>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="zgNr"></span><span class="small muted" id="zgWynik"></span></div>
+    <p class="prpyt" id="zgPyt"></p>
+    <p class="mono ops" id="zgOps"></p>
+    <div id="zgOdpWpis" class="row"><input id="zgOdp" type="text" style="width: 12em; font-family: var(--mono)" placeholder="np. 2, 4, 3" autocomplete="off" aria-label="Twoja odpowiedź"><button type="button" class="btn" id="zgSprawdz">Sprawdź</button></div>
+    <div id="zgOdpWybor" class="row" hidden><button type="button" class="btn opbtn" data-s="stos">stos</button><button type="button" class="btn opbtn" data-s="kolejka">kolejka</button></div>
+    <p class="fbline" id="zgFb" role="status"></p>
+    <button type="button" class="btn ghost" id="zgDalej" hidden>Następna →</button>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Włóż 1, 2, 3, 4 i wyjmij wszystko. W jakiej kolejności wychodzą ze stosu, a w jakiej z kolejki?</li>
+      <li>Czy ciąg wyjść 3, 1, 2 jest możliwy dla stosu, jeśli wkładamy po kolei 1, 2, 3 (wyjmować można w dowolnych momentach)?</li>
+      <li>Przycisk „Wstecz” w przeglądarce i kolejka do kasy w sklepie: która struktura do czego?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════ 2. NAWIASY I ZDANIA ═══════════════════ -->
+<section id="v-nawiasy" hidden>
+  <h2>2. Nawiasy i zdania</h2>
+  <p class="lead">Ostatni otwarty nawias musi zamknąć się pierwszy — dlatego do sprawdzania nawiasów wystarcza stos. Ta sama struktura kryje się w zdaniach z zagnieżdżonymi zdaniami podrzędnymi.</p>
+
+  <div class="card">
+    <h3>Część A: sprawdzanie nawiasów krok po kroku</h3>
+    <div class="row">
+      <input id="nwTekst" type="text" style="flex: 1; min-width: 14em; font-family: var(--mono)" value="([]{})" aria-label="Tekst z nawiasami">
+      <button type="button" class="btn" id="nwKrok">Krok</button>
+      <button type="button" class="btn ghost" id="nwKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="nwReset">Od nowa</button>
+    </div>
+    <div class="row" style="margin-top: 6px" id="nwPrzyk"></div>
+    <div class="znaki" id="nwZnaki"></div>
+    <div class="row" style="align-items: flex-end; gap: 18px">
+      <div><div class="small muted">stos (wierzch po prawej)</div><div class="stospoz" id="nwStos"></div></div>
+    </div>
+    <p class="fbline" id="nwFb" role="status"></p>
+  </div>
+
+  <div class="card" id="zdIntro">
+    <h3>Część B: zdania jak nawiasy (pomiar)</h3>
+    <ul>
+      <li>Zobaczysz 9 zdań o trzech osobach. Przeczytaj zdanie i kliknij „Przeczytane”.</li>
+      <li>Zdanie zniknie, a my zapytamy, kto co zrobił. Mierzymy czas czytania i trafność.</li>
+      <li>Zdania różnią się tylko budową: zdania podrzędne doczepione na końcu albo wstawione w środek (zagnieżdżone).</li>
+    </ul>
+    <button type="button" class="btn" id="zdStart">Zaczynamy</button>
+  </div>
+  <div class="card" id="zdProba" hidden>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="zdNr"></span><span class="small muted" id="zdTimer" aria-hidden="true"></span></div>
+    <div id="zdZdanieBox">
+      <p class="zdanie" id="zdZdanie"></p>
+      <button type="button" class="btn" id="zdPrzecz">Przeczytane</button>
+    </div>
+    <div id="zdPytBox" hidden>
+      <p class="prpyt" id="zdPyt"></p>
+      <div class="row" id="zdOpcje"></div>
+    </div>
+    <div id="zdFbBox" hidden>
+      <p class="fbline" id="zdFb" role="status"></p>
+      <button type="button" class="btn" id="zdDalej">Dalej →</button>
+    </div>
+  </div>
+  <div class="card" id="zdWynik" hidden>
+    <h3>Twój wynik</h3>
+    <div class="hbars" id="zdWykres"></div>
+    <p class="small" id="zdWniosek"></p>
+    <button type="button" class="btn ghost small" id="zdJeszcze">Jeszcze raz</button>
+  </div>
+
+  <div id="grupa-zdania"></div>
+
+  <div class="card most">
+    <h3>Psychologia ↔ informatyka: zagnieżdżanie w języku</h3>
+    <ul>
+      <li>Żeby zrozumieć zdanie z zagnieżdżonym zdaniem podrzędnym, trzeba pamiętać wszystkie otwarte, niedokończone zdania; ostatnie otwarte zamyka się pierwsze — jak nawiasy na stosie.</li>
+      <li>Jedno zagnieżdżenie rozumiemy bez trudu, dwa sprawiają kłopot, trzy są dla większości ludzi niezrozumiałe (Miller i Chomsky 1963). W korpusach tekstów pisanych zdarzają się najwyżej trzy poziomy, w mowie dwa (Karlsson 2007).</li>
+      <li>Zdania „doczepiane na końcu” niosą tę samą treść, ale każde zdanie zamyka się od razu — wystarczy stała pamięć.</li>
+      <li><strong>Model, nie mechanizm.</strong> Stos opisuje strukturę zadania; nie wynika z tego, że mózg ma stos. Wynik sali to pokaz, nie eksperyment: mała próba i tylko trzy zdania na poziom.</li>
+    </ul>
+  </div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Jak zmieniały się Twoja trafność i czas czytania wraz z głębokością zagnieżdżenia?</li>
+      <li>Zapisz zdanie z dwoma zagnieżdżeniami w postaci nawiasów, np. [Listonosz, (którego sąsiad, {którego lekarz zawołał}, zobaczył), zasnął]. Gdzie leży wierzch stosu przy słowie „zawołał”?</li>
+      <li>Czy umiałbyś przerobić zdanie z dwoma zagnieżdżeniami tak, by miało tę samą treść, a nie wymagało stosu?</li>
+    </ol>
+  </div>
+  <p class="src">G. A. Miller, N. Chomsky, <em>Finitary Models of Language Users</em>, w: R. D. Luce i in. (red.), <em>Handbook of Mathematical Psychology</em> II, Wiley 1963; F. Karlsson, <em>Constraints on Multiple Center-Embedding of Clauses</em>, J. Linguistics 43(2), 2007, s. 365–392.</p>
+</section>
+
+<!-- ═══════════════════ 3. PAMIĘĆ POD LUPĄ ═══════════════════ -->
+<section id="v-pamiec" hidden>
+  <h2>3. Pamięć pod lupą</h2>
+  <p class="lead">Pamięć to ciąg komórek z adresami (W5). Tablica trzyma elementy w sąsiednich komórkach, lista wiązana — w dowolnych, połączonych wskaźnikami. Te same operacje kosztują więc co innego.</p>
+
+  <div class="card">
+    <div class="row">
+      <label for="pmWart">Wartość</label><input id="pmWart" class="liczba" type="text" style="width: 6em" autocomplete="off">
+      <button type="button" class="btn small" data-op="pocz">Wstaw na początek</button>
+      <button type="button" class="btn small" data-op="kon">Dopisz na koniec</button>
+      <button type="button" class="btn small ghost" data-op="usun">Usuń z początku</button>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <label for="pmI">Odczytaj element nr</label><input id="pmI" class="liczba" type="text" style="width: 5em" value="0" autocomplete="off">
+      <button type="button" class="btn small ghost" data-op="czyt">Odczytaj</button>
+      <button type="button" class="btn small ghost" id="pmReset">Od nowa</button>
+    </div>
+    <p class="err" id="pmErr" role="alert"></p>
+  </div>
+
+  <div class="card">
+    <h3>Tablica <span class="small muted">(<span class="mono">list</span> w Pythonie) — elementy w kolejnych komórkach od adresu 100</span></h3>
+    <div class="mem" id="pmTab"></div>
+    <p class="koszt" id="pmTabKoszt"></p>
+  </div>
+  <div class="card">
+    <h3>Lista wiązana <span class="small muted">— węzeł = wartość + adres następnego; komórki rozrzucone po pamięci</span></h3>
+    <p class="small mono" id="pmGlowa"></p>
+    <div class="mem" id="pmLista"></div>
+    <p class="koszt" id="pmListaKoszt"></p>
+  </div>
+
+  <div class="card">
+    <h3>Licznik łączny</h3>
+    <div class="scroll-x"><table class="t" id="pmSuma"></table></div>
+    <div class="row" style="margin-top: 10px">
+      <button type="button" class="btn ghost small" id="pmTysiac">Eksperyment: 1000 × wstaw na początek</button>
+      <button type="button" class="btn ghost small" id="pmTysiacK">Eksperyment: 1000 × dopisz na koniec</button>
+    </div>
+    <p class="note" id="pmEksp" hidden></p>
+    <p class="small muted">Koszt w tablicy: liczba przesunięć elementów (plus jeden zapis). Koszt w liście: liczba przejść po wskaźnikach i zmian wskaźników. Lista pamięta wskaźnik do ostatniego węzła (ogon), dlatego dopisanie na koniec jest tanie. Pomijamy powiększanie tablicy, gdy brakuje miejsca — Python robi to rzadko, więc średni koszt dopisania pozostaje stały.</p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Ile przesunięć kosztuje 1000 wstawień na początek tablicy? Skąd wzór 0 + 1 + … + 999?</li>
+      <li>Która struktura lepiej nadaje się na kolejkę, w której ciągle usuwamy z początku? A na tablicę, w której często czytamy element nr i?</li>
+      <li>Dlaczego <span class="mono">collections.deque</span> w Pythonie usuwa z początku w czasie O(1), choć <span class="mono">list.pop(0)</span> nie?</li>
+    </ol>
+  </div>
+  <p class="src">A. Bhargava, <em>Algorytmy. Ilustrowany przewodnik</em>, rozdz. 2; T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdział o elementarnych strukturach danych; dokumentacja Pythona, <span class="mono">collections.deque</span>.</p>
+</section>
+
+<!-- ═══════════════════ 4. DRZEWO WYWOŁAŃ ═══════════════════ -->
+<section id="v-rekurencja" hidden>
+  <h2>4. Drzewo wywołań</h2>
+  <p class="lead">Każde wywołanie fib(k) czeka na wyniki fib(k − 1) i fib(k − 2). Przejdź drzewo krok po kroku: obok widać stos wywołań — ścieżkę od korzenia do bieżącego wywołania.</p>
+
+  <div class="card">
+    <div class="row">
+      <span class="small muted" id="rkWarLab">Wersja</span>
+      <div class="seg" id="rkWar" role="group" aria-labelledby="rkWarLab">
+        <button type="button" data-w="bez" aria-pressed="true">Bez pamięci</button>
+        <button type="button" data-w="z" aria-pressed="false">Z pamięcią</button>
+      </div>
+      <label for="rkN">n =</label><input type="range" id="rkN" min="1" max="7" value="5"><span class="mono" id="rkNv">5</span>
+    </div>
+    <div class="sk-grid" style="margin-top: 12px">
+      <div><pre class="kod" id="rkKod"></pre></div>
+      <div>
+        <div class="stats">
+          <div class="stat"><div class="k">wywołania (dotąd)</div><div class="v" id="rkIle">0</div></div>
+          <div class="stat"><div class="k">wywołania łącznie</div><div class="v" id="rkLacznie">—</div></div>
+          <div class="stat"><div class="k">głębokość stosu</div><div class="v" id="rkGl">0</div></div>
+        </div>
+        <div class="small muted">stos wywołań (wierzch u góry)</div>
+        <div class="stos" id="rkStos"></div>
+      </div>
+    </div>
+    <div class="ctrl">
+      <button type="button" class="btn" id="rkKrok">Krok</button>
+      <button type="button" class="btn ghost" id="rkGraj">Uruchom</button>
+      <button type="button" class="btn ghost" id="rkKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="rkReset">Od nowa</button>
+    </div>
+    <div class="scroll-x"><svg class="drzewo" id="rkSvg" role="img" aria-label="Drzewo wywołań fib"></svg></div>
+    <div class="legend"><span><span class="sw sw-cur"></span> bieżące wywołanie</span><span><span class="sw sw-stos"></span> na stosie (czeka)</span><span><span class="sw sw-done"></span> zakończone</span><span><span class="sw sw-mem"></span> wynik z pamięci</span></div>
+  </div>
+
+  <div class="card">
+    <h3>Liczba wywołań dla większych n</h3>
+    <div class="scroll-x"><table class="t" id="rkTab"></table></div>
+    <p class="small muted">Bez pamięci: 2·F(n+1) − 1 wywołań. Z pamięcią: 2n − 1 (dla n ≥ 1), bo każde fib(k) liczone jest raz, a drugie wywołanie trafia od razu do pamięci.</p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Dla n = 5: ile razy liczone jest fib(2) bez pamięci? Znajdź te węzły w drzewie.</li>
+      <li>Jaka jest największa głębokość stosu dla fib(n)? Czy zależy od tego, czy używamy pamięci?</li>
+      <li>Python przerywa po ok. 1000 poziomach rekurencji. Dla jakiego n wersja z pamięcią w tej postaci zgłosi <span class="mono">RecursionError</span>? Jak tego uniknąć (wersja z tabelą ze slajdu)?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════════════ 5. KASJER ═══════════════════ -->
+<section id="v-reszta" hidden>
+  <h2>5. Kasjer</h2>
+  <p class="lead">Metoda zachłanna bierze zawsze największą monetę, która się mieści. Programowanie dynamiczne liczy najmniejszą liczbę monet M(s) dla każdej kwoty od 0 do s. Kiedy dają różne wyniki?</p>
+
+  <div class="card">
+    <div class="row">
+      <div class="field"><label for="ksNom">Nominały</label><input id="ksNom" type="text" style="width: 16em; font-family: var(--mono)" value="1, 3, 4"></div>
+      <div class="field"><label for="ksKw">Kwota</label><input id="ksKw" class="liczba" type="text" inputmode="numeric" value="6" style="width: 7em"></div>
+    </div>
+    <div class="row" style="margin-top: 6px" id="ksPrzyk"></div>
+    <p class="err" id="ksErr" role="alert"></p>
+    <div class="sk-grid" style="margin-top: 8px">
+      <div class="card" style="margin: 0"><h3>Zachłannie</h3><p class="wynikduzy" id="ksZach"></p></div>
+      <div class="card" style="margin: 0"><h3>Programowanie dynamiczne</h3><p class="wynikduzy" id="ksDp"></p></div>
+    </div>
+    <p class="fbline" id="ksFb"></p>
+    <div class="row"><button type="button" class="btn ghost small" id="ksKontr">Znajdź najmniejszą kwotę, dla której zachłanność zawodzi</button><span class="small" id="ksKontrOut"></span></div>
+  </div>
+
+  <div class="card">
+    <h3>Tabela M(s) krok po kroku</h3>
+    <p class="small muted">M(0) = 0, a dla s ≥ 1: M(s) = 1 + min M(s − c) po nominałach c ≤ s. Pod wartością: ostatnia moneta w najlepszym rozwiązaniu.</p>
+    <div class="ctrl">
+      <button type="button" class="btn" id="ksKrok">Następna komórka</button>
+      <button type="button" class="btn ghost" id="ksCala">Cała tabela</button>
+      <button type="button" class="btn ghost small" id="ksTabReset">Od nowa</button>
+    </div>
+    <p class="small mono" id="ksObl"></p>
+    <div class="dpcells" id="ksTab"></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Mini-zadanie ze slajdu: nominały 1, 5, 6, 9 i kwota 11. Najpierw policz na kartce, potem sprawdź.</li>
+      <li>Dla złotówek (1, 2, 5, 10, 20, 50 gr, 1, 2, 5 zł) przycisk nie znajduje kontrprzykładu. Dodaj monetę 4 gr — co się zmienia?</li>
+      <li>Ile komórek ma tabela dla kwoty 1000 i 9 nominałów? Ile porównań wykona DP?</li>
+    </ol>
+  </div>
+  <p class="src">A. Bhargava, <em>Algorytmy. Ilustrowany przewodnik</em>, rozdz. 8 i 9; T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdziały o programowaniu dynamicznym i algorytmach zachłannych.</p>
+</section>
+
+<!-- ═══════════════════ 6. PLAN SALI ═══════════════════ -->
+<section id="v-plan" hidden>
+  <h2>6. Plan sali</h2>
+  <p class="lead">Jedna sala, zajęcia nie mogą na siebie nachodzić (koniec o 10 i początek o 10 — można). Wybierz jak najwięcej zajęć. Trzy plany: pierwszy ze slajdu, dwa losowe.</p>
+
+  <div class="card" id="plIntro">
+    <h3>Zasady</h3>
+    <ul>
+      <li>Klikaj zajęcia, żeby je dodać do planu albo z niego usunąć. Kolizje zaznaczymy na czerwono.</li>
+      <li>Gdy uznasz plan za dobry, kliknij „Gotowe”. Mierzymy czas i to, czy znalazłeś największą możliwą liczbę zajęć.</li>
+      <li>Nie mówimy z góry, ile zajęć da się zmieścić.</li>
+    </ul>
+    <button type="button" class="btn" id="plStart">Zaczynamy</button>
+  </div>
+  <div class="card" id="plGra" hidden>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="plNr"></span><span class="small muted" id="plLicz"></span></div>
+    <div class="plan" id="plPlan"></div>
+    <div class="row" style="margin-top: 10px"><button type="button" class="btn" id="plGotowe">Gotowe</button><span class="err" id="plErr"></span></div>
+    <div id="plFbBox" hidden>
+      <p class="fbline" id="plFb" role="status"></p>
+      <div class="scroll-x"><table class="t" id="plReguly"></table></div>
+      <button type="button" class="btn" id="plDalej" style="margin-top: 10px">Dalej →</button>
+    </div>
+  </div>
+  <div class="card" id="plWynik" hidden>
+    <h3>Twój wynik</h3>
+    <div class="scroll-x"><table class="t" id="plTab"></table></div>
+    <p class="small" id="plWniosek"></p>
+    <button type="button" class="btn ghost small" id="plJeszcze">Jeszcze raz</button>
+  </div>
+
+  <div id="grupa-plan"></div>
+
+  <div class="card most">
+    <h3>Psychologia ↔ informatyka: ograniczona racjonalność</h3>
+    <ul>
+      <li>H. Simon: ludzie rzadko przeglądają wszystkie możliwości. Zwykle przyjmują pierwszą „wystarczająco dobrą” (<em>satisficing</em>) — z braku czasu, informacji i mocy obliczeniowej.</li>
+      <li>Algorytm zachłanny robi coś podobnego: jeden lokalny wybór, bez powrotu. Dla tego problemu reguła „najwcześniejszy koniec” ma jednak dowód, że zawsze daje optimum.</li>
+      <li><strong>To tylko analogia.</strong> Algorytm zachłanny to ścisła reguła, którą można analizować dowodem; <em>satisficing</em> to opis zachowania z poziomem aspiracji. Wynik sali to pokaz, nie eksperyment.</li>
+    </ul>
+  </div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Jaką regułą się kierowałeś? Czy przypominała którąś z trzech reguł zachłannych?</li>
+      <li>Skąd wiedziałeś, że już wystarczy? Czy sprawdzałeś, czy da się zmieścić jeszcze jedne zajęcia?</li>
+      <li>Wymyśl plan, na którym reguła „najkrótsze” zawodzi. Co musi zrobić krótkie zajęcie, żeby zaszkodzić?</li>
+    </ol>
+  </div>
+  <p class="src">H. A. Simon, <em>A Behavioral Model of Rational Choice</em>, Q. J. Econ. 69(1), 1955, s. 99–118; T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, „Problem wyboru zajęć” (rozdział o algorytmach zachłannych).</p>
+</section>
+
+<!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
+<section id="v-ustawienia" hidden>
+  <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
+  <p class="lead">Ćwiczenia 2B („Zdania jak nawiasy”) i 6 („Plan sali”) mogą wysyłać anonimowe wyniki do Formularza Google i pokazywać wyniki całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła. Można użyć tego samego formularza co w poprzednich wykładach.</p>
+
+  <div class="card">
+    <h3>Jednorazowe przygotowanie (ok. 10 min)</h3>
+    <ol>
+      <li>Utwórz nowy Formularz Google z <strong>czterema pytaniami typu „Krótka odpowiedź”</strong> o nazwach dokładnie: <code>aplikacja</code>, <code>sesja</code>, <code>wariant</code>, <code>wynik</code>. Żadne nie powinno być wymagane.</li>
+      <li>W <strong>Ustawieniach → Odpowiedzi</strong> wyłącz zbieranie adresów e-mail i <strong>ograniczenie do użytkowników SWPS</strong>. Nie włączaj „Ogranicz do 1 odpowiedzi”. Inaczej wysyłka ze strony nie zadziała.</li>
+      <li>W zakładce <strong>Odpowiedzi</strong> kliknij „Połącz z Arkuszami” i utwórz nowy arkusz.</li>
+      <li>W arkuszu: <strong>Plik → Udostępnij → Opublikuj w internecie</strong>. Wybierz arkusz z odpowiedziami i format <strong>CSV</strong>, opublikuj i skopiuj link.</li>
+      <li>W formularzu: <strong>⋮ → Pobierz link wstępnie wypełniony</strong>. Wpisz w pola kolejno <code>APLIKACJA</code>, <code>SESJA</code>, <code>WARIANT</code>, <code>WYNIK</code>, kliknij „Pobierz link” i skopiuj go.</li>
+      <li>Wklej oba linki poniżej, nadaj nazwę sesji i kliknij „Sprawdź”.</li>
+    </ol>
+    <p class="small muted">Wysyłane są tylko: nazwa ćwiczenia, nazwa sesji, wariant próby (głębokość zdania i trafność albo trafienie optimum) i czas w ms — po jednym wierszu na próbę. Opublikowany CSV jest publiczny, więc nie dodawaj do formularza pytań o dane osobowe.</p>
+  </div>
+
+  <div class="card">
+    <h3>Konfiguracja</h3>
+    <div class="field">
+      <label for="sPrefill">Link wstępnie wypełniony z formularza</label>
+      <textarea id="sPrefill" style="min-height:70px" placeholder="https://docs.google.com/forms/d/e/…/viewform?usp=pp_url&amp;entry.…=APLIKACJA&amp;…"></textarea>
+      <span id="sPrefillInfo" class="small"></span>
+    </div>
+    <div class="field">
+      <label for="sCsv">Link do opublikowanego arkusza (CSV)</label>
+      <input id="sCsv" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=…&amp;single=true&amp;output=csv">
+    </div>
+    <div class="field">
+      <label for="sSes">Nazwa sesji</label>
+      <input id="sSes" type="text" maxlength="60" style="max-width: 320px">
+      <span class="small muted">Wykresy pokazują tylko wyniki z tej sesji. Na kolejne zajęcia lub grupę zmień nazwę; formularz zostaje ten sam.</span>
+    </div>
+    <div class="field">
+      <label for="sBase">Adres strony w sieci (do linku dla studentów)</label>
+      <input id="sBase" type="url" placeholder="https://login.github.io/wdi/w07.html">
+      <span class="small muted" id="sBaseInfo"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="btn" id="sCheck">Sprawdź</button>
+      <button type="button" class="btn ghost" id="sSave">Zapisz w tej przeglądarce</button>
+      <button type="button" class="btn ghost" id="sForget">Usuń z tej przeglądarki</button>
+    </div>
+    <div id="sOut" class="small" style="margin-top:10px" aria-live="polite"></div>
+  </div>
+
+  <div class="card" id="sLinksCard" hidden>
+    <h3>Linki dla studentów (tryb grupowy)</h3>
+    <p class="small muted">Te linki włączają wysyłanie wyników i wykresy sali. Pokaż je na slajdzie (najlepiej jako kod QR). Zwykły adres strony, bez parametru <code>cfg</code>, działa bez wysyłania.</p>
+    <div class="field"><label for="sLinkZ">Zdania jak nawiasy</label><div class="row"><input id="sLinkZ" type="text" readonly style="flex:1"><button type="button" class="btn small" data-copy="sLinkZ">Kopiuj</button></div></div>
+    <div class="field"><label for="sLinkP">Plan sali</label><div class="row"><input id="sLinkP" type="text" readonly style="flex:1"><button type="button" class="btn small" data-copy="sLinkP">Kopiuj</button></div></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline. Wysyła dane wyłącznie w trybie grupowym, i to tylko anonimowe wyniki.</p>
+    <p><a href="#ustawienia">Dla prowadzącego: wspólne wyniki grupy</a></p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const el = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k === 'html') e.innerHTML = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids) e.append(k);
+  return e;
+};
+const SVGNS = 'http://www.w3.org/2000/svg';
+const sv = (tag, attrs = {}, txt) => {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (txt !== undefined) e.textContent = txt;
+  return e;
+};
+const liczba = (x) => String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const ulamek = (x, d = 1) => x.toLocaleString('pl-PL', { maximumFractionDigits: d });
+const seg = (host, cb) => {
+  for (const b of $$('button', host)) b.addEventListener('click', () => {
+    for (const c of $$('button', host)) c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+    cb(b.dataset.w);
+  });
+};
+const parsujInt = (t) => { const s = String(t).trim().replace(/[\s _]/g, ''); return /^\d+$/.test(s) ? s : null; };
+const losuj = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const wybierz = (t) => t[Math.floor(Math.random() * t.length)];
+const tasuj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+const mediana = (t) => { const s = [...t].sort((a, b) => a - b); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : NaN; };
+const odm = (n, a, b, c) => n === 1 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? b : c;
+const sek = (ms) => Number.isFinite(ms) ? ulamek(ms / 1000, 1) + ' s' : '—';
+function slupki(host, dane) {
+  // dane: [{lab, pc (0–100) albo null, tekst}]
+  host.replaceChildren(...dane.map((d) => el('div', { class: 'hbar' },
+    el('div', { class: 'lab', text: d.lab }),
+    el('div', { class: 'track' }, el('div', { class: 'fill', style: `width: ${(d.pc ?? 0) * 0.45}%` }),
+      el('span', { class: 'val', style: `left: calc(${(d.pc ?? 0) * 0.45}% + 6px)`, text: d.tekst })))));
+}
+
+/* ═════════════════════ Ćwiczenie 1: Stos czy kolejka? ═════════════════════ */
+const Struktury = (() => {
+  let stos = [], kol = [], outS = [], outK = [], nast = 1, nowy = null;
+  function rysuj() {
+    const elem = (v, kl) => el('div', { class: 'el ' + kl, text: String(v) });
+    $('#stStos').replaceChildren(...(stos.length ? [...stos].reverse().map((v, i) => elem(v, (i === 0 ? 'wierzch ' : '') + (v === nowy && i === 0 ? 'nowy' : ''))) : [el('div', { class: 'pusty', text: 'pusty' })]));
+    $('#stKol').replaceChildren(...(kol.length ? kol.map((v, i) => elem(v, (i === 0 ? 'wierzch ' : '') + (v === nowy && i === kol.length - 1 ? 'nowy' : ''))) : [el('div', { class: 'pusty', text: 'pusta' })]));
+    $('#stStosOut').textContent = outS.length ? outS.join(', ') : '—';
+    $('#stKolOut').textContent = outK.length ? outK.join(', ') : '—';
+    $('#stWart').value = String(nast);
+  }
+  function wloz() {
+    const t = $('#stWart').value.trim();
+    if (!t || t.length > 6) { $('#stErr').textContent = 'Wpisz krótką wartość (do 6 znaków).'; return; }
+    if (stos.length >= 12) { $('#stErr').textContent = 'W ćwiczeniu mieści się 12 elementów.'; return; }
+    $('#stErr').textContent = '';
+    stos.push(t); kol.push(t); nowy = t;
+    if (/^\d+$/.test(t)) nast = Math.max(nast, Number(t) + 1);
+    rysuj();
+  }
+  function wyjmij() {
+    if (!stos.length) { $('#stErr').textContent = 'IndexError: pop from empty list (stos) · IndexError: pop from an empty deque (kolejka). Najpierw sprawdzaj: if stos:'; return; }
+    $('#stErr').textContent = ''; nowy = null;
+    outS.push(stos.pop()); outK.push(kol.shift());
+    rysuj();
+  }
+  // ── zagadki ──
+  const TYPY = ['przewidz', 'przewidz', 'rozpoznaj', 'przewidz', 'przewidz', 'rozpoznaj'];
+  let zg = null, nrZ = 0, punkty = 0;
+  function generuj() {
+    for (;;) {
+      const ops = []; let w = 0, k = 1;
+      const dl = losuj(7, 9);
+      for (let i = 0; i < dl; i++) {
+        const pop = w > 0 && (Math.random() < 0.45 || (dl - i) <= w - 1) && !(i === 0);
+        if (pop) { ops.push('wyjmij'); w--; } else { ops.push(k++); w++; }
+      }
+      const s = [], q = [], oS = [], oQ = [];
+      for (const o of ops) { if (o === 'wyjmij') { oS.push(s.pop()); oQ.push(q.shift()); } else { s.push(o); q.push(o); } }
+      if (oS.length >= 3 && oS.join() !== oQ.join()) return { ops, oS, oQ };
+    }
+  }
+  function opsTekst(ops) { return ops.map((o) => o === 'wyjmij' ? 'wyjmij' : `włóż ${o}`).join(' · '); }
+  function nowaZagadka() {
+    const g = generuj(), typ = TYPY[nrZ], str = wybierz(['stos', 'kolejka']);
+    zg = { ...g, typ, str, done: false };
+    $('#zgNr').textContent = `Zagadka ${nrZ + 1} z ${TYPY.length}`;
+    $('#zgWynik').textContent = `punkty: ${punkty}`;
+    $('#zgOps').textContent = opsTekst(g.ops);
+    $('#zgFb').textContent = ''; $('#zgFb').className = 'fbline'; $('#zgDalej').hidden = true;
+    for (const b of $$('#zgOdpWybor button')) { b.classList.remove('dobra', 'zla'); b.disabled = false; }
+    if (typ === 'przewidz') {
+      $('#zgPyt').textContent = `Co wyjdzie i w jakiej kolejności, jeśli to ${str === 'stos' ? 'STOS' : 'KOLEJKA'}?`;
+      $('#zgOdpWpis').hidden = false; $('#zgOdpWybor').hidden = true; $('#zgOdp').value = ''; $('#zgOdp').disabled = false;
+    } else {
+      const out = str === 'stos' ? g.oS : g.oQ;
+      $('#zgPyt').textContent = `Wyszło: ${out.join(', ')}. Jaka to struktura?`;
+      $('#zgOdpWpis').hidden = true; $('#zgOdpWybor').hidden = false;
+    }
+  }
+  function ocen(ok, txt) {
+    zg.done = true; if (ok) punkty++;
+    $('#zgFb').className = 'fbline ' + (ok ? 'dobrze' : 'zle');
+    $('#zgFb').textContent = (ok ? 'Dobrze! ' : 'Nie. ') + txt;
+    $('#zgWynik').textContent = `punkty: ${punkty}`;
+    $('#zgDalej').hidden = false;
+    $('#zgDalej').textContent = nrZ === TYPY.length - 1 ? 'Jeszcze raz od początku' : 'Następna →';
+  }
+  function sprawdzWpis() {
+    if (!zg || zg.done) return;
+    const t = $('#zgOdp').value.split(/[\s,;]+/).filter((x) => x !== '');
+    if (!t.length) return;
+    const ocz = zg.str === 'stos' ? zg.oS : zg.oQ;
+    $('#zgOdp').disabled = true;
+    ocen(t.join() === ocz.join(), `${zg.str === 'stos' ? 'Ze stosu' : 'Z kolejki'} wychodzi: ${ocz.join(', ')}. (${zg.str === 'stos' ? 'Kolejka dałaby' : 'Stos dałby'}: ${(zg.str === 'stos' ? zg.oQ : zg.oS).join(', ')}.)`);
+  }
+  function wybor(s, b) {
+    if (!zg || zg.done) return;
+    for (const x of $$('#zgOdpWybor button')) x.disabled = true;
+    const ok = s === zg.str;
+    b.classList.add(ok ? 'dobra' : 'zla');
+    ocen(ok, `To ${zg.str === 'stos' ? 'stos' : 'kolejka'}: ${zg.str === 'stos' ? 'ostatni włożony wychodzi pierwszy' : 'elementy wychodzą w kolejności włożenia'}. ${zg.str === 'stos' ? 'Kolejka dałaby' : 'Stos dałby'}: ${(zg.str === 'stos' ? zg.oQ : zg.oS).join(', ')}.`);
+  }
+  function init() {
+    $('#stWloz').addEventListener('click', wloz);
+    $('#stWart').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); wloz(); } });
+    $('#stWyjmij').addEventListener('click', wyjmij);
+    $('#stCzysc').addEventListener('click', () => { stos = []; kol = []; outS = []; outK = []; nast = 1; nowy = null; $('#stErr').textContent = ''; rysuj(); });
+    $('#zgSprawdz').addEventListener('click', sprawdzWpis);
+    $('#zgOdp').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); sprawdzWpis(); } });
+    for (const b of $$('#zgOdpWybor button')) b.addEventListener('click', () => wybor(b.dataset.s, b));
+    $('#zgDalej').addEventListener('click', () => { if (nrZ === TYPY.length - 1) { nrZ = 0; punkty = 0; } else nrZ++; nowaZagadka(); });
+    rysuj(); nowaZagadka();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 2A: Nawiasy ═════════════════════ */
+const Nawiasy = (() => {
+  const PARA = { ')': '(', ']': '[', '}': '{' };
+  let t = '', S = null;
+  function reset() {
+    t = $('#nwTekst').value.slice(0, 60);
+    S = { i: 0, stos: [], koniec: false, ok: null, zly: -1, powod: '' };
+    rysuj();
+  }
+  function krok() {
+    if (S.koniec) return;
+    if (S.i >= t.length) {
+      S.koniec = true;
+      if (S.stos.length) { S.ok = false; S.powod = `Koniec tekstu, a na stosie zostało: ${S.stos.map((x) => x.ch).join(' ')} — nawiasy niezamknięte.`; }
+      else { S.ok = true; S.powod = 'Koniec tekstu, stos pusty — nawiasy poprawne.'; }
+      rysuj(); return;
+    }
+    const ch = t[S.i];
+    if ('([{'.includes(ch)) S.stos.push({ ch, i: S.i });
+    else if (PARA[ch]) {
+      if (!S.stos.length) { S.koniec = true; S.ok = false; S.zly = S.i; S.powod = `„${ch}” na pozycji ${S.i}: stos jest pusty — zamknięcie bez otwarcia.`; }
+      else {
+        const g = S.stos.pop();
+        if (g.ch !== PARA[ch]) { S.koniec = true; S.ok = false; S.zly = S.i; S.powod = `„${ch}” na pozycji ${S.i}, a na wierzchu stosu „${g.ch}” — zły rodzaj nawiasu.`; }
+      }
+    }
+    S.i++;
+    rysuj();
+  }
+  function rysuj() {
+    $('#nwZnaki').replaceChildren(...[...t].map((ch, i) => el('span', { class: 'znak' + (i < S.i ? ' byl' : '') + (i === S.i && !S.koniec ? ' cur' : '') + (i === S.zly ? ' zly' : ''), text: ch === ' ' ? '·' : ch })));
+    $('#nwStos').replaceChildren(...(S.stos.length ? S.stos.map((x, k) => el('div', { class: 'el' + (k === S.stos.length - 1 ? ' wierzch' : ''), text: x.ch })) : [el('div', { class: 'pusty', text: 'pusty' })]));
+    const fb = $('#nwFb');
+    fb.className = 'fbline' + (S.ok === true ? ' dobrze' : S.ok === false ? ' zle' : '');
+    fb.textContent = S.koniec ? S.powod : '';
+    $('#nwKrok').disabled = S.koniec; $('#nwKoniec').disabled = S.koniec;
+  }
+  function init() {
+    const P = ['([]{})', '([)]', '((', '())', 'print(A[f(x)] + {1: [2, 3]}[1][0])', 'if (a[i] == f(x)) {'];
+    $('#nwPrzyk').replaceChildren(el('span', { class: 'small muted', text: 'Przykłady:' }), ...P.map((p) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small mono', text: p });
+      b.addEventListener('click', () => { $('#nwTekst').value = p; reset(); });
+      return b;
+    }));
+    $('#nwTekst').addEventListener('input', reset);
+    $('#nwKrok').addEventListener('click', krok);
+    $('#nwKoniec').addEventListener('click', () => { let g = 0; while (!S.koniec && g++ < 100) krok(); });
+    $('#nwReset').addEventListener('click', reset);
+    reset();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Tryb grupowy (jak w W01–W06) ═════════════════════ */
+const CFG_KEY = 'wdi-w07-grupa';
+function b64e(str) { const b = new TextEncoder().encode(str); let bin = ''; b.forEach((x) => { bin += String.fromCharCode(x); }); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64d(str) { let t = str.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; const bin = atob(t); return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))); }
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* brak dostępu */ } },
+};
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) { return false; }
+}
+function cfgPoprawna(c) {
+  return c && typeof c === 'object' && /^https?:\/\//.test(c.f || '') && /^https?:\/\//.test(c.c || '') &&
+    c.e && ['a', 's', 'w', 'v'].every((k) => /^entry\.\d+$/.test(c.e[k] || '')) && typeof c.s === 'string' && c.s.trim().length > 0 && c.s.length <= 60;
+}
+function parseCSV(text) {
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(f); f = ''; }
+    else if (ch === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (ch !== '\r') f += ch;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x !== ''));
+}
+const Grupa = {
+  cfg: null, zrodlo: null,
+  init() {
+    const p = new URLSearchParams(location.search).get('cfg');
+    if (p) { try { const c = JSON.parse(b64d(p)); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'url'; } } catch (e) { /* zły parametr: tryb samodzielny */ } }
+    if (!this.cfg) { const raw = store.get(CFG_KEY); if (raw) { try { const c = JSON.parse(raw); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'local'; } } catch (e) { /* ignoruj */ } } }
+    const b = $('#groupBadge');
+    if (this.cfg) { b.hidden = false; b.textContent = `Tryb grupowy · ${this.cfg.s}`; b.title = this.zrodlo === 'local' ? 'Konfiguracja zapisana w tej przeglądarce' : 'Konfiguracja z linku'; }
+  },
+  aktywna() { return !!this.cfg; },
+  async wyslij(aplikacja, wariant, wynik, cfg = this.cfg) {
+    const body = new URLSearchParams();
+    body.set(cfg.e.a, aplikacja); body.set(cfg.e.s, cfg.s); body.set(cfg.e.w, wariant); body.set(cfg.e.v, String(wynik));
+    await fetch(cfg.f, { method: 'POST', mode: 'no-cors', body });
+  },
+  async pobierz(cfg = this.cfg) {
+    const r = await fetch(cfg.c, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`serwer odpowiedział kodem ${r.status}`);
+    const rows = parseCSV(await r.text());
+    if (rows.length === 0) return { rows: [], kol: null };
+    const head = rows[0].map((x) => x.trim().toLowerCase());
+    const idx = (n, fb) => { const i = head.indexOf(n); return i >= 0 ? i : fb; };
+    const kol = { a: idx('aplikacja', 1), s: idx('sesja', 2), w: idx('wariant', 3), v: idx('wynik', 4), znalezione: ['aplikacja', 'sesja', 'wariant', 'wynik'].every((n) => head.includes(n)) };
+    const out = rows.slice(1).map((r) => ({ a: (r[kol.a] || '').trim(), s: (r[kol.s] || '').trim(), w: (r[kol.w] || '').trim(), v: Number(String(r[kol.v] || '').replace(',', '.').trim()) }));
+    return { rows: out, kol };
+  },
+};
+// Panel wyników sali. o = { aplikacja, wiersze(paczka) → [[wariant, wynik]], filtr(wiersz) → bool, rysuj(host, wiersze), opis(wiersze) → tekst }
+function panelGrupy(host, o) {
+  if (!Grupa.aktywna()) return null;
+  let paczka = null, timer = null, aktywny = false;
+  const status = el('span', { class: 'small muted', 'aria-live': 'polite' });
+  const send = el('button', { type: 'button', class: 'btn', text: 'Wyślij moje wyniki do grupy' });
+  send.disabled = true;
+  const wyk = el('div', { class: 'hbars' });
+  const meta = el('p', { class: 'small muted' });
+  const statsP = el('p', { class: 'small' });
+  const refresh = el('button', { type: 'button', class: 'btn ghost small', text: 'Odśwież' });
+  host.append(el('div', { class: 'group' },
+    el('h3', {}, el('span', { class: 'dot' }), `Wyniki sali · sesja „${Grupa.cfg.s}”`),
+    el('div', { class: 'row' }, send, status), statsP, wyk, el('div', { class: 'row' }, refresh, meta)));
+  send.addEventListener('click', async () => {
+    if (!paczka) return;
+    send.disabled = true; status.textContent = 'Wysyłanie…';
+    try {
+      for (const [w, v] of o.wiersze(paczka)) await Grupa.wyslij(o.aplikacja, w, v);
+      status.textContent = 'Wysłano. Wyniki pojawią się na wykresie po odświeżeniu arkusza (zwykle w ciągu kilku minut).';
+      paczka = null; setTimeout(odswiez, 4000);
+    } catch (e) { status.textContent = 'Nie udało się wysłać (brak internetu?). Spróbuj ponownie.'; send.disabled = false; }
+  });
+  async function odswiez() {
+    meta.textContent = 'Pobieranie…';
+    try {
+      const { rows } = await Grupa.pobierz();
+      const dane = rows.filter((r) => r.a === o.aplikacja && r.s === Grupa.cfg.s && Number.isFinite(r.v) && o.filtr(r));
+      o.rysuj(wyk, dane);
+      statsP.textContent = dane.length ? o.opis(dane) : 'Nikt jeszcze nie wysłał wyników.';
+      meta.textContent = `Aktualizacja: ${new Date().toLocaleTimeString('pl-PL')}. Opublikowany arkusz odświeża się z opóźnieniem do kilku minut.`;
+    } catch (e) { meta.textContent = `Wyniki sali są chwilowo niedostępne (${e.message || 'błąd sieci'}).`; }
+  }
+  refresh.addEventListener('click', odswiez);
+  return {
+    gotowe(w) { paczka = w; send.disabled = false; status.textContent = ''; },
+    start() { aktywny = true; odswiez(); clearInterval(timer); timer = setInterval(() => { if (aktywny && !document.hidden) odswiez(); }, 20000); },
+    stop() { aktywny = false; clearInterval(timer); },
+  };
+}
+
+/* ═════════════════════ Ćwiczenie 2B: Zdania jak nawiasy ═════════════════════ */
+const Zdania = (() => {
+  const APLIKACJA = 'zdania';
+  const OSOBY = [['sąsiad', 'sąsiada'], ['lekarz', 'lekarza'], ['student', 'studenta'], ['listonosz', 'listonosza'], ['kelner', 'kelnera'], ['policjant', 'policjanta'], ['malarz', 'malarza'], ['nauczyciel', 'nauczyciela'], ['kierowca', 'kierowcę'], ['sprzedawca', 'sprzedawcę']];
+  const PRZECH = ['zawołał', 'zobaczył', 'minął', 'obudził', 'rozśmieszył', 'przestraszył', 'zaczepił', 'pozdrowił'];
+  const NIEPRZECH = ['wyszedł', 'zasnął', 'zniknął', 'odpoczął', 'westchnął'];
+  const GL = [0, 0, 0, 1, 1, 1, 2, 2, 2];
+  const NAZWA = ['bez zagnieżdżenia', '1 zagnieżdżenie', '2 zagnieżdżenia'];
+  const duza = (s) => s[0].toUpperCase() + s.slice(1);
+  let proby = [], nr = 0, wyniki = [], t0 = 0, czas = 0, tick = null, faza = '', panel = null;
+
+  function zdanie(d) {
+    const [A, B, C] = tasuj([...OSOBY]).slice(0, 3);
+    const [v1, v2] = tasuj([...PRZECH]).slice(0, 2), v3 = wybierz(NIEPRZECH);
+    // relacje: C v1 B; B v2 A; A v3
+    const tekst = d === 0 ? `${duza(C[0])} ${v1} ${B[1]}, który ${v2} ${A[1]}, który ${v3}.`
+      : d === 1 ? `${duza(B[0])}, którego ${C[0]} ${v1}, ${v2} ${A[1]}, który ${v3}.`
+        : `${duza(A[0])}, którego ${B[0]}, którego ${C[0]} ${v1}, ${v2}, ${v3}.`;
+    const pyt = wybierz([[v1, C[0]], [v2, B[0]], [v3, A[0]]]);
+    return { d, tekst, pytanie: `Kto ${pyt[0]}?`, odp: pyt[1], opcje: tasuj([A[0], B[0], C[0]]), rel: `${C[0]} ${v1} ${B[1]}; ${B[0]} ${v2} ${A[1]}; ${A[0]} ${v3}` };
+  }
+  function pokaz() {
+    const p = proby[nr]; faza = 'czyt';
+    $('#zdNr').textContent = `Zdanie ${nr + 1} z ${proby.length}`;
+    $('#zdZdanie').textContent = p.tekst;
+    $('#zdZdanieBox').hidden = false; $('#zdPytBox').hidden = true; $('#zdFbBox').hidden = true;
+    t0 = performance.now(); clearInterval(tick);
+    tick = setInterval(() => { $('#zdTimer').textContent = ((performance.now() - t0) / 1000).toFixed(0) + ' s'; }, 250);
+    $('#zdPrzecz').focus();
+  }
+  function przeczytane() {
+    if (faza !== 'czyt') return;
+    faza = 'pyt'; czas = Math.round(performance.now() - t0); clearInterval(tick);
+    const p = proby[nr];
+    $('#zdZdanieBox').hidden = true; $('#zdPytBox').hidden = false;
+    $('#zdPyt').textContent = p.pytanie;
+    $('#zdOpcje').replaceChildren(...p.opcje.map((o) => { const b = el('button', { type: 'button', class: 'btn ghost opbtn', text: o }); b.addEventListener('click', () => odpowiedz(o, b)); return b; }));
+  }
+  function odpowiedz(o, b) {
+    if (faza !== 'pyt') return;
+    faza = 'fb';
+    const p = proby[nr], ok = o === p.odp;
+    wyniki.push({ d: p.d, ok, czas });
+    for (const x of $$('#zdOpcje button')) { x.disabled = true; if (x.textContent === p.odp) x.classList.add('dobra'); }
+    if (!ok) b.classList.add('zla');
+    $('#zdFbBox').hidden = false;
+    $('#zdFb').className = 'fbline ' + (ok ? 'dobrze' : 'zle');
+    $('#zdFb').textContent = `${ok ? 'Dobrze!' : `Nie — ${p.odp}.`} Zdanie: „${p.tekst}” Kto co zrobił: ${p.rel}. Czas czytania: ${sek(czas)}.`;
+    $('#zdDalej').textContent = nr === proby.length - 1 ? 'Zobacz wynik →' : 'Dalej →';
+    $('#zdDalej').focus();
+  }
+  function wykres(host, dane) {
+    slupki(host, [0, 1, 2].map((d) => {
+      const x = dane.filter((w) => w.d === d), pc = x.length ? 100 * x.filter((w) => w.ok).length / x.length : null;
+      return { lab: NAZWA[d], pc, tekst: x.length ? `${Math.round(pc)}% trafnych · mediana czytania ${sek(mediana(x.map((w) => w.czas)))} · n = ${x.length}` : 'brak danych' };
+    }));
+  }
+  function podsumuj() {
+    $('#zdProba').hidden = true; $('#zdWynik').hidden = false;
+    wykres($('#zdWykres'), wyniki);
+    const m = [0, 1, 2].map((d) => mediana(wyniki.filter((w) => w.d === d).map((w) => w.czas)));
+    const tr = (d) => wyniki.filter((w) => w.d === d && w.ok).length;
+    $('#zdWniosek').textContent = (m[2] > 1.2 * m[0] ? `Zdania z dwoma zagnieżdżeniami czytałeś (mediana) ${ulamek(m[2] / m[0], 1)} raza dłużej niż zdania bez zagnieżdżeń — choć niosą tę samą treść. ` : 'Zagnieżdżenia nie wydłużyły wyraźnie Twojego czytania. ') + `Trafne odpowiedzi: ${tr(0)}/3 bez zagnieżdżeń, ${tr(1)}/3 przy jednym, ${tr(2)}/3 przy dwóch.`;
+    if (panel) panel.gotowe(wyniki);
+  }
+  function start() {
+    proby = tasuj([...GL]).map(zdanie); nr = 0; wyniki = [];
+    $('#zdIntro').hidden = true; $('#zdWynik').hidden = true; $('#zdProba').hidden = false;
+    pokaz();
+  }
+  function init() {
+    panel = panelGrupy($('#grupa-zdania'), {
+      aplikacja: APLIKACJA,
+      wiersze: (w) => w.map((x) => [`g${x.d}|${x.ok ? 1 : 0}`, x.czas]),
+      filtr: (r) => /^g[0-2]\|[01]$/.test(r.w) && r.v > 0 && r.v < 600000,
+      rysuj: (host, rows) => wykres(host, rows.map((r) => ({ d: Number(r.w[1]), ok: r.w.endsWith('1'), czas: r.v }))),
+      opis: (rows) => `Prób: ${rows.length} (ok. ${Math.round(rows.length / GL.length)} osób).`,
+    });
+    $('#zdStart').addEventListener('click', start);
+    $('#zdJeszcze').addEventListener('click', start);
+    $('#zdPrzecz').addEventListener('click', przeczytane);
+    $('#zdDalej').addEventListener('click', () => { if (nr < proby.length - 1) { nr++; pokaz(); } else podsumuj(); });
+  }
+  function wejscie() { if (panel) panel.start(); if (faza === 'czyt') t0 = performance.now() - czas; }
+  function wyjscie() { if (panel) panel.stop(); if (faza === 'czyt') czas = performance.now() - t0; }
+  return { init, wejscie, wyjscie, _zdanie: zdanie };
+})();
+
+/* ═════════════════════ Ćwiczenie 3: Pamięć pod lupą ═════════════════════ */
+const Pamiec = (() => {
+  const MAX = 12, BAZA_T = 100, PULA = Array.from({ length: 18 }, (_, i) => 200 + 4 * i);
+  let tab = [], wezly = new Map(), glowa = null, ogon = null, nast = 1, sumT = 0, sumL = 0, zm = { t: {}, l: {} }, ostatnie = null;
+  const dlugosc = () => tab.length;
+  function wolnyAdres() { const wolne = PULA.filter((a) => !wezly.has(a)); return wybierz(wolne); }
+  function reset() {
+    tab = []; wezly = new Map(); glowa = null; ogon = null; nast = 1; sumT = 0; sumL = 0; zm = { t: {}, l: {} }; ostatnie = null;
+    for (const v of [7, 3, 9]) wstawKon(v, true);
+    sumT = 0; sumL = 0; zm = { t: {}, l: {} }; nast = 10;
+    $('#pmTabKoszt').textContent = ''; $('#pmListaKoszt').textContent = ''; $('#pmEksp').hidden = true;
+    rysuj();
+  }
+  function wstawPocz(v) {
+    const k = tab.length;
+    tab.unshift(v); zm.t = { nowa: [0], ruch: Array.from({ length: k }, (_, i) => i + 1) };
+    const kT = k + 1;
+    const a = wolnyAdres(); wezly.set(a, { v, next: glowa }); glowa = a; if (ogon === null) ogon = a;
+    zm.l = { nowa: [a], glowa: true };
+    return { kT, kL: 3, opisT: `przesunięto ${k} ${k === 1 ? 'element' : k < 5 && k > 1 ? 'elementy' : 'elementów'} o jedno miejsce w prawo i zapisano nowy: <b>${kT}</b> ${odm(kT, 'operacja', 'operacje', 'operacji')}`, opisL: `nowy węzeł pod adresem ${a}, jego „następny” = stara głowa, głowa = ${a}: <b>3</b> operacje` };
+  }
+  function wstawKon(v) {
+    tab.push(v); zm.t = { nowa: [tab.length - 1], ruch: [] };
+    const a = wolnyAdres(); wezly.set(a, { v, next: null });
+    if (ogon !== null) wezly.get(ogon).next = a; else glowa = a;
+    const stary = ogon; ogon = a;
+    zm.l = { nowa: [a], ruch: stary !== null ? [stary] : [] };
+    return { kT: 1, kL: 3, opisT: 'zapis w pierwszej wolnej komórce za ostatnim elementem: <b>1</b> operacja', opisL: `nowy węzeł pod adresem ${a}, „następny” starego ogona = ${a}, ogon = ${a}: <b>3</b> operacje` };
+  }
+  function usunPocz() {
+    const k = tab.length;
+    tab.shift(); zm.t = { nowa: [], ruch: Array.from({ length: k - 1 }, (_, i) => i) };
+    const a = glowa, n = wezly.get(a); wezly.delete(a); glowa = n.next; if (glowa === null) ogon = null;
+    zm.l = { nowa: [], glowa: true };
+    return { kT: k - 1, kL: 1, opisT: `przesunięto ${k - 1} ${k - 1 === 1 ? 'element' : (k - 1) < 5 && (k - 1) > 1 ? 'elementy' : 'elementów'} o jedno miejsce w lewo: <b>${k - 1}</b> ${odm(k - 1, 'operacja', 'operacje', 'operacji')}`, opisL: `głowa = „następny” usuniętego węzła (${glowa === null ? 'None' : glowa}): <b>1</b> operacja` };
+  }
+  function czytaj(i) {
+    zm.t = { czyt: [i], ruch: [], nowa: [] };
+    let a = glowa; const droga = [a];
+    for (let k = 0; k < i; k++) { a = wezly.get(a).next; droga.push(a); }
+    zm.l = { czyt: droga, nowa: [] };
+    return { kT: 1, kL: i + 1, opisT: `adres = ${BAZA_T} + ${i} = ${BAZA_T + i}, jeden odczyt: <b>1</b> operacja → ${tab[i]}`, opisL: `przejście od głowy po ${i} ${i === 1 ? 'wskaźniku' : 'wskaźnikach'}: ${droga.join(' → ')}: <b>${i + 1}</b> ${odm(i + 1, 'operacja', 'operacje', 'operacji')} → ${wezly.get(a).v}` };
+  }
+  function wykonaj(op) {
+    $('#pmErr').textContent = '';
+    let r;
+    if (op === 'pocz' || op === 'kon') {
+      if (tab.length >= MAX) { $('#pmErr').textContent = `W ćwiczeniu mieści się ${MAX} elementów.`; return; }
+      const t = $('#pmWart').value.trim(), v = /^-?\d{1,4}$/.test(t) ? Number(t) : nast;
+      r = op === 'pocz' ? wstawPocz(v) : wstawKon(v);
+      nast = Math.max(nast, v + 1);
+    } else if (op === 'usun') {
+      if (!tab.length) { $('#pmErr').textContent = 'Struktura jest pusta.'; return; }
+      r = usunPocz();
+    } else {
+      const s = parsujInt($('#pmI').value);
+      if (s === null || Number(s) >= tab.length) { $('#pmErr').textContent = `Podaj numer od 0 do ${tab.length - 1}.`; return; }
+      r = czytaj(Number(s));
+    }
+    sumT += r.kT; sumL += r.kL; ostatnie = op;
+    $('#pmTabKoszt').innerHTML = r.opisT; $('#pmListaKoszt').innerHTML = r.opisL;
+    rysuj();
+  }
+  function rysuj() {
+    $('#pmWart').value = String(nast);
+    const kt = [];
+    for (let i = 0; i < MAX; i++) {
+      const jest = i < tab.length;
+      const kl = !jest ? ' wolna' : (zm.t.nowa || []).includes(i) ? ' nowa' : (zm.t.ruch || []).includes(i) ? ' ruch' : (zm.t.czyt || []).includes(i) ? ' czyt' : '';
+      kt.push(el('div', { class: 'kom' + kl }, el('div', { class: 'ad', text: String(BAZA_T + i) }), el('div', { class: 'wa', text: jest ? String(tab[i]) : '·' }), el('div', { class: 'nx', text: jest ? `[${i}]` : '' })));
+    }
+    $('#pmTab').replaceChildren(...kt);
+    $('#pmGlowa').textContent = `głowa = ${glowa === null ? 'None' : glowa} · ogon = ${ogon === null ? 'None' : ogon}`;
+    $('#pmLista').replaceChildren(...PULA.map((a) => {
+      const w = wezly.get(a);
+      const kl = !w ? ' wolna' : (zm.l.nowa || []).includes(a) ? ' nowa' : (zm.l.czyt || []).includes(a) ? ' czyt' : (zm.l.ruch || []).includes(a) ? ' ruch' : '';
+      return el('div', { class: 'kom' + kl + (a === glowa ? ' glowa' : '') }, el('div', { class: 'ad', text: String(a) }), el('div', { class: 'wa', text: w ? String(w.v) : '·' }), el('div', { class: 'nx', text: w ? `→ ${w.next === null ? 'None' : w.next}` : '' }));
+    }));
+    $('#pmSuma').replaceChildren(el('thead', {}, el('tr', {}, el('th', { text: '' }), el('th', { class: 'n', text: 'tablica' }), el('th', { class: 'n', text: 'lista wiązana' }))),
+      el('tbody', {}, el('tr', {}, el('td', { text: 'operacje łącznie (od „Od nowa”)' }), el('td', { class: 'n', text: liczba(sumT) }), el('td', { class: 'n', text: liczba(sumL) })),
+        el('tr', {}, el('td', { text: 'elementów' }), el('td', { class: 'n', text: String(tab.length) }), el('td', { class: 'n', text: String(wezly.size) }))));
+  }
+  function eksperyment(gdzie) {
+    // koszt 1000 operacji na pustej strukturze, bez rysowania
+    let kT = 0, kL = 0;
+    for (let k = 0; k < 1000; k++) { if (gdzie === 'pocz') { kT += k + 1; kL += 3; } else { kT += 1; kL += 3; } }
+    const p = $('#pmEksp'); p.hidden = false;
+    p.innerHTML = gdzie === 'pocz'
+      ? `1000 wstawień na początek pustej struktury: tablica <b>${liczba(kT)}</b> operacji (1 + 2 + … + 1000 = 1000 · 1001 / 2), lista wiązana <b>${liczba(kL)}</b>. Tablica: O(n) na wstawienie, O(n²) łącznie; lista: O(1) na wstawienie.`
+      : `1000 dopisań na koniec: tablica <b>${liczba(kT)}</b> operacji, lista wiązana z ogonem <b>${liczba(kL)}</b>. Obie O(1) na operację; tablica ma mniejszą stałą i nie zużywa pamięci na wskaźniki.`;
+  }
+  function init() {
+    for (const b of $$('[data-op]', $('#v-pamiec'))) b.addEventListener('click', () => wykonaj(b.dataset.op));
+    $('#pmReset').addEventListener('click', reset);
+    $('#pmTysiac').addEventListener('click', () => eksperyment('pocz'));
+    $('#pmTysiacK').addEventListener('click', () => eksperyment('kon'));
+    reset();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 4: Drzewo wywołań ═════════════════════ */
+const Drzewo = (() => {
+  const KOD = {
+    bez: ['def fib(n):', '    if n < 2:', '        return n', '    return fib(n - 1) + fib(n - 2)'],
+    z: ['pamiec = {}', 'def fib(n):', '    if n < 2:', '        return n', '    if n in pamiec:', '        return pamiec[n]', '    pamiec[n] = fib(n - 1) + fib(n - 2)', '    return pamiec[n]'],
+  };
+  let war = 'bez', n = 5, wezly = [], zdarz = [], krokNr = 0, timer = null;
+  function buduj() {
+    wezly = []; zdarz = []; let liscie = 0;
+    const pamiec = new Set();
+    function wywolaj(k, gl, rodzic) {
+      const id = wezly.length;
+      const w = { id, k, gl, rodzic, dzieci: [], mem: false, x: 0 };
+      wezly.push(w); zdarz.push(['we', id]);
+      if (k < 2) { w.x = liscie++; }
+      else if (war === 'z' && pamiec.has(k)) { w.mem = true; w.x = liscie++; }
+      else {
+        const a = wywolaj(k - 1, gl + 1, id), b = wywolaj(k - 2, gl + 1, id);
+        w.dzieci = [a, b]; w.x = (wezly[a].x + wezly[b].x) / 2;
+        if (war === 'z') pamiec.add(k);
+      }
+      zdarz.push(['wy', id]);
+      return id;
+    }
+    wywolaj(n, 0, null);
+    return liscie;
+  }
+  function rysuj() {
+    const liscie = Math.max(...wezly.map((w) => w.x)) + 1, glMax = Math.max(...wezly.map((w) => w.gl));
+    const DX = 44, DY = 58, W = Math.max(560, liscie * DX + 40), H = (glMax + 1) * DY + 10;
+    const X = (w) => (W - liscie * DX) / 2 + DX / 2 + w.x * DX, Y = (w) => 26 + w.gl * DY;
+    // stan po krokNr zdarzeniach
+    const stan = new Array(wezly.length).fill('ukryty'), stos = [];
+    for (let i = 0; i < krokNr; i++) {
+      const [t, id] = zdarz[i];
+      if (t === 'we') { stan[id] = 'stos'; stos.push(id); } else { stan[id] = wezly[id].mem ? 'mem' : 'done'; stos.pop(); }
+    }
+    if (stos.length) stan[stos.at(-1)] = 'cur';
+    const svg = $('#rkSvg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.replaceChildren();
+    for (const w of wezly) if (w.rodzic !== null) svg.append(sv('line', { x1: X(wezly[w.rodzic]), y1: Y(wezly[w.rodzic]), x2: X(w), y2: Y(w), opacity: stan[w.id] === 'ukryty' ? 0.25 : 1 }));
+    for (const w of wezly) {
+      const g = sv('g', { class: `w ${stan[w.id]}${stan[w.id] === 'done' && w.mem ? ' mem' : ''}` });
+      g.append(sv('circle', { cx: X(w), cy: Y(w), r: 15 }), sv('text', { x: X(w), y: Y(w) + 4, 'text-anchor': 'middle' }, String(w.k)));
+      g.append(sv('title', {}, `fib(${w.k})${w.mem ? ' — z pamięci' : ''}`));
+      svg.append(g);
+    }
+    const wej = zdarz.slice(0, krokNr).filter((z) => z[0] === 'we').length;
+    $('#rkIle').textContent = String(wej);
+    $('#rkLacznie').textContent = String(wezly.length);
+    $('#rkGl').textContent = String(stos.length);
+    $('#rkStos').replaceChildren(...(stos.length ? [...stos].reverse().map((id, i) => el('div', { class: 'el' + (i === 0 ? ' wierzch nowy' : ''), text: `fib(${wezly[id].k})${wezly[id].mem ? ' — z pamięci' : ''}` })) : [el('div', { class: 'pusty', text: krokNr ? 'pusty — wynik gotowy' : 'pusty' })]));
+    const kon = krokNr >= zdarz.length;
+    $('#rkKrok').disabled = kon; $('#rkGraj').disabled = kon; $('#rkKoniec').disabled = kon;
+    if (kon) stopGraj();
+  }
+  function reset() { stopGraj(); krokNr = 0; buduj(); $('#rkKod').replaceChildren(...KOD[war].map((t) => el('span', { text: t }))); rysuj(); }
+  function stopGraj() { clearInterval(timer); timer = null; $('#rkGraj').textContent = 'Uruchom'; }
+  function tabela() {
+    const F = [0, 1]; for (let i = 2; i <= 45; i++) F.push(F[i - 1] + F[i - 2]);
+    const N = [5, 10, 20, 30, 40];
+    $('#rkTab').replaceChildren(el('thead', {}, el('tr', {}, el('th', { text: 'n' }), ...N.map((x) => el('th', { class: 'n', text: String(x) })))),
+      el('tbody', {},
+        el('tr', {}, el('td', { text: 'bez pamięci' }), ...N.map((x) => el('td', { class: 'n', text: liczba(2 * F[x + 1] - 1) }))),
+        el('tr', {}, el('td', { text: 'z pamięcią' }), ...N.map((x) => el('td', { class: 'n', text: String(2 * x - 1) })))));
+  }
+  function init() {
+    seg($('#rkWar'), (w) => { war = w; reset(); });
+    $('#rkN').addEventListener('input', () => { n = Number($('#rkN').value); $('#rkNv').textContent = String(n); reset(); });
+    $('#rkKrok').addEventListener('click', () => { stopGraj(); krokNr++; rysuj(); });
+    $('#rkGraj').addEventListener('click', () => {
+      if (timer) { stopGraj(); return; }
+      $('#rkGraj').textContent = 'Pauza';
+      timer = setInterval(() => { krokNr++; rysuj(); }, 380);
+    });
+    $('#rkKoniec').addEventListener('click', () => { stopGraj(); krokNr = zdarz.length; rysuj(); });
+    $('#rkReset').addEventListener('click', reset);
+    tabela(); reset();
+  }
+  return { init, wyjscie: stopGraj, _liczba: (w, k) => { war = w; n = k; buduj(); return wezly.length; } };
+})();
+
+/* ═════════════════════ Ćwiczenie 5: Kasjer ═════════════════════ */
+const Kasjer = (() => {
+  const POKAZ = 150; // tyle komórek tabeli rysujemy
+  let nom = [], kwota = 0, M = [], C = [], krok = 0;
+  function zachlannie(nm, s) {
+    const out = []; let r = s;
+    for (const c of [...nm].sort((a, b) => b - a)) while (r >= c) { out.push(c); r -= c; }
+    return { monety: out, reszta: r };
+  }
+  function dp(nm, s) {
+    const m = [0], c = [null];
+    for (let x = 1; x <= s; x++) {
+      let best = Infinity, bc = null;
+      for (const k of nm) if (k <= x && m[x - k] + 1 < best) { best = m[x - k] + 1; bc = k; }
+      m.push(best); c.push(bc);
+    }
+    return { m, c };
+  }
+  const rozklad = (c, s) => { const out = []; while (s > 0 && c[s] !== null) { out.push(c[s]); s -= c[s]; } return out; };
+  const zl = (c) => nom.every((x) => x >= 1) && nom.includes(500) && nom.includes(1) ? (c >= 100 ? `${c / 100} zł` : `${c} gr`) : String(c);
+  function wczytaj() {
+    const cz = $('#ksNom').value.split(/[\s,;]+/).filter((x) => x !== '');
+    const kw = parsujInt($('#ksKw').value);
+    if (!cz.length || !cz.every((x) => /^\d+$/.test(x) && Number(x) > 0) || kw === null) { $('#ksErr').textContent = 'Nominały: dodatnie liczby całkowite oddzielone przecinkami; kwota: liczba całkowita.'; return false; }
+    if (cz.length > 15 || Number(kw) > 5000) { $('#ksErr').textContent = 'Najwyżej 15 nominałów i kwota do 5000.'; return false; }
+    $('#ksErr').textContent = '';
+    nom = [...new Set(cz.map(Number))].sort((a, b) => a - b); kwota = Number(kw);
+    return true;
+  }
+  function licz() {
+    if (!wczytaj()) return;
+    const z = zachlannie(nom, kwota), d = dp(nom, kwota);
+    M = d.m; C = d.c;
+    const opt = M[kwota];
+    $('#ksZach').innerHTML = z.reszta ? `utknęła: zostało ${z.reszta} do wydania<br><span class="small">(${z.monety.map(zl).join(' + ') || '—'})</span>` : `<b>${z.monety.length}</b> ${z.monety.length === 1 ? 'moneta' : z.monety.length < 5 ? 'monety' : 'monet'}<br><span class="small">${z.monety.map(zl).join(' + ') || '—'}</span>`;
+    $('#ksDp').innerHTML = opt === Infinity ? 'tej kwoty nie da się wydać' : `<b>${opt}</b> ${opt === 1 ? 'moneta' : opt < 5 && opt > 1 ? 'monety' : 'monet'}<br><span class="small">${rozklad(C, kwota).map(zl).join(' + ') || '—'}</span>`;
+    const fb = $('#ksFb');
+    if (opt === Infinity) { fb.className = 'fbline zle'; fb.textContent = 'Tymi nominałami nie da się wydać tej kwoty.'; }
+    else if (z.reszta || z.monety.length !== opt) { fb.className = 'fbline zle'; fb.textContent = 'Metoda zachłanna nie daje tu optimum.'; }
+    else { fb.className = 'fbline dobrze'; fb.textContent = 'Obie metody dają tę samą liczbę monet.'; }
+    $('#ksKontrOut').textContent = '';
+    krok = 0; rysujTab();
+  }
+  function rysujTab() {
+    const ile = Math.min(kwota, POKAZ);
+    const zrodla = new Set();
+    let obl = '';
+    if (krok > 0 && krok <= ile) {
+      const s = krok;
+      const czlony = nom.filter((c) => c <= s).map((c) => { zrodla.add(s - c); return `M(${s - c}) = ${M[s - c] === Infinity ? '∞' : M[s - c]}`; });
+      obl = czlony.length ? `M(${s}) = 1 + min(${czlony.join(', ')}) = ${M[s] === Infinity ? '∞' : M[s]}${C[s] !== null ? `, ostatnia moneta ${C[s]}` : ''}` : `M(${s}) = ∞ — żaden nominał się nie mieści`;
+    }
+    $('#ksObl').textContent = krok === 0 ? 'M(0) = 0. Kliknij „Następna komórka”.' : krok > ile ? (kwota > POKAZ ? `Pokazujemy pierwsze ${POKAZ} komórek; M(${kwota}) = ${M[kwota] === Infinity ? '∞' : M[kwota]}.` : `Tabela gotowa: M(${kwota}) = ${M[kwota] === Infinity ? '∞' : M[kwota]}.`) : obl;
+    $('#ksTab').replaceChildren(...Array.from({ length: ile + 1 }, (_, s) => {
+      const znana = s <= krok;
+      return el('div', { class: 'dp' + (znana ? '' : ' puste') + (s === krok && krok > 0 && krok <= ile ? ' teraz' : '') + (zrodla.has(s) ? ' zrodlo' : '') + (s === kwota ? ' cel' : '') },
+        el('div', { class: 's', text: String(s) }), el('div', { class: 'm', text: znana ? (M[s] === Infinity ? '∞' : String(M[s])) : '?' }), el('div', { class: 'c', text: znana && C[s] !== null ? String(C[s]) : '' }));
+    }));
+    $('#ksKrok').disabled = krok > ile;
+  }
+  function kontrprzyklad() {
+    if (!wczytaj()) return;
+    const sorted = [...nom].sort((a, b) => b - a);
+    const gr = Math.max(1000, 2 * (sorted[0] + (sorted[1] || 0)));
+    const d = dp(nom, gr);
+    for (let s = 1; s <= gr; s++) {
+      const z = zachlannie(nom, s);
+      if (d.m[s] !== Infinity && (z.reszta || z.monety.length !== d.m[s])) {
+        $('#ksKontrOut').textContent = `Najmniejsza taka kwota: ${s}. Zachłannie: ${z.reszta ? `utyka (zostaje ${z.reszta})` : `${z.monety.length} (${z.monety.join(' + ')})`}; optimum: ${d.m[s]} (${rozklad(d.c, s).join(' + ')}).`;
+        $('#ksKw').value = String(s); licz(); $('#ksKontrOut').textContent = `Najmniejsza taka kwota: ${s} — wpisana powyżej.`;
+        return;
+      }
+    }
+    $('#ksKontrOut').textContent = `Brak kontrprzykładu dla kwot do ${liczba(gr)}: dla tych nominałów zachłanność daje optimum (sprawdzone komputerowo w tym zakresie).`;
+  }
+  function init() {
+    const P = [['złotówki (gr), 2,89 zł', '1, 2, 5, 10, 20, 50, 100, 200, 500', 289], ['1, 3, 4 · kwota 6', '1, 3, 4', 6], ['1, 5, 6, 9 · kwota 11 (mini-zadanie)', '1, 5, 6, 9', 11], ['1, 7, 10 · kwota 14', '1, 7, 10', 14], ['2, 5 · kwota 3', '2, 5', 3]];
+    $('#ksPrzyk').replaceChildren(el('span', { class: 'small muted', text: 'Przykłady:' }), ...P.map(([t, nm, k]) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small', text: t });
+      b.addEventListener('click', () => { $('#ksNom').value = nm; $('#ksKw').value = String(k); licz(); });
+      return b;
+    }));
+    for (const id of ['#ksNom', '#ksKw']) $(id).addEventListener('input', licz);
+    $('#ksKrok').addEventListener('click', () => { krok++; rysujTab(); });
+    $('#ksCala').addEventListener('click', () => { krok = Math.min(kwota, POKAZ) + 1; rysujTab(); });
+    $('#ksTabReset').addEventListener('click', () => { krok = 0; rysujTab(); });
+    $('#ksKontr').addEventListener('click', kontrprzyklad);
+    licz();
+  }
+  return { init, _t: { zachlannie, dp } };
+})();
+
+/* ═════════════════════ Ćwiczenie 6: Plan sali ═════════════════════ */
+const Plan = (() => {
+  const APLIKACJA = 'plan';
+  const SLAJD = [['A', 8, 10], ['B', 9, 12], ['C', 10, 11], ['D', 11, 14], ['E', 10, 13], ['F', 13, 15], ['G', 14, 16], ['H', 7, 16]];
+  const REGULY = [['najwcześniejszy początek', (t) => t[1]], ['najkrótsze', (t) => t[2] - t[1]], ['najwcześniejszy koniec', (t) => t[2]]];
+  const kol = (a, b) => a[1] < b[2] && b[1] < a[2];
+  let plany = [], nr = 0, wybrane = new Set(), t0 = 0, wyniki = [], panel = null, faza = '';
+  function regula(z, klucz) {
+    const sel = [];
+    for (const t of [...z].sort((a, b) => klucz(a) - klucz(b) || a[0].localeCompare(b[0]))) if (sel.every((s) => !kol(t, s))) sel.push(t);
+    return sel.map((t) => t[0]).sort();
+  }
+  const optimum = (z) => regula(z, (t) => t[2]).length;
+  function losowyPlan() {
+    for (;;) {
+      const z = 'ABCDEFGHIJ'.split('').map((nm) => { const s = losuj(8, 17), d = losuj(1, 4); return [nm, s, Math.min(20, s + d)]; });
+      const r = REGULY.map(([, k]) => regula(z, k).length), o = r[2];
+      if (o >= 4 && (r[0] < o || r[1] < o)) return z;
+    }
+  }
+  function rysuj() {
+    const z = plany[nr], od = Math.min(...z.map((t) => t[1])), doo = Math.max(...z.map((t) => t[2])), H = doo - od;
+    const proc = (h) => `${100 * (h - od) / H}%`;
+    const konfl = new Set();
+    const sel = z.filter((t) => wybrane.has(t[0]));
+    for (const a of sel) for (const b of sel) if (a !== b && kol(a, b)) konfl.add(a[0]);
+    const os = el('div', { class: 'os' }, ...Array.from({ length: H + 1 }, (_, i) => el('span', { style: `left: ${100 * i / H}%`, text: String(od + i) })));
+    const host = $('#plPlan');
+    host.style.setProperty('--godz', String(H));
+    host.replaceChildren(os, ...z.map((t) => {
+      const b = el('button', { type: 'button', class: 'zaj' + (konfl.has(t[0]) ? ' kol' : ''), 'aria-pressed': wybrane.has(t[0]) ? 'true' : 'false', style: `left: ${proc(t[1])}; width: calc(${100 * (t[2] - t[1]) / H}% - 2px)`, title: `${t[0]}: ${t[1]}–${t[2]}`, text: `${t[1]}–${t[2]}` });
+      b.addEventListener('click', () => { if (faza !== 'gra') return; if (wybrane.has(t[0])) wybrane.delete(t[0]); else wybrane.add(t[0]); rysuj(); });
+      return el('div', { class: 'wiersz' }, el('div', { class: 'nm', text: t[0] }), el('div', { class: 'tor' }, b));
+    }));
+    $('#plLicz').textContent = `wybrane: ${wybrane.size}${konfl.size ? ' · są kolizje' : ''}`;
+  }
+  function pokaz() {
+    wybrane = new Set(); faza = 'gra';
+    $('#plNr').textContent = `Plan ${nr + 1} z ${plany.length}${nr === 0 ? ' (ze slajdu)' : ' (losowy)'}`;
+    $('#plFbBox').hidden = true; $('#plGotowe').hidden = false; $('#plErr').textContent = '';
+    t0 = performance.now(); rysuj();
+  }
+  function gotowe() {
+    if (faza !== 'gra') return;
+    const z = plany[nr], sel = z.filter((t) => wybrane.has(t[0]));
+    if (sel.some((a) => sel.some((b) => a !== b && kol(a, b)))) { $('#plErr').textContent = 'Usuń kolizje (czerwone zajęcia).'; return; }
+    if (!sel.length) { $('#plErr').textContent = 'Wybierz przynajmniej jedne zajęcia.'; return; }
+    faza = 'fb'; $('#plErr').textContent = '';
+    const czas = Math.round(performance.now() - t0), opt = optimum(z), ok = sel.length === opt;
+    wyniki.push({ plan: nr + 1, ty: sel.length, opt, ok, czas });
+    $('#plGotowe').hidden = true; $('#plFbBox').hidden = false;
+    $('#plFb').className = 'fbline ' + (ok ? 'dobrze' : 'zle');
+    $('#plFb').textContent = ok ? `Optimum! Zmieściłeś najwięcej, ile się da: ${sel.length}. Czas: ${sek(czas)}.` : `Twój plan mieści ${sel.length}, a da się zmieścić ${opt}. Czas: ${sek(czas)}.`;
+    $('#plReguly').replaceChildren(el('thead', {}, el('tr', {}, el('th', { text: 'reguła zachłanna' }), el('th', { text: 'wybrane zajęcia' }), el('th', { class: 'n', text: 'liczba' }))),
+      el('tbody', {}, ...REGULY.map(([nm, k]) => { const r = regula(z, k); return el('tr', {}, el('td', { text: nm }), el('td', { class: 'mono', text: r.join(', ') }), el('td', { class: 'n', text: String(r.length) })); }),
+        el('tr', {}, el('td', { text: 'Ty' }), el('td', { class: 'mono', text: sel.map((t) => t[0]).sort().join(', ') }), el('td', { class: 'n', text: String(sel.length) }))));
+    $('#plDalej').textContent = nr === plany.length - 1 ? 'Zobacz wynik →' : 'Dalej →';
+    $('#plDalej').focus();
+  }
+  function podsumuj() {
+    $('#plGra').hidden = true; $('#plWynik').hidden = false; faza = '';
+    $('#plTab').replaceChildren(el('thead', {}, el('tr', {}, ...['plan', 'Ty', 'optimum', 'czas'].map((h, i) => el('th', { class: i ? 'n' : '', text: h })))),
+      el('tbody', {}, ...wyniki.map((w) => el('tr', {}, el('td', { text: String(w.plan) }), el('td', { class: 'n', text: String(w.ty) }), el('td', { class: 'n', text: String(w.opt) }), el('td', { class: 'n', text: sek(w.czas) })))));
+    const traf = wyniki.filter((w) => w.ok).length;
+    $('#plWniosek').textContent = `Optimum w ${traf} z ${wyniki.length} planów. ${traf === wyniki.length ? 'Reguła „najwcześniejszy koniec” zrobiłaby to samo — bez szukania.' : 'Tam, gdzie zabrakło zajęć, porównaj swój wybór z regułą „najwcześniejszy koniec”.'}`;
+    if (panel) panel.gotowe(wyniki);
+  }
+  function wykres(host, dane) {
+    slupki(host, [1, 2, 3].map((p) => {
+      const x = dane.filter((d) => d.plan === p), pc = x.length ? 100 * x.filter((d) => d.ok).length / x.length : null;
+      return { lab: `plan ${p}${p === 1 ? ' (ze slajdu)' : ''}`, pc, tekst: x.length ? `${Math.round(pc)}% osób z optimum · mediana ${sek(mediana(x.map((d) => d.czas)))} · n = ${x.length}` : 'brak danych' };
+    }));
+  }
+  function start() {
+    plany = [SLAJD, losowyPlan(), losowyPlan()]; nr = 0; wyniki = [];
+    $('#plIntro').hidden = true; $('#plWynik').hidden = true; $('#plGra').hidden = false;
+    pokaz();
+  }
+  function init() {
+    panel = panelGrupy($('#grupa-plan'), {
+      aplikacja: APLIKACJA,
+      wiersze: (w) => w.map((x) => [`p${x.plan}|${x.ok ? 1 : 0}`, x.czas]),
+      filtr: (r) => /^p[1-3]\|[01]$/.test(r.w) && r.v > 0 && r.v < 1800000,
+      rysuj: (host, rows) => wykres(host, rows.map((r) => ({ plan: Number(r.w[1]), ok: r.w.endsWith('1'), czas: r.v }))),
+      opis: (rows) => `Planów: ${rows.length} (ok. ${Math.round(rows.length / 3)} osób). Dla porównania: reguła „najwcześniejszy koniec” trafia optimum zawsze.`,
+    });
+    $('#plStart').addEventListener('click', start);
+    $('#plJeszcze').addEventListener('click', start);
+    $('#plGotowe').addEventListener('click', gotowe);
+    $('#plDalej').addEventListener('click', () => { if (nr < plany.length - 1) { nr++; pokaz(); } else podsumuj(); });
+  }
+  function wejscie() { if (panel) panel.start(); }
+  function wyjscie() { if (panel) panel.stop(); }
+  return { init, wejscie, wyjscie, _t: { regula, SLAJD, REGULY } };
+})();
+
+/* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
+const Ustawienia = (() => {
+  let roboczy = null;
+  function domyslnaSesja() { const d = new Date(); return `W07-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+  function parsujPrefill(link) {
+    let u; try { u = new URL(link.trim()); } catch (e) { throw new Error('To nie wygląda na adres internetowy.'); }
+    if (!/\/forms\/.+\/(viewform|formResponse)$/.test(u.pathname)) throw new Error('To nie jest link do Formularza Google (powinien kończyć się na /viewform?…).');
+    const f = u.origin + u.pathname.replace(/\/viewform$/, '/formResponse');
+    const e = {}; const MAP = { APLIKACJA: 'a', SESJA: 's', WARIANT: 'w', WYNIK: 'v' };
+    for (const [k, v] of u.searchParams) if (/^entry\.\d+$/.test(k) && MAP[v.trim().toUpperCase()]) e[MAP[v.trim().toUpperCase()]] = k;
+    const brak = Object.entries(MAP).filter(([, kk]) => !e[kk]).map(([nm]) => nm);
+    if (brak.length) throw new Error(`W linku brakuje pól: ${brak.join(', ')}. Wpisz te słowa w pola formularza przed pobraniem linku.`);
+    return { f, e };
+  }
+  function zbierz() {
+    const { f, e } = parsujPrefill($('#sPrefill').value);
+    const c = $('#sCsv').value.trim();
+    if (!/^https?:\/\//.test(c)) throw new Error('Podaj link do opublikowanego arkusza (CSV).');
+    const sesja = $('#sSes').value.trim();
+    if (!sesja) throw new Error('Podaj nazwę sesji.');
+    return { v: 1, f, e, c, s: sesja };
+  }
+  function baza() { return location.protocol === 'file:' ? $('#sBase').value.trim() : location.origin + location.pathname; }
+  function linki(cfg) {
+    const b = baza(); const card = $('#sLinksCard');
+    if (!b) { card.hidden = true; return; }
+    const q = `${b}?cfg=${b64e(JSON.stringify(cfg))}`;
+    $('#sLinkZ').value = `${q}#nawiasy`; $('#sLinkP').value = `${q}#plan`; card.hidden = false;
+  }
+  function wypelnij(cfg) {
+    if (!cfg) return;
+    const u = new URL(cfg.f.replace(/\/formResponse$/, '/viewform'));
+    u.searchParams.set('usp', 'pp_url'); u.searchParams.set(cfg.e.a, 'APLIKACJA'); u.searchParams.set(cfg.e.s, 'SESJA'); u.searchParams.set(cfg.e.w, 'WARIANT'); u.searchParams.set(cfg.e.v, 'WYNIK');
+    $('#sPrefill').value = u.toString(); $('#sCsv').value = cfg.c; $('#sSes').value = cfg.s;
+  }
+  function out(...kids) { $('#sOut').replaceChildren(...kids); }
+  async function sprawdz() {
+    let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+    roboczy = cfg; linki(cfg);
+    const lista = el('ul');
+    const pkt = (ok, t) => lista.append(el('li', { class: ok ? 'ok' : 'err', text: `${ok ? '✓' : '✗'} ${t}` }));
+    out(lista);
+    pkt(true, 'Link formularza rozpoznany, wszystkie cztery pola znalezione.');
+    try { await Grupa.wyslij('test', 'test', 0, cfg); pkt(true, 'Wpis testowy wysłany (aplikacja = test). Przeglądarka nie potwierdza odbioru: sprawdź, czy pojawił się w arkuszu.'); }
+    catch (e) { pkt(false, `Wysyłka nie powiodła się: ${e.message}`); }
+    try {
+      const { rows, kol } = await Grupa.pobierz(cfg);
+      pkt(true, `Arkusz CSV odczytany: ${rows.length} wierszy odpowiedzi.`);
+      if (kol && !kol.znalezione) pkt(false, 'Nie znaleziono kolumn o nazwach aplikacja, sesja, wariant, wynik. Używam kolejności kolumn 2–5. Sprawdź nazwy pytań.');
+      const testy = rows.filter((r) => r.a === 'test' && r.s === cfg.s).length;
+      lista.append(el('li', { class: 'muted', text: `Wpisów testowych w tej sesji: ${testy}. Nowy wpis może pojawić się w CSV dopiero po kilku minutach; kliknij „Sprawdź” ponownie.` }));
+    } catch (e) { pkt(false, `Nie udało się odczytać CSV: ${e.message}. Sprawdź, czy arkusz jest opublikowany jako CSV.`); }
+    if (location.protocol === 'file:' && !$('#sBase').value.trim()) lista.append(el('li', { class: 'muted', text: 'Strona jest otwarta z dysku. Żeby wygenerować link dla studentów, wpisz adres strony w sieci (GitHub Pages).' }));
+  }
+  function init() {
+    $('#sSes').value = domyslnaSesja();
+    if (location.protocol === 'file:') $('#sBaseInfo').textContent = 'Strona jest otwarta z dysku, więc link musi wskazywać kopię w sieci.';
+    else { $('#sBase').value = location.origin + location.pathname; $('#sBase').readOnly = true; $('#sBaseInfo').textContent = 'Adres tej strony.'; }
+    const zapisana = store.get(CFG_KEY); if (zapisana) { try { wypelnij(JSON.parse(zapisana)); } catch (e) { /* ignoruj */ } }
+    else if (Grupa.cfg) wypelnij(Grupa.cfg);
+    $('#sPrefill').addEventListener('input', () => {
+      const i = $('#sPrefillInfo');
+      if (!$('#sPrefill').value.trim()) { i.textContent = ''; return; }
+      try { const { e } = parsujPrefill($('#sPrefill').value); i.className = 'small ok'; i.textContent = `✓ Pola: aplikacja = ${e.a}, sesja = ${e.s}, wariant = ${e.w}, wynik = ${e.v}`; }
+      catch (err) { i.className = 'small err'; i.textContent = err.message; }
+    });
+    $('#sPrefill').dispatchEvent(new Event('input'));
+    $('#sCheck').addEventListener('click', sprawdz);
+    $('#sBase').addEventListener('input', () => { if (roboczy) linki(roboczy); });
+    $('#sSave').addEventListener('click', () => {
+      let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+      const ok = store.set(CFG_KEY, JSON.stringify(cfg)); linki(cfg);
+      out(el('p', { class: ok ? 'ok' : 'err', text: ok ? 'Zapisano. W tej przeglądarce tryb grupowy będzie włączony także bez parametru w linku. Odśwież stronę, żeby go uruchomić.' : 'Ta przeglądarka nie pozwala zapisywać ustawień. Używaj linków dla studentów.' }));
+    });
+    $('#sForget').addEventListener('click', () => { store.del(CFG_KEY); out(el('p', { text: 'Usunięto zapisaną konfigurację. Po odświeżeniu strona będzie działać samodzielnie (chyba że otworzysz link z parametrem cfg).' })); });
+    for (const b of $$('[data-copy]')) b.addEventListener('click', async () => { const ok = await copyText($('#' + b.dataset.copy).value); b.textContent = ok ? 'Skopiowano' : 'Zaznacz i skopiuj'; setTimeout(() => { b.textContent = 'Kopiuj'; }, 1600); });
+    if (Grupa.cfg) linki(Grupa.cfg);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+const WIDOKI = ['start', 'struktury', 'nawiasy', 'pamiec', 'rekurencja', 'reszta', 'plan', 'ustawienia'];
+const TYTULY = { start: 'Wykład 7 · ćwiczenia', struktury: 'Stos czy kolejka? · W7', nawiasy: 'Nawiasy i zdania · W7', pamiec: 'Pamięć pod lupą · W7', rekurencja: 'Drzewo wywołań · W7', reszta: 'Kasjer · W7', plan: 'Plan sali · W7', ustawienia: 'Ustawienia prowadzącego · W7' };
+let biezacy = null;
+function nawiguj() {
+  const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  if (biezacy === 'rekurencja' && v !== 'rekurencja') Drzewo.wyjscie();
+  if (biezacy === 'nawiasy' && v !== 'nawiasy') Zdania.wyjscie();
+  if (v === 'nawiasy' && biezacy !== 'nawiasy') Zdania.wejscie();
+  if (biezacy === 'plan' && v !== 'plan') Plan.wyjscie();
+  if (v === 'plan' && biezacy !== 'plan') Plan.wejscie();
+  for (const w of WIDOKI) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = TYTULY[v];
+}
+Grupa.init();
+Struktury.init();
+Nawiasy.init();
+Zdania.init();
+Pamiec.init();
+Drzewo.init();
+Kasjer.init();
+Plan.init();
+Ustawienia.init();
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+</script>
+</body>
+</html>
