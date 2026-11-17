@@ -498,6 +498,12 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
       </div>
       <label for="rkN">n =</label><input type="range" id="rkN" min="1" max="7" value="5"><span class="mono" id="rkNv">5</span>
     </div>
+    <div class="ctrl">
+      <button type="button" class="btn" id="rkKrok">Krok</button>
+      <button type="button" class="btn ghost" id="rkGraj">Uruchom</button>
+      <button type="button" class="btn ghost" id="rkKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="rkReset">Od nowa</button>
+    </div>
     <div class="sk-grid" style="margin-top: 12px">
       <div><pre class="kod" id="rkKod"></pre></div>
       <div>
@@ -509,12 +515,6 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
         <div class="small muted">stos wywołań (wierzch u góry)</div>
         <div class="stos" id="rkStos"></div>
       </div>
-    </div>
-    <div class="ctrl">
-      <button type="button" class="btn" id="rkKrok">Krok</button>
-      <button type="button" class="btn ghost" id="rkGraj">Uruchom</button>
-      <button type="button" class="btn ghost" id="rkKoniec">Do końca</button>
-      <button type="button" class="btn ghost small" id="rkReset">Od nowa</button>
     </div>
     <div class="scroll-x"><svg class="drzewo" id="rkSvg" role="img" aria-label="Drzewo wywołań fib"></svg></div>
     <div class="legend"><span><span class="sw sw-cur"></span> bieżące wywołanie</span><span><span class="sw sw-stos"></span> na stosie (czeka)</span><span><span class="sw sw-done"></span> zakończone</span><span><span class="sw sw-mem"></span> wynik z pamięci</span></div>
@@ -1237,7 +1237,7 @@ const Drzewo = (() => {
     $('#rkKrok').disabled = kon; $('#rkGraj').disabled = kon; $('#rkKoniec').disabled = kon;
     if (kon) stopGraj();
   }
-  function reset() { stopGraj(); krokNr = 0; buduj(); $('#rkKod').replaceChildren(...KOD[war].map((t) => el('span', { text: t }))); rysuj(); }
+  function reset() { stopGraj(); krokNr = 0; buduj(); $('#rkStos').style.minHeight = `${n * 42 + 20}px`; $('#rkKod').replaceChildren(...KOD[war].map((t) => el('span', { text: t }))); rysuj(); }
   function stopGraj() { clearInterval(timer); timer = null; $('#rkGraj').textContent = 'Uruchom'; }
   function tabela() {
     const F = [0, 1]; for (let i = 2; i <= 45; i++) F.push(F[i - 1] + F[i - 2]);
