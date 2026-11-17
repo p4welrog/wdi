@@ -1,0 +1,1430 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 8 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 8 „Sortowanie” (Wprowadzenie do informatyki, SWPS).">
+<style>
+
+
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+html { scroll-padding-top: 96px; }
+@media (max-width: 560px) { html { scroll-padding-top: 124px; } }
+.home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+
+/* ───────── Wspólne elementy (jak w W05) ───────── */
+.dirty { color: var(--amber); font-size: .88rem; }
+.errlist { margin: 6px 0 0; padding-left: 1.2em; color: var(--bad); font-size: .9rem; }
+.alert { border-radius: 8px; padding: 8px 12px; font-size: .92rem; margin: 6px 0; }
+.alert.bad { background: var(--bad-soft); color: var(--bad); }
+.alert.warn { background: var(--amber-soft); color: var(--amber); }
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 6px; }
+.ctrl .speed { display: flex; align-items: center; gap: 6px; font-size: .88rem; color: var(--text-2); }
+.ctrl input[type="range"] { width: 110px; }
+.status.halt { color: var(--good); }
+.status.stuck { color: var(--bad); }
+.status.limit { color: var(--amber); }
+.task { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.task h4 { margin: 0 0 4px; font-size: 1rem; }
+.task p { margin: 0 0 8px; color: var(--text-2); font-size: .94rem; }
+.task.done { border-color: var(--good); }
+.task .hint { font-size: .88rem; }
+.res td.okc { color: var(--good); font-weight: 700; }
+.res td.badc { color: var(--bad); font-weight: 700; }
+.res td.mono { font-family: var(--mono); }
+.pill { display: inline-block; font-size: .78rem; padding: 2px 9px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+details.ref { margin-top: 10px; }
+details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.fbline { font-weight: 600; font-size: 1.1rem; margin: 12px 0 4px; }
+.fbline.dobrze { color: var(--good); }
+.fbline.zle { color: var(--bad); }
+.group { border: 1px solid var(--s1); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; background: var(--surface); }
+.group h3 { display: flex; gap: 8px; align-items: center; }
+.group .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; }
+.card.most { border-left: 4px solid var(--good); }
+.card.most h3 { color: var(--good); }
+
+/* ───────── W07: elementy wspólne z W06 ───────── */
+.sk-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 720px) { .sk-grid { grid-template-columns: minmax(0, 1fr); } }
+pre.kod { font-family: var(--mono); font-size: .92rem; line-height: 1.55; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 0; margin: 0 0 10px; overflow-x: auto; }
+pre.kod span { display: block; padding: 0 12px; white-space: pre; }
+pre.kod span.cur { background: var(--hl); color: var(--hl-ink); }
+input.liczba { width: 9em; font-family: var(--mono); }
+.prpyt { font-size: 1.15rem; font-weight: 600; margin: 8px 0 10px; }
+.opbtn { min-width: 6em; }
+.opbtn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
+.opbtn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+
+/* ───────── W07: stos i kolejka ───────── */
+.stos { display: flex; flex-direction: column; gap: 4px; min-height: 60px; padding: 8px; border: 2px solid var(--border); border-top: 0; border-radius: 0 0 10px 10px; max-width: 220px; }
+.kolejka { display: flex; flex-wrap: wrap; gap: 4px; min-height: 52px; padding: 8px; border: 2px solid var(--border); border-left: 0; border-right: 0; align-items: center; }
+.el { font-family: var(--mono); font-weight: 700; padding: 6px 12px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); text-align: center; border: 1.5px solid transparent; }
+.el.wierzch { border-color: var(--accent); }
+.el.nowy { background: var(--hl); color: var(--hl-ink); }
+.pusty { color: var(--muted); font-size: .85rem; font-style: italic; padding: 4px; }
+.ops { font-size: 1rem; line-height: 1.7; background: var(--surface-2); padding: 8px 12px; border-radius: 8px; }
+
+
+/* ───────── W08: sortownia ───────── */
+.slupki { display: flex; align-items: flex-end; gap: 3px; height: 230px; padding: 8px 6px 0; border-bottom: 2px solid var(--border); margin-top: 8px; }
+.slupki .sl { flex: 1 1 0; min-width: 4px; background: var(--accent-soft); border: 1.5px solid var(--accent); border-bottom: 0; border-radius: 4px 4px 0 0; position: relative; display: flex; justify-content: center; align-items: flex-end; transition: height .12s; }
+.slupki .sl span { font: 600 .72rem var(--mono); color: var(--accent); padding-bottom: 2px; }
+.slupki .sl.cmp { background: var(--hl); border-color: var(--amber); }
+.slupki .sl.cmp span { color: var(--hl-ink); }
+.slupki .sl.zap { background: var(--s2); border-color: var(--s2); }
+.slupki .sl.zap span { color: #fff; }
+.slupki .sl.fix { background: var(--good-soft); border-color: var(--good); }
+.slupki .sl.fix span { color: var(--good); }
+.slupki .sl.poza { opacity: .35; }
+.slupki .sl.os { box-shadow: inset 0 0 0 2px var(--bad); }
+.legenda { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .82rem; color: var(--text-2); margin-top: 6px; }
+.legenda i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 4px; border: 1.5px solid; }
+.lg-cmp { background: var(--hl); border-color: var(--amber) !important; }
+.lg-zap { background: var(--s2); border-color: var(--s2) !important; }
+.lg-fix { background: var(--good-soft); border-color: var(--good) !important; }
+.lg-os { background: var(--surface); border-color: var(--bad) !important; }
+.statusl { min-height: 2.8em; font-size: .95rem; margin: 8px 0 0; }
+
+/* ───────── W08: waga ───────── */
+.odwazniki { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+.odw { font: 700 1.3rem var(--mono); width: 64px; height: 64px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; position: relative; }
+.odw[aria-pressed="true"] { border-color: var(--amber); background: var(--hl); color: var(--hl-ink); }
+.odw small { position: absolute; bottom: 3px; left: 0; right: 0; font-size: .68rem; font-weight: 600; color: var(--muted); }
+.odw:disabled { cursor: default; opacity: 1; }
+.dziennik { font: .95rem/1.7 var(--mono); background: var(--surface-2); border-radius: 8px; padding: 6px 12px; min-height: 2.2em; }
+.pasek { height: 14px; background: var(--surface-2); border-radius: 99px; overflow: hidden; border: 1px solid var(--border); }
+.pasek > div { height: 100%; background: var(--s1); transition: width .25s; }
+.kolejnosc { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-height: 44px; padding: 6px; border: 1.5px dashed var(--border); border-radius: 10px; }
+
+/* ───────── W08: kopiec ───────── */
+.tablica { display: flex; flex-wrap: wrap; gap: 3px; margin: 8px 0; }
+.tablica .kom { min-width: 46px; text-align: center; border: 1.5px solid var(--border); border-radius: 8px; padding: 2px 4px; background: var(--surface); }
+.tablica .kom .ix { font: .7rem var(--mono); color: var(--muted); }
+.tablica .kom .wv { font: 700 1.05rem var(--mono); }
+.tablica .kom.hl { background: var(--hl); border-color: var(--amber); color: var(--hl-ink); }
+.tablica .kom.hl .ix { color: var(--hl-ink); }
+.tablica .kom.wyj { background: var(--good-soft); border-color: var(--good); }
+svg.drz { display: block; width: 100%; height: auto; max-width: 720px; }
+svg.drz line { stroke: var(--border); stroke-width: 1.5; }
+svg.drz circle { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5; }
+svg.drz text { fill: var(--text); font: 600 13px var(--mono); text-anchor: middle; dominant-baseline: central; }
+svg.drz text.ix { fill: var(--muted); font: 10px var(--mono); }
+svg.drz g.hl circle { fill: var(--hl); stroke: var(--amber); stroke-width: 2.5; }
+svg.drz g.hl text { fill: var(--hl-ink); }
+svg.drz g.zly circle { fill: var(--bad-soft); stroke: var(--bad); }
+svg.drz g.sciezka circle { fill: var(--accent-soft); stroke-width: 2.5; }
+svg.drz g.ok circle { fill: var(--good-soft); stroke: var(--good); stroke-width: 2.5; }
+svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
+
+/* ───────── W08: przegródki ───────── */
+.przegrodki { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; margin: 10px 0; }
+.przeg { border: 1.5px solid var(--border); border-top: 0; border-radius: 0 0 8px 8px; min-height: 120px; display: flex; flex-direction: column-reverse; gap: 3px; padding: 4px 2px; align-items: stretch; }
+.przeg-nr { text-align: center; font: 700 .9rem var(--mono); color: var(--muted); }
+.liczba-r { font: 600 .82rem var(--mono); text-align: center; border-radius: 6px; padding: 2px 0; background: var(--accent-soft); color: var(--accent); }
+.liczba-r b { color: var(--s2); }
+.liczba-r.nowa { background: var(--hl); color: var(--hl-ink); }
+.ciag { display: flex; flex-wrap: wrap; gap: 6px; }
+.ciag .liczba-r { padding: 4px 10px; font-size: 1rem; }
+@media (max-width: 560px) { .liczba-r { font-size: .68rem; } .przeg { min-height: 100px; } }
+
+/* ───────── W08: ranking ───────── */
+.para { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: center; margin: 14px 0; }
+.para .btn { min-height: 72px; font-size: 1.15rem; }
+.para .vs { color: var(--muted); font-weight: 600; }
+.cykl { font-family: var(--mono); }
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 8</a></div>
+    <a id="groupBadge" class="badge" href="#ustawienia" hidden></a>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#sortownia">1. Sortownia</a>
+    <a href="#kopiec">2. Kopiec</a>
+    <a href="#ranking">3. Ranking parami</a>
+    <a href="#waga">4. Waga szalkowa</a>
+    <a href="#radix">5. Przegródki</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Sortowanie: ćwiczenia</h1>
+  <p class="lead">Ćwiczenia do wykładu 8, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
+  <div class="grid2">
+    <a class="tile" href="#sortownia"><span class="num">1</span><h3>Sortownia</h3><p>Pięć algorytmów z wykładu na tych samych danych, krok po kroku: co porównują, co przestawiają i ile ich to kosztuje. Na końcu wszystkie naraz, także dla tysiąca liczb.</p><div class="meta">ok. 10 min · slajdy od „Sortowania przez wybór” do „Ile kosztuje quicksort?”</div></a>
+    <a class="tile" href="#kopiec"><span class="num">2</span><h3>Kopiec na żywo</h3><p>Kopiec jako drzewo i jako tablica jednocześnie. Wstawiaj, wyjmuj maksimum i patrz, jak elementy przesiewają się w górę i w dół. Kolejne maksima układają się w heapsort.</p><div class="meta">ok. 6 min · slajdy od „Kolejki priorytetowej” do „Heapsort”</div></a>
+    <a class="tile" href="#ranking"><span class="num">3</span><h3>Ranking parami</h3><p>Porównaj sześć rzeczy parami, jak w metodzie Thurstone’a. Czy Twoje wybory są przechodnie? Co zrobią z nimi dwa różne algorytmy sortujące?</p><div class="meta">ok. 5 min · slajd „Ranking jak sortowanie”</div></a>
+    <a class="tile" href="#waga"><span class="num">4</span><h3>Waga szalkowa</h3><p>Ułóż ukryte odważniki od najlżejszego, ważąc je parami. Licznik pokazuje, ile kolejności jest jeszcze możliwych. Czy zejdziesz do dolnej granicy ⌈log₂ n!⌉?</p><div class="meta">ok. 6 min · slajd „Czy da się szybciej niż n log n?”</div></a>
+    <a class="tile" href="#radix"><span class="num">5</span><h3>Przegródki</h3><p>Sortowanie pozycyjne bez ani jednego porównania: rozkładaj liczby do dziesięciu przegródek cyfra po cyfrze. I zobacz, co się psuje, gdy zbieranie nie jest stabilne.</p><div class="meta">ok. 5 min · slajdy „Sortowanie pozycyjne” i „Częsty błąd: radix łamie granicę”</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. SORTOWNIA ═══════════════════ -->
+<section id="v-sortownia" hidden>
+  <h2>1. Sortownia</h2>
+  <p class="lead">Wybierz algorytm i dane. Każdy krok to jedno porównanie albo jeden zapis do tablicy, dokładnie jak w kodzie ze slajdów.</p>
+
+  <div class="card">
+    <div class="row">
+      <span class="small muted" id="soAlgLab">Algorytm</span>
+      <div class="seg" id="soAlg" role="group" aria-labelledby="soAlgLab">
+        <button type="button" data-w="wybor" aria-pressed="false">przez wybór</button>
+        <button type="button" data-w="wstawianie" aria-pressed="true">przez wstawianie</button>
+        <button type="button" data-w="scalanie" aria-pressed="false">przez scalanie</button>
+        <button type="button" data-w="szybkie" aria-pressed="false">szybkie</button>
+        <button type="button" data-w="kopiec" aria-pressed="false">przez kopiec</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <span class="small muted" id="soDaneLab">Dane</span>
+      <div class="seg" id="soDane" role="group" aria-labelledby="soDaneLab">
+        <button type="button" data-w="losowe" aria-pressed="true">losowe</button>
+        <button type="button" data-w="prawie" aria-pressed="false">prawie posortowane</button>
+        <button type="button" data-w="rosnace" aria-pressed="false">rosnące</button>
+        <button type="button" data-w="malejace" aria-pressed="false">malejące</button>
+      </div>
+      <label for="soN">n =</label><input type="range" id="soN" min="5" max="40" value="12"><span class="mono" id="soNv">12</span>
+    </div>
+    <div class="ctrl">
+      <button type="button" class="btn" id="soKrok">Krok</button>
+      <button type="button" class="btn ghost" id="soGraj">Uruchom</button>
+      <button type="button" class="btn ghost" id="soKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="soNowe">Nowe dane</button>
+      <span class="speed"><label for="soTempo">tempo</label><input type="range" id="soTempo" min="1" max="10" value="5"></span>
+    </div>
+    <div class="slupki" id="soSlupki" aria-hidden="true"></div>
+    <div class="legenda"><span><i class="lg-cmp"></i>porównywane</span><span><i class="lg-zap"></i>zapis do tablicy</span><span><i class="lg-fix"></i>na swoim miejscu</span><span id="soLgOs"><i class="lg-os"></i>element osiowy</span></div>
+    <p class="statusl" id="soStatus" aria-live="polite"></p>
+    <div class="stats">
+      <div class="stat"><div class="k">porównania</div><div class="v" id="soPor">0</div></div>
+      <div class="stat"><div class="k">zapisy do tablicy</div><div class="v" id="soZap">0</div></div>
+      <div class="stat"><div class="k">n(n − 1)/2</div><div class="v" id="soKw">—</div></div>
+      <div class="stat"><div class="k">⌈log₂ n!⌉ (granica)</div><div class="v" id="soGr">—</div></div>
+    </div>
+    <p class="small muted" id="soOpis"></p>
+  </div>
+
+  <div class="card">
+    <h3>Wszystkie naraz</h3>
+    <p class="small muted">Te same dane dla pięciu algorytmów. Zamiana dwóch elementów to dwa zapisy.</p>
+    <div class="row">
+      <button type="button" class="btn small" id="soPorTe">Na danych z góry</button>
+      <button type="button" class="btn small ghost" id="soPor100">n = 100</button>
+      <button type="button" class="btn small ghost" id="soPor1000">n = 1000</button>
+    </div>
+    <div class="scroll-x"><table class="t" id="soTab"></table></div>
+    <p class="small muted" id="soTabOpis"></p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Dla danych rosnących sortowanie przez wstawianie robi n − 1 porównań, a przez wybór n(n − 1)/2. Dlaczego? Sprawdź oba.</li>
+      <li>Szybkie sortowanie z osią A[0] na danych rosnących: ile porównań? Porównaj z danymi losowymi tej samej długości.</li>
+      <li>Który algorytm robi najmniej zapisów? Kiedy to ważne?</li>
+    </ol>
+  </div>
+  <p class="src">Kod jak na slajdach W8. Sortowanie szybkie: podział w miejscu z osią A[lo] (wariant Lomuto); porównań tyle samo co w wersji z listami ze slajdu. T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 2, 6, 7; A. Bhargava, <em>Algorytmy</em>, rozdz. 2 i 4.</p>
+</section>
+
+<!-- ═══════════════════ 2. KOPIEC ═══════════════════ -->
+<section id="v-kopiec" hidden>
+  <h2>2. Kopiec na żywo</h2>
+  <p class="lead">Kopiec typu max: każdy rodzic ≥ swoich dzieci. W tablicy dzieci elementu o indeksie i mają indeksy 2i + 1 i 2i + 2, a rodzic — (i − 1) // 2.</p>
+
+  <div class="card">
+    <div class="row">
+      <label for="kpWart">Wartość</label><input id="kpWart" class="liczba" type="text" style="width: 6em" autocomplete="off">
+      <button type="button" class="btn" id="kpWstaw">Wstaw</button>
+      <button type="button" class="btn" id="kpWyjmij">Wyjmij maksimum</button>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <button type="button" class="btn ghost small" id="kpPrzyklad">Przykład z wykładu</button>
+      <button type="button" class="btn ghost small" id="kpLos">Losowy kopiec</button>
+      <button type="button" class="btn ghost small" id="kpCzysc">Wyczyść</button>
+    </div>
+    <div class="ctrl">
+      <button type="button" class="btn" id="kpKrok" disabled>Następny krok</button>
+      <button type="button" class="btn ghost" id="kpKoniec" disabled>Do końca</button>
+    </div>
+    <p class="statusl" id="kpStatus" aria-live="polite"></p>
+    <p class="err" id="kpErr" role="alert"></p>
+    <svg class="drz" id="kpDrzewo" viewBox="0 0 720 250" role="img" aria-label="Kopiec jako drzewo"></svg>
+    <div class="small muted">tablica (indeks nad wartością)</div>
+    <div class="tablica" id="kpTab"></div>
+    <div class="small muted" style="margin-top: 10px">wyjęte maksima, kolejno</div>
+    <div class="tablica" id="kpWyj"></div>
+    <p class="small" id="kpWyjOpis"></p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Ile zamian najwyżej wykona wstawienie do kopca o 15 elementach? A o 1000?</li>
+      <li>Wyjmij z przykładu z wykładu wszystkie elementy. W jakiej kolejności wychodzą? Tak działa heapsort.</li>
+      <li>Czy tablica [16, 14, 10, 8, 7, 9, 3, 2, 4, 1] jest posortowana? Czy musi być, żeby była kopcem?</li>
+    </ol>
+  </div>
+  <p class="src">Przykład: T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 6. W Pythonie moduł <code>heapq</code> daje kopiec typu min.</p>
+</section>
+
+<!-- ═══════════════════ 3. RANKING ═══════════════════ -->
+<section id="v-ranking" hidden>
+  <h2>3. Ranking parami</h2>
+  <p class="lead">Zobaczysz 15 par, czyli wszystkie pary z sześciu rzeczy. W każdej wybierz to, co wolisz. Nie ma złych odpowiedzi i nie trzeba się zastanawiać długo.</p>
+
+  <div class="card" id="rkIntro">
+    <div class="row">
+      <span class="small muted" id="rkZbLab">Zestaw</span>
+      <div class="seg" id="rkZb" role="group" aria-labelledby="rkZbLab">
+        <button type="button" data-w="lody" aria-pressed="true">smaki lodów</button>
+        <button type="button" data-w="wieczor" aria-pressed="false">wolny wieczór</button>
+        <button type="button" data-w="wakacje" aria-pressed="false">wakacje</button>
+      </div>
+    </div>
+    <p class="small muted" id="rkLista" style="margin-top: 8px"></p>
+    <button type="button" class="btn" id="rkStart">Zaczynamy</button>
+  </div>
+  <div class="card" id="rkGra" hidden>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="rkNr"></span><span class="small muted">Co wolisz?</span></div>
+    <div class="para"><button type="button" class="btn ghost" id="rkL"></button><span class="vs">czy</span><button type="button" class="btn ghost" id="rkP"></button></div>
+  </div>
+  <div class="card" id="rkWynik" hidden>
+    <h3>Twoje wybory</h3>
+    <div class="sk-grid">
+      <div>
+        <div class="scroll-x"><table class="t" id="rkTab"></table></div>
+      </div>
+      <div>
+        <div class="stats">
+          <div class="stat"><div class="k">cykle typu A &gt; B &gt; C &gt; A</div><div class="v" id="rkCykle">—</div></div>
+          <div class="stat"><div class="k">najwięcej możliwych</div><div class="v">8</div></div>
+        </div>
+        <p class="small" id="rkCykleOpis"></p>
+      </div>
+    </div>
+    <h3 style="margin-top: 14px">Co zrobią z tym algorytmy?</h3>
+    <p class="small muted">Oba sortują tę samą listę w tej samej kolejności początkowej i zamiast liczyć, pytają Twoje odpowiedzi.</p>
+    <div class="scroll-x"><table class="t" id="rkAlg"></table></div>
+    <p class="small" id="rkAlgOpis"></p>
+    <button type="button" class="btn ghost small" id="rkJeszcze">Jeszcze raz</button>
+  </div>
+  <div id="grupa-ranking"></div>
+
+  <div class="card most">
+    <h3>Psychologia ↔ informatyka: porównania parami</h3>
+    <ul>
+      <li>L. L. Thurstone (1927): badany ocenia pary bodźców, a skalę buduje się z tego, jak często jeden wygrywa z drugim. Pełny plan dla n bodźców to n(n − 1)/2 par.</li>
+      <li>Algorytm sortujący wymaga <strong>przechodniości</strong>: jeśli A &gt; B i B &gt; C, to A &gt; C. Wtedy wystarczy mniej porównań, a każdy poprawny algorytm daje ten sam ranking.</li>
+      <li>A. Tversky (1969) pokazał, że ludzkie preferencje bywają nieprzechodnie. Wtedy ranking zależy od algorytmu i kolejności pytań. Wynik tego ćwiczenia to pokaz, nie badanie.</li>
+    </ul>
+  </div>
+  <p class="src">L. L. Thurstone, <em>A Law of Comparative Judgment</em>, Psychol. Rev. 34(4), 1927, s. 273–286; A. Tversky, <em>Intransitivity of Preferences</em>, Psychol. Rev. 76(1), 1969, s. 31–48; liczba cykli: M. G. Kendall, B. Babington Smith, Biometrika 31, 1940, s. 324–345.</p>
+</section>
+
+<!-- ═══════════════════ 4. WAGA ═══════════════════ -->
+<section id="v-waga" hidden>
+  <h2>4. Waga szalkowa</h2>
+  <p class="lead">Odważniki mają różne, ukryte masy. Waga mówi tylko, który z dwóch jest cięższy. Ułóż je od najlżejszego do najcięższego, ważąc jak najmniej razy.</p>
+
+  <div class="card">
+    <div class="row">
+      <span class="small muted" id="wgNLab">Liczba odważników</span>
+      <div class="seg" id="wgN" role="group" aria-labelledby="wgNLab">
+        <button type="button" data-w="4" aria-pressed="false">4</button>
+        <button type="button" data-w="5" aria-pressed="true">5</button>
+        <button type="button" data-w="6" aria-pressed="false">6</button>
+      </div>
+      <button type="button" class="btn ghost small" id="wgNowe">Nowe odważniki</button>
+    </div>
+    <p class="small muted" style="margin: 10px 0 0">Kliknij dwa odważniki, żeby je zważyć.</p>
+    <div class="odwazniki" id="wgOdw"></div>
+    <div class="dziennik" id="wgDz" aria-live="polite"></div>
+    <div class="stats" style="margin-top: 10px">
+      <div class="stat"><div class="k">ważenia</div><div class="v" id="wgIle">0</div></div>
+      <div class="stat"><div class="k">możliwe kolejności</div><div class="v" id="wgMoz">—</div></div>
+      <div class="stat"><div class="k">brakująca informacja</div><div class="v" id="wgBity">—</div></div>
+    </div>
+    <div class="pasek" aria-hidden="true"><div id="wgPasek" style="width: 0%"></div></div>
+    <h3 style="margin-top: 16px">Twoja kolejność</h3>
+    <p class="small muted">Klikaj odważniki od najlżejszego. Kliknij w kolejności ponownie, żeby usunąć.</p>
+    <div class="kolejnosc" id="wgKol"></div>
+    <div class="row" style="margin-top: 10px"><button type="button" class="btn" id="wgSprawdz" disabled>Sprawdź</button></div>
+    <p class="fbline" id="wgFb" role="status"></p>
+    <p class="small" id="wgFbOpis"></p>
+  </div>
+  <div id="grupa-waga"></div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Które ważenie najbardziej zmniejsza liczbę możliwych kolejności? Szukaj takiego, które dzieli je mniej więcej na pół.</li>
+      <li>Dla 5 odważników granica to 7 ważeń, a sortowanie przez wybór robi 10. Ile robi przez scalanie w najgorszym razie? Patrz tabela niżej.</li>
+      <li>Jak to się łączy z grą „Zgadnij liczbę” z W1 i W6?</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>Ile ważeń w najgorszym przypadku?</h3>
+    <div class="scroll-x"><table class="t" id="wgTab"></table></div>
+    <p class="small muted">Sprawdzone przez przejrzenie wszystkich n! ułożeń. Dla n ≤ 11 granicę ⌈log₂ n!⌉ osiąga algorytm Forda–Johnsona (scalanie przez wstawianie).</p>
+  </div>
+  <p class="src">D. E. Knuth, <em>The Art of Computer Programming</em>, t. 3, rozdz. 5.3.1 (minimalna liczba porównań); L. R. Ford, S. M. Johnson, Amer. Math. Monthly 66(5), 1959, s. 387–389.</p>
+</section>
+
+<!-- ═══════════════════ 5. PRZEGRÓDKI ═══════════════════ -->
+<section id="v-radix" hidden>
+  <h2>5. Przegródki</h2>
+  <p class="lead">Sortowanie pozycyjne (LSD): najpierw rozłóż wszystkie liczby według cyfry jedności, zbierz, potem według dziesiątek i tak dalej. Żadna liczba nie jest porównywana z inną.</p>
+
+  <div class="card">
+    <div class="row">
+      <label for="rxDane">Liczby</label>
+      <input id="rxDane" type="text" style="flex: 1; min-width: 14em; font-family: var(--mono)" value="170, 45, 75, 90, 802, 24, 2, 66" autocomplete="off">
+      <button type="button" class="btn ghost small" id="rxLos">Losowe</button>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <span class="small muted" id="rxZbLab">Zbieranie z przegródki</span>
+      <div class="seg" id="rxZb" role="group" aria-labelledby="rxZbLab">
+        <button type="button" data-w="fifo" aria-pressed="true">od najstarszej (stabilnie)</button>
+        <button type="button" data-w="lifo" aria-pressed="false">od najnowszej (jak stos)</button>
+      </div>
+    </div>
+    <div class="ctrl">
+      <button type="button" class="btn" id="rxKrok">Krok</button>
+      <button type="button" class="btn ghost" id="rxCyfra">Cała cyfra</button>
+      <button type="button" class="btn ghost" id="rxKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="rxReset">Od nowa</button>
+    </div>
+    <p class="err" id="rxErr" role="alert"></p>
+    <p class="statusl" id="rxStatus" aria-live="polite"></p>
+    <div class="small muted">ciąg</div>
+    <div class="ciag" id="rxCiag"></div>
+    <div class="przegrodki" id="rxPrzeg"></div>
+    <div class="stats">
+      <div class="stat"><div class="k">przejścia (cyfry)</div><div class="v" id="rxPrzejscia">0</div></div>
+      <div class="stat"><div class="k">przeniesienia liczb</div><div class="v" id="rxRuchy">0</div></div>
+      <div class="stat"><div class="k">porównania liczb</div><div class="v">0</div></div>
+    </div>
+    <p class="small" id="rxHist"></p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Przełącz zbieranie na „jak stos” i posortuj przykład. Na której cyfrze kolejność się psuje i dlaczego?</li>
+      <li>Ile przeniesień potrzeba dla n liczb o d cyfrach? Kiedy to mniej niż n log₂ n porównań, a kiedy więcej?</li>
+      <li>Dlaczego radix nie przeczy granicy ⌈log₂ n!⌉? Czego ta granica dotyczy?</li>
+    </ol>
+  </div>
+  <p class="src">Przykład: T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 8.3.</p>
+</section>
+
+
+<!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
+<section id="v-ustawienia" hidden>
+  <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
+  <p class="lead">Ćwiczenia 3 („Ranking parami”) i 4 („Waga szalkowa”) mogą wysyłać anonimowe wyniki do Formularza Google i pokazywać wyniki całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła. Można użyć tego samego formularza co w poprzednich wykładach.</p>
+
+  <div class="card">
+    <h3>Jednorazowe przygotowanie (ok. 10 min)</h3>
+    <ol>
+      <li>Utwórz nowy Formularz Google z <strong>czterema pytaniami typu „Krótka odpowiedź”</strong> o nazwach dokładnie: <code>aplikacja</code>, <code>sesja</code>, <code>wariant</code>, <code>wynik</code>. Żadne nie powinno być wymagane.</li>
+      <li>W <strong>Ustawieniach → Odpowiedzi</strong> wyłącz zbieranie adresów e-mail i <strong>ograniczenie do użytkowników SWPS</strong>. Nie włączaj „Ogranicz do 1 odpowiedzi”. Inaczej wysyłka ze strony nie zadziała.</li>
+      <li>W zakładce <strong>Odpowiedzi</strong> kliknij „Połącz z Arkuszami” i utwórz nowy arkusz.</li>
+      <li>W arkuszu: <strong>Plik → Udostępnij → Opublikuj w internecie</strong>. Wybierz arkusz z odpowiedziami i format <strong>CSV</strong>, opublikuj i skopiuj link.</li>
+      <li>W formularzu: <strong>⋮ → Pobierz link wstępnie wypełniony</strong>. Wpisz w pola kolejno <code>APLIKACJA</code>, <code>SESJA</code>, <code>WARIANT</code>, <code>WYNIK</code>, kliknij „Pobierz link” i skopiuj go.</li>
+      <li>Wklej oba linki poniżej, nadaj nazwę sesji i kliknij „Sprawdź”.</li>
+    </ol>
+    <p class="small muted">Wysyłane są tylko: nazwa ćwiczenia, nazwa sesji i jedna liczba na osobę (liczba cykli w rankingu albo liczba ważeń przy 5 odważnikach, z informacją, czy kolejność była poprawna). Opublikowany CSV jest publiczny, więc nie dodawaj do formularza pytań o dane osobowe.</p>
+  </div>
+
+  <div class="card">
+    <h3>Konfiguracja</h3>
+    <div class="field">
+      <label for="sPrefill">Link wstępnie wypełniony z formularza</label>
+      <textarea id="sPrefill" style="min-height:70px" placeholder="https://docs.google.com/forms/d/e/…/viewform?usp=pp_url&amp;entry.…=APLIKACJA&amp;…"></textarea>
+      <span id="sPrefillInfo" class="small"></span>
+    </div>
+    <div class="field">
+      <label for="sCsv">Link do opublikowanego arkusza (CSV)</label>
+      <input id="sCsv" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=…&amp;single=true&amp;output=csv">
+    </div>
+    <div class="field">
+      <label for="sSes">Nazwa sesji</label>
+      <input id="sSes" type="text" maxlength="60" style="max-width: 320px">
+      <span class="small muted">Wykresy pokazują tylko wyniki z tej sesji. Na kolejne zajęcia lub grupę zmień nazwę; formularz zostaje ten sam.</span>
+    </div>
+    <div class="field">
+      <label for="sBase">Adres strony w sieci (do linku dla studentów)</label>
+      <input id="sBase" type="url" placeholder="https://login.github.io/wdi/w08.html">
+      <span class="small muted" id="sBaseInfo"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="btn" id="sCheck">Sprawdź</button>
+      <button type="button" class="btn ghost" id="sSave">Zapisz w tej przeglądarce</button>
+      <button type="button" class="btn ghost" id="sForget">Usuń z tej przeglądarki</button>
+    </div>
+    <div id="sOut" class="small" style="margin-top:10px" aria-live="polite"></div>
+  </div>
+
+  <div class="card" id="sLinksCard" hidden>
+    <h3>Linki dla studentów (tryb grupowy)</h3>
+    <p class="small muted">Te linki włączają wysyłanie wyników i wykresy sali. Pokaż je na slajdzie (najlepiej jako kod QR). Zwykły adres strony, bez parametru <code>cfg</code>, działa bez wysyłania.</p>
+    <div class="field"><label for="sLink0">Ranking parami</label><div class="row"><input id="sLink0" type="text" readonly style="flex:1"><button type="button" class="btn small" data-copy="sLink0">Kopiuj</button></div></div>
+    <div class="field"><label for="sLink1">Waga szalkowa</label><div class="row"><input id="sLink1" type="text" readonly style="flex:1"><button type="button" class="btn small" data-copy="sLink1">Kopiuj</button></div></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline. Wysyła dane wyłącznie w trybie grupowym, i to tylko anonimowe wyniki.</p>
+    <p><a href="#ustawienia">Dla prowadzącego: wspólne wyniki grupy</a></p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+const KONF = {"wyk": "W08", "key": "wdi-w08-grupa", "widoki": {"start": "Wykład 8 · ćwiczenia", "sortownia": "Sortownia · W8", "kopiec": "Kopiec na żywo · W8", "ranking": "Ranking parami · W8", "waga": "Waga szalkowa · W8", "radix": "Przegródki · W8", "ustawienia": "Ustawienia prowadzącego · W8"}, "linki": [{"id": "sLink0", "hash": "ranking", "label": "Ranking parami"}, {"id": "sLink1", "hash": "waga", "label": "Waga szalkowa"}]};
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const el = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k === 'html') e.innerHTML = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids) e.append(k);
+  return e;
+};
+const SVGNS = 'http://www.w3.org/2000/svg';
+const sv = (tag, attrs = {}, txt) => {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (txt !== undefined) e.textContent = txt;
+  return e;
+};
+const liczba = (x) => String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const ulamek = (x, d = 1) => x.toLocaleString('pl-PL', { maximumFractionDigits: d });
+const seg = (host, cb) => {
+  for (const b of $$('button', host)) b.addEventListener('click', () => {
+    for (const c of $$('button', host)) c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+    cb(b.dataset.w);
+  });
+};
+const parsujInt = (t) => { const s = String(t).trim().replace(/[\s _]/g, ''); return /^\d+$/.test(s) ? s : null; };
+const losuj = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const wybierz = (t) => t[Math.floor(Math.random() * t.length)];
+const tasuj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+const mediana = (t) => { const s = [...t].sort((a, b) => a - b); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : NaN; };
+const odm = (n, a, b, c) => n === 1 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? b : c;
+const sek = (ms) => Number.isFinite(ms) ? ulamek(ms / 1000, 1) + ' s' : '—';
+function slupki(host, dane) {
+  // dane: [{lab, pc (0–100) albo null, tekst}]
+  host.replaceChildren(...dane.map((d) => el('div', { class: 'hbar' },
+    el('div', { class: 'lab', text: d.lab }),
+    el('div', { class: 'track' }, el('div', { class: 'fill', style: `width: ${(d.pc ?? 0) * 0.45}%` }),
+      el('span', { class: 'val', style: `left: calc(${(d.pc ?? 0) * 0.45}% + 6px)`, text: d.tekst })))));
+}
+
+
+/* ═════════════════════ Tryb grupowy (jak w W01–W07) ═════════════════════ */
+const CFG_KEY = KONF.key;
+function b64e(str) { const b = new TextEncoder().encode(str); let bin = ''; b.forEach((x) => { bin += String.fromCharCode(x); }); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64d(str) { let t = str.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; const bin = atob(t); return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))); }
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* brak dostępu */ } },
+};
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) { return false; }
+}
+function cfgPoprawna(c) {
+  return c && typeof c === 'object' && /^https?:\/\//.test(c.f || '') && /^https?:\/\//.test(c.c || '') &&
+    c.e && ['a', 's', 'w', 'v'].every((k) => /^entry\.\d+$/.test(c.e[k] || '')) && typeof c.s === 'string' && c.s.trim().length > 0 && c.s.length <= 60;
+}
+function parseCSV(text) {
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(f); f = ''; }
+    else if (ch === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (ch !== '\r') f += ch;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x !== ''));
+}
+const Grupa = {
+  cfg: null, zrodlo: null,
+  init() {
+    const p = new URLSearchParams(location.search).get('cfg');
+    if (p) { try { const c = JSON.parse(b64d(p)); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'url'; } } catch (e) { /* zły parametr: tryb samodzielny */ } }
+    if (!this.cfg) { const raw = store.get(CFG_KEY); if (raw) { try { const c = JSON.parse(raw); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'local'; } } catch (e) { /* ignoruj */ } } }
+    const b = $('#groupBadge');
+    if (this.cfg) { b.hidden = false; b.textContent = `Tryb grupowy · ${this.cfg.s}`; b.title = this.zrodlo === 'local' ? 'Konfiguracja zapisana w tej przeglądarce' : 'Konfiguracja z linku'; }
+  },
+  aktywna() { return !!this.cfg; },
+  async wyslij(aplikacja, wariant, wynik, cfg = this.cfg) {
+    const body = new URLSearchParams();
+    body.set(cfg.e.a, aplikacja); body.set(cfg.e.s, cfg.s); body.set(cfg.e.w, wariant); body.set(cfg.e.v, String(wynik));
+    await fetch(cfg.f, { method: 'POST', mode: 'no-cors', body });
+  },
+  async pobierz(cfg = this.cfg) {
+    const r = await fetch(cfg.c, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`serwer odpowiedział kodem ${r.status}`);
+    const rows = parseCSV(await r.text());
+    if (rows.length === 0) return { rows: [], kol: null };
+    const head = rows[0].map((x) => x.trim().toLowerCase());
+    const idx = (n, fb) => { const i = head.indexOf(n); return i >= 0 ? i : fb; };
+    const kol = { a: idx('aplikacja', 1), s: idx('sesja', 2), w: idx('wariant', 3), v: idx('wynik', 4), znalezione: ['aplikacja', 'sesja', 'wariant', 'wynik'].every((n) => head.includes(n)) };
+    const out = rows.slice(1).map((r) => ({ a: (r[kol.a] || '').trim(), s: (r[kol.s] || '').trim(), w: (r[kol.w] || '').trim(), v: Number(String(r[kol.v] || '').replace(',', '.').trim()) }));
+    return { rows: out, kol };
+  },
+};
+// Panel wyników sali. o = { aplikacja, wiersze(paczka) → [[wariant, wynik]], filtr(wiersz) → bool, rysuj(host, wiersze), opis(wiersze) → tekst }
+function panelGrupy(host, o) {
+  if (!Grupa.aktywna()) return null;
+  let paczka = null, timer = null, aktywny = false;
+  const status = el('span', { class: 'small muted', 'aria-live': 'polite' });
+  const send = el('button', { type: 'button', class: 'btn', text: 'Wyślij moje wyniki do grupy' });
+  send.disabled = true;
+  const wyk = el('div', { class: 'hbars' });
+  const meta = el('p', { class: 'small muted' });
+  const statsP = el('p', { class: 'small' });
+  const refresh = el('button', { type: 'button', class: 'btn ghost small', text: 'Odśwież' });
+  host.append(el('div', { class: 'group' },
+    el('h3', {}, el('span', { class: 'dot' }), `Wyniki sali · sesja „${Grupa.cfg.s}”`),
+    el('div', { class: 'row' }, send, status), statsP, wyk, el('div', { class: 'row' }, refresh, meta)));
+  send.addEventListener('click', async () => {
+    if (!paczka) return;
+    send.disabled = true; status.textContent = 'Wysyłanie…';
+    try {
+      for (const [w, v] of o.wiersze(paczka)) await Grupa.wyslij(o.aplikacja, w, v);
+      status.textContent = 'Wysłano. Wyniki pojawią się na wykresie po odświeżeniu arkusza (zwykle w ciągu kilku minut).';
+      paczka = null; setTimeout(odswiez, 4000);
+    } catch (e) { status.textContent = 'Nie udało się wysłać (brak internetu?). Spróbuj ponownie.'; send.disabled = false; }
+  });
+  async function odswiez() {
+    meta.textContent = 'Pobieranie…';
+    try {
+      const { rows } = await Grupa.pobierz();
+      const dane = rows.filter((r) => r.a === o.aplikacja && r.s === Grupa.cfg.s && Number.isFinite(r.v) && o.filtr(r));
+      o.rysuj(wyk, dane);
+      statsP.textContent = dane.length ? o.opis(dane) : 'Nikt jeszcze nie wysłał wyników.';
+      meta.textContent = `Aktualizacja: ${new Date().toLocaleTimeString('pl-PL')}. Opublikowany arkusz odświeża się z opóźnieniem do kilku minut.`;
+    } catch (e) { meta.textContent = `Wyniki sali są chwilowo niedostępne (${e.message || 'błąd sieci'}).`; }
+  }
+  refresh.addEventListener('click', odswiez);
+  return {
+    gotowe(w) { paczka = w; send.disabled = false; status.textContent = ''; },
+    start() { aktywny = true; odswiez(); clearInterval(timer); timer = setInterval(() => { if (aktywny && !document.hidden) odswiez(); }, 20000); },
+    stop() { aktywny = false; clearInterval(timer); },
+  };
+}
+
+
+/* ═════════════════════ wspólne W08 ═════════════════════ */
+const log2silnia = (n) => { let s = 0; for (let k = 2; k <= n; k++) s += Math.log2(k); return s; };
+const granica = (n) => Math.ceil(log2silnia(n) - 1e-9);
+const permutacje = (n) => {
+  const out = [], a = [...Array(n).keys()];
+  const gen = (k) => { if (k === n) { out.push([...a]); return; } for (let i = k; i < n; i++) { [a[k], a[i]] = [a[i], a[k]]; gen(k + 1); [a[k], a[i]] = [a[i], a[k]]; } };
+  gen(0); return out;
+};
+
+/* Zdarzenia algorytmów: {t: 'cmp'|'set'|'swap'|'fix'|'info', i, j, v, txt, lo, hi, os} */
+function zdarzenia(alg, A0, Q = false) {
+  const A = [...A0], E = [], n = A.length; let C = 0, Z = 0;
+  const cmp = (i, j, txt, extra = {}) => { C++; if (!Q) E.push({ t: 'cmp', i, j, txt, ...extra }); };
+  const set = (i, v, txt, extra = {}) => { A[i] = v; Z++; if (!Q) E.push({ t: 'set', i, v, txt, ...extra }); };
+  const swap = (i, j, txt, extra = {}) => { [A[i], A[j]] = [A[j], A[i]]; Z += 2; if (!Q) E.push({ t: 'swap', i, j, txt, ...extra }); };
+  const fix = (i) => E.push({ t: 'fix', i });
+  if (alg === 'wybor') {
+    for (let i = 0; i < n - 1; i++) {
+      let m = i;
+      for (let j = i + 1; j < n; j++) {
+        cmp(j, m, (Q ? '' : `A[${j}] = ${A[j]} < A[m] = ${A[m]}? ${A[j] < A[m] ? 'Tak — nowe minimum.' : 'Nie.'}`), { lo: i, hi: n - 1 });
+        if (A[j] < A[m]) m = j;
+      }
+      if (m !== i) swap(i, m, (Q ? '' : `Minimum reszty to ${A[m]}: zamiana A[${i}] ↔ A[${m}].`));
+      else E.push({ t: 'info', txt: (Q ? '' : `Minimum reszty (${A[i]}) już stoi na pozycji ${i}.`) });
+      fix(i);
+    }
+    fix(n - 1);
+  } else if (alg === 'wstawianie') {
+    fix(0);
+    for (let i = 1; i < n; i++) {
+      const k = A[i]; let j = i - 1;
+      E.push({ t: 'info', txt: (Q ? '' : `klucz = A[${i}] = ${k}. Wsuwamy go do posortowanego fragmentu A[0..${i - 1}].`), i, lo: 0, hi: i });
+      for (;;) {
+        if (j < 0) break;
+        cmp(j, i, (Q ? '' : `A[${j}] = ${A[j]} > klucz = ${k}? ${A[j] > k ? 'Tak — przesuwamy w prawo.' : 'Nie — klucz wstawiamy za nim.'}`), { lo: 0, hi: i });
+        if (!(A[j] > k)) break;
+        set(j + 1, A[j], (Q ? '' : `A[${j + 1}] ← A[${j}] = ${A[j]}`), { lo: 0, hi: i });
+        j--;
+      }
+      set(j + 1, k, (Q ? '' : `A[${j + 1}] ← klucz = ${k}. Fragment A[0..${i}] jest posortowany.`), { lo: 0, hi: i });
+      for (let q = 0; q <= i; q++) fix(q);
+    }
+  } else if (alg === 'scalanie') {
+    const rek = (lo, hi) => {
+      if (hi - lo < 1) return;
+      const s = Math.floor((lo + hi + 1) / 2);
+      rek(lo, s - 1); rek(s, hi);
+      const L = A.slice(lo, s), P = A.slice(s, hi + 1);
+      E.push({ t: 'info', txt: (Q ? '' : `Scalamy L = [${L.join(', ')}] i P = [${P.join(', ')}].`), lo, hi });
+      let i = 0, j = 0, k = lo;
+      while (i < L.length && j < P.length) {
+        cmp(k, -1, (Q ? '' : `L[${i}] = ${L[i]} ≤ P[${j}] = ${P[j]}? ${L[i] <= P[j] ? 'Tak — bierzemy z L.' : 'Nie — bierzemy z P.'}`), { lo, hi });
+        if (L[i] <= P[j]) set(k++, L[i++], (Q ? '' : `A[${k - 1}] ← ${L[i - 1]}`), { lo, hi });
+        else set(k++, P[j++], (Q ? '' : `A[${k - 1}] ← ${P[j - 1]}`), { lo, hi });
+      }
+      while (i < L.length) set(k++, L[i++], (Q ? '' : `Reszta L: A[${k - 1}] ← ${L[i - 1]}`), { lo, hi });
+      while (j < P.length) set(k++, P[j++], (Q ? '' : `Reszta P: A[${k - 1}] ← ${P[j - 1]}`), { lo, hi });
+      if (lo === 0 && hi === n - 1) for (let q = 0; q < n; q++) fix(q);
+    };
+    rek(0, n - 1);
+    if (n === 1) fix(0);
+  } else if (alg === 'szybkie') {
+    const rek = (lo, hi) => {
+      if (lo > hi) return;
+      if (lo === hi) { fix(lo); return; }
+      const p = A[lo]; let m = lo;
+      E.push({ t: 'info', txt: (Q ? '' : `Podział A[${lo}..${hi}], oś = A[${lo}] = ${p}.`), lo, hi, os: lo });
+      for (let k = lo + 1; k <= hi; k++) {
+        cmp(k, lo, (Q ? '' : `A[${k}] = ${A[k]} < oś ${p}? ${A[k] < p ? 'Tak — na lewo.' : 'Nie.'}`), { lo, hi, os: lo });
+        if (A[k] < p) { m++; if (m !== k) swap(m, k, (Q ? '' : `Zamiana A[${m}] ↔ A[${k}]: mniejsze od osi trzymamy z lewej.`), { lo, hi, os: lo }); }
+      }
+      if (m !== lo) swap(lo, m, (Q ? '' : `Oś ${p} na swoje miejsce: A[${lo}] ↔ A[${m}].`), { lo, hi, os: m });
+      fix(m);
+      rek(lo, m - 1); rek(m + 1, hi);
+    };
+    rek(0, n - 1);
+  } else if (alg === 'kopiec') {
+    const przesiej = (i, roz) => {
+      for (;;) {
+        const l = 2 * i + 1, r = l + 1; let w = i;
+        if (l < roz) { cmp(l, w, (Q ? '' : `Dziecko A[${l}] = ${A[l]} > A[${w}] = ${A[w]}?`), { lo: 0, hi: roz - 1 }); if (A[l] > A[w]) w = l; }
+        if (r < roz) { cmp(r, w, (Q ? '' : `Dziecko A[${r}] = ${A[r]} > A[${w}] = ${A[w]}?`), { lo: 0, hi: roz - 1 }); if (A[r] > A[w]) w = r; }
+        if (w === i) return;
+        swap(i, w, (Q ? '' : `Przesiewanie w dół: A[${i}] ↔ A[${w}].`), { lo: 0, hi: roz - 1 }); i = w;
+      }
+    };
+    E.push({ t: 'info', txt: 'Faza 1: budowa kopca typu max od ostatniego rodzica w górę.', lo: 0, hi: n - 1 });
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) przesiej(i, n);
+    E.push({ t: 'info', txt: (Q ? '' : `Kopiec gotowy: [${A.join(', ')}]. Faza 2: maksimum na koniec, przesiewanie.`), lo: 0, hi: n - 1 });
+    for (let k = n - 1; k > 0; k--) {
+      swap(0, k, (Q ? '' : `Maksimum ${A[0]} na koniec: A[0] ↔ A[${k}].`), { lo: 0, hi: k });
+      fix(k); przesiej(0, k);
+    }
+    fix(0);
+  }
+  return { E, wynik: A, c: C, z: Z };
+}
+const ALG_NAZWA = { wybor: 'przez wybór', wstawianie: 'przez wstawianie', scalanie: 'przez scalanie', szybkie: 'szybkie (oś A[0])', kopiec: 'przez kopiec' };
+const ALG_OPIS = {
+  wybor: 'Zawsze n(n − 1)/2 porównań, niezależnie od danych; najwyżej n − 1 zamian.',
+  wstawianie: 'Od n − 1 porównań (dane rosnące) do n(n − 1)/2 (malejące). Dużo zapisów: każdy większy element przesuwa się o jedno miejsce.',
+  scalanie: 'Około n log₂ n porównań zawsze; potrzebuje dodatkowej pamięci na L i P.',
+  szybkie: 'Średnio O(n log n) porównań; z osią A[0] dla danych już posortowanych aż n(n − 1)/2.',
+  kopiec: 'Zawsze O(n log n), w miejscu. Każde przesiewanie to najwyżej wysokość drzewa.',
+};
+function dane(rodzaj, n) {
+  const a = tasuj([...Array(n).keys()].map((x) => x + 1));
+  if (rodzaj === 'rosnace') return a.sort((x, y) => x - y);
+  if (rodzaj === 'malejace') return a.sort((x, y) => y - x);
+  if (rodzaj === 'prawie') { a.sort((x, y) => x - y); const k = Math.max(1, Math.round(n / 8)); for (let q = 0; q < k; q++) { const i = losuj(0, n - 2); [a[i], a[i + 1]] = [a[i + 1], a[i]]; } }
+  return a;
+}
+
+/* ═════════════════════ Ćwiczenie 1: Sortownia ═════════════════════ */
+const Sortownia = (() => {
+  let alg = 'wstawianie', rodzaj = 'losowe', n = 12, A0 = [], E = [], p = 0, A = [], fixy = new Set(), timer = null, c = 0, z = 0;
+  function przygotuj(noweDane) {
+    stop();
+    if (noweDane) A0 = dane(rodzaj, n);
+    E = zdarzenia(alg, A0).E; p = 0; A = [...A0]; fixy = new Set(); c = 0; z = 0;
+    $('#soKw').textContent = liczba(n * (n - 1) / 2);
+    $('#soGr').textContent = liczba(granica(n));
+    $('#soOpis').textContent = ALG_OPIS[alg];
+    $('#soLgOs').hidden = alg !== 'szybkie';
+    $('#soStatus').textContent = `Dane: [${A0.join(', ')}]. Kliknij „Krok”.`;
+    rysuj(null);
+  }
+  function rysuj(e) {
+    const max = Math.max(...A0);
+    const host = $('#soSlupki');
+    const opis = n <= 24;
+    host.replaceChildren(...A.map((v, i) => {
+      let kl = 'sl';
+      if (fixy.has(i)) kl += ' fix';
+      if (e) {
+        if (e.lo !== undefined && (i < e.lo || i > e.hi) && !fixy.has(i)) kl += ' poza';
+        if (e.t === 'cmp' && (i === e.i || i === e.j)) kl += ' cmp';
+        if ((e.t === 'set' && i === e.i) || (e.t === 'swap' && (i === e.i || i === e.j))) kl += ' zap';
+        if (e.os === i) kl += ' os';
+      }
+      return el('div', { class: kl, style: `height: ${8 + (v / max) * 92}%` }, el('span', { text: opis ? String(v) : '' }));
+    }));
+    $('#soPor').textContent = liczba(c); $('#soZap').textContent = liczba(z);
+  }
+  function krok() {
+    while (p < E.length) {
+      const e = E[p++];
+      if (e.t === 'fix') { fixy.add(e.i); continue; }
+      if (e.t === 'cmp') c++;
+      if (e.t === 'set') { A[e.i] = e.v; z++; }
+      if (e.t === 'swap') { [A[e.i], A[e.j]] = [A[e.j], A[e.i]]; z += 2; }
+      $('#soStatus').textContent = e.txt;
+      while (p < E.length && E[p].t === 'fix') fixy.add(E[p++].i);
+      rysuj(e); return true;
+    }
+    koniec(); return false;
+  }
+  function koniec() {
+    stop();
+    $('#soStatus').textContent = `Posortowane: [${A.join(', ')}]. Porównań: ${liczba(c)}, zapisów: ${liczba(z)}.`;
+    rysuj(null);
+  }
+  function doKonca() { stop(); while (p < E.length) { const e = E[p++]; if (e.t === 'fix') fixy.add(e.i); else if (e.t === 'cmp') c++; else if (e.t === 'set') { A[e.i] = e.v; z++; } else if (e.t === 'swap') { [A[e.i], A[e.j]] = [A[e.j], A[e.i]]; z += 2; } } koniec(); }
+  function stop() { clearInterval(timer); timer = null; $('#soGraj').textContent = 'Uruchom'; }
+  function graj() {
+    if (timer) { stop(); return; }
+    if (p >= E.length) przygotuj(false);
+    const t = Number($('#soTempo').value);
+    $('#soGraj').textContent = 'Pauza';
+    timer = setInterval(() => { if (!krok()) stop(); }, Math.round(900 / t));
+  }
+  function tabela(wiersze, nn, opis) {
+    const t = $('#soTab');
+    t.replaceChildren(el('thead', {}, el('tr', {}, el('th', { text: 'algorytm' }), el('th', { text: 'porównania' }), el('th', { text: 'zapisy do tablicy' }))),
+      el('tbody', {}, ...wiersze.map(([a, cc, zz]) => el('tr', {}, el('td', { text: a }), el('td', { class: 'n', text: cc }), el('td', { class: 'n', text: zz }))),
+        el('tr', {}, el('td', { class: 'muted', text: 'n(n − 1)/2' }), el('td', { class: 'n muted', text: liczba(nn * (nn - 1) / 2) }), el('td', {})),
+        el('tr', {}, el('td', { class: 'muted', text: 'dolna granica ⌈log₂ n!⌉' }), el('td', { class: 'n muted', text: liczba(granica(nn)) }), el('td', {}))));
+    $('#soTabOpis').textContent = opis;
+  }
+  function porownajTe() {
+    tabela(Object.keys(ALG_NAZWA).map((a) => { const { c: cc, z: zz } = zdarzenia(a, A0, true); return [ALG_NAZWA[a], liczba(cc), liczba(zz)]; }), n,
+      `Dane: ${rodzaj === 'losowe' ? 'losowe' : rodzaj === 'prawie' ? 'prawie posortowane' : rodzaj === 'rosnace' ? 'rosnące' : 'malejące'}, n = ${n}.`);
+  }
+  function porownajDuze(nn) {
+    const R = nn === 100 ? 30 : 5;
+    const sumy = Object.fromEntries(Object.keys(ALG_NAZWA).map((a) => [a, [0, 0]]));
+    for (let r = 0; r < R; r++) { const d = dane(rodzaj, nn); for (const a of Object.keys(ALG_NAZWA)) { const { c: cc, z: zz } = zdarzenia(a, d, true); sumy[a][0] += cc; sumy[a][1] += zz; } }
+    tabela(Object.keys(ALG_NAZWA).map((a) => [ALG_NAZWA[a], liczba(Math.round(sumy[a][0] / R)), liczba(Math.round(sumy[a][1] / R))]), nn,
+      `Dane: ${rodzaj === 'losowe' ? 'losowe' : rodzaj === 'prawie' ? 'prawie posortowane' : rodzaj === 'rosnace' ? 'rosnące' : 'malejące'}, n = ${liczba(nn)}; średnia z ${R} losowań.`);
+  }
+  function init() {
+    seg($('#soAlg'), (w) => { alg = w; przygotuj(false); });
+    seg($('#soDane'), (w) => { rodzaj = w; przygotuj(true); });
+    $('#soN').addEventListener('input', () => { n = Number($('#soN').value); $('#soNv').textContent = String(n); przygotuj(true); });
+    $('#soKrok').addEventListener('click', () => { stop(); if (p >= E.length) przygotuj(false); krok(); });
+    $('#soGraj').addEventListener('click', graj);
+    $('#soKoniec').addEventListener('click', doKonca);
+    $('#soNowe').addEventListener('click', () => przygotuj(true));
+    $('#soTempo').addEventListener('input', () => { if (timer) { stop(); graj(); } });
+    $('#soPorTe').addEventListener('click', porownajTe);
+    $('#soPor100').addEventListener('click', () => porownajDuze(100));
+    $('#soPor1000').addEventListener('click', () => porownajDuze(1000));
+    przygotuj(true); porownajTe();
+  }
+  return { init, wyjscie: stop };
+})();
+
+/* ═════════════════════ Ćwiczenie 2: Kopiec ═════════════════════ */
+const Kopiec = (() => {
+  const PRZYKLAD = [16, 14, 10, 8, 7, 9, 3, 2, 4, 1];
+  let H = [], kroki = [], wyj = [], hl = [], zmian = 0;
+  function rysujDrzewo() {
+    const s = $('#kpDrzewo'); s.replaceChildren();
+    const n = H.length; if (!n) { s.append(sv('text', { x: 360, y: 40, class: 'ix' }, 'kopiec jest pusty')); return; }
+    const poz = (i) => { const g = Math.floor(Math.log2(i + 1)), k = i - (2 ** g - 1), szer = 720 / 2 ** g; return [szer * k + szer / 2, 26 + g * 52]; };
+    for (let i = 1; i < n; i++) { const [x1, y1] = poz(Math.floor((i - 1) / 2)), [x2, y2] = poz(i); s.append(sv('line', { x1, y1, x2, y2 })); }
+    for (let i = 0; i < n; i++) {
+      const [x, y] = poz(i), g = sv('g', { class: hl.includes(i) ? 'hl' : '' });
+      g.append(sv('circle', { cx: x, cy: y, r: 17 }), sv('text', { x, y }, String(H[i])), sv('text', { x: x + 22, y: y - 14, class: 'ix' }, String(i)));
+      s.append(g);
+    }
+    const wys = Math.floor(Math.log2(n)) + 1;
+    s.setAttribute('viewBox', `0 0 720 ${Math.max(60, 26 + (wys - 1) * 52 + 30)}`);
+  }
+  function rysuj() {
+    rysujDrzewo();
+    $('#kpTab').replaceChildren(...H.map((v, i) => el('div', { class: 'kom' + (hl.includes(i) ? ' hl' : '') }, el('div', { class: 'ix', text: String(i) }), el('div', { class: 'wv', text: String(v) }))));
+    $('#kpWyj').replaceChildren(...wyj.map((v) => el('div', { class: 'kom wyj' }, el('div', { class: 'wv', text: String(v) }))));
+    $('#kpWyjOpis').textContent = wyj.length > 1 ? (wyj.every((v, i) => i === 0 || wyj[i - 1] >= v) ? 'Maksima wychodzą malejąco. W heapsorcie trafiają kolejno na koniec tablicy, więc tablica jest na końcu posortowana rosnąco.' : '') : '';
+    const busy = kroki.length > 0;
+    $('#kpKrok').disabled = !busy; $('#kpKoniec').disabled = !busy;
+    for (const id of ['#kpWstaw', '#kpWyjmij', '#kpPrzyklad', '#kpLos', '#kpCzysc']) $(id).disabled = busy;
+    if (!busy) $('#kpWyjmij').disabled = H.length === 0;
+  }
+  function krok() {
+    const f = kroki.shift(); if (!f) return;
+    f(); rysuj();
+  }
+  function wstaw() {
+    const sw = $('#kpWart').value.trim().replace('−', '-');
+    if (!/^-?\d{1,3}$/.test(sw)) { $('#kpErr').textContent = 'Wpisz liczbę całkowitą od −999 do 999.'; return; }
+    const v = Number(sw);
+    if (H.length >= 31) { $('#kpErr').textContent = 'W ćwiczeniu mieści się 31 elementów (5 poziomów).'; return; }
+    $('#kpErr').textContent = ''; zmian = 0;
+    H.push(v); let i = H.length - 1; hl = [i];
+    $('#kpStatus').textContent = `Dopisujemy ${v} na koniec tablicy (indeks ${i}). Teraz przesiewanie w górę.`;
+    const dalej = () => {
+      if (i === 0) { $('#kpStatus').textContent = `${v} jest w korzeniu. Koniec; zamian: ${zmian}.`; hl = [0]; return; }
+      const r = Math.floor((i - 1) / 2);
+      if (H[r] >= H[i]) { $('#kpStatus').textContent = `Rodzic ${H[r]} (indeks ${r}) ≥ ${H[i]}. Koniec; zamian: ${zmian}.`; hl = [i]; return; }
+      kroki.push(() => { $('#kpStatus').textContent = `Rodzic ${H[r]} (indeks ${r}) < ${H[i]}: zamiana.`; [H[r], H[i]] = [H[i], H[r]]; zmian++; hl = [r, i]; i = r; kroki.push(dalej); });
+    };
+    kroki = [dalej];
+    $('#kpWart').value = String(losuj(1, 99));
+    rysuj();
+  }
+  function wyjmij() {
+    if (!H.length) return;
+    zmian = 0;
+    const max = H[0];
+    $('#kpStatus').textContent = `Maksimum to korzeń: ${max}. Zabieramy je.`; hl = [0];
+    kroki = [() => {
+      wyj.push(max);
+      const ost = H.pop();
+      if (!H.length) { $('#kpStatus').textContent = 'Kopiec jest pusty.'; hl = []; return; }
+      H[0] = ost; hl = [0];
+      $('#kpStatus').textContent = `Ostatni element ${ost} przenosimy na szczyt. Teraz przesiewanie w dół.`;
+      let i = 0;
+      const dalej = () => {
+        const l = 2 * i + 1, r = l + 1; let w = i;
+        if (l < H.length && H[l] > H[w]) w = l;
+        if (r < H.length && H[r] > H[w]) w = r;
+        if (w === i) { $('#kpStatus').textContent = `${H[i]} jest ≥ swoich dzieci${l < H.length ? '' : ' (nie ma dzieci)'}. Koniec; zamian: ${zmian}.`; hl = [i]; return; }
+        $('#kpStatus').textContent = `Większe dziecko ${H[w]} (indeks ${w}) > ${H[i]}: zamiana.`;
+        [H[i], H[w]] = [H[w], H[i]]; zmian++; hl = [i, w]; i = w; kroki.push(dalej);
+      };
+      kroki.push(dalej);
+    }];
+    rysuj();
+  }
+  function init() {
+    $('#kpWstaw').addEventListener('click', wstaw);
+    $('#kpWart').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (!kroki.length) wstaw(); } });
+    $('#kpWyjmij').addEventListener('click', wyjmij);
+    $('#kpKrok').addEventListener('click', krok);
+    $('#kpKoniec').addEventListener('click', () => { let g = 0; while (kroki.length && g++ < 200) krok(); });
+    $('#kpPrzyklad').addEventListener('click', () => { H = [...PRZYKLAD]; wyj = []; hl = []; $('#kpStatus').textContent = 'Kopiec ze slajdu „Kopiec binarny”. Wyjmij maksimum, żeby zobaczyć przykład ze slajdu „Operacje na kopcu”.'; rysuj(); });
+    $('#kpLos').addEventListener('click', () => {
+      const n = losuj(7, 15), t = tasuj([...Array(60).keys()].map((x) => x + 1)).slice(0, n);
+      H = []; for (const v of t) { H.push(v); let i = H.length - 1; while (i > 0 && H[(i - 1) >> 1] < H[i]) { [H[(i - 1) >> 1], H[i]] = [H[i], H[(i - 1) >> 1]]; i = (i - 1) >> 1; } }
+      wyj = []; hl = []; $('#kpStatus').textContent = `Losowy kopiec z ${n} elementów.`; rysuj();
+    });
+    $('#kpCzysc').addEventListener('click', () => { H = []; wyj = []; hl = []; $('#kpStatus').textContent = ''; rysuj(); });
+    $('#kpWart').value = '15';
+    H = [...PRZYKLAD];
+    $('#kpStatus').textContent = 'Kopiec ze slajdu „Kopiec binarny”. Wstaw 15 albo wyjmij maksimum.';
+    rysuj();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 3: Ranking parami ═════════════════════ */
+const Ranking = (() => {
+  const APLIKACJA = 'w08-ranking';
+  const ZESTAWY = {
+    lody: ['wanilia', 'czekolada', 'truskawka', 'pistacja', 'mango', 'kawa'],
+    wieczor: ['film', 'książka', 'spacer', 'gra', 'siłownia', 'spotkanie'],
+    wakacje: ['góry', 'morze', 'miasto', 'jezioro', 'wieś', 'rejs'],
+  };
+  let zestaw = 'lody', pary = [], nr = 0, wygr = {}, panel = null;
+  const klucz = (a, b) => `${a}|${b}`;
+  function lepszy(a, b) { return wygr[klucz(a, b)] === a; }   // odpowiedź badanego: czy a > b
+  function start() {
+    const R = ZESTAWY[zestaw]; pary = []; wygr = {};
+    for (let i = 0; i < R.length; i++) for (let j = i + 1; j < R.length; j++) pary.push(Math.random() < 0.5 ? [R[i], R[j]] : [R[j], R[i]]);
+    tasuj(pary); nr = 0;
+    $('#rkIntro').hidden = true; $('#rkWynik').hidden = true; $('#rkGra').hidden = false;
+    pokaz();
+  }
+  function pokaz() {
+    $('#rkNr').textContent = `Para ${nr + 1} z ${pary.length}`;
+    $('#rkL').textContent = pary[nr][0]; $('#rkP').textContent = pary[nr][1];
+  }
+  function wybor(k) {
+    const [a, b] = pary[nr], w = k === 0 ? a : b;
+    wygr[klucz(a, b)] = w; wygr[klucz(b, a)] = w;
+    if (nr < pary.length - 1) { nr++; pokaz(); } else podsumuj();
+  }
+  function podsumuj() {
+    const R = ZESTAWY[zestaw];
+    const pkt = Object.fromEntries(R.map((x) => [x, R.filter((y) => y !== x && lepszy(x, y)).length]));
+    const cykle = [];
+    for (let i = 0; i < R.length; i++) for (let j = i + 1; j < R.length; j++) for (let k = j + 1; k < R.length; k++) {
+      const [a, b, c] = [R[i], R[j], R[k]];
+      if (lepszy(a, b) && lepszy(b, c) && lepszy(c, a)) cykle.push([a, b, c]);
+      else if (lepszy(a, c) && lepszy(c, b) && lepszy(b, a)) cykle.push([a, c, b]);
+    }
+    const kol = [...R].sort((x, y) => pkt[y] - pkt[x]);
+    $('#rkTab').replaceChildren(el('thead', {}, el('tr', {}, el('th', { text: '' }), el('th', { text: 'wygrane pary (z 5)' }))),
+      el('tbody', {}, ...kol.map((x) => el('tr', {}, el('td', { text: x }), el('td', { class: 'n', text: String(pkt[x]) })))));
+    $('#rkCykle').textContent = String(cykle.length);
+    $('#rkCykleOpis').textContent = cykle.length
+      ? `Twoje wybory nie są przechodnie. Na przykład: ${cykle.slice(0, 3).map(([a, b, c]) => `${a} > ${b} > ${c} > ${a}`).join('; ')}.`
+      : 'Twoje wybory są przechodnie: punkty to 5, 4, 3, 2, 1, 0 i każdy algorytm sortujący da ten sam ranking.';
+    // dwa algorytmy na tej samej liście startowej, z porównaniem = odpowiedź badanego (od najlepszego)
+    let c1 = 0, c2 = 0;
+    const wst = [...R];
+    for (let i = 1; i < wst.length; i++) { const k = wst[i]; let j = i - 1; while (j >= 0) { c1++; if (!lepszy(k, wst[j])) break; wst[j + 1] = wst[j]; j--; } wst[j + 1] = k; }
+    const sc = (t) => { if (t.length <= 1) return t; const s = t.length >> 1, L = sc(t.slice(0, s)), P = sc(t.slice(s)), w = []; let i = 0, j = 0; while (i < L.length && j < P.length) { c2++; if (!lepszy(P[j], L[i])) w.push(L[i++]); else w.push(P[j++]); } return w.concat(L.slice(i), P.slice(j)); };
+    const scl = sc([...R]);
+    const takieSame = wst.join() === scl.join();
+    $('#rkAlg').replaceChildren(el('thead', {}, el('tr', {}, el('th', { text: 'algorytm' }), el('th', { text: 'ranking (od najlepszego)' }), el('th', { text: 'użyte pary' }))),
+      el('tbody', {},
+        el('tr', {}, el('td', { text: 'przez wstawianie' }), el('td', { text: wst.join(' › ') }), el('td', { class: 'n', text: String(c1) })),
+        el('tr', {}, el('td', { text: 'przez scalanie' }), el('td', { text: scl.join(' › ') }), el('td', { class: 'n', text: String(c2) })),
+        el('tr', {}, el('td', { text: 'punkty (pełny plan)' }), el('td', { text: kol.join(' › ') }), el('td', { class: 'n', text: '15' }))));
+    $('#rkAlgOpis').textContent = takieSame
+      ? (cykle.length ? 'Tym razem oba algorytmy dały ten sam ranking, choć wybory zawierają cykl — mogły go po prostu nie „zauważyć”. Spróbuj jeszcze raz albo innego zestawu.' : 'Przy przechodnich wyborach oba algorytmy dają ten sam ranking i potrzebują mniej niż 15 par.')
+      : 'Algorytmy dały różne rankingi z tych samych odpowiedzi. Przy nieprzechodnich preferencjach „poprawny ranking” nie istnieje — wynik zależy od metody.';
+    $('#rkGra').hidden = true; $('#rkWynik').hidden = false;
+    if (panel) panel.gotowe([['cykle', cykle.length]]);
+  }
+  function init() {
+    const lista = () => { $('#rkLista').textContent = 'Do porównania: ' + ZESTAWY[zestaw].join(', ') + '.'; };
+    seg($('#rkZb'), (w) => { zestaw = w; lista(); });
+    lista();
+    panel = panelGrupy($('#grupa-ranking'), {
+      aplikacja: APLIKACJA,
+      wiersze: (w) => w,
+      filtr: (r) => r.w === 'cykle' && Number.isInteger(r.v) && r.v >= 0 && r.v <= 8,
+      rysuj: (host, rows) => { const h = Array(9).fill(0); for (const r of rows) h[r.v]++; const m = Math.max(1, ...h); slupki(host, h.map((x, i) => ({ lab: `${i} ${odm(i, 'cykl', 'cykle', 'cykli')}`, pc: (100 * x) / m, tekst: `${x} ${odm(x, 'osoba', 'osoby', 'osób')}` }))); },
+      opis: (rows) => `Osób: ${rows.length}. Bez cykli: ${rows.filter((r) => r.v === 0).length}. Mediana liczby cykli: ${ulamek(mediana(rows.map((r) => r.v)))}.`,
+    });
+    $('#rkStart').addEventListener('click', start);
+    $('#rkJeszcze').addEventListener('click', () => { $('#rkWynik').hidden = true; $('#rkIntro').hidden = false; });
+    $('#rkL').addEventListener('click', () => wybor(0));
+    $('#rkP').addEventListener('click', () => wybor(1));
+  }
+  return { init, wejscie: () => panel?.start(), wyjscie: () => panel?.stop() };
+})();
+
+/* ═════════════════════ Ćwiczenie 4: Waga szalkowa ═════════════════════ */
+const Waga = (() => {
+  const APLIKACJA = 'w08-waga';
+  const LIT = 'ABCDEF';
+  let n = 5, masy = [], wyb = [], fakty = [], kol = [], zgodne = [], koniec = false, panel = null;
+  function nowe() {
+    masy = tasuj([...Array(n).keys()].map((x) => x + 1));
+    wyb = []; fakty = []; kol = []; koniec = false;
+    zgodne = permutacje(n);  // perm[i] = ranga odważnika i
+    $('#wgFb').textContent = ''; $('#wgFb').className = 'fbline'; $('#wgFbOpis').textContent = '';
+    $('#wgDz').textContent = 'Jeszcze nic nie ważono.';
+    rysuj();
+  }
+  function rysuj() {
+    $('#wgOdw').replaceChildren(...[...Array(n).keys()].map((i) => {
+      const b = el('button', { type: 'button', class: 'odw', 'aria-pressed': wyb.includes(i) ? 'true' : 'false', 'aria-label': `odważnik ${LIT[i]}` }, LIT[i]);
+      if (koniec) b.append(el('small', { text: `${masy[i]} kg` }));
+      b.disabled = koniec;
+      b.addEventListener('click', () => klik(i));
+      return b;
+    }));
+    $('#wgIle').textContent = String(fakty.length);
+    $('#wgMoz').textContent = liczba(zgodne.length);
+    const bity = Math.log2(zgodne.length), max = log2silnia(n);
+    $('#wgBity').textContent = `${ulamek(bity, 2)} bitu`;
+    $('#wgPasek').style.width = `${100 * (1 - bity / max)}%`;
+    $('#wgKol').replaceChildren(...(kol.length ? kol.map((i, k) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small', text: `${k + 1}. ${LIT[i]}` });
+      b.disabled = koniec; b.addEventListener('click', () => { kol.splice(k, 1); rysuj(); });
+      return b;
+    }) : [el('span', { class: 'pusty', text: 'pusto' })]));
+    const wolne = [...Array(n).keys()].filter((i) => !kol.includes(i));
+    if (!koniec) for (const i of wolne) { const b = el('button', { type: 'button', class: 'btn small', text: `+ ${LIT[i]}` }); b.addEventListener('click', () => { kol.push(i); rysuj(); }); $('#wgKol').append(b); }
+    $('#wgSprawdz').disabled = koniec || kol.length !== n;
+  }
+  function klik(i) {
+    if (koniec) return;
+    if (wyb.includes(i)) wyb = wyb.filter((x) => x !== i); else wyb.push(i);
+    if (wyb.length === 2) {
+      const [a, b] = wyb, lzej = masy[a] < masy[b] ? a : b, ciez = lzej === a ? b : a;
+      fakty.push([lzej, ciez]);
+      zgodne = zgodne.filter((p) => p[lzej] < p[ciez]);
+      $('#wgDz').textContent = fakty.map(([x, y]) => `${LIT[x]} < ${LIT[y]}`).join(' · ');
+      wyb = [];
+    }
+    rysuj();
+  }
+  function sprawdz() {
+    koniec = true;
+    const ok = kol.every((x, k) => k === 0 || masy[kol[k - 1]] < masy[x]);
+    const g = granica(n), ile = fakty.length;
+    const jedn = zgodne.length === 1;
+    $('#wgFb').className = 'fbline ' + (ok ? 'dobrze' : 'zle');
+    $('#wgFb').textContent = ok ? `Dobrze! Ważeń: ${ile}, granica: ${g}.` : `Nie. Prawidłowo: ${[...Array(n).keys()].sort((x, y) => masy[x] - masy[y]).map((x) => LIT[x]).join(' < ')}.`;
+    $('#wgFbOpis').textContent = (jedn
+      ? 'Twoje ważenia wyznaczały kolejność jednoznacznie.'
+      : `Twoje ważenia nie wyznaczały kolejności: zgodnych było ${zgodne.length}. ${ok ? 'Trafiłeś, ale to było zgadywanie.' : ''}`)
+      + (ok && jedn && ile <= g ? ' Lepiej się nie da: to dolna granica dla najgorszego przypadku.' : '')
+      + (ok && jedn && ile > g ? ` Każde ważenie daje najwyżej 1 bit, a trzeba było ${ulamek(log2silnia(n), 2)} bitu, więc co najmniej ${g} ważeń w najgorszym przypadku. Czasem wystarczy mniej, jeśli ma się szczęście.` : '');
+    rysuj();
+    if (panel && n === 5) panel.gotowe([[`n5|${ok && jedn ? 1 : 0}`, ile]]);
+  }
+  function tabelaNajgorszych() {
+    const wiersze = [];
+    for (const nn of [3, 4, 5, 6, 7]) {
+      let wst = 0, sc = 0;
+      for (const p of permutacje(nn)) {
+        let c = 0; const a = [...p];
+        for (let i = 1; i < nn; i++) { const k = a[i]; let j = i - 1; while (j >= 0) { c++; if (!(a[j] > k)) break; a[j + 1] = a[j]; j--; } a[j + 1] = k; }
+        wst = Math.max(wst, c);
+        let c2 = 0; const s = (t) => { if (t.length <= 1) return t; const m = t.length >> 1, L = s(t.slice(0, m)), P = s(t.slice(m)), w = []; let i = 0, j = 0; while (i < L.length && j < P.length) { c2++; if (L[i] <= P[j]) w.push(L[i++]); else w.push(P[j++]); } return w.concat(L.slice(i), P.slice(j)); };
+        s(p); sc = Math.max(sc, c2);
+      }
+      wiersze.push([nn, nn * (nn - 1) / 2, wst, sc, granica(nn)]);
+    }
+    $('#wgTab').replaceChildren(el('thead', {}, el('tr', {}, ...['n', 'przez wybór', 'przez wstawianie', 'przez scalanie', '⌈log₂ n!⌉'].map((t) => el('th', { text: t })))),
+      el('tbody', {}, ...wiersze.map((w) => el('tr', {}, ...w.map((x) => el('td', { class: 'n', text: String(x) }))))));
+  }
+  function init() {
+    seg($('#wgN'), (w) => { n = Number(w); nowe(); });
+    $('#wgNowe').addEventListener('click', nowe);
+    $('#wgSprawdz').addEventListener('click', sprawdz);
+    panel = panelGrupy($('#grupa-waga'), {
+      aplikacja: APLIKACJA,
+      wiersze: (w) => w,
+      filtr: (r) => /^n5\|[01]$/.test(r.w) && Number.isInteger(r.v) && r.v >= 0 && r.v <= 30,
+      rysuj: (host, rows) => {
+        const dobre = rows.filter((r) => r.w.endsWith('1')).map((r) => r.v);
+        const h = {}; for (const v of dobre) h[v] = (h[v] || 0) + 1;
+        const kl = Object.keys(h).map(Number).sort((a, b) => a - b), m = Math.max(1, ...Object.values(h));
+        slupki(host, kl.map((k) => ({ lab: `${k} ${odm(k, 'ważenie', 'ważenia', 'ważeń')}${k === 7 ? ' (granica)' : ''}`, pc: (100 * h[k]) / m, tekst: String(h[k]) })));
+      },
+      opis: (rows) => { const d = rows.filter((r) => r.w.endsWith('1')); return `Prób dla 5 odważników: ${rows.length}, poprawnych i jednoznacznych: ${d.length}. Mediana ważeń w poprawnych: ${d.length ? ulamek(mediana(d.map((r) => r.v))) : '—'} (granica: 7).`; },
+    });
+    tabelaNajgorszych();
+    nowe();
+  }
+  return { init, wejscie: () => panel?.start(), wyjscie: () => panel?.stop() };
+})();
+
+/* ═════════════════════ Ćwiczenie 5: Przegródki ═════════════════════ */
+const Radix = (() => {
+  let liczby = [], cyfry = 1, poz = 0, ciag = [], przeg = [], i = 0, faza = 'rozklad', tryb = 'fifo', ruchy = 0, hist = [], nowa = null, gotowe = false;
+  function wczytaj() {
+    const t = $('#rxDane').value.split(/[\s,;]+/).filter((x) => x !== '');
+    if (!t.length || t.length > 16 || t.some((x) => !/^\d{1,4}$/.test(x))) { $('#rxErr').textContent = 'Wpisz od 1 do 16 liczb naturalnych, każdą do 4 cyfr.'; return false; }
+    $('#rxErr').textContent = '';
+    liczby = t.map(Number); cyfry = Math.max(...liczby.map((x) => String(x).length));
+    poz = 0; ciag = [...liczby]; przeg = Array.from({ length: 10 }, () => []); i = 0; faza = 'rozklad'; ruchy = 0; hist = []; nowa = null; gotowe = false;
+    $('#rxStatus').textContent = `Najdłuższa liczba ma ${cyfry} ${odm(cyfry, 'cyfrę', 'cyfry', 'cyfr')}, więc będą ${cyfry} ${odm(cyfry, 'przejście', 'przejścia', 'przejść')}. Zaczynamy od cyfry jedności.`;
+    rysuj(); return true;
+  }
+  const cyfra = (x, p) => Math.floor(x / 10 ** p) % 10;
+  const NAZWY = ['jedności', 'dziesiątek', 'setek', 'tysięcy'];
+  function liczbaEl(x, kl = '') {
+    const s = String(x).padStart(cyfry, '0'), k = s.length - 1 - poz;
+    if (k < 0) return el('div', { class: 'liczba-r ' + kl, text: String(x) });
+    return el('div', { class: 'liczba-r ' + kl }, s.slice(0, k), el('b', { text: s[k] }), s.slice(k + 1));
+  }
+  function rysuj() {
+    $('#rxCiag').replaceChildren(...(ciag.length ? ciag.map((x, k) => liczbaEl(x, faza === 'rozklad' && k === 0 && !gotowe ? 'nowa' : '')) : [el('span', { class: 'pusty', text: 'wszystkie w przegródkach' })]));
+    $('#rxPrzeg').replaceChildren(...przeg.map((b, d) => el('div', {}, el('div', { class: 'przeg-nr', text: String(d) }), el('div', { class: 'przeg' }, ...b.map((x) => liczbaEl(x, x === nowa ? 'nowa' : ''))))));
+    $('#rxPrzejscia').textContent = String(hist.length);
+    $('#rxRuchy').textContent = String(ruchy);
+    $('#rxHist').replaceChildren(...hist.map((h) => el('div', { class: 'mono', text: h })));
+  }
+  function krok() {
+    if (gotowe) return false;
+    if (faza === 'rozklad') {
+      const x = ciag.shift(), d = cyfra(x, poz);
+      przeg[d].push(x); ruchy++; nowa = x;
+      $('#rxStatus').textContent = `${x}: cyfra ${NAZWY[poz]} to ${d} → przegródka ${d}.`;
+      if (!ciag.length) faza = 'zbieranie';
+    } else {
+      nowa = null;
+      for (const b of przeg) { const t = tryb === 'fifo' ? b : [...b].reverse(); ciag.push(...t); ruchy += t.length; }
+      przeg = Array.from({ length: 10 }, () => []);
+      hist.push(`po cyfrze ${NAZWY[poz]}: ${ciag.join(', ')}`);
+      $('#rxStatus').textContent = `Zbieramy przegródki od 0 do 9${tryb === 'fifo' ? ', w każdej od najstarszej liczby' : ', ale w każdej od najnowszej (jak ze stosu)'}.`;
+      poz++; faza = 'rozklad';
+      if (poz >= cyfry) {
+        gotowe = true;
+        const ok = ciag.every((x, k) => k === 0 || ciag[k - 1] <= x);
+        $('#rxStatus').textContent = ok ? `Posortowane po ${cyfry} ${odm(cyfry, 'przejściu', 'przejściach', 'przejściach')}, bez ani jednego porównania liczb.` : 'Wynik nie jest posortowany! Zbieranie „jak stos” odwraca kolejność z poprzednich przejść — zbieranie musi być stabilne.';
+      }
+    }
+    rysuj(); return true;
+  }
+  function init() {
+    seg($('#rxZb'), (w) => { tryb = w; wczytaj(); });
+    $('#rxKrok').addEventListener('click', () => { if (gotowe) wczytaj(); else krok(); });
+    $('#rxCyfra').addEventListener('click', () => { if (gotowe) wczytaj(); const p0 = poz; while (!gotowe && poz === p0) krok(); });
+    $('#rxKoniec').addEventListener('click', () => { if (gotowe) wczytaj(); while (krok()); });
+    $('#rxReset').addEventListener('click', wczytaj);
+    $('#rxDane').addEventListener('change', wczytaj);
+    $('#rxLos').addEventListener('click', () => { $('#rxDane').value = [...Array(losuj(6, 10))].map(() => losuj(1, 999)).join(', '); wczytaj(); });
+    wczytaj();
+  }
+  return { init };
+})();
+
+const MODULY = { sortownia: Sortownia, kopiec: Kopiec, ranking: Ranking, waga: Waga, radix: Radix };
+
+/* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
+const Ustawienia = (() => {
+  let roboczy = null;
+  function domyslnaSesja() { const d = new Date(); return `${KONF.wyk}-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+  function parsujPrefill(link) {
+    let u; try { u = new URL(link.trim()); } catch (e) { throw new Error('To nie wygląda na adres internetowy.'); }
+    if (!/\/forms\/.+\/(viewform|formResponse)$/.test(u.pathname)) throw new Error('To nie jest link do Formularza Google (powinien kończyć się na /viewform?…).');
+    const f = u.origin + u.pathname.replace(/\/viewform$/, '/formResponse');
+    const e = {}; const MAP = { APLIKACJA: 'a', SESJA: 's', WARIANT: 'w', WYNIK: 'v' };
+    for (const [k, v] of u.searchParams) if (/^entry\.\d+$/.test(k) && MAP[v.trim().toUpperCase()]) e[MAP[v.trim().toUpperCase()]] = k;
+    const brak = Object.entries(MAP).filter(([, kk]) => !e[kk]).map(([nm]) => nm);
+    if (brak.length) throw new Error(`W linku brakuje pól: ${brak.join(', ')}. Wpisz te słowa w pola formularza przed pobraniem linku.`);
+    return { f, e };
+  }
+  function zbierz() {
+    const { f, e } = parsujPrefill($('#sPrefill').value);
+    const c = $('#sCsv').value.trim();
+    if (!/^https?:\/\//.test(c)) throw new Error('Podaj link do opublikowanego arkusza (CSV).');
+    const sesja = $('#sSes').value.trim();
+    if (!sesja) throw new Error('Podaj nazwę sesji.');
+    return { v: 1, f, e, c, s: sesja };
+  }
+  function baza() { return location.protocol === 'file:' ? $('#sBase').value.trim() : location.origin + location.pathname; }
+  function linki(cfg) {
+    const b = baza(); const card = $('#sLinksCard');
+    if (!b) { card.hidden = true; return; }
+    const q = `${b}?cfg=${b64e(JSON.stringify(cfg))}`;
+    for (const l of KONF.linki) $('#' + l.id).value = `${q}#${l.hash}`;
+    card.hidden = false;
+  }
+  function wypelnij(cfg) {
+    if (!cfg) return;
+    const u = new URL(cfg.f.replace(/\/formResponse$/, '/viewform'));
+    u.searchParams.set('usp', 'pp_url'); u.searchParams.set(cfg.e.a, 'APLIKACJA'); u.searchParams.set(cfg.e.s, 'SESJA'); u.searchParams.set(cfg.e.w, 'WARIANT'); u.searchParams.set(cfg.e.v, 'WYNIK');
+    $('#sPrefill').value = u.toString(); $('#sCsv').value = cfg.c; $('#sSes').value = cfg.s;
+  }
+  function out(...kids) { $('#sOut').replaceChildren(...kids); }
+  async function sprawdz() {
+    let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+    roboczy = cfg; linki(cfg);
+    const lista = el('ul');
+    const pkt = (ok, t) => lista.append(el('li', { class: ok ? 'ok' : 'err', text: `${ok ? '✓' : '✗'} ${t}` }));
+    out(lista);
+    pkt(true, 'Link formularza rozpoznany, wszystkie cztery pola znalezione.');
+    try { await Grupa.wyslij('test', 'test', 0, cfg); pkt(true, 'Wpis testowy wysłany (aplikacja = test). Przeglądarka nie potwierdza odbioru: sprawdź, czy pojawił się w arkuszu.'); }
+    catch (e) { pkt(false, `Wysyłka nie powiodła się: ${e.message}`); }
+    try {
+      const { rows, kol } = await Grupa.pobierz(cfg);
+      pkt(true, `Arkusz CSV odczytany: ${rows.length} wierszy odpowiedzi.`);
+      if (kol && !kol.znalezione) pkt(false, 'Nie znaleziono kolumn o nazwach aplikacja, sesja, wariant, wynik. Używam kolejności kolumn 2–5. Sprawdź nazwy pytań.');
+      const testy = rows.filter((r) => r.a === 'test' && r.s === cfg.s).length;
+      lista.append(el('li', { class: 'muted', text: `Wpisów testowych w tej sesji: ${testy}. Nowy wpis może pojawić się w CSV dopiero po kilku minutach; kliknij „Sprawdź” ponownie.` }));
+    } catch (e) { pkt(false, `Nie udało się odczytać CSV: ${e.message}. Sprawdź, czy arkusz jest opublikowany jako CSV.`); }
+    if (location.protocol === 'file:' && !$('#sBase').value.trim()) lista.append(el('li', { class: 'muted', text: 'Strona jest otwarta z dysku. Żeby wygenerować link dla studentów, wpisz adres strony w sieci (GitHub Pages).' }));
+  }
+  function init() {
+    $('#sSes').value = domyslnaSesja();
+    if (location.protocol === 'file:') $('#sBaseInfo').textContent = 'Strona jest otwarta z dysku, więc link musi wskazywać kopię w sieci.';
+    else { $('#sBase').value = location.origin + location.pathname; $('#sBase').readOnly = true; $('#sBaseInfo').textContent = 'Adres tej strony.'; }
+    const zapisana = store.get(CFG_KEY); if (zapisana) { try { wypelnij(JSON.parse(zapisana)); } catch (e) { /* ignoruj */ } }
+    else if (Grupa.cfg) wypelnij(Grupa.cfg);
+    $('#sPrefill').addEventListener('input', () => {
+      const i = $('#sPrefillInfo');
+      if (!$('#sPrefill').value.trim()) { i.textContent = ''; return; }
+      try { const { e } = parsujPrefill($('#sPrefill').value); i.className = 'small ok'; i.textContent = `✓ Pola: aplikacja = ${e.a}, sesja = ${e.s}, wariant = ${e.w}, wynik = ${e.v}`; }
+      catch (err) { i.className = 'small err'; i.textContent = err.message; }
+    });
+    $('#sPrefill').dispatchEvent(new Event('input'));
+    $('#sCheck').addEventListener('click', sprawdz);
+    $('#sBase').addEventListener('input', () => { if (roboczy) linki(roboczy); });
+    $('#sSave').addEventListener('click', () => {
+      let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+      const ok = store.set(CFG_KEY, JSON.stringify(cfg)); linki(cfg);
+      out(el('p', { class: ok ? 'ok' : 'err', text: ok ? 'Zapisano. W tej przeglądarce tryb grupowy będzie włączony także bez parametru w linku. Odśwież stronę, żeby go uruchomić.' : 'Ta przeglądarka nie pozwala zapisywać ustawień. Używaj linków dla studentów.' }));
+    });
+    $('#sForget').addEventListener('click', () => { store.del(CFG_KEY); out(el('p', { text: 'Usunięto zapisaną konfigurację. Po odświeżeniu strona będzie działać samodzielnie (chyba że otworzysz link z parametrem cfg).' })); });
+    for (const b of $$('[data-copy]')) b.addEventListener('click', async () => { const ok = await copyText($('#' + b.dataset.copy).value); b.textContent = ok ? 'Skopiowano' : 'Zaznacz i skopiuj'; setTimeout(() => { b.textContent = 'Kopiuj'; }, 1600); });
+    if (Grupa.cfg) linki(Grupa.cfg);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+let biezacy = null;
+function nawiguj() {
+  const ids = Object.keys(KONF.widoki);
+  const v = ids.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  if (biezacy && biezacy !== v) MODULY[biezacy]?.wyjscie?.();
+  if (biezacy !== v) MODULY[v]?.wejscie?.();
+  for (const w of ids) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = KONF.widoki[v];
+}
+Grupa.init();
+for (const m of Object.values(MODULY)) m.init?.();
+Ustawienia.init();
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+
+</script>
+</body>
+</html>

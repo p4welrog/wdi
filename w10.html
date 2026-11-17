@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 10 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 10 „Grafy: przeszukiwanie, najkrótsze ścieżki, drzewa rozpinające” (Wprowadzenie do informatyki, SWPS).">
+<style>
+
+
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+html { scroll-padding-top: 96px; }
+@media (max-width: 560px) { html { scroll-padding-top: 124px; } }
+.home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+
+/* ───────── Wspólne elementy (jak w W05) ───────── */
+.dirty { color: var(--amber); font-size: .88rem; }
+.errlist { margin: 6px 0 0; padding-left: 1.2em; color: var(--bad); font-size: .9rem; }
+.alert { border-radius: 8px; padding: 8px 12px; font-size: .92rem; margin: 6px 0; }
+.alert.bad { background: var(--bad-soft); color: var(--bad); }
+.alert.warn { background: var(--amber-soft); color: var(--amber); }
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 6px; }
+.ctrl .speed { display: flex; align-items: center; gap: 6px; font-size: .88rem; color: var(--text-2); }
+.ctrl input[type="range"] { width: 110px; }
+.status.halt { color: var(--good); }
+.status.stuck { color: var(--bad); }
+.status.limit { color: var(--amber); }
+.task { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.task h4 { margin: 0 0 4px; font-size: 1rem; }
+.task p { margin: 0 0 8px; color: var(--text-2); font-size: .94rem; }
+.task.done { border-color: var(--good); }
+.task .hint { font-size: .88rem; }
+.res td.okc { color: var(--good); font-weight: 700; }
+.res td.badc { color: var(--bad); font-weight: 700; }
+.res td.mono { font-family: var(--mono); }
+.pill { display: inline-block; font-size: .78rem; padding: 2px 9px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+details.ref { margin-top: 10px; }
+details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.fbline { font-weight: 600; font-size: 1.1rem; margin: 12px 0 4px; }
+.fbline.dobrze { color: var(--good); }
+.fbline.zle { color: var(--bad); }
+.group { border: 1px solid var(--s1); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; background: var(--surface); }
+.group h3 { display: flex; gap: 8px; align-items: center; }
+.group .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; }
+.card.most { border-left: 4px solid var(--good); }
+.card.most h3 { color: var(--good); }
+
+/* ───────── W07: elementy wspólne z W06 ───────── */
+.sk-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 720px) { .sk-grid { grid-template-columns: minmax(0, 1fr); } }
+pre.kod { font-family: var(--mono); font-size: .92rem; line-height: 1.55; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 0; margin: 0 0 10px; overflow-x: auto; }
+pre.kod span { display: block; padding: 0 12px; white-space: pre; }
+pre.kod span.cur { background: var(--hl); color: var(--hl-ink); }
+input.liczba { width: 9em; font-family: var(--mono); }
+.prpyt { font-size: 1.15rem; font-weight: 600; margin: 8px 0 10px; }
+.opbtn { min-width: 6em; }
+.opbtn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
+.opbtn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+
+/* ───────── W07: stos i kolejka ───────── */
+.stos { display: flex; flex-direction: column; gap: 4px; min-height: 60px; padding: 8px; border: 2px solid var(--border); border-top: 0; border-radius: 0 0 10px 10px; max-width: 220px; }
+.kolejka { display: flex; flex-wrap: wrap; gap: 4px; min-height: 52px; padding: 8px; border: 2px solid var(--border); border-left: 0; border-right: 0; align-items: center; }
+.el { font-family: var(--mono); font-weight: 700; padding: 6px 12px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); text-align: center; border: 1.5px solid transparent; }
+.el.wierzch { border-color: var(--accent); }
+.el.nowy { background: var(--hl); color: var(--hl-ink); }
+.pusty { color: var(--muted); font-size: .85rem; font-style: italic; padding: 4px; }
+.ops { font-size: 1rem; line-height: 1.7; background: var(--surface-2); padding: 8px 12px; border-radius: 8px; }
+
+
+/* ───────── W10: grafy ───────── */
+svg.graf { display: block; width: 100%; height: auto; max-width: 620px; margin: 6px auto; }
+svg.graf line, svg.graf path.kr { stroke: var(--muted); stroke-width: 2; fill: none; }
+svg.graf .kr.akt { stroke: var(--amber); stroke-width: 4; }
+svg.graf .kr.drzewo { stroke: var(--accent); stroke-width: 4; }
+svg.graf .kr.wyb { stroke: var(--s1); stroke-width: 5; }
+svg.graf .kr.cykl { stroke: var(--bad); stroke-width: 5; stroke-dasharray: 6 4; }
+svg.graf .kr.odrz { stroke: var(--grid); stroke-dasharray: 3 4; }
+svg.graf .kr.sciezka { stroke: var(--good); stroke-width: 5; }
+svg.graf .klik { stroke: transparent; stroke-width: 18; cursor: pointer; }
+svg.graf .waga rect { fill: var(--surface); stroke: var(--border); }
+svg.graf .waga text { fill: var(--text); font: 700 13px var(--mono); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+svg.graf .waga { pointer-events: none; }
+svg.graf .w circle { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+svg.graf .w text { fill: var(--text); font: 700 15px var(--mono); text-anchor: middle; dominant-baseline: central; }
+svg.graf .w text.et { fill: var(--accent); font: 700 12px var(--mono); }
+svg.graf .w.odw circle { fill: var(--accent-soft); }
+svg.graf .w.kol circle { fill: var(--hl); stroke: var(--amber); }
+svg.graf .w.kol text:not(.et) { fill: var(--hl-ink); }
+svg.graf .w.cur circle { fill: var(--amber); stroke: var(--amber); stroke-width: 3; }
+svg.graf .w.cur text:not(.et) { fill: #fff; }
+svg.graf .w.gotowy circle { fill: var(--good-soft); stroke: var(--good); }
+svg.graf .w.start circle { stroke-width: 4; }
+svg.graf .strz { fill: var(--muted); }
+.statusl { min-height: 2.8em; font-size: .95rem; margin: 8px 0 0; }
+.dwie { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 760px) { .dwie { grid-template-columns: minmax(0, 1fr); } }
+.struktura { display: flex; flex-wrap: wrap; gap: 4px; min-height: 44px; padding: 6px; border: 2px solid var(--border); border-radius: 8px; align-items: center; }
+.kopiec-l .el { font-size: .9rem; }
+
+/* ───────── W10: labirynt ───────── */
+.lab { display: grid; gap: 1px; background: var(--border); border: 2px solid var(--border); border-radius: 6px; overflow: hidden; touch-action: manipulation; max-width: 640px; }
+.lab div { aspect-ratio: 1; background: var(--surface); cursor: pointer; }
+.lab div.sc { background: var(--text-2); }
+.lab div.odw { background: var(--accent-soft); }
+.lab div.front { background: var(--hl); }
+.lab div.droga { background: var(--good); }
+.lab div.st, .lab div.cel { background: var(--s2); }
+
+/* ───────── W10: plan badania ───────── */
+.zadania { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin: 10px 0; }
+.zad { text-align: left; font: inherit; border: 1.5px solid var(--border); border-radius: 10px; padding: 8px 10px; background: var(--surface); color: var(--text); cursor: pointer; position: relative; min-height: 64px; }
+.zad b { display: block; }
+.zad small { color: var(--muted); }
+.zad .st { position: absolute; top: 6px; right: 8px; font: 700 .8rem var(--mono); color: var(--accent); }
+.zad .wej { position: absolute; bottom: 6px; right: 8px; font: 600 .75rem var(--mono); color: var(--muted); }
+.zad small { display: block; padding-right: 3.5em; }
+.zad.zrob { background: var(--good-soft); border-color: var(--good); }
+.zad.gotowe { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.zad.zle { background: var(--bad-soft); border-color: var(--bad); }
+.zad:disabled { cursor: default; }
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 10</a></div>
+    <a id="groupBadge" class="badge" href="#ustawienia" hidden></a>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#przeszukiwanie">1. BFS i DFS</a>
+    <a href="#labirynt">2. Labirynt</a>
+    <a href="#topo">3. Plan badania</a>
+    <a href="#dijkstra">4. Dijkstra</a>
+    <a href="#mst">5. Połącz osiedla</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Grafy: ćwiczenia</h1>
+  <p class="lead">Ćwiczenia do wykładu 10, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
+  <div class="grid2">
+    <a class="tile" href="#przeszukiwanie"><span class="num">1</span><h3>BFS i DFS krok po kroku</h3><p>Graf z wykładu i dwa sposoby przeszukiwania. Kolejka albo stos wywołań na widoku, kolejność odwiedzin i odległości od startu.</p><div class="meta">ok. 7 min · slajdy od „Przeszukiwania wszerz” do „Mini-zadania: BFS ręcznie”</div></a>
+    <a class="tile" href="#labirynt"><span class="num">2</span><h3>Labirynt</h3><p>BFS i DFS szukają wyjścia. Jeden rozlewa się jak fala, drugi idzie korytarzem do końca. Który znajdzie najkrótszą drogę, a który odwiedzi mniej pól?</p><div class="meta">ok. 4 min · slajdy „Zastosowania BFS i DFS” i „Częste błędy”</div></a>
+    <a class="tile" href="#topo"><span class="num">3</span><h3>Plan badania</h3><p>Ułóż zadania projektu badawczego w kolejności, która szanuje zależności. Potem algorytm Kahna krok po kroku — i co się dzieje, gdy zależności tworzą cykl.</p><div class="meta">ok. 4 min · slajd „Sortowanie topologiczne”</div></a>
+    <a class="tile" href="#dijkstra"><span class="num">4</span><h3>Dijkstra krok po kroku</h3><p>Kopiec, relaksacja i ostateczne odległości. Grafy ze slajdu i z mini-zadania, a do tego kontrprzykład z ujemną wagą.</p><div class="meta">ok. 8 min · slajdy od „Algorytmu Dijkstry: idea” do „Mini-zadania: policz odległości”</div></a>
+    <a class="tile" href="#mst"><span class="num">5</span><h3>Połącz osiedla</h3><p>Wybierz krawędzie, które połączą wszystkie osiedla jak najtaniej. Trzy plansze na czas, porównanie z algorytmem Kruskala i Prima, wyniki sali.</p><div class="meta">ok. 7 min · slajdy od „Drzewa rozpinającego” do „Częstego błędu: MST to nie najkrótsze ścieżki”</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. BFS i DFS ═══════════════════ -->
+<section id="v-przeszukiwanie" hidden>
+  <h2>1. BFS i DFS krok po kroku</h2>
+  <p class="lead">Graf z wykładu: A–B, A–C, B–D, C–E, D–F, E–F, G–H. Sąsiadów sprawdzamy w kolejności alfabetycznej, jak na listach sąsiedztwa ze slajdu.</p>
+  <div class="card">
+    <div class="row">
+      <span class="small muted" id="bfAlgLab">Algorytm</span>
+      <div class="seg" id="bfAlg" role="group" aria-labelledby="bfAlgLab">
+        <button type="button" data-w="bfs" aria-pressed="true">BFS (kolejka)</button>
+        <button type="button" data-w="dfs" aria-pressed="false">DFS (rekurencja)</button>
+      </div>
+      <span class="small muted" id="bfStLab">Start</span>
+      <div class="seg" id="bfSt" role="group" aria-labelledby="bfStLab"></div>
+    </div>
+    <div class="ctrl">
+      <button type="button" class="btn" id="bfKrok">Krok</button>
+      <button type="button" class="btn ghost" id="bfKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="bfReset">Od nowa</button>
+    </div>
+    <div class="dwie">
+      <svg class="graf" id="bfGraf" viewBox="0 0 420 330" role="img" aria-label="Graf z wykładu"></svg>
+      <div>
+        <div class="small muted" id="bfStrNazwa">kolejka (wyjście z lewej)</div>
+        <div class="struktura" id="bfStr"></div>
+        <div class="small muted" style="margin-top: 10px">kolejność odwiedzin</div>
+        <p class="mono" id="bfKol" style="font-size: 1.1rem; margin: 2px 0 0"></p>
+        <p class="statusl" id="bfStatus" aria-live="polite"></p>
+      </div>
+    </div>
+    <p class="small muted">Liczba przy wierzchołku w BFS to odległość od startu (w krawędziach). Żółte — czekają w kolejce lub na stosie; niebieskie — odwiedzone; pomarańczowy — przetwarzany teraz.</p>
+  </div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Mini-zadanie ze slajdu: BFS z F. Zapisz kolejność i odległości, potem sprawdź.</li>
+      <li>DFS z A daje A, B, D, F, E, C. Dlaczego C jest na końcu, choć to sąsiad A?</li>
+      <li>Startując z A, nie dojdziemy do G ani H. Jak policzyć, ile grafu ma spójnych składowych?</li>
+    </ol>
+  </div>
+  <p class="src">A. Bhargava, <em>Algorytmy</em>, rozdz. 6; T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 22.2–22.3.</p>
+</section>
+
+<!-- ═══════════════════ 2. LABIRYNT ═══════════════════ -->
+<section id="v-labirynt" hidden>
+  <h2>2. Labirynt</h2>
+  <p class="lead">Każde pole to wierzchołek, a sąsiednie wolne pola łączy krawędź. Start w lewym górnym rogu, wyjście w prawym dolnym. Kliknij pole, żeby postawić albo zburzyć ścianę.</p>
+  <div class="card">
+    <div class="row">
+      <button type="button" class="btn" id="lbBfs">Szukaj BFS</button>
+      <button type="button" class="btn" id="lbDfs">Szukaj DFS</button>
+      <button type="button" class="btn ghost small" id="lbNowy">Nowy labirynt</button>
+      <button type="button" class="btn ghost small" id="lbPusty">Pusta plansza</button>
+      <span class="speed small muted"><label for="lbTempo">tempo</label> <input type="range" id="lbTempo" min="1" max="10" value="6"></span>
+    </div>
+    <div class="lab" id="lbPlansza" style="margin-top: 12px" aria-label="Labirynt"></div>
+    <div class="stats" style="margin-top: 10px">
+      <div class="stat"><div class="k">odwiedzone pola</div><div class="v" id="lbOdw">—</div></div>
+      <div class="stat"><div class="k">długość znalezionej drogi</div><div class="v" id="lbDroga">—</div></div>
+      <div class="stat"><div class="k">najkrótsza możliwa</div><div class="v" id="lbMin">—</div></div>
+    </div>
+    <p class="small" id="lbOpis"></p>
+  </div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Na pustej planszy uruchom oba. Który znalazł najkrótszą drogę? Który odwiedził mniej pól?</li>
+      <li>Czy DFS może znaleźć najkrótszą drogę? Czy może odwiedzić mniej pól niż BFS? Zbuduj taki labirynt.</li>
+      <li>Co by się stało, gdyby algorytm nie zapamiętywał odwiedzonych pól?</li>
+    </ol>
+  </div>
+  <p class="src">Labirynt generowany losowym DFS z kilkoma dodatkowymi przejściami, żeby istniało kilka dróg.</p>
+</section>
+
+<!-- ═══════════════════ 3. PLAN BADANIA ═══════════════════ -->
+<section id="v-topo" hidden>
+  <h2>3. Plan badania</h2>
+  <p class="lead">Zadania projektu badawczego i ich zależności ze slajdu „Sortowanie topologiczne”. Klikaj zadania w kolejności, w jakiej je wykonasz.</p>
+  <div class="card">
+    <div class="row">
+      <button type="button" class="btn ghost small" id="tpReset">Od nowa</button>
+      <label class="small"><input type="checkbox" id="tpCykl"> dodaj zależność „analiza → hipotezy” (cykl)</label>
+    </div>
+    <div class="zadania" id="tpZad"></div>
+    <p class="statusl" id="tpStatus" aria-live="polite"></p>
+    <p class="mono" id="tpKol"></p>
+  </div>
+  <div class="card">
+    <h3>Algorytm Kahna</h3>
+    <p class="small muted">Liczba w rogu to stopień wejściowy: na ile niewykonanych zadań zadanie jeszcze czeka. Do kolejki trafiają te z zerem.</p>
+    <div class="ctrl">
+      <button type="button" class="btn" id="tpKrok">Krok</button>
+      <button type="button" class="btn ghost" id="tpKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="tpKReset">Od nowa</button>
+    </div>
+    <div class="small muted">kolejka</div>
+    <div class="struktura" id="tpKolejka"></div>
+    <p class="statusl" id="tpKStatus" aria-live="polite"></p>
+    <p class="mono" id="tpWynik"></p>
+  </div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Ile różnych poprawnych kolejności ma ten plan? (Wskazówka: pierwsze dwa i ostatnie dwa zadania mają stałe miejsca.)</li>
+      <li>Włącz cykl. Na którym zadaniu utkniesz Ty, a na którym algorytm?</li>
+    </ol>
+  </div>
+  <p class="src">A. B. Kahn, <em>Topological Sorting of Large Networks</em>, Comm. ACM 5(11), 1962, s. 558–562; T. H. Cormen i in., rozdz. 22.4.</p>
+</section>
+
+<!-- ═══════════════════ 4. DIJKSTRA ═══════════════════ -->
+<section id="v-dijkstra" hidden>
+  <h2>4. Dijkstra krok po kroku</h2>
+  <p class="lead">Krok = zdejmij z kopca wierzchołek o najmniejszej odległości i popraw odległości jego sąsiadów (relaksacja).</p>
+  <div class="card">
+    <div class="row">
+      <span class="small muted" id="djGLab">Graf</span>
+      <div class="seg" id="djG" role="group" aria-labelledby="djGLab">
+        <button type="button" data-w="wyklad" aria-pressed="true">ze slajdu (S…D)</button>
+        <button type="button" data-w="mini" aria-pressed="false">mini-zadanie (A…F)</button>
+        <button type="button" data-w="ujemna" aria-pressed="false">ujemna waga</button>
+      </div>
+    </div>
+    <div class="ctrl">
+      <button type="button" class="btn" id="djKrok">Krok</button>
+      <button type="button" class="btn ghost" id="djKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="djReset">Od nowa</button>
+    </div>
+    <div class="dwie">
+      <svg class="graf" id="djGraf" viewBox="0 0 520 320" role="img" aria-label="Graf ważony"></svg>
+      <div>
+        <div class="small muted">kopiec (wpisy: odległość, wierzchołek)</div>
+        <div class="struktura kopiec-l" id="djKopiec"></div>
+        <div class="scroll-x" style="margin-top: 10px"><table class="t" id="djTab"></table></div>
+      </div>
+    </div>
+    <p class="statusl" id="djStatus" aria-live="polite"></p>
+    <div class="row" id="djCelBox" hidden><span class="small muted" id="djCelLab">Pokaż najkrótszą drogę do</span><div class="seg" id="djCel" role="group" aria-labelledby="djCelLab"></div></div>
+  </div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>W grafie ze slajdu krawędź S–A ma wagę 4, a do A dochodzimy z odległością 3. Kiedy Dijkstra „zmienia zdanie” o A?</li>
+      <li>W mini-zadaniu D i E mają tę samą odległość 20. Czy kolejność ich zdjęcia ma znaczenie dla wyniku?</li>
+      <li>Przy ujemnej wadze Dijkstra ogłasza A ostatecznym za wcześnie. Które założenie dowodu przestaje działać?</li>
+    </ol>
+  </div>
+  <p class="src">E. W. Dijkstra, <em>A Note on Two Problems in Connexion with Graphs</em>, Numer. Math. 1, 1959, s. 269–271; A. Bhargava, <em>Algorytmy</em>, rozdz. 7. Kod jak na slajdzie „Dijkstra w Pythonie” (heapq, pomijanie nieaktualnych wpisów).</p>
+</section>
+
+<!-- ═══════════════════ 5. MST ═══════════════════ -->
+<section id="v-mst" hidden>
+  <h2>5. Połącz osiedla</h2>
+  <p class="lead">Liczby to koszt położenia światłowodu między osiedlami. Wybierz krawędzie tak, żeby z każdego osiedla dało się dojść do każdego, a łączny koszt był jak najmniejszy.</p>
+  <div class="card" id="msIntro">
+    <h3>Zasady</h3>
+    <ul>
+      <li>Klikaj krawędzie, żeby je wybrać lub odznaczyć. Krawędź zamykająca cykl zaświeci na czerwono — jest zbędna.</li>
+      <li>„Gotowe” działa, gdy wszystkie osiedla są połączone. Trzy plansze; mierzymy czas i to, czy trafiłeś w najtańszą sieć.</li>
+    </ul>
+    <button type="button" class="btn" id="msStart">Zaczynamy</button>
+  </div>
+  <div class="card" id="msGra" hidden>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="msNr"></span><span class="small muted" id="msLicz"></span></div>
+    <svg class="graf" id="msGraf" viewBox="0 0 540 330" role="img" aria-label="Plansza: osiedla i możliwe połączenia"></svg>
+    <div class="row"><button type="button" class="btn" id="msGotowe" disabled>Gotowe</button><span class="small" id="msInfo"></span></div>
+  </div>
+  <div class="card" id="msPorown" hidden>
+    <h3 id="msPorTyt"></h3>
+    <p class="fbline" id="msFb" role="status"></p>
+    <div class="ctrl">
+      <span class="small muted" id="msAlgLab">Algorytm</span>
+      <div class="seg" id="msAlg" role="group" aria-labelledby="msAlgLab">
+        <button type="button" data-w="kruskal" aria-pressed="true">Kruskal</button>
+        <button type="button" data-w="prim" aria-pressed="false">Prim</button>
+      </div>
+      <button type="button" class="btn" id="msKrok">Krok</button>
+      <button type="button" class="btn ghost" id="msKoniec">Do końca</button>
+    </div>
+    <svg class="graf" id="msGrafA" viewBox="0 0 540 330" role="img" aria-label="Algorytm na tej samej planszy"></svg>
+    <p class="statusl" id="msAStatus" aria-live="polite"></p>
+    <button type="button" class="btn" id="msDalej">Następna plansza →</button>
+  </div>
+  <div class="card" id="msWynik" hidden>
+    <h3>Twoje wyniki</h3>
+    <div class="scroll-x"><table class="t" id="msTab"></table></div>
+    <button type="button" class="btn ghost small" id="msJeszcze">Jeszcze raz</button>
+  </div>
+  <div id="grupa-mst"></div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Jaką regułą się kierowałeś? Czy przypominała Kruskala (zawsze najtańsza krawędź gdziekolwiek) czy Prima (najtańsza krawędź z już zbudowanej sieci)?</li>
+      <li>Na pierwszej planszy (ze slajdu) policz drogę A → F w MST i najkrótszą drogę A → F w całym grafie. Czy są równe? Czy muszą być?</li>
+      <li>Dlaczego drzewo rozpinające dla n osiedli ma zawsze n − 1 krawędzi?</li>
+    </ol>
+  </div>
+  <p class="src">J. B. Kruskal, Proc. Amer. Math. Soc. 7(1), 1956, s. 48–50; R. C. Prim, Bell Syst. Tech. J. 36(6), 1957, s. 1389–1401; T. H. Cormen i in., rozdz. 23. Plansza 1 — graf ze slajdów W10; na planszach 2 i 3 wagi są różne, więc najtańsza sieć jest jedna.</p>
+</section>
+
+
+<!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
+<section id="v-ustawienia" hidden>
+  <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
+  <p class="lead">Ćwiczenie 5 („Połącz osiedla”) może wysyłać anonimowe wyniki do Formularza Google i pokazywać wyniki całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła. Można użyć tego samego formularza co w poprzednich wykładach.</p>
+
+  <div class="card">
+    <h3>Jednorazowe przygotowanie (ok. 10 min)</h3>
+    <ol>
+      <li>Utwórz nowy Formularz Google z <strong>czterema pytaniami typu „Krótka odpowiedź”</strong> o nazwach dokładnie: <code>aplikacja</code>, <code>sesja</code>, <code>wariant</code>, <code>wynik</code>. Żadne nie powinno być wymagane.</li>
+      <li>W <strong>Ustawieniach → Odpowiedzi</strong> wyłącz zbieranie adresów e-mail i <strong>ograniczenie do użytkowników SWPS</strong>. Nie włączaj „Ogranicz do 1 odpowiedzi”. Inaczej wysyłka ze strony nie zadziała.</li>
+      <li>W zakładce <strong>Odpowiedzi</strong> kliknij „Połącz z Arkuszami” i utwórz nowy arkusz.</li>
+      <li>W arkuszu: <strong>Plik → Udostępnij → Opublikuj w internecie</strong>. Wybierz arkusz z odpowiedziami i format <strong>CSV</strong>, opublikuj i skopiuj link.</li>
+      <li>W formularzu: <strong>⋮ → Pobierz link wstępnie wypełniony</strong>. Wpisz w pola kolejno <code>APLIKACJA</code>, <code>SESJA</code>, <code>WARIANT</code>, <code>WYNIK</code>, kliknij „Pobierz link” i skopiuj go.</li>
+      <li>Wklej oba linki poniżej, nadaj nazwę sesji i kliknij „Sprawdź”.</li>
+    </ol>
+    <p class="small muted">Wysyłane są tylko: nazwa ćwiczenia, nazwa sesji, numer planszy z informacją, czy wynik był optymalny, i czas w ms — trzy wiersze na osobę. Opublikowany CSV jest publiczny, więc nie dodawaj do formularza pytań o dane osobowe.</p>
+  </div>
+
+  <div class="card">
+    <h3>Konfiguracja</h3>
+    <div class="field">
+      <label for="sPrefill">Link wstępnie wypełniony z formularza</label>
+      <textarea id="sPrefill" style="min-height:70px" placeholder="https://docs.google.com/forms/d/e/…/viewform?usp=pp_url&amp;entry.…=APLIKACJA&amp;…"></textarea>
+      <span id="sPrefillInfo" class="small"></span>
+    </div>
+    <div class="field">
+      <label for="sCsv">Link do opublikowanego arkusza (CSV)</label>
+      <input id="sCsv" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=…&amp;single=true&amp;output=csv">
+    </div>
+    <div class="field">
+      <label for="sSes">Nazwa sesji</label>
+      <input id="sSes" type="text" maxlength="60" style="max-width: 320px">
+      <span class="small muted">Wykresy pokazują tylko wyniki z tej sesji. Na kolejne zajęcia lub grupę zmień nazwę; formularz zostaje ten sam.</span>
+    </div>
+    <div class="field">
+      <label for="sBase">Adres strony w sieci (do linku dla studentów)</label>
+      <input id="sBase" type="url" placeholder="https://login.github.io/wdi/w10.html">
+      <span class="small muted" id="sBaseInfo"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="btn" id="sCheck">Sprawdź</button>
+      <button type="button" class="btn ghost" id="sSave">Zapisz w tej przeglądarce</button>
+      <button type="button" class="btn ghost" id="sForget">Usuń z tej przeglądarki</button>
+    </div>
+    <div id="sOut" class="small" style="margin-top:10px" aria-live="polite"></div>
+  </div>
+
+  <div class="card" id="sLinksCard" hidden>
+    <h3>Linki dla studentów (tryb grupowy)</h3>
+    <p class="small muted">Te linki włączają wysyłanie wyników i wykresy sali. Pokaż je na slajdzie (najlepiej jako kod QR). Zwykły adres strony, bez parametru <code>cfg</code>, działa bez wysyłania.</p>
+    <div class="field"><label for="sLink0">Połącz osiedla</label><div class="row"><input id="sLink0" type="text" readonly style="flex:1"><button type="button" class="btn small" data-copy="sLink0">Kopiuj</button></div></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline. Wysyła dane wyłącznie w trybie grupowym, i to tylko anonimowe wyniki.</p>
+    <p><a href="#ustawienia">Dla prowadzącego: wspólne wyniki grupy</a></p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+const KONF = {"wyk": "W10", "key": "wdi-w10-grupa", "widoki": {"start": "Wykład 10 · ćwiczenia", "przeszukiwanie": "BFS i DFS krok po kroku · W10", "labirynt": "Labirynt · W10", "topo": "Plan badania · W10", "dijkstra": "Dijkstra krok po kroku · W10", "mst": "Połącz osiedla · W10", "ustawienia": "Ustawienia prowadzącego · W10"}, "linki": [{"id": "sLink0", "hash": "mst", "label": "Połącz osiedla"}]};
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const el = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k === 'html') e.innerHTML = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids) e.append(k);
+  return e;
+};
+const SVGNS = 'http://www.w3.org/2000/svg';
+const sv = (tag, attrs = {}, txt) => {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (txt !== undefined) e.textContent = txt;
+  return e;
+};
+const liczba = (x) => String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const ulamek = (x, d = 1) => x.toLocaleString('pl-PL', { maximumFractionDigits: d });
+const seg = (host, cb) => {
+  for (const b of $$('button', host)) b.addEventListener('click', () => {
+    for (const c of $$('button', host)) c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+    cb(b.dataset.w);
+  });
+};
+const parsujInt = (t) => { const s = String(t).trim().replace(/[\s _]/g, ''); return /^\d+$/.test(s) ? s : null; };
+const losuj = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const wybierz = (t) => t[Math.floor(Math.random() * t.length)];
+const tasuj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+const mediana = (t) => { const s = [...t].sort((a, b) => a - b); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : NaN; };
+const odm = (n, a, b, c) => n === 1 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? b : c;
+const sek = (ms) => Number.isFinite(ms) ? ulamek(ms / 1000, 1) + ' s' : '—';
+function slupki(host, dane) {
+  // dane: [{lab, pc (0–100) albo null, tekst}]
+  host.replaceChildren(...dane.map((d) => el('div', { class: 'hbar' },
+    el('div', { class: 'lab', text: d.lab }),
+    el('div', { class: 'track' }, el('div', { class: 'fill', style: `width: ${(d.pc ?? 0) * 0.45}%` }),
+      el('span', { class: 'val', style: `left: calc(${(d.pc ?? 0) * 0.45}% + 6px)`, text: d.tekst })))));
+}
+
+
+/* ═════════════════════ Tryb grupowy (jak w W01–W07) ═════════════════════ */
+const CFG_KEY = KONF.key;
+function b64e(str) { const b = new TextEncoder().encode(str); let bin = ''; b.forEach((x) => { bin += String.fromCharCode(x); }); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64d(str) { let t = str.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; const bin = atob(t); return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))); }
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* brak dostępu */ } },
+};
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) { return false; }
+}
+function cfgPoprawna(c) {
+  return c && typeof c === 'object' && /^https?:\/\//.test(c.f || '') && /^https?:\/\//.test(c.c || '') &&
+    c.e && ['a', 's', 'w', 'v'].every((k) => /^entry\.\d+$/.test(c.e[k] || '')) && typeof c.s === 'string' && c.s.trim().length > 0 && c.s.length <= 60;
+}
+function parseCSV(text) {
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(f); f = ''; }
+    else if (ch === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (ch !== '\r') f += ch;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x !== ''));
+}
+const Grupa = {
+  cfg: null, zrodlo: null,
+  init() {
+    const p = new URLSearchParams(location.search).get('cfg');
+    if (p) { try { const c = JSON.parse(b64d(p)); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'url'; } } catch (e) { /* zły parametr: tryb samodzielny */ } }
+    if (!this.cfg) { const raw = store.get(CFG_KEY); if (raw) { try { const c = JSON.parse(raw); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'local'; } } catch (e) { /* ignoruj */ } } }
+    const b = $('#groupBadge');
+    if (this.cfg) { b.hidden = false; b.textContent = `Tryb grupowy · ${this.cfg.s}`; b.title = this.zrodlo === 'local' ? 'Konfiguracja zapisana w tej przeglądarce' : 'Konfiguracja z linku'; }
+  },
+  aktywna() { return !!this.cfg; },
+  async wyslij(aplikacja, wariant, wynik, cfg = this.cfg) {
+    const body = new URLSearchParams();
+    body.set(cfg.e.a, aplikacja); body.set(cfg.e.s, cfg.s); body.set(cfg.e.w, wariant); body.set(cfg.e.v, String(wynik));
+    await fetch(cfg.f, { method: 'POST', mode: 'no-cors', body });
+  },
+  async pobierz(cfg = this.cfg) {
+    const r = await fetch(cfg.c, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`serwer odpowiedział kodem ${r.status}`);
+    const rows = parseCSV(await r.text());
+    if (rows.length === 0) return { rows: [], kol: null };
+    const head = rows[0].map((x) => x.trim().toLowerCase());
+    const idx = (n, fb) => { const i = head.indexOf(n); return i >= 0 ? i : fb; };
+    const kol = { a: idx('aplikacja', 1), s: idx('sesja', 2), w: idx('wariant', 3), v: idx('wynik', 4), znalezione: ['aplikacja', 'sesja', 'wariant', 'wynik'].every((n) => head.includes(n)) };
+    const out = rows.slice(1).map((r) => ({ a: (r[kol.a] || '').trim(), s: (r[kol.s] || '').trim(), w: (r[kol.w] || '').trim(), v: Number(String(r[kol.v] || '').replace(',', '.').trim()) }));
+    return { rows: out, kol };
+  },
+};
+// Panel wyników sali. o = { aplikacja, wiersze(paczka) → [[wariant, wynik]], filtr(wiersz) → bool, rysuj(host, wiersze), opis(wiersze) → tekst }
+function panelGrupy(host, o) {
+  if (!Grupa.aktywna()) return null;
+  let paczka = null, timer = null, aktywny = false;
+  const status = el('span', { class: 'small muted', 'aria-live': 'polite' });
+  const send = el('button', { type: 'button', class: 'btn', text: 'Wyślij moje wyniki do grupy' });
+  send.disabled = true;
+  const wyk = el('div', { class: 'hbars' });
+  const meta = el('p', { class: 'small muted' });
+  const statsP = el('p', { class: 'small' });
+  const refresh = el('button', { type: 'button', class: 'btn ghost small', text: 'Odśwież' });
+  host.append(el('div', { class: 'group' },
+    el('h3', {}, el('span', { class: 'dot' }), `Wyniki sali · sesja „${Grupa.cfg.s}”`),
+    el('div', { class: 'row' }, send, status), statsP, wyk, el('div', { class: 'row' }, refresh, meta)));
+  send.addEventListener('click', async () => {
+    if (!paczka) return;
+    send.disabled = true; status.textContent = 'Wysyłanie…';
+    try {
+      for (const [w, v] of o.wiersze(paczka)) await Grupa.wyslij(o.aplikacja, w, v);
+      status.textContent = 'Wysłano. Wyniki pojawią się na wykresie po odświeżeniu arkusza (zwykle w ciągu kilku minut).';
+      paczka = null; setTimeout(odswiez, 4000);
+    } catch (e) { status.textContent = 'Nie udało się wysłać (brak internetu?). Spróbuj ponownie.'; send.disabled = false; }
+  });
+  async function odswiez() {
+    meta.textContent = 'Pobieranie…';
+    try {
+      const { rows } = await Grupa.pobierz();
+      const dane = rows.filter((r) => r.a === o.aplikacja && r.s === Grupa.cfg.s && Number.isFinite(r.v) && o.filtr(r));
+      o.rysuj(wyk, dane);
+      statsP.textContent = dane.length ? o.opis(dane) : 'Nikt jeszcze nie wysłał wyników.';
+      meta.textContent = `Aktualizacja: ${new Date().toLocaleTimeString('pl-PL')}. Opublikowany arkusz odświeża się z opóźnieniem do kilku minut.`;
+    } catch (e) { meta.textContent = `Wyniki sali są chwilowo niedostępne (${e.message || 'błąd sieci'}).`; }
+  }
+  refresh.addEventListener('click', odswiez);
+  return {
+    gotowe(w) { paczka = w; send.disabled = false; status.textContent = ''; },
+    start() { aktywny = true; odswiez(); clearInterval(timer); timer = setInterval(() => { if (aktywny && !document.hidden) odswiez(); }, 20000); },
+    stop() { aktywny = false; clearInterval(timer); },
+  };
+}
+
+
+/* ═════════════════════ wspólne W10: rysowanie grafu ═════════════════════ */
+// G = { poz: {v: [x, y]}, kr: [[u, v, w?]], skier: bool }
+// st = { w: {v: klasa}, et: {v: tekst}, k: {indeks: klasa}, klik: (indeks) => void }
+function rysujGraf(svg, G, st = {}) {
+  svg.replaceChildren();
+  if (G.skier) {
+    const defs = sv('defs'), mk = sv('marker', { id: svg.id + 'Strz', viewBox: '0 0 10 10', refX: 10, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' });
+    mk.append(sv('path', { d: 'M0,0 L10,5 L0,10 z', class: 'strz' })); defs.append(mk); svg.append(defs);
+  }
+  const R = 20;
+  G.kr.forEach(([u, v, w], i) => {
+    const [x1, y1] = G.poz[u], [x2, y2] = G.poz[v];
+    const dx = x2 - x1, dy = y2 - y1, d = Math.hypot(dx, dy);
+    const a = [x1 + (dx / d) * R, y1 + (dy / d) * R], b = [x2 - (dx / d) * (R + (G.skier ? 3 : 0)), y2 - (dy / d) * (R + (G.skier ? 3 : 0))];
+    const ln = sv('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], class: 'kr ' + ((st.k || {})[i] || '') });
+    if (G.skier) ln.setAttribute('marker-end', `url(#${svg.id}Strz)`);
+    svg.append(ln);
+    if (st.klik) {
+      const h = sv('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], class: 'klik', tabindex: 0, role: 'button', 'aria-label': `krawędź ${u}–${v}, koszt ${w}` });
+      h.addEventListener('click', () => st.klik(i));
+      h.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); st.klik(i); } });
+      svg.append(h);
+    }
+  });
+  G.kr.forEach(([u, v, w]) => {
+    if (w === undefined) return;
+    const [x1, y1] = G.poz[u], [x2, y2] = G.poz[v], mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const t = String(w), g = sv('g', { class: 'waga' });
+    g.append(sv('rect', { x: mx - 6 - 4.5 * t.length, y: my - 10, width: 12 + 9 * t.length, height: 20, rx: 5 }), sv('text', { x: mx, y: my }, t));
+    svg.append(g);
+  });
+  for (const [v, [x, y]] of Object.entries(G.poz)) {
+    const g = sv('g', { class: 'w ' + ((st.w || {})[v] || '') });
+    g.append(sv('circle', { cx: x, cy: y, r: R }), sv('text', { x, y }, v));
+    const e = (st.et || {})[v];
+    if (e !== undefined && e !== null) g.append(sv('text', { x: x + 24, y: y - 20, class: 'et' }, String(e)));
+    svg.append(g);
+  }
+}
+const elStr = (t, kl = '') => el('div', { class: 'el ' + kl, text: t });
+const pustaStr = (t = 'pusta') => el('div', { class: 'pusty', text: t });
+
+/* ═════════════════════ Ćwiczenie 1: BFS i DFS ═════════════════════ */
+const Przeszukiwanie = (() => {
+  const G = {
+    poz: { A: [150, 40], B: [80, 125], C: [220, 125], D: [80, 210], E: [220, 210], F: [150, 290], G: [340, 125], H: [340, 210] },
+    kr: [['A', 'B'], ['A', 'C'], ['B', 'D'], ['C', 'E'], ['D', 'F'], ['E', 'F'], ['G', 'H']],
+  };
+  const sas = {}; for (const v of Object.keys(G.poz)) sas[v] = [];
+  for (const [u, v] of G.kr) { sas[u].push(v); sas[v].push(u); }
+  for (const v of Object.keys(sas)) sas[v].sort();
+  let alg = 'bfs', start = 'A', S = null;
+  function reset() {
+    S = alg === 'bfs'
+      ? { odl: { [start]: 0 }, kolejka: [start], kol: [], cur: null, koniec: false }
+      : { odw: new Set(), stos: [], kol: [], cur: null, koniec: false, plan: [] };
+    if (alg === 'dfs') {
+      // przebieg rekurencyjnego DFS zapisany jako lista zdarzeń
+      const odw = new Set(), stos = [];
+      const dfs = (v) => {
+        odw.add(v); stos.push(v);
+        S.plan.push({ t: 'wejdz', v, stos: [...stos] });
+        for (const w of sas[v]) {
+          if (!odw.has(w)) dfs(w);
+          else S.plan.push({ t: 'pomin', v, w, stos: [...stos] });
+        }
+        stos.pop();
+        S.plan.push({ t: 'wyjdz', v, stos: [...stos] });
+      };
+      dfs(start);
+    }
+    $('#bfStatus').textContent = alg === 'bfs' ? `odl = {${start}: 0}, kolejka = [${start}]. Kliknij „Krok”.` : `Wywołujemy dfs(G, "${start}", odw). Kliknij „Krok”.`;
+    $('#bfStrNazwa').textContent = alg === 'bfs' ? 'kolejka (wyjście z lewej)' : 'stos wywołań (wierzch z prawej)';
+    rysuj();
+  }
+  function krok() {
+    if (S.koniec) return false;
+    if (alg === 'bfs') {
+      if (!S.kolejka.length) { zakoncz(); return false; }
+      const v = S.kolejka.shift(); S.cur = v; S.kol.push(v);
+      const nowi = [];
+      for (const w of sas[v]) if (!(w in S.odl)) { S.odl[w] = S.odl[v] + 1; S.kolejka.push(w); nowi.push(w); }
+      const starzy = sas[v].filter((w) => !nowi.includes(w));
+      $('#bfStatus').textContent = `Zdejmujemy ${v} (odległość ${S.odl[v]}). ${nowi.length ? `Nowi sąsiedzi ${nowi.join(', ')} dostają odległość ${S.odl[v] + 1} i idą na koniec kolejki.` : 'Brak nowych sąsiadów.'}${starzy.length ? ` Pomijamy już znanych: ${starzy.join(', ')}.` : ''}`;
+    } else {
+      const e = S.plan.shift();
+      if (!e) { zakoncz(); return false; }
+      S.stos = e.stos; S.cur = e.v;
+      if (e.t === 'wejdz') { S.odw.add(e.v); S.kol.push(e.v); $('#bfStatus').textContent = `dfs(${e.v}): oznaczamy ${e.v} jako odwiedzony i przeglądamy sąsiadów: ${sas[e.v].join(', ')}.`; }
+      else if (e.t === 'pomin') $('#bfStatus').textContent = `W ${e.v}: sąsiad ${e.w} już odwiedzony — pomijamy.`;
+      else $('#bfStatus').textContent = `dfs(${e.v}) kończy się — wszyscy sąsiedzi sprawdzeni. ${e.stos.length ? `Wracamy do ${e.stos[e.stos.length - 1]}.` : 'Stos wywołań pusty.'}`;
+    }
+    if (alg === 'bfs' ? !S.kolejka.length : !S.plan.length) { const t = $('#bfStatus').textContent; zakoncz(); $('#bfStatus').textContent = t + ' ' + $('#bfStatus').textContent; return true; }
+    rysuj(); return true;
+  }
+  function zakoncz() {
+    S.koniec = true; S.cur = null;
+    const nieos = Object.keys(G.poz).filter((v) => !S.kol.includes(v));
+    $('#bfStatus').textContent = `Koniec. Kolejność: ${S.kol.join(', ')}.${nieos.length ? ` Nieosiągalne z ${start}: ${nieos.join(', ')} — to inna spójna składowa.` : ''}`;
+    rysuj();
+  }
+  function rysuj() {
+    const w = {}, et = {};
+    for (const v of S.kol) w[v] = 'odw';
+    if (alg === 'bfs') { for (const v of S.kolejka) w[v] = 'kol'; for (const [v, d] of Object.entries(S.odl)) et[v] = d; }
+    else for (const v of S.stos || []) w[v] = 'kol';
+    if (S.cur) w[S.cur] = 'cur';
+    w[start] = (w[start] || '') + ' start';
+    const k = {};
+    G.kr.forEach(([u, v], i) => { if (S.cur && (u === S.cur || v === S.cur)) k[i] = 'akt'; });
+    rysujGraf($('#bfGraf'), G, { w, et, k });
+    const t = alg === 'bfs' ? S.kolejka : (S.stos || []);
+    $('#bfStr').replaceChildren(...(t.length ? t.map((v, i) => elStr(alg === 'bfs' ? v : `dfs(${v})`, (alg === 'bfs' ? i === 0 : i === t.length - 1) ? 'wierzch' : '')) : [pustaStr(alg === 'bfs' ? 'pusta' : 'pusty')]));
+    $('#bfKol').textContent = S.kol.length ? S.kol.join(', ') : '—';
+    $('#bfKrok').disabled = S.koniec;
+  }
+  function init() {
+    const st = $('#bfSt');
+    for (const v of Object.keys(G.poz)) st.append(el('button', { type: 'button', 'data-w': v, 'aria-pressed': v === 'A' ? 'true' : 'false', text: v }));
+    seg(st, (v) => { start = v; reset(); });
+    seg($('#bfAlg'), (w) => { alg = w; reset(); });
+    $('#bfKrok').addEventListener('click', krok);
+    $('#bfKoniec').addEventListener('click', () => { let g = 0; while (!S.koniec && g++ < 200) { if (!krok()) break; } if (!S.koniec) zakoncz(); });
+    $('#bfReset').addEventListener('click', reset);
+    reset();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 2: Labirynt ═════════════════════ */
+const Labirynt = (() => {
+  const W = 21, H = 15;
+  let sciana = [], timer = null, stan = null;
+  const id = (x, y) => y * W + x, S0 = id(0, 0), CEL = id(W - 1, H - 1);
+  function generuj() {
+    sciana = Array(W * H).fill(true);
+    const stos = [[0, 0]]; sciana[S0] = false;
+    while (stos.length) {
+      const [x, y] = stos[stos.length - 1];
+      const opcje = tasuj([[2, 0], [-2, 0], [0, 2], [0, -2]]).filter(([dx, dy]) => x + dx >= 0 && x + dx < W && y + dy >= 0 && y + dy < H && sciana[id(x + dx, y + dy)]);
+      if (!opcje.length) { stos.pop(); continue; }
+      const [dx, dy] = opcje[0];
+      sciana[id(x + dx / 2, y + dy / 2)] = false; sciana[id(x + dx, y + dy)] = false; stos.push([x + dx, y + dy]);
+    }
+    for (let k = 0; k < 18; k++) { const x = losuj(1, W - 2), y = losuj(1, H - 2); if ((x + y) % 2 === 1) sciana[id(x, y)] = false; }
+    sciana[CEL] = false; sciana[id(W - 2, H - 1)] = false;
+  }
+  const sasiedzi = (c) => { const x = c % W, y = Math.floor(c / W), out = []; for (const [dx, dy] of [[1, 0], [0, 1], [-1, 0], [0, -1]]) { const nx = x + dx, ny = y + dy; if (nx >= 0 && nx < W && ny >= 0 && ny < H && !sciana[id(nx, ny)]) out.push(id(nx, ny)); } return out; };
+  function najkrotsza() { const d = new Map([[S0, 0]]), q = [S0]; while (q.length) { const c = q.shift(); for (const n of sasiedzi(c)) if (!d.has(n)) { d.set(n, d.get(c) + 1); q.push(n); } } return d.has(CEL) ? d.get(CEL) : null; }
+  function rysuj() {
+    const host = $('#lbPlansza');
+    if (host.children.length !== W * H) {
+      host.style.gridTemplateColumns = `repeat(${W}, 1fr)`;
+      host.replaceChildren(...[...Array(W * H).keys()].map((c) => { const d = el('div'); d.addEventListener('click', () => przelacz(c)); return d; }));
+    }
+    const odw = stan ? stan.odw : new Set(), front = stan ? new Set(stan.front) : new Set(), droga = stan && stan.droga ? new Set(stan.droga) : new Set();
+    [...host.children].forEach((d, c) => {
+      d.className = c === S0 ? 'st' : c === CEL ? 'cel' : sciana[c] ? 'sc' : droga.has(c) ? 'droga' : front.has(c) ? 'front' : odw.has(c) ? 'odw' : '';
+    });
+  }
+  function przelacz(c) {
+    if (c === S0 || c === CEL || timer) return;
+    sciana[c] = !sciana[c]; stan = null; opisz(); rysuj();
+  }
+  function opisz() { const m = najkrotsza(); $('#lbMin').textContent = m === null ? 'brak drogi' : String(m); if (!stan) { $('#lbOdw').textContent = '—'; $('#lbDroga').textContent = '—'; $('#lbOpis').textContent = ''; } }
+  function szukaj(alg) {
+    stop();
+    const odw = new Set(), skad = new Map(), q = [S0];
+    if (alg === 'bfs') odw.add(S0);
+    stan = { odw, front: [S0], droga: null };
+    const t = Number($('#lbTempo').value), co = Math.round(260 / t);
+    timer = setInterval(() => {
+      for (let r = 0; r < (t >= 9 ? 3 : 1); r++) {
+        if (!q.length) { koniec(alg, null); return; }
+        const c = alg === 'bfs' ? q.shift() : q.pop();
+        if (alg === 'dfs') { if (odw.has(c)) continue; odw.add(c); }
+        if (c === CEL) { const d = [c]; let x = c; while (skad.has(x)) { x = skad.get(x); d.push(x); } koniec(alg, d); return; }
+        for (const n of (alg === 'dfs' ? [...sasiedzi(c)].reverse() : sasiedzi(c))) {
+          if (odw.has(n)) continue;
+          skad.set(n, c); q.push(n);
+          if (alg === 'bfs') odw.add(n);
+        }
+        stan.front = alg === 'bfs' ? [...q] : q.filter((x) => !odw.has(x));
+      }
+      $('#lbOdw').textContent = String(odw.size);
+      rysuj();
+    }, co);
+  }
+  function koniec(alg, d) {
+    stop();
+    stan.front = []; stan.droga = d;
+    const ile = stan.odw.size;
+    $('#lbOdw').textContent = String(ile);
+    const m = najkrotsza();
+    if (!d) { $('#lbDroga').textContent = 'brak'; $('#lbOpis').textContent = 'Wyjście jest nieosiągalne — przeszukaliśmy całą składową startu.'; }
+    else {
+      const dl = d.length - 1; $('#lbDroga').textContent = String(dl);
+      $('#lbOpis').textContent = alg === 'bfs'
+        ? `BFS: droga długości ${dl} — najkrótsza, bo BFS odwiedza pola w kolejności rosnącej odległości. Odwiedzonych pól: ${ile}.`
+        : `DFS: droga długości ${dl}${dl === m ? ' — tym razem akurat najkrótsza' : `, a najkrótsza ma ${m}`}. DFS znajduje jakąś drogę, nie najkrótszą. Odwiedzonych pól: ${ile}.`;
+    }
+    rysuj();
+  }
+  function stop() { clearInterval(timer); timer = null; }
+  function init() {
+    $('#lbBfs').addEventListener('click', () => szukaj('bfs'));
+    $('#lbDfs').addEventListener('click', () => szukaj('dfs'));
+    $('#lbNowy').addEventListener('click', () => { stop(); stan = null; generuj(); opisz(); rysuj(); });
+    $('#lbPusty').addEventListener('click', () => { stop(); stan = null; sciana = Array(W * H).fill(false); opisz(); rysuj(); });
+    generuj(); opisz(); rysuj();
+  }
+  return { init, wyjscie: stop };
+})();
+
+/* ═════════════════════ Ćwiczenie 3: Plan badania (sortowanie topologiczne) ═════════════════════ */
+const Topo = (() => {
+  const Z = {
+    lit: 'przegląd literatury', hip: 'hipotezy', ank: 'ankieta', etyka: 'zgoda komisji etycznej',
+    plan: 'plan analizy', dane: 'zbieranie danych', analiza: 'analiza', raport: 'raport',
+  };
+  const KR = [['lit', 'hip'], ['hip', 'ank'], ['hip', 'etyka'], ['hip', 'plan'], ['ank', 'dane'], ['etyka', 'dane'], ['dane', 'analiza'], ['plan', 'analiza'], ['analiza', 'raport']];
+  let cykl = false, zrob = [], zly = null, K = null;
+  const kraw = () => cykl ? [...KR, ['analiza', 'hip']] : KR;
+  const poprz = (v) => kraw().filter(([, b]) => b === v).map(([a]) => a);
+  function rysujZad() {
+    $('#tpZad').replaceChildren(...Object.keys(Z).map((v) => {
+      const p = poprz(v), gotowe = !zrob.includes(v) && p.every((x) => zrob.includes(x));
+      const b = el('button', { type: 'button', class: 'zad' + (zrob.includes(v) ? ' zrob' : gotowe ? ' gotowe' : '') + (zly === v ? ' zle' : '') },
+        el('b', { text: Z[v] }), el('small', { text: p.length ? 'po: ' + p.map((x) => Z[x]).join(', ') : 'bez zależności' }));
+      if (zrob.includes(v)) b.append(el('span', { class: 'st', text: String(zrob.indexOf(v) + 1) }));
+      b.disabled = zrob.includes(v);
+      b.addEventListener('click', () => klik(v));
+      return b;
+    }));
+    $('#tpKol').textContent = zrob.length ? zrob.map((v, i) => `${i + 1}. ${Z[v]}`).join(' · ') : '';
+    if (K) rysujK();
+  }
+  function klik(v) {
+    const brak = poprz(v).filter((x) => !zrob.includes(x));
+    if (brak.length) { zly = v; $('#tpStatus').textContent = `Jeszcze nie: „${Z[v]}” czeka na: ${brak.map((x) => Z[x]).join(', ')}.`; rysujZad(); return; }
+    zly = null; zrob.push(v);
+    const zostalo = Object.keys(Z).filter((x) => !zrob.includes(x));
+    const dostepne = zostalo.filter((x) => poprz(x).every((y) => zrob.includes(y)));
+    $('#tpStatus').textContent = !zostalo.length ? 'Gotowe — to poprawny porządek topologiczny.' : dostepne.length ? `Można teraz zrobić: ${dostepne.map((x) => Z[x]).join(', ')}.` : `Utknęliśmy: każde z pozostałych zadań (${zostalo.map((x) => Z[x]).join(', ')}) czeka na inne z nich. To cykl — porządku nie ma.`;
+    rysujZad();
+  }
+  function resetK() {
+    const wej = Object.fromEntries(Object.keys(Z).map((v) => [v, 0]));
+    for (const [, b] of kraw()) wej[b]++;
+    K = { wej, kolejka: Object.keys(Z).filter((v) => wej[v] === 0), wynik: [], koniec: false };
+    $('#tpKStatus').textContent = `Na start do kolejki trafiają zadania bez zależności: ${K.kolejka.map((v) => Z[v]).join(', ')}.`;
+    rysujK();
+  }
+  function krokK() {
+    if (K.koniec) return false;
+    if (!K.kolejka.length) {
+      K.koniec = true;
+      const n = Object.keys(Z).length;
+      $('#tpKStatus').textContent = K.wynik.length === n ? 'Kolejka pusta, wszystkie zadania w wyniku — porządek gotowy.' : `Kolejka pusta, a w wyniku tylko ${K.wynik.length} z ${n} zadań. Wynik krótszy niż liczba wierzchołków = w grafie jest cykl.`;
+      rysujK(); return false;
+    }
+    const v = K.kolejka.shift(); K.wynik.push(v);
+    const nowe = [];
+    for (const [a, b] of kraw()) if (a === v) { K.wej[b]--; if (K.wej[b] === 0) { K.kolejka.push(b); nowe.push(b); } }
+    $('#tpKStatus').textContent = `Zdejmujemy „${Z[v]}” i odhaczamy je u następników.${nowe.length ? ` Stopień 0 osiągnęły: ${nowe.map((x) => Z[x]).join(', ')} — do kolejki.` : ''}`;
+    rysujK(); return true;
+  }
+  function rysujK() {
+    $('#tpKolejka').replaceChildren(...(K.kolejka.length ? K.kolejka.map((v, i) => elStr(Z[v], i === 0 ? 'wierzch' : '')) : [pustaStr()]));
+    $('#tpWynik').textContent = 'wynik: ' + (K.wynik.length ? K.wynik.map((v) => Z[v]).join(' → ') : '—');
+    $('#tpKrok').disabled = K.koniec;
+    // stopnie wejściowe na kartach zadań
+    for (const [i, v] of Object.keys(Z).entries()) {
+      const karta = $('#tpZad').children[i]; if (!karta) continue;
+      let s = karta.querySelector('.wej'); if (!s) { s = el('span', { class: 'wej' }); karta.append(s); }
+      s.textContent = `wej: ${K.wynik.includes(v) ? '✓' : K.wej[v]}`;
+    }
+  }
+  function reset() { zrob = []; zly = null; $('#tpStatus').textContent = 'Zacznij od zadania, które nie czeka na nic.'; rysujZad(); resetK(); }
+  function init() {
+    $('#tpReset').addEventListener('click', reset);
+    $('#tpCykl').addEventListener('change', () => { cykl = $('#tpCykl').checked; reset(); });
+    $('#tpKrok').addEventListener('click', krokK);
+    $('#tpKoniec').addEventListener('click', () => { let g = 0; while (krokK() && g++ < 50); krokK(); });
+    $('#tpKReset').addEventListener('click', resetK);
+    reset();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 4: Dijkstra ═════════════════════ */
+const Dijkstra = (() => {
+  const GRAFY = {
+    wyklad: { poz: { S: [50, 160], A: [220, 60], B: [220, 260], C: [370, 160], D: [480, 160] }, kr: [['S', 'A', 4], ['S', 'B', 1], ['B', 'A', 2], ['A', 'C', 1], ['B', 'C', 5], ['C', 'D', 3]], start: 'S',
+      opis: 'Graf nieskierowany ze slajdu „Śledzenie Dijkstry”, start w S.' },
+    mini: { poz: { A: [50, 190], B: [170, 290], C: [220, 165], D: [390, 290], E: [480, 140], F: [270, 45] }, kr: [['A', 'B', 7], ['A', 'C', 9], ['A', 'F', 14], ['B', 'C', 10], ['B', 'D', 15], ['C', 'D', 11], ['C', 'F', 2], ['D', 'E', 6], ['E', 'F', 9]], start: 'A',
+      opis: 'Graf z mini-zadania, start w A. Najpierw policz na kartce!' },
+    ujemna: { poz: { S: [60, 160], A: [280, 60], B: [280, 260], C: [470, 60] }, kr: [['S', 'A', 2], ['S', 'B', 3], ['B', 'A', -2], ['A', 'C', 1]], start: 'S', skier: true,
+      opis: 'Graf skierowany ze slajdu „Kontrprzykład: ujemna waga” z dodaną krawędzią A → C (1), start w S.' },
+  };
+  let nazwa = 'wyklad', G = null, sas = {}, D = null;
+  function przygotuj() {
+    G = GRAFY[nazwa]; sas = {};
+    for (const v of Object.keys(G.poz)) sas[v] = [];
+    for (const [u, v, w] of G.kr) { sas[u].push([v, w]); if (!G.skier) sas[v].push([u, w]); }
+    for (const v of Object.keys(sas)) sas[v].sort((a, b) => a[0].localeCompare(b[0]));
+    D = { odl: { [G.start]: 0 }, pop: {}, gotowe: [], kopiec: [[0, G.start]], cur: null, zmiany: [], koniec: false, cel: null };
+    $('#djStatus').textContent = `${G.opis} odl = {${G.start}: 0}, kopiec = [(0, ${G.start})].`;
+    $('#djCelBox').hidden = true;
+    rysuj();
+  }
+  const sortKopiec = () => D.kopiec.sort((a, b) => a[0] - b[0] || a[1].localeCompare(b[1]));
+  function krok() {
+    if (D.koniec) return false;
+    sortKopiec();
+    let pomin = [];
+    while (D.kopiec.length && D.gotowe.includes(D.kopiec[0][1])) pomin.push(D.kopiec.shift());
+    if (!D.kopiec.length) { zakoncz(pomin); return false; }
+    const [d, v] = D.kopiec.shift();
+    D.gotowe.push(v); D.cur = v; D.zmiany = [];
+    const opis = [];
+    for (const [w, waga] of sas[v]) {
+      const nowa = d + waga;
+      if (!(w in D.odl) || nowa < D.odl[w]) {
+        opis.push(`${w}: ${d} + ${waga} = ${nowa}${w in D.odl ? ` < ${D.odl[w]} — poprawiamy` : ''}`);
+        D.odl[w] = nowa; D.pop[w] = v; D.kopiec.push([nowa, w]); D.zmiany.push(w);
+      } else opis.push(`${w}: ${d} + ${waga} = ${nowa} ≥ ${D.odl[w]} — bez zmian`);
+    }
+    $('#djStatus').textContent = `${pomin.length ? `Pomijamy nieaktualne wpisy ${pomin.map(([a, b]) => `(${a}, ${b})`).join(', ')}. ` : ''}Zdejmujemy (${d}, ${v}): odległość ${v} = ${d} jest ostateczna. ${opis.length ? 'Relaksacja: ' + opis.join('; ') + '.' : 'Brak sąsiadów.'}`;
+    rysuj(); return true;
+  }
+  function zakoncz(pomin = []) {
+    D.koniec = true; D.cur = null; D.zmiany = [];
+    let txt = `${pomin.length ? `Pomijamy nieaktualne wpisy ${pomin.map(([a, b]) => `(${a}, ${b})`).join(', ')}. ` : ''}Kopiec pusty — koniec. Kolejność zdejmowania: ${D.gotowe.join(', ')}.`;
+    if (nazwa === 'ujemna') {
+      // Bellman–Ford dla porównania
+      const bf = { [G.start]: 0 };
+      for (let i = 0; i < Object.keys(G.poz).length - 1; i++) for (const [u, v, w] of G.kr) if (u in bf && (!(v in bf) || bf[u] + w < bf[v])) bf[v] = bf[u] + w;
+      const zle = Object.keys(bf).filter((v) => bf[v] !== D.odl[v]);
+      if (zle.length) txt += ` Ale prawdziwa odległość: ${zle.map((v) => `${v} = ${bf[v]} (Dijkstra podał ${D.odl[v]})`).join(', ')}. A zdjęto jako „ostateczny” z odległością 2 i od niej policzono C. Później S → B → A dało 3 + (−2) = 1 i kod poprawił odl[A], ale A był już gotowy, więc krawędzi A → C nikt nie sprawdził ponownie.`;
+    }
+    $('#djStatus').textContent = txt;
+    $('#djCelBox').hidden = false;
+    const c = $('#djCel'); c.replaceChildren(...Object.keys(G.poz).filter((v) => v !== G.start && v in D.odl).map((v) => el('button', { type: 'button', 'data-w': v, 'aria-pressed': 'false', text: v })));
+    seg(c, (v) => { D.cel = v; const s = [v]; let x = v; while (D.pop[x]) { x = D.pop[x]; s.push(x); } $('#djStatus').textContent = `Najkrótsza droga do ${v} według algorytmu: ${s.reverse().join(' → ')}, długość ${D.odl[v]}. Odtwarzamy ją po poprzednikach, od końca.`; rysuj(); });
+    rysuj();
+  }
+  function rysuj() {
+    const w = {}, et = {}, k = {};
+    for (const v of Object.keys(D.odl)) { w[v] = 'kol'; et[v] = D.odl[v]; }
+    for (const v of D.gotowe) w[v] = 'gotowy';
+    if (D.cur) w[D.cur] = 'cur';
+    for (const v of D.zmiany) w[v] = 'kol';
+    w[G.start] = (w[G.start] || '') + ' start';
+    const naDrodze = new Set();
+    if (D.cel) { let x = D.cel; while (D.pop[x]) { naDrodze.add(`${D.pop[x]}|${x}`); naDrodze.add(`${x}|${D.pop[x]}`); x = D.pop[x]; } }
+    G.kr.forEach(([u, v], i) => {
+      if (naDrodze.has(`${u}|${v}`)) k[i] = 'sciezka';
+      else if (D.pop[v] === u || (!G.skier && D.pop[u] === v)) k[i] = 'drzewo';
+      if (D.cur && D.zmiany.length && ((u === D.cur && D.zmiany.includes(v)) || (!G.skier && v === D.cur && D.zmiany.includes(u)))) k[i] = 'akt';
+    });
+    rysujGraf($('#djGraf'), G, { w, et, k });
+    sortKopiec();
+    $('#djKopiec').replaceChildren(...(D.kopiec.length ? D.kopiec.map(([d, v], i) => elStr(`(${d}, ${v})`, (D.gotowe.includes(v) ? 'pusty ' : '') + (i === 0 ? 'wierzch' : ''))) : [pustaStr('pusty')]));
+    $('#djTab').replaceChildren(el('thead', {}, el('tr', {}, ...['', 'odl', 'poprzednik', 'stan'].map((t) => el('th', { text: t })))),
+      el('tbody', {}, ...Object.keys(G.poz).map((v) => el('tr', {}, el('td', { class: 'mono', text: v }), el('td', { class: 'n', text: v in D.odl ? String(D.odl[v]) : '∞' }), el('td', { class: 'mono', text: D.pop[v] || '—' }), el('td', { text: D.gotowe.includes(v) ? 'ostateczna' : v in D.odl ? 'w kopcu' : '—' })))));
+    $('#djKrok').disabled = D.koniec;
+  }
+  function init() {
+    seg($('#djG'), (w) => { nazwa = w; przygotuj(); });
+    $('#djKrok').addEventListener('click', () => { if (!krok() && !D.koniec) zakoncz(); });
+    $('#djKoniec').addEventListener('click', () => { let g = 0; while (!D.koniec && g++ < 100) krok(); });
+    $('#djReset').addEventListener('click', przygotuj);
+    przygotuj();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 5: Połącz osiedla (MST) ═════════════════════ */
+const MST = (() => {
+  const APLIKACJA = 'w10-mst';
+  const PLANSZE = [
+    { poz: { A: [60, 90], B: [130, 260], C: [220, 50], D: [310, 270], E: [380, 110], F: [480, 250] },
+      kr: [['A', 'B', 4], ['A', 'C', 1], ['B', 'C', 2], ['B', 'D', 5], ['C', 'D', 8], ['C', 'E', 10], ['D', 'E', 2], ['D', 'F', 6], ['E', 'F', 3]] },
+    { poz: { P: [50, 70], Q: [200, 40], R: [360, 60], S: [490, 160], T: [380, 280], U: [190, 290], V: [240, 165] },
+      kr: [['P', 'Q', 7], ['Q', 'R', 9], ['R', 'S', 4], ['S', 'T', 11], ['T', 'U', 6], ['U', 'P', 13], ['P', 'V', 8], ['Q', 'V', 3], ['R', 'V', 12], ['T', 'V', 5], ['U', 'V', 10], ['R', 'T', 14]] },
+    { poz: { K: [50, 170], L: [150, 50], M: [300, 40], N: [450, 80], O: [490, 220], W: [350, 290], X: [180, 290], Y: [290, 165] },
+      kr: [['K', 'L', 12], ['L', 'M', 8], ['M', 'N', 15], ['N', 'O', 7], ['O', 'W', 10], ['W', 'X', 9], ['X', 'K', 11], ['K', 'Y', 16], ['L', 'Y', 6], ['M', 'Y', 5], ['N', 'Y', 13], ['O', 'Y', 14], ['W', 'Y', 4], ['X', 'Y', 17]] },
+  ];
+  let nr = 0, wyb = new Set(), t0 = 0, wyniki = [], panel = null, A = null, alg = 'kruskal';
+  function znajdz(p, x) { while (p[x] !== x) { p[x] = p[p[x]]; x = p[x]; } return x; }
+  function kruskalKroki(G) {
+    const p = Object.fromEntries(Object.keys(G.poz).map((v) => [v, v]));
+    const kol = G.kr.map((e, i) => i).sort((a, b) => G.kr[a][2] - G.kr[b][2] || a - b);
+    const kroki = []; let ile = 0; const n = Object.keys(G.poz).length;
+    for (const i of kol) {
+      if (ile === n - 1) { kroki.push({ i, bierz: false, pomin: true }); continue; }
+      const [u, v] = G.kr[i], a = znajdz(p, u), b = znajdz(p, v);
+      if (a === b) kroki.push({ i, bierz: false });
+      else { p[a] = b; ile++; kroki.push({ i, bierz: true }); }
+    }
+    return kroki;
+  }
+  function primKroki(G, s) {
+    const w = new Set([s]), kroki = [], n = Object.keys(G.poz).length;
+    while (w.size < n) {
+      let best = -1;
+      G.kr.forEach(([u, v, c], i) => { if (w.has(u) !== w.has(v) && (best < 0 || c < G.kr[best][2])) best = i; });
+      const [u, v] = G.kr[best]; const nowy = w.has(u) ? v : u; w.add(nowy);
+      kroki.push({ i: best, bierz: true, nowy });
+    }
+    return kroki;
+  }
+  const koszt = (G, zb) => [...zb].reduce((s, i) => s + G.kr[i][2], 0);
+  const optimum = (G) => kruskalKroki(G).filter((k) => k.bierz).reduce((s, k) => s + G.kr[k.i][2], 0);
+  function analiza(G, zb) {
+    // składowe i krawędzie w cyklu (krawędź jest w cyklu, jeśli bez niej jej końce nadal są połączone)
+    const vs = Object.keys(G.poz);
+    const polacz = (pomin) => { const p = Object.fromEntries(vs.map((v) => [v, v])); for (const i of zb) if (i !== pomin) { const a = znajdz(p, G.kr[i][0]), b = znajdz(p, G.kr[i][1]); if (a !== b) p[a] = b; } return p; };
+    const p = polacz(-1), skl = new Set(vs.map((v) => znajdz(p, v))).size;
+    const cykl = new Set([...zb].filter((i) => { const q = polacz(i); return znajdz(q, G.kr[i][0]) === znajdz(q, G.kr[i][1]); }));
+    return { skl, cykl };
+  }
+  function rysujGre() {
+    const G = PLANSZE[nr], { skl, cykl } = analiza(G, wyb);
+    const k = {}; for (const i of wyb) k[i] = cykl.has(i) ? 'cykl' : 'wyb';
+    rysujGraf($('#msGraf'), G, { k, klik: (i) => { if (wyb.has(i)) wyb.delete(i); else wyb.add(i); rysujGre(); } });
+    $('#msNr').textContent = `Plansza ${nr + 1} z ${PLANSZE.length}`;
+    $('#msLicz').textContent = `wybrane: ${wyb.size} ${odm(wyb.size, 'krawędź', 'krawędzie', 'krawędzi')} · koszt: ${koszt(G, wyb)}`;
+    $('#msInfo').textContent = skl > 1 ? `Osobnych części sieci: ${skl}.` : cykl.size ? 'Wszystko połączone, ale czerwone krawędzie tworzą cykl — któraś jest zbędna.' : 'Wszystko połączone, bez cykli.';
+    $('#msGotowe').disabled = skl > 1;
+  }
+  function start() { nr = 0; wyniki = []; $('#msIntro').hidden = true; $('#msWynik').hidden = true; plansza(); }
+  function plansza() { wyb = new Set(); $('#msPorown').hidden = true; $('#msGra').hidden = false; rysujGre(); t0 = performance.now(); }
+  function gotowe() {
+    const G = PLANSZE[nr], czas = performance.now() - t0, k = koszt(G, wyb), opt = optimum(G);
+    const nad = Math.round((100 * (k - opt)) / opt);
+    wyniki.push({ nr, k, opt, czas, nad });
+    $('#msGra').hidden = true; $('#msPorown').hidden = false;
+    $('#msPorTyt').textContent = `Plansza ${nr + 1}: Twój koszt ${k}, najmniejszy możliwy ${opt}`;
+    $('#msFb').className = 'fbline ' + (k === opt ? 'dobrze' : 'zle');
+    $('#msFb').textContent = k === opt ? `Optimum! Czas: ${sek(czas)}.` : `Drożej o ${k - opt} (${nad}%). Czas: ${sek(czas)}.${analiza(G, wyb).cykl.size ? ' Twoja sieć ma cykl — można było coś usunąć.' : ''}`;
+    $('#msDalej').textContent = nr < PLANSZE.length - 1 ? 'Następna plansza →' : 'Podsumowanie';
+    resetAlg();
+  }
+  function resetAlg() {
+    const G = PLANSZE[nr];
+    A = { kroki: alg === 'kruskal' ? kruskalKroki(G) : primKroki(G, Object.keys(G.poz)[0]), p: 0, k: {}, suma: 0, w: { [Object.keys(G.poz)[0]]: alg === 'prim' ? 'gotowy' : '' } };
+    $('#msAStatus').textContent = alg === 'kruskal' ? 'Kruskal: krawędzie od najtańszej; bierzemy, jeśli łączą dwie różne części.' : `Prim: drzewo rośnie od ${Object.keys(G.poz)[0]}; zawsze najtańsza krawędź wychodząca z drzewa.`;
+    rysujAlg();
+  }
+  function krokAlg() {
+    if (A.p >= A.kroki.length) return false;
+    const G = PLANSZE[nr], s = A.kroki[A.p++], [u, v, c] = G.kr[s.i];
+    if (s.bierz) { A.k[s.i] = 'drzewo'; A.suma += c; if (s.nowy) A.w[s.nowy] = 'gotowy'; }
+    else A.k[s.i] = 'odrz';
+    $('#msAStatus').textContent = s.bierz
+      ? `${u}–${v} (${c}): ${alg === 'prim' ? `najtańsze wyjście z drzewa — dołączamy ${s.nowy}` : 'łączy dwie różne części — bierzemy'}. Suma: ${A.suma}.`
+      : s.pomin ? `${u}–${v} (${c}): mamy już ${Object.keys(G.poz).length - 1} krawędzi — koniec.` : `${u}–${v} (${c}): zamknęłaby cykl — pomijamy.`;
+    if (A.p >= A.kroki.length) $('#msAStatus').textContent += ` Gotowe: MST o koszcie ${A.suma}.`;
+    rysujAlg(); return true;
+  }
+  function rysujAlg() {
+    const G = PLANSZE[nr];
+    const k = { ...A.k };
+    rysujGraf($('#msGrafA'), G, { k, w: A.w });
+    $('#msKrok').disabled = A.p >= A.kroki.length;
+  }
+  function podsumuj() {
+    $('#msPorown').hidden = true; $('#msWynik').hidden = false;
+    $('#msTab').replaceChildren(el('thead', {}, el('tr', {}, ...['plansza', 'Twój koszt', 'optimum', 'czas'].map((t) => el('th', { text: t })))),
+      el('tbody', {}, ...wyniki.map((w) => el('tr', {}, el('td', { text: String(w.nr + 1) }), el('td', { class: 'n', text: String(w.k) }), el('td', { class: 'n', text: String(w.opt) }), el('td', { class: 'n', text: sek(w.czas) })))));
+    if (panel) panel.gotowe(wyniki.map((w) => [`p${w.nr + 1}|${w.k === w.opt ? 1 : 0}`, Math.round(w.czas)]));
+  }
+  function init() {
+    $('#msStart').addEventListener('click', start);
+    $('#msJeszcze').addEventListener('click', start);
+    $('#msGotowe').addEventListener('click', gotowe);
+    $('#msDalej').addEventListener('click', () => { if (nr < PLANSZE.length - 1) { nr++; plansza(); } else podsumuj(); });
+    seg($('#msAlg'), (w) => { alg = w; resetAlg(); });
+    $('#msKrok').addEventListener('click', krokAlg);
+    $('#msKoniec').addEventListener('click', () => { while (krokAlg()); });
+    panel = panelGrupy($('#grupa-mst'), {
+      aplikacja: APLIKACJA,
+      wiersze: (w) => w,
+      filtr: (r) => /^p[1-3]\|[01]$/.test(r.w) && r.v > 0 && r.v < 900000,
+      rysuj: (host, rows) => slupki(host, [1, 2, 3].map((p) => { const t = rows.filter((r) => r.w.startsWith(`p${p}|`)), ok = t.filter((r) => r.w.endsWith('1')).length; return { lab: `plansza ${p}: optimum`, pc: t.length ? (100 * ok) / t.length : null, tekst: t.length ? `${Math.round((100 * ok) / t.length)}% (${ok} z ${t.length}), mediana czasu ${sek(mediana(t.map((r) => r.v)))}` : 'brak danych' }; })),
+      opis: (rows) => `Osób: ok. ${Math.round(rows.length / 3)}.`,
+    });
+  }
+  return { init, wejscie: () => panel?.start(), wyjscie: () => panel?.stop() };
+})();
+
+const MODULY = { przeszukiwanie: Przeszukiwanie, labirynt: Labirynt, topo: Topo, dijkstra: Dijkstra, mst: MST };
+
+/* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
+const Ustawienia = (() => {
+  let roboczy = null;
+  function domyslnaSesja() { const d = new Date(); return `${KONF.wyk}-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+  function parsujPrefill(link) {
+    let u; try { u = new URL(link.trim()); } catch (e) { throw new Error('To nie wygląda na adres internetowy.'); }
+    if (!/\/forms\/.+\/(viewform|formResponse)$/.test(u.pathname)) throw new Error('To nie jest link do Formularza Google (powinien kończyć się na /viewform?…).');
+    const f = u.origin + u.pathname.replace(/\/viewform$/, '/formResponse');
+    const e = {}; const MAP = { APLIKACJA: 'a', SESJA: 's', WARIANT: 'w', WYNIK: 'v' };
+    for (const [k, v] of u.searchParams) if (/^entry\.\d+$/.test(k) && MAP[v.trim().toUpperCase()]) e[MAP[v.trim().toUpperCase()]] = k;
+    const brak = Object.entries(MAP).filter(([, kk]) => !e[kk]).map(([nm]) => nm);
+    if (brak.length) throw new Error(`W linku brakuje pól: ${brak.join(', ')}. Wpisz te słowa w pola formularza przed pobraniem linku.`);
+    return { f, e };
+  }
+  function zbierz() {
+    const { f, e } = parsujPrefill($('#sPrefill').value);
+    const c = $('#sCsv').value.trim();
+    if (!/^https?:\/\//.test(c)) throw new Error('Podaj link do opublikowanego arkusza (CSV).');
+    const sesja = $('#sSes').value.trim();
+    if (!sesja) throw new Error('Podaj nazwę sesji.');
+    return { v: 1, f, e, c, s: sesja };
+  }
+  function baza() { return location.protocol === 'file:' ? $('#sBase').value.trim() : location.origin + location.pathname; }
+  function linki(cfg) {
+    const b = baza(); const card = $('#sLinksCard');
+    if (!b) { card.hidden = true; return; }
+    const q = `${b}?cfg=${b64e(JSON.stringify(cfg))}`;
+    for (const l of KONF.linki) $('#' + l.id).value = `${q}#${l.hash}`;
+    card.hidden = false;
+  }
+  function wypelnij(cfg) {
+    if (!cfg) return;
+    const u = new URL(cfg.f.replace(/\/formResponse$/, '/viewform'));
+    u.searchParams.set('usp', 'pp_url'); u.searchParams.set(cfg.e.a, 'APLIKACJA'); u.searchParams.set(cfg.e.s, 'SESJA'); u.searchParams.set(cfg.e.w, 'WARIANT'); u.searchParams.set(cfg.e.v, 'WYNIK');
+    $('#sPrefill').value = u.toString(); $('#sCsv').value = cfg.c; $('#sSes').value = cfg.s;
+  }
+  function out(...kids) { $('#sOut').replaceChildren(...kids); }
+  async function sprawdz() {
+    let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+    roboczy = cfg; linki(cfg);
+    const lista = el('ul');
+    const pkt = (ok, t) => lista.append(el('li', { class: ok ? 'ok' : 'err', text: `${ok ? '✓' : '✗'} ${t}` }));
+    out(lista);
+    pkt(true, 'Link formularza rozpoznany, wszystkie cztery pola znalezione.');
+    try { await Grupa.wyslij('test', 'test', 0, cfg); pkt(true, 'Wpis testowy wysłany (aplikacja = test). Przeglądarka nie potwierdza odbioru: sprawdź, czy pojawił się w arkuszu.'); }
+    catch (e) { pkt(false, `Wysyłka nie powiodła się: ${e.message}`); }
+    try {
+      const { rows, kol } = await Grupa.pobierz(cfg);
+      pkt(true, `Arkusz CSV odczytany: ${rows.length} wierszy odpowiedzi.`);
+      if (kol && !kol.znalezione) pkt(false, 'Nie znaleziono kolumn o nazwach aplikacja, sesja, wariant, wynik. Używam kolejności kolumn 2–5. Sprawdź nazwy pytań.');
+      const testy = rows.filter((r) => r.a === 'test' && r.s === cfg.s).length;
+      lista.append(el('li', { class: 'muted', text: `Wpisów testowych w tej sesji: ${testy}. Nowy wpis może pojawić się w CSV dopiero po kilku minutach; kliknij „Sprawdź” ponownie.` }));
+    } catch (e) { pkt(false, `Nie udało się odczytać CSV: ${e.message}. Sprawdź, czy arkusz jest opublikowany jako CSV.`); }
+    if (location.protocol === 'file:' && !$('#sBase').value.trim()) lista.append(el('li', { class: 'muted', text: 'Strona jest otwarta z dysku. Żeby wygenerować link dla studentów, wpisz adres strony w sieci (GitHub Pages).' }));
+  }
+  function init() {
+    $('#sSes').value = domyslnaSesja();
+    if (location.protocol === 'file:') $('#sBaseInfo').textContent = 'Strona jest otwarta z dysku, więc link musi wskazywać kopię w sieci.';
+    else { $('#sBase').value = location.origin + location.pathname; $('#sBase').readOnly = true; $('#sBaseInfo').textContent = 'Adres tej strony.'; }
+    const zapisana = store.get(CFG_KEY); if (zapisana) { try { wypelnij(JSON.parse(zapisana)); } catch (e) { /* ignoruj */ } }
+    else if (Grupa.cfg) wypelnij(Grupa.cfg);
+    $('#sPrefill').addEventListener('input', () => {
+      const i = $('#sPrefillInfo');
+      if (!$('#sPrefill').value.trim()) { i.textContent = ''; return; }
+      try { const { e } = parsujPrefill($('#sPrefill').value); i.className = 'small ok'; i.textContent = `✓ Pola: aplikacja = ${e.a}, sesja = ${e.s}, wariant = ${e.w}, wynik = ${e.v}`; }
+      catch (err) { i.className = 'small err'; i.textContent = err.message; }
+    });
+    $('#sPrefill').dispatchEvent(new Event('input'));
+    $('#sCheck').addEventListener('click', sprawdz);
+    $('#sBase').addEventListener('input', () => { if (roboczy) linki(roboczy); });
+    $('#sSave').addEventListener('click', () => {
+      let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+      const ok = store.set(CFG_KEY, JSON.stringify(cfg)); linki(cfg);
+      out(el('p', { class: ok ? 'ok' : 'err', text: ok ? 'Zapisano. W tej przeglądarce tryb grupowy będzie włączony także bez parametru w linku. Odśwież stronę, żeby go uruchomić.' : 'Ta przeglądarka nie pozwala zapisywać ustawień. Używaj linków dla studentów.' }));
+    });
+    $('#sForget').addEventListener('click', () => { store.del(CFG_KEY); out(el('p', { text: 'Usunięto zapisaną konfigurację. Po odświeżeniu strona będzie działać samodzielnie (chyba że otworzysz link z parametrem cfg).' })); });
+    for (const b of $$('[data-copy]')) b.addEventListener('click', async () => { const ok = await copyText($('#' + b.dataset.copy).value); b.textContent = ok ? 'Skopiowano' : 'Zaznacz i skopiuj'; setTimeout(() => { b.textContent = 'Kopiuj'; }, 1600); });
+    if (Grupa.cfg) linki(Grupa.cfg);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+let biezacy = null;
+function nawiguj() {
+  const ids = Object.keys(KONF.widoki);
+  const v = ids.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  if (biezacy && biezacy !== v) MODULY[biezacy]?.wyjscie?.();
+  if (biezacy !== v) MODULY[v]?.wejscie?.();
+  for (const w of ids) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = KONF.widoki[v];
+}
+Grupa.init();
+for (const m of Object.values(MODULY)) m.init?.();
+Ustawienia.init();
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+
+</script>
+</body>
+</html>

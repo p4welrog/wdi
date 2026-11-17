@@ -1,0 +1,1252 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 9 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 9 „Słowniki: drzewa BST i haszowanie” (Wprowadzenie do informatyki, SWPS).">
+<style>
+
+
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+html { scroll-padding-top: 96px; }
+@media (max-width: 560px) { html { scroll-padding-top: 124px; } }
+.home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+
+/* ───────── Wspólne elementy (jak w W05) ───────── */
+.dirty { color: var(--amber); font-size: .88rem; }
+.errlist { margin: 6px 0 0; padding-left: 1.2em; color: var(--bad); font-size: .9rem; }
+.alert { border-radius: 8px; padding: 8px 12px; font-size: .92rem; margin: 6px 0; }
+.alert.bad { background: var(--bad-soft); color: var(--bad); }
+.alert.warn { background: var(--amber-soft); color: var(--amber); }
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 6px; }
+.ctrl .speed { display: flex; align-items: center; gap: 6px; font-size: .88rem; color: var(--text-2); }
+.ctrl input[type="range"] { width: 110px; }
+.status.halt { color: var(--good); }
+.status.stuck { color: var(--bad); }
+.status.limit { color: var(--amber); }
+.task { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.task h4 { margin: 0 0 4px; font-size: 1rem; }
+.task p { margin: 0 0 8px; color: var(--text-2); font-size: .94rem; }
+.task.done { border-color: var(--good); }
+.task .hint { font-size: .88rem; }
+.res td.okc { color: var(--good); font-weight: 700; }
+.res td.badc { color: var(--bad); font-weight: 700; }
+.res td.mono { font-family: var(--mono); }
+.pill { display: inline-block; font-size: .78rem; padding: 2px 9px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+details.ref { margin-top: 10px; }
+details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.fbline { font-weight: 600; font-size: 1.1rem; margin: 12px 0 4px; }
+.fbline.dobrze { color: var(--good); }
+.fbline.zle { color: var(--bad); }
+.group { border: 1px solid var(--s1); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; background: var(--surface); }
+.group h3 { display: flex; gap: 8px; align-items: center; }
+.group .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; }
+.card.most { border-left: 4px solid var(--good); }
+.card.most h3 { color: var(--good); }
+
+/* ───────── W07: elementy wspólne z W06 ───────── */
+.sk-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 720px) { .sk-grid { grid-template-columns: minmax(0, 1fr); } }
+pre.kod { font-family: var(--mono); font-size: .92rem; line-height: 1.55; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 0; margin: 0 0 10px; overflow-x: auto; }
+pre.kod span { display: block; padding: 0 12px; white-space: pre; }
+pre.kod span.cur { background: var(--hl); color: var(--hl-ink); }
+input.liczba { width: 9em; font-family: var(--mono); }
+.prpyt { font-size: 1.15rem; font-weight: 600; margin: 8px 0 10px; }
+.opbtn { min-width: 6em; }
+.opbtn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
+.opbtn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+
+/* ───────── W07: stos i kolejka ───────── */
+.stos { display: flex; flex-direction: column; gap: 4px; min-height: 60px; padding: 8px; border: 2px solid var(--border); border-top: 0; border-radius: 0 0 10px 10px; max-width: 220px; }
+.kolejka { display: flex; flex-wrap: wrap; gap: 4px; min-height: 52px; padding: 8px; border: 2px solid var(--border); border-left: 0; border-right: 0; align-items: center; }
+.el { font-family: var(--mono); font-weight: 700; padding: 6px 12px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); text-align: center; border: 1.5px solid transparent; }
+.el.wierzch { border-color: var(--accent); }
+.el.nowy { background: var(--hl); color: var(--hl-ink); }
+.pusty { color: var(--muted); font-size: .85rem; font-style: italic; padding: 4px; }
+.ops { font-size: 1rem; line-height: 1.7; background: var(--surface-2); padding: 8px 12px; border-radius: 8px; }
+
+
+/* ───────── W09: drzewo BST ───────── */
+svg.drz { display: block; width: 100%; height: auto; }
+svg.drz line { stroke: var(--border); stroke-width: 1.5; }
+svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
+svg.drz circle { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5; }
+svg.drz text { fill: var(--text); font: 600 13px var(--mono); text-anchor: middle; dominant-baseline: central; }
+svg.drz text.ix { fill: var(--muted); font: 11px var(--font); }
+svg.drz g.hl circle { fill: var(--hl); stroke: var(--amber); stroke-width: 2.5; }
+svg.drz g.hl text { fill: var(--hl-ink); }
+svg.drz g.sciezka circle { fill: var(--accent-soft); stroke-width: 2.5; }
+svg.drz g.ok circle { fill: var(--good-soft); stroke: var(--good); stroke-width: 2.5; }
+svg.drz g.zly circle { fill: var(--bad-soft); stroke: var(--bad); stroke-width: 2.5; }
+svg.drz g.nast circle { stroke: var(--s2); stroke-width: 3; stroke-dasharray: 4 2; }
+svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
+.statusl { min-height: 2.8em; font-size: .95rem; margin: 8px 0 0; }
+.inorder { font: 1rem/1.8 var(--mono); }
+.inorder b { background: var(--hl); color: var(--hl-ink); padding: 0 3px; border-radius: 4px; }
+
+/* ───────── W09: tablica z haszowaniem ───────── */
+.ht { display: grid; gap: 4px; margin: 10px 0; }
+.ht .wiersz { display: grid; grid-template-columns: 44px 1fr; gap: 8px; align-items: center; min-height: 38px; }
+.ht .nr { font: 700 .9rem var(--mono); color: var(--muted); text-align: right; }
+.ht .kom { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; min-height: 36px; padding: 3px 6px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--surface); }
+.ht .kom.cel { border-color: var(--accent); }
+.ht .kl { font: 700 .95rem var(--mono); padding: 3px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); }
+.ht .kl.nowy { background: var(--hl); color: var(--hl-ink); }
+.ht .kl.prob { box-shadow: inset 0 0 0 2px var(--amber); }
+.ht .kl.znal { background: var(--good-soft); color: var(--good); box-shadow: inset 0 0 0 2px var(--good); }
+.ht .str { color: var(--muted); font-size: .85rem; }
+.ht .kom.prob { background: var(--amber-soft); border-color: var(--amber); }
+.ht .kom.znal { background: var(--good-soft); border-color: var(--good); }
+.ht .kom.pusta-st { background: var(--surface-2); }
+
+/* ───────── W09: histogram ───────── */
+.hist { display: flex; align-items: flex-end; gap: 2px; height: 160px; border-bottom: 2px solid var(--border); padding-top: 6px; }
+.hist div { flex: 1 1 0; background: var(--s1); border-radius: 3px 3px 0 0; min-width: 2px; }
+.hist div.zaz { background: var(--s2); }
+.histos { display: flex; justify-content: space-between; font: .78rem var(--mono); color: var(--muted); margin-top: 2px; }
+
+/* ───────── W09: weryfikacja zdań ───────── */
+.bodziec { font-size: 1.7rem; font-weight: 600; text-align: center; min-height: 3.2em; display: grid; place-items: center; margin: 18px 0; }
+.odpowiedzi { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.odpowiedzi .btn { min-height: 64px; font-size: 1.15rem; }
+.kbd { font: 600 .8rem var(--mono); border: 1px solid var(--border); border-radius: 4px; padding: 0 5px; background: var(--surface-2); }
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 9</a></div>
+    <a id="groupBadge" class="badge" href="#ustawienia" hidden></a>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#bst">1. Ogród BST</a>
+    <a href="#kolejnosc">2. Kolejność</a>
+    <a href="#siec">3. Kanarek ma skórę?</a>
+    <a href="#urodziny">4. Urodziny</a>
+    <a href="#hasz">5. Haszowanie</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Słowniki: drzewa BST i haszowanie — ćwiczenia</h1>
+  <p class="lead">Ćwiczenia do wykładu 9, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
+  <div class="grid2">
+    <a class="tile" href="#bst"><span class="num">1</span><h3>Ogród BST</h3><p>Wstawiaj, szukaj i usuwaj klucze w drzewie poszukiwań binarnych, krok po kroku. Węzły stoją w kolejności kluczy, więc przejście w porządku widać gołym okiem.</p><div class="meta">ok. 8 min · slajdy od „Drzewa BST” do „Mini-zadania: zbuduj drzewo”</div></a>
+    <a class="tile" href="#kolejnosc"><span class="num">2</span><h3>Kolejność ma znaczenie</h3><p>Te same klucze, różne kolejności wstawiania. Setki losowych drzew w sekundę: jak wysokie są zwykle, a jak wysokie mogą być?</p><div class="meta">ok. 4 min · slajd „Kolejność wstawiania ma znaczenie”</div></a>
+    <a class="tile" href="#siec"><span class="num">3</span><h3>Kanarek ma skórę?</h3><p>Odpowiadaj jak najszybciej, czy zdanie jest prawdziwe. Mierzymy czas, jak w eksperymencie Collinsa i Quilliana. Czy dłużej myślisz nad tym, co leży „wyżej” w hierarchii?</p><div class="meta">ok. 4 min · slajd „Pamięć jako drzewo?”</div></a>
+    <a class="tile" href="#urodziny"><span class="num">4</span><h3>Paradoks urodzin</h3><p>Ile kluczy trzeba wrzucić do tablicy o m miejscach, zanim dwa trafią w to samo? Symulacja i wzór — dla dni roku i dla tablic.</p><div class="meta">ok. 3 min · slajd „Kolizje są nieuniknione”</div></a>
+    <a class="tile" href="#hasz"><span class="num">5</span><h3>Tablica z haszowaniem</h3><p>Wstawiaj i szukaj kluczy łańcuchowo albo z próbkowaniem liniowym. Licznik prób, współczynnik zapełnienia i bloki, które same się sklejają.</p><div class="meta">ok. 8 min · slajdy od „Dwóch sposobów na kolizje” do „Mini-zadania: wstaw do tablicy”</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. BST ═══════════════════ -->
+<section id="v-bst" hidden>
+  <h2>1. Ogród BST</h2>
+  <p class="lead">W każdym węźle: klucze w lewym poddrzewie są mniejsze, w prawym — większe. Węzły rysujemy w kolejności kluczy od lewej do prawej, a w dół według głębokości.</p>
+
+  <div class="card">
+    <div class="row">
+      <label for="bsKlucz">Klucz</label><input id="bsKlucz" class="liczba" type="text" style="width: 6em" autocomplete="off">
+      <button type="button" class="btn" id="bsWstaw">Wstaw</button>
+      <button type="button" class="btn ghost" id="bsZnajdz">Znajdź</button>
+      <button type="button" class="btn ghost" id="bsUsun">Usuń</button>
+      <button type="button" class="btn ghost" id="bsInorder">W porządku</button>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <span class="small muted">Gotowe drzewa:</span>
+      <button type="button" class="btn ghost small" id="bsPrzW">ze slajdu (50, 30, 70, …)</button>
+      <button type="button" class="btn ghost small" id="bsPrzM">z mini-zadania (8, 3, 10, …)</button>
+      <button type="button" class="btn ghost small" id="bsPrzR">rosnąco (20, 30, …, 80)</button>
+      <button type="button" class="btn ghost small" id="bsLos">losowe</button>
+      <button type="button" class="btn ghost small" id="bsCzysc">puste</button>
+    </div>
+    <div class="ctrl">
+      <button type="button" class="btn" id="bsKrok" disabled>Następny krok</button>
+      <button type="button" class="btn ghost" id="bsKoniec" disabled>Do końca</button>
+    </div>
+    <p class="statusl" id="bsStatus" aria-live="polite"></p>
+    <p class="err" id="bsErr" role="alert"></p>
+    <svg class="drz" id="bsDrzewo" viewBox="0 0 720 200" role="img" aria-label="Drzewo BST"></svg>
+    <div class="stats">
+      <div class="stat"><div class="k">węzły n</div><div class="v" id="bsN">0</div></div>
+      <div class="stat"><div class="k">wysokość h</div><div class="v" id="bsH">—</div></div>
+      <div class="stat"><div class="k">najmniejsza możliwa ⌊log₂ n⌋</div><div class="v" id="bsMin">—</div></div>
+      <div class="stat"><div class="k">porównania w ostatniej operacji</div><div class="v" id="bsPor">—</div></div>
+    </div>
+    <p class="inorder" id="bsKol"></p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Mini-zadanie ze slajdu: zbuduj drzewo z 8, 3, 10, 1, 6, 14, 4, 7, 13 na kartce, potem sprawdź. Ile porównań kosztuje znajdź(7), a ile znajdź(5)?</li>
+      <li>Usuń 50 z drzewa ze slajdu. Kto zajmuje jego miejsce i dlaczego właśnie on?</li>
+      <li>Dlaczego przejście w porządku daje klucze rosnąco? Spójrz na rysunek: co znaczy pozycja węzła w poziomie?</li>
+    </ol>
+  </div>
+  <p class="src">T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 12 (drzewa poszukiwań binarnych; usuwanie przez następnika).</p>
+</section>
+
+<!-- ═══════════════════ 2. KOLEJNOŚĆ ═══════════════════ -->
+<section id="v-kolejnosc" hidden>
+  <h2>2. Kolejność ma znaczenie</h2>
+  <p class="lead">Wstawiamy klucze 1, 2, …, n do pustego BST w losowej kolejności i mierzymy wysokość drzewa. Powtarzamy wiele razy.</p>
+
+  <div class="card">
+    <div class="row">
+      <span class="small muted" id="koNLab">Liczba kluczy n</span>
+      <div class="seg" id="koN" role="group" aria-labelledby="koNLab">
+        <button type="button" data-w="15" aria-pressed="false">15</button>
+        <button type="button" data-w="100" aria-pressed="false">100</button>
+        <button type="button" data-w="1000" aria-pressed="true">1000</button>
+        <button type="button" data-w="10000" aria-pressed="false">10 000</button>
+      </div>
+      <button type="button" class="btn" id="koStart">Losuj 200 drzew</button>
+    </div>
+    <div class="stats" style="margin-top: 10px">
+      <div class="stat"><div class="k">najmniejsza możliwa</div><div class="v" id="koMin">—</div></div>
+      <div class="stat"><div class="k">losowo: średnia</div><div class="v" id="koSr">—</div></div>
+      <div class="stat"><div class="k">losowo: od – do</div><div class="v" id="koZakres">—</div></div>
+      <div class="stat"><div class="k">rosnąco</div><div class="v" id="koRos">—</div></div>
+    </div>
+    <div class="hist" id="koHist" aria-hidden="true"></div>
+    <div class="histos"><span id="koOsL"></span><span class="muted">wysokość drzewa</span><span id="koOsP"></span></div>
+    <p class="small" id="koOpis"></p>
+  </div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Średnia wysokość dla 1000 kluczy to ok. 21, a dla 10 000 — ok. 30. O ile rośnie wysokość, gdy n rośnie dziesięciokrotnie? Jak rośnie log₂ n?</li>
+      <li>Jaka jest szansa, że losowa kolejność da drzewo-listę? Ile jest takich kolejności dla n kluczy?</li>
+      <li>Dane z życia rzadko są losowe: numery albumów nadawane rosnąco, daty. Co wtedy?</li>
+    </ol>
+  </div>
+  <p class="src">Średnia wysokość losowego BST rośnie jak ok. 4,31 ln n (B. Reed, J. ACM 50(3), 2003); dla małych n liczby z symulacji są mniejsze niż ten wzór. Drzewa samorównoważące: Cormen i in., rozdz. 13.</p>
+</section>
+
+<!-- ═══════════════════ 3. SIEĆ SEMANTYCZNA ═══════════════════ -->
+<section id="v-siec" hidden>
+  <h2>3. Kanarek ma skórę?</h2>
+  <p class="lead">Zobaczysz krótkie zdania. Odpowiedz jak najszybciej, czy są prawdziwe. Najpierw 4 zdania na rozgrzewkę, potem 28 właściwych.</p>
+
+  <div class="card" id="swIntro">
+    <h3>Zasady</h3>
+    <ul>
+      <li>Na klawiaturze: <span class="kbd">F</span> — prawda, <span class="kbd">J</span> — fałsz. Na telefonie: przyciski.</li>
+      <li>Trzymaj palce na klawiszach. Liczy się szybkość, ale staraj się nie mylić.</li>
+      <li>Każde zdanie poprzedza krótka przerwa z krzyżykiem.</li>
+    </ul>
+    <button type="button" class="btn" id="swStart">Zaczynamy</button>
+  </div>
+  <div class="card" id="swProba" hidden>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="swNr"></span><span class="small muted" id="swFaza"></span></div>
+    <div class="bodziec" id="swZdanie" aria-live="polite"></div>
+    <div class="odpowiedzi"><button type="button" class="btn" id="swTak">Prawda <span class="small">(F)</span></button><button type="button" class="btn ghost" id="swNie">Fałsz <span class="small">(J)</span></button></div>
+  </div>
+  <div class="card" id="swWynik" hidden>
+    <h3>Twoje czasy (mediana poprawnych odpowiedzi „prawda”)</h3>
+    <div class="hbars" id="swWykres"></div>
+    <p class="small" id="swWniosek"></p>
+    <button type="button" class="btn ghost small" id="swJeszcze">Jeszcze raz</button>
+  </div>
+  <div id="grupa-siec"></div>
+
+  <div class="card most">
+    <h3>Psychologia ↔ informatyka: sieć semantyczna</h3>
+    <ul>
+      <li>Collins i Quillian (1969): pojęcia w hierarchii kanarek → ptak → zwierzę; cecha zapisana raz, przy najogólniejszym pojęciu (zwierzę oddycha i ma skórę).</li>
+      <li>Przewidywanie: im więcej poziomów trzeba przejść, tym dłużej trwa weryfikacja — jak szukanie głębiej w drzewie. W ich eksperymencie różnice wynosiły kilkadziesiąt milisekund na poziom.</li>
+      <li>Późniejsze badania: część efektu wyjaśnia to, jak często cecha kojarzy się z pojęciem (Conrad 1972), a <strong>typowość</strong> zmienia czas przy tym samym poziomie (Rips, Shoben, Smith 1973). To model, nie opis budowy mózgu, i nie jest to BST: hierarchia nie ma porządku kluczy.</li>
+    </ul>
+  </div>
+  <p class="src">A. M. Collins, M. R. Quillian, <em>Retrieval Time from Semantic Memory</em>, J. Verb. Learn. Verb. Behav. 8, 1969, s. 240–247; C. Conrad, <em>Cognitive Economy in Semantic Memory</em>, J. Exp. Psychol. 92(2), 1972, s. 149–154; L. J. Rips, E. J. Shoben, E. E. Smith, J. Verb. Learn. Verb. Behav. 12, 1973, s. 1–20.</p>
+</section>
+
+<!-- ═══════════════════ 4. URODZINY ═══════════════════ -->
+<section id="v-urodziny" hidden>
+  <h2>4. Paradoks urodzin</h2>
+  <p class="lead">Wrzucamy losowe klucze do tablicy o m miejscach, aż dwa trafią w to samo miejsce. Ile kluczy to zwykle trwa?</p>
+  <div class="card">
+    <div class="row">
+      <span class="small muted" id="urMLab">Liczba miejsc m</span>
+      <div class="seg" id="urM" role="group" aria-labelledby="urMLab">
+        <button type="button" data-w="365" aria-pressed="true">365 (dni roku)</button>
+        <button type="button" data-w="1000" aria-pressed="false">1000</button>
+        <button type="button" data-w="1000000" aria-pressed="false">1 000 000</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <button type="button" class="btn" id="urJeden">Jedna próba</button>
+      <button type="button" class="btn ghost" id="urTys">1000 prób</button>
+    </div>
+    <p class="statusl mono" id="urProba" aria-live="polite"></p>
+    <div class="stats">
+      <div class="stat"><div class="k">prób</div><div class="v" id="urIle">0</div></div>
+      <div class="stat"><div class="k">mediana: klucz z pierwszą kolizją</div><div class="v" id="urMed">—</div></div>
+      <div class="stat"><div class="k">wzór: P ≥ 50% od n =</div><div class="v" id="urWzor">—</div></div>
+      <div class="stat"><div class="k">≈ 1,18 √m</div><div class="v" id="urPier">—</div></div>
+    </div>
+    <div class="hist" id="urHist" aria-hidden="true"></div>
+    <div class="histos"><span id="urOsL"></span><span class="muted">numer klucza, przy którym pierwszy raz doszło do kolizji</span><span id="urOsP"></span></div>
+    <div class="row" style="margin-top: 14px">
+      <label for="urN">Kalkulator: n =</label><input id="urN" class="liczba" type="text" value="23" style="width: 7em" autocomplete="off">
+      <span id="urP" class="mono"></span>
+    </div>
+  </div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Dlaczego intuicja podpowiada liczbę bliską 183? Z iloma osobami porównujesz swoje urodziny, a ile jest wszystkich par?</li>
+      <li>Tablica na milion miejsc i tylko 1200 kluczy (0,12% zapełnienia). Czy kolizja jest prawdopodobna?</li>
+    </ol>
+  </div>
+  <p class="src">P(choć jedna kolizja) = 1 − (m/m)·((m − 1)/m)·…·((m − n + 1)/m), przy założeniu, że wszystkie miejsca są jednakowo prawdopodobne (realne urodziny nie są). T. H. Cormen i in., rozdz. 5.4.1.</p>
+</section>
+
+<!-- ═══════════════════ 5. HASZOWANIE ═══════════════════ -->
+<section id="v-hasz" hidden>
+  <h2>5. Tablica z haszowaniem</h2>
+  <p class="lead">h(k) = k mod m. Klucz trafia do komórki h(k); gdy jest zajęta — dopisujemy go do listy w tej komórce (łańcuchowo) albo próbujemy kolejnych komórek (adresowanie otwarte, próbkowanie liniowe).</p>
+
+  <div class="card">
+    <div class="row">
+      <span class="small muted" id="hsMetLab">Kolizje</span>
+      <div class="seg" id="hsMet" role="group" aria-labelledby="hsMetLab">
+        <button type="button" data-w="lancuch" aria-pressed="true">łańcuchowo</button>
+        <button type="button" data-w="otwarte" aria-pressed="false">adresowanie otwarte</button>
+      </div>
+      <label for="hsM">m =</label><input type="range" id="hsM" min="5" max="23" value="7"><span class="mono" id="hsMv">7</span>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <label for="hsKlucz">Klucz</label><input id="hsKlucz" class="liczba" type="text" style="width: 6em" autocomplete="off">
+      <button type="button" class="btn" id="hsWstaw">Wstaw</button>
+      <button type="button" class="btn ghost" id="hsZnajdz">Znajdź</button>
+      <button type="button" class="btn ghost small" id="hsLos">+ 5 losowych</button>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <span class="small muted">Przykłady:</span>
+      <button type="button" class="btn ghost small" id="hsPrzS">ze slajdu (m = 7)</button>
+      <button type="button" class="btn ghost small" id="hsPrzM">z mini-zadania (m = 11)</button>
+      <button type="button" class="btn ghost small" id="hsPrzZ">złośliwe klucze</button>
+      <button type="button" class="btn ghost small" id="hsCzysc">wyczyść</button>
+    </div>
+    <p class="statusl" id="hsStatus" aria-live="polite"></p>
+    <p class="err" id="hsErr" role="alert"></p>
+    <div class="ht" id="hsTab"></div>
+    <div class="stats">
+      <div class="stat"><div class="k">klucze n</div><div class="v" id="hsN">0</div></div>
+      <div class="stat"><div class="k">α = n / m</div><div class="v" id="hsA">0</div></div>
+      <div class="stat"><div class="k">średnio prób przy udanym szukaniu</div><div class="v" id="hsSr">—</div></div>
+      <div class="stat"><div class="k" id="hsMaxK">najdłuższa lista</div><div class="v" id="hsMax">—</div></div>
+    </div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Mini-zadanie: m = 11, wstaw 22, 1, 13, 11, 24, 33 przy adresowaniu otwartym. Ile prób kosztuje 33? Policz najpierw sam.</li>
+      <li>„Złośliwe klucze” to wielokrotności m. Co się dzieje z czasem szukania? Na tym polega atak <em>hash flooding</em>.</li>
+      <li>Wypełnij tablicę z adresowaniem otwartym prawie do końca. Jak zmienia się liczba prób?</li>
+    </ol>
+  </div>
+  <p class="src">Przykłady jak na slajdach W9. T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 11; A. Bhargava, <em>Algorytmy</em>, rozdz. 5.</p>
+</section>
+
+
+<!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
+<section id="v-ustawienia" hidden>
+  <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
+  <p class="lead">Ćwiczenie 3 („Kanarek ma skórę?”) może wysyłać anonimowe wyniki do Formularza Google i pokazywać wyniki całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła. Można użyć tego samego formularza co w poprzednich wykładach.</p>
+
+  <div class="card">
+    <h3>Jednorazowe przygotowanie (ok. 10 min)</h3>
+    <ol>
+      <li>Utwórz nowy Formularz Google z <strong>czterema pytaniami typu „Krótka odpowiedź”</strong> o nazwach dokładnie: <code>aplikacja</code>, <code>sesja</code>, <code>wariant</code>, <code>wynik</code>. Żadne nie powinno być wymagane.</li>
+      <li>W <strong>Ustawieniach → Odpowiedzi</strong> wyłącz zbieranie adresów e-mail i <strong>ograniczenie do użytkowników SWPS</strong>. Nie włączaj „Ogranicz do 1 odpowiedzi”. Inaczej wysyłka ze strony nie zadziała.</li>
+      <li>W zakładce <strong>Odpowiedzi</strong> kliknij „Połącz z Arkuszami” i utwórz nowy arkusz.</li>
+      <li>W arkuszu: <strong>Plik → Udostępnij → Opublikuj w internecie</strong>. Wybierz arkusz z odpowiedziami i format <strong>CSV</strong>, opublikuj i skopiuj link.</li>
+      <li>W formularzu: <strong>⋮ → Pobierz link wstępnie wypełniony</strong>. Wpisz w pola kolejno <code>APLIKACJA</code>, <code>SESJA</code>, <code>WARIANT</code>, <code>WYNIK</code>, kliknij „Pobierz link” i skopiuj go.</li>
+      <li>Wklej oba linki poniżej, nadaj nazwę sesji i kliknij „Sprawdź”.</li>
+    </ol>
+    <p class="small muted">Wysyłane są tylko: nazwa ćwiczenia, nazwa sesji, warunek (np. P2 — cecha z poziomu 2) i mediana czasu odpowiedzi w ms — pięć wierszy na osobę. Opublikowany CSV jest publiczny, więc nie dodawaj do formularza pytań o dane osobowe.</p>
+  </div>
+
+  <div class="card">
+    <h3>Konfiguracja</h3>
+    <div class="field">
+      <label for="sPrefill">Link wstępnie wypełniony z formularza</label>
+      <textarea id="sPrefill" style="min-height:70px" placeholder="https://docs.google.com/forms/d/e/…/viewform?usp=pp_url&amp;entry.…=APLIKACJA&amp;…"></textarea>
+      <span id="sPrefillInfo" class="small"></span>
+    </div>
+    <div class="field">
+      <label for="sCsv">Link do opublikowanego arkusza (CSV)</label>
+      <input id="sCsv" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=…&amp;single=true&amp;output=csv">
+    </div>
+    <div class="field">
+      <label for="sSes">Nazwa sesji</label>
+      <input id="sSes" type="text" maxlength="60" style="max-width: 320px">
+      <span class="small muted">Wykresy pokazują tylko wyniki z tej sesji. Na kolejne zajęcia lub grupę zmień nazwę; formularz zostaje ten sam.</span>
+    </div>
+    <div class="field">
+      <label for="sBase">Adres strony w sieci (do linku dla studentów)</label>
+      <input id="sBase" type="url" placeholder="https://login.github.io/wdi/w09.html">
+      <span class="small muted" id="sBaseInfo"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="btn" id="sCheck">Sprawdź</button>
+      <button type="button" class="btn ghost" id="sSave">Zapisz w tej przeglądarce</button>
+      <button type="button" class="btn ghost" id="sForget">Usuń z tej przeglądarki</button>
+    </div>
+    <div id="sOut" class="small" style="margin-top:10px" aria-live="polite"></div>
+  </div>
+
+  <div class="card" id="sLinksCard" hidden>
+    <h3>Linki dla studentów (tryb grupowy)</h3>
+    <p class="small muted">Te linki włączają wysyłanie wyników i wykresy sali. Pokaż je na slajdzie (najlepiej jako kod QR). Zwykły adres strony, bez parametru <code>cfg</code>, działa bez wysyłania.</p>
+    <div class="field"><label for="sLink0">Kanarek ma skórę?</label><div class="row"><input id="sLink0" type="text" readonly style="flex:1"><button type="button" class="btn small" data-copy="sLink0">Kopiuj</button></div></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline. Wysyła dane wyłącznie w trybie grupowym, i to tylko anonimowe wyniki.</p>
+    <p><a href="#ustawienia">Dla prowadzącego: wspólne wyniki grupy</a></p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+const KONF = {"wyk": "W09", "key": "wdi-w09-grupa", "widoki": {"start": "Wykład 9 · ćwiczenia", "bst": "Ogród BST · W9", "kolejnosc": "Kolejność ma znaczenie · W9", "siec": "Kanarek ma skórę? · W9", "urodziny": "Paradoks urodzin · W9", "hasz": "Tablica z haszowaniem · W9", "ustawienia": "Ustawienia prowadzącego · W9"}, "linki": [{"id": "sLink0", "hash": "siec", "label": "Kanarek ma skórę?"}]};
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const el = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k === 'html') e.innerHTML = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids) e.append(k);
+  return e;
+};
+const SVGNS = 'http://www.w3.org/2000/svg';
+const sv = (tag, attrs = {}, txt) => {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (txt !== undefined) e.textContent = txt;
+  return e;
+};
+const liczba = (x) => String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const ulamek = (x, d = 1) => x.toLocaleString('pl-PL', { maximumFractionDigits: d });
+const seg = (host, cb) => {
+  for (const b of $$('button', host)) b.addEventListener('click', () => {
+    for (const c of $$('button', host)) c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+    cb(b.dataset.w);
+  });
+};
+const parsujInt = (t) => { const s = String(t).trim().replace(/[\s _]/g, ''); return /^\d+$/.test(s) ? s : null; };
+const losuj = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const wybierz = (t) => t[Math.floor(Math.random() * t.length)];
+const tasuj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+const mediana = (t) => { const s = [...t].sort((a, b) => a - b); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : NaN; };
+const odm = (n, a, b, c) => n === 1 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? b : c;
+const sek = (ms) => Number.isFinite(ms) ? ulamek(ms / 1000, 1) + ' s' : '—';
+function slupki(host, dane) {
+  // dane: [{lab, pc (0–100) albo null, tekst}]
+  host.replaceChildren(...dane.map((d) => el('div', { class: 'hbar' },
+    el('div', { class: 'lab', text: d.lab }),
+    el('div', { class: 'track' }, el('div', { class: 'fill', style: `width: ${(d.pc ?? 0) * 0.45}%` }),
+      el('span', { class: 'val', style: `left: calc(${(d.pc ?? 0) * 0.45}% + 6px)`, text: d.tekst })))));
+}
+
+
+/* ═════════════════════ Tryb grupowy (jak w W01–W07) ═════════════════════ */
+const CFG_KEY = KONF.key;
+function b64e(str) { const b = new TextEncoder().encode(str); let bin = ''; b.forEach((x) => { bin += String.fromCharCode(x); }); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64d(str) { let t = str.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; const bin = atob(t); return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))); }
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* brak dostępu */ } },
+};
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) { return false; }
+}
+function cfgPoprawna(c) {
+  return c && typeof c === 'object' && /^https?:\/\//.test(c.f || '') && /^https?:\/\//.test(c.c || '') &&
+    c.e && ['a', 's', 'w', 'v'].every((k) => /^entry\.\d+$/.test(c.e[k] || '')) && typeof c.s === 'string' && c.s.trim().length > 0 && c.s.length <= 60;
+}
+function parseCSV(text) {
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(f); f = ''; }
+    else if (ch === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (ch !== '\r') f += ch;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x !== ''));
+}
+const Grupa = {
+  cfg: null, zrodlo: null,
+  init() {
+    const p = new URLSearchParams(location.search).get('cfg');
+    if (p) { try { const c = JSON.parse(b64d(p)); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'url'; } } catch (e) { /* zły parametr: tryb samodzielny */ } }
+    if (!this.cfg) { const raw = store.get(CFG_KEY); if (raw) { try { const c = JSON.parse(raw); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'local'; } } catch (e) { /* ignoruj */ } } }
+    const b = $('#groupBadge');
+    if (this.cfg) { b.hidden = false; b.textContent = `Tryb grupowy · ${this.cfg.s}`; b.title = this.zrodlo === 'local' ? 'Konfiguracja zapisana w tej przeglądarce' : 'Konfiguracja z linku'; }
+  },
+  aktywna() { return !!this.cfg; },
+  async wyslij(aplikacja, wariant, wynik, cfg = this.cfg) {
+    const body = new URLSearchParams();
+    body.set(cfg.e.a, aplikacja); body.set(cfg.e.s, cfg.s); body.set(cfg.e.w, wariant); body.set(cfg.e.v, String(wynik));
+    await fetch(cfg.f, { method: 'POST', mode: 'no-cors', body });
+  },
+  async pobierz(cfg = this.cfg) {
+    const r = await fetch(cfg.c, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`serwer odpowiedział kodem ${r.status}`);
+    const rows = parseCSV(await r.text());
+    if (rows.length === 0) return { rows: [], kol: null };
+    const head = rows[0].map((x) => x.trim().toLowerCase());
+    const idx = (n, fb) => { const i = head.indexOf(n); return i >= 0 ? i : fb; };
+    const kol = { a: idx('aplikacja', 1), s: idx('sesja', 2), w: idx('wariant', 3), v: idx('wynik', 4), znalezione: ['aplikacja', 'sesja', 'wariant', 'wynik'].every((n) => head.includes(n)) };
+    const out = rows.slice(1).map((r) => ({ a: (r[kol.a] || '').trim(), s: (r[kol.s] || '').trim(), w: (r[kol.w] || '').trim(), v: Number(String(r[kol.v] || '').replace(',', '.').trim()) }));
+    return { rows: out, kol };
+  },
+};
+// Panel wyników sali. o = { aplikacja, wiersze(paczka) → [[wariant, wynik]], filtr(wiersz) → bool, rysuj(host, wiersze), opis(wiersze) → tekst }
+function panelGrupy(host, o) {
+  if (!Grupa.aktywna()) return null;
+  let paczka = null, timer = null, aktywny = false;
+  const status = el('span', { class: 'small muted', 'aria-live': 'polite' });
+  const send = el('button', { type: 'button', class: 'btn', text: 'Wyślij moje wyniki do grupy' });
+  send.disabled = true;
+  const wyk = el('div', { class: 'hbars' });
+  const meta = el('p', { class: 'small muted' });
+  const statsP = el('p', { class: 'small' });
+  const refresh = el('button', { type: 'button', class: 'btn ghost small', text: 'Odśwież' });
+  host.append(el('div', { class: 'group' },
+    el('h3', {}, el('span', { class: 'dot' }), `Wyniki sali · sesja „${Grupa.cfg.s}”`),
+    el('div', { class: 'row' }, send, status), statsP, wyk, el('div', { class: 'row' }, refresh, meta)));
+  send.addEventListener('click', async () => {
+    if (!paczka) return;
+    send.disabled = true; status.textContent = 'Wysyłanie…';
+    try {
+      for (const [w, v] of o.wiersze(paczka)) await Grupa.wyslij(o.aplikacja, w, v);
+      status.textContent = 'Wysłano. Wyniki pojawią się na wykresie po odświeżeniu arkusza (zwykle w ciągu kilku minut).';
+      paczka = null; setTimeout(odswiez, 4000);
+    } catch (e) { status.textContent = 'Nie udało się wysłać (brak internetu?). Spróbuj ponownie.'; send.disabled = false; }
+  });
+  async function odswiez() {
+    meta.textContent = 'Pobieranie…';
+    try {
+      const { rows } = await Grupa.pobierz();
+      const dane = rows.filter((r) => r.a === o.aplikacja && r.s === Grupa.cfg.s && Number.isFinite(r.v) && o.filtr(r));
+      o.rysuj(wyk, dane);
+      statsP.textContent = dane.length ? o.opis(dane) : 'Nikt jeszcze nie wysłał wyników.';
+      meta.textContent = `Aktualizacja: ${new Date().toLocaleTimeString('pl-PL')}. Opublikowany arkusz odświeża się z opóźnieniem do kilku minut.`;
+    } catch (e) { meta.textContent = `Wyniki sali są chwilowo niedostępne (${e.message || 'błąd sieci'}).`; }
+  }
+  refresh.addEventListener('click', odswiez);
+  return {
+    gotowe(w) { paczka = w; send.disabled = false; status.textContent = ''; },
+    start() { aktywny = true; odswiez(); clearInterval(timer); timer = setInterval(() => { if (aktywny && !document.hidden) odswiez(); }, 20000); },
+    stop() { aktywny = false; clearInterval(timer); },
+  };
+}
+
+
+/* ═════════════════════ Ćwiczenie 1: Ogród BST ═════════════════════ */
+const BST = (() => {
+  const MAXN = 25;
+  let korzen = null, kroki = [], hl = {}, porownania = null, kolejnoscTxt = '';
+  const wezel = (k) => ({ k, l: null, r: null });
+  const wszystkie = (w, out = []) => { if (w) { wszystkie(w.l, out); out.push(w); wszystkie(w.r, out); } return out; };
+  const wys = (w) => w ? 1 + Math.max(wys(w.l), wys(w.r)) : 0;
+  function wstawCicho(k) {
+    if (!korzen) { korzen = wezel(k); return; }
+    let w = korzen;
+    for (;;) { if (k === w.k) return; const s = k < w.k ? 'l' : 'r'; if (!w[s]) { w[s] = wezel(k); return; } w = w[s]; }
+  }
+  function zbuduj(t, opis) { korzen = null; for (const k of t) wstawCicho(k); hl = {}; porownania = null; kolejnoscTxt = ''; $('#bsStatus').textContent = opis; rysuj(); }
+  function rysuj() {
+    const s = $('#bsDrzewo'); s.replaceChildren();
+    const lista = wszystkie(korzen), n = lista.length, h = wys(korzen);
+    const W = 720, dx = W / Math.max(n, 1);
+    const poz = new Map(); lista.forEach((w, i) => poz.set(w, i));
+    const pkt = new Map();
+    const licz = (w, d) => { if (!w) return; pkt.set(w, [dx * (poz.get(w) + 0.5), 24 + d * 46]); licz(w.l, d + 1); licz(w.r, d + 1); };
+    licz(korzen, 0);
+    const H = Math.max(70, 24 + Math.max(h - 1, 0) * 46 + 30);
+    s.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    if (!n) { s.append(sv('text', { x: W / 2, y: 30, class: 'ix' }, 'drzewo jest puste')); }
+    for (const [w, [x, y]] of pkt) for (const c of [w.l, w.r]) if (c) { const [x2, y2] = pkt.get(c); s.append(sv('line', { x1: x, y1: y, x2, y2, class: (hl.sciezka || []).includes(w) && (hl.sciezka || []).includes(c) ? 'sc' : '' })); }
+    for (const [w, [x, y]] of pkt) {
+      let kl = '';
+      if ((hl.sciezka || []).includes(w)) kl = 'sciezka';
+      if ((hl.ok || []).includes(w)) kl = 'ok';
+      if (hl.nast === w) kl = 'nast';
+      if (hl.cur === w) kl = 'hl';
+      if (hl.zly === w) kl = 'zly';
+      const g = sv('g', { class: kl });
+      g.append(sv('circle', { cx: x, cy: y, r: n > 18 ? 14 : 17 }), sv('text', { x, y }, String(w.k)));
+      s.append(g);
+    }
+    $('#bsN').textContent = String(n);
+    $('#bsH').textContent = n ? String(h - 1) : '—';
+    $('#bsMin').textContent = n ? String(Math.floor(Math.log2(n))) : '—';
+    $('#bsPor').textContent = porownania === null ? '—' : String(porownania);
+    $('#bsKol').innerHTML = '';
+    if (kolejnoscTxt) $('#bsKol').append(el('span', { class: 'small muted', text: 'w porządku: ' }), ...kolejnoscTxt);
+    const busy = kroki.length > 0;
+    $('#bsKrok').disabled = !busy; $('#bsKoniec').disabled = !busy;
+    for (const id of ['#bsWstaw', '#bsZnajdz', '#bsUsun', '#bsInorder', '#bsPrzW', '#bsPrzM', '#bsPrzR', '#bsLos', '#bsCzysc']) $(id).disabled = busy;
+  }
+  function krok() { const f = kroki.shift(); if (f) { f(); rysuj(); } }
+  function klucz() {
+    const t = $('#bsKlucz').value.trim();
+    if (!/^\d{1,3}$/.test(t)) { $('#bsErr').textContent = 'Wpisz liczbę naturalną od 0 do 999.'; return null; }
+    $('#bsErr').textContent = ''; return Number(t);
+  }
+  // Ścieżka szukania: kroki porównań; na końcu cb(rodzic, strona, znaleziony, sciezka)
+  function szukaj(k, cb) {
+    const sciezka = []; let w = korzen, rodzic = null, strona = null; porownania = 0; kolejnoscTxt = '';
+    if (!w) { kroki.push(() => { hl = {}; cb(null, null, null, sciezka); }); return; }
+    const dalej = () => {
+      porownania++; sciezka.push(w); hl = { sciezka: [...sciezka], cur: w };
+      if (k === w.k) { $('#bsStatus').textContent = `${k} = ${w.k}: znalezione (porównań: ${porownania}).`; const z = w; kroki.push(() => cb(rodzic, strona, z, sciezka)); return; }
+      const s = k < w.k ? 'l' : 'r';
+      $('#bsStatus').textContent = `${k} ${k < w.k ? '<' : '>'} ${w.k} → idziemy w ${k < w.k ? 'lewo' : 'prawo'}${w[s] ? '' : ', ale tam nic nie ma'}.`;
+      rodzic = w; strona = s; w = w[s];
+      kroki.push(w ? dalej : () => cb(rodzic, strona, null, sciezka));
+    };
+    kroki.push(dalej);
+  }
+  function wstaw() {
+    const k = klucz(); if (k === null) return;
+    if (wszystkie(korzen).length >= MAXN) { $('#bsErr').textContent = `W ćwiczeniu mieści się ${MAXN} kluczy.`; return; }
+    kroki = [];
+    szukaj(k, (rodzic, strona, z, sc) => {
+      if (z) { $('#bsStatus').textContent = `${k} już jest w drzewie. W słowniku zmienilibyśmy tylko wartość. Porównań: ${porownania}.`; hl = { ok: [z], sciezka: sc }; return; }
+      const nw = wezel(k);
+      if (!rodzic) korzen = nw; else rodzic[strona] = nw;
+      hl = { sciezka: sc, ok: [nw] };
+      $('#bsStatus').textContent = rodzic ? `${k} wstawiamy jako ${strona === 'l' ? 'lewe' : 'prawe'} dziecko ${rodzic.k}. Porównań: ${porownania}.` : `Drzewo było puste: ${k} zostaje korzeniem.`;
+    });
+    $('#bsKlucz').value = '';
+    krok();
+  }
+  function znajdz() {
+    const k = klucz(); if (k === null) return;
+    kroki = [];
+    szukaj(k, (rodzic, strona, z, sc) => {
+      if (z) { hl = { sciezka: sc, ok: [z] }; $('#bsStatus').textContent = `Znalezione: ${k}. Porównań: ${porownania}.`; }
+      else { hl = { sciezka: sc }; $('#bsStatus').textContent = `Brak klucza ${k}. Porównań: ${porownania}.${rodzic ? ` Przy wstawianiu trafiłby jako ${strona === 'l' ? 'lewe' : 'prawe'} dziecko ${rodzic.k}.` : ''}`; }
+    });
+    krok();
+  }
+  function usun() {
+    const k = klucz(); if (k === null) return;
+    kroki = [];
+    szukaj(k, (rodzic, strona, z, sc) => {
+      if (!z) { hl = { sciezka: sc }; $('#bsStatus').textContent = `Brak klucza ${k} — nie ma czego usuwać.`; return; }
+      const podmien = (nowy) => { if (!rodzic) korzen = nowy; else rodzic[strona] = nowy; };
+      if (!z.l && !z.r) {
+        hl = { zly: z }; $('#bsStatus').textContent = `${k} to liść: po prostu go odcinamy.`;
+        kroki.push(() => { podmien(null); hl = {}; $('#bsStatus').textContent = `Usunięto liść ${k}.`; });
+      } else if (!z.l || !z.r) {
+        const d = z.l || z.r;
+        hl = { zly: z, ok: [d] }; $('#bsStatus').textContent = `${k} ma jedno dziecko (${d.k}): dziecko zajmie jego miejsce razem ze swoim poddrzewem.`;
+        kroki.push(() => { podmien(d); hl = { ok: [d] }; $('#bsStatus').textContent = `Usunięto ${k}; na jego miejscu stoi ${d.k}.`; });
+      } else {
+        hl = { zly: z }; $('#bsStatus').textContent = `${k} ma dwoje dzieci. Szukamy następnika: raz w prawo, potem w lewo do końca.`;
+        let r = z, s = z.r; const sciezkaN = [];
+        const dalej = () => {
+          sciezkaN.push(s); hl = { zly: z, sciezka: [...sciezkaN], cur: s };
+          if (s.l) { $('#bsStatus').textContent = `${s.k} ma lewe dziecko — idziemy dalej w lewo.`; r = s; s = s.l; kroki.push(dalej); return; }
+          $('#bsStatus').textContent = `Następnik to ${s.k}: najmniejszy klucz w prawym poddrzewie. Wpisujemy go w miejsce ${k}, a jego stary węzeł usuwamy (ma najwyżej prawe dziecko).`;
+          hl = { zly: z, nast: s };
+          kroki.push(() => {
+            if (r === z) r.r = s.r; else r.l = s.r;
+            z.k = s.k; hl = { ok: [z] };
+            $('#bsStatus').textContent = `Usunięto ${k}; na jego miejscu stoi następnik ${z.k}. Własność BST zachowana.`;
+          });
+        };
+        kroki.push(dalej);
+      }
+    });
+    krok();
+  }
+  function wPorzadku() {
+    const lista = wszystkie(korzen); if (!lista.length) return;
+    kroki = []; porownania = null; let i = 0;
+    const nast = () => {
+      hl = { ok: lista.slice(0, i + 1), cur: lista[i] };
+      kolejnoscTxt = lista.map((w, j) => j < i ? `${w.k}, ` : j === i ? el('b', { text: String(w.k) }) : '').filter((x) => x !== '');
+      $('#bsStatus').textContent = `Odwiedzamy ${lista[i].k}: najpierw całe lewe poddrzewo, potem węzeł, potem prawe.`;
+      i++;
+      if (i < lista.length) kroki.push(nast);
+      else kroki.push(() => { hl = { ok: lista }; kolejnoscTxt = [lista.map((w) => w.k).join(', ')]; $('#bsStatus').textContent = 'Klucze wyszły rosnąco — tak samo, jak stoją węzły od lewej do prawej.'; });
+    };
+    kroki.push(nast); krok();
+  }
+  function init() {
+    $('#bsWstaw').addEventListener('click', wstaw);
+    $('#bsZnajdz').addEventListener('click', znajdz);
+    $('#bsUsun').addEventListener('click', usun);
+    $('#bsInorder').addEventListener('click', wPorzadku);
+    $('#bsKlucz').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !kroki.length) { e.preventDefault(); wstaw(); } });
+    $('#bsKrok').addEventListener('click', krok);
+    $('#bsKoniec').addEventListener('click', () => { let g = 0; while (kroki.length && g++ < 300) krok(); });
+    $('#bsPrzW').addEventListener('click', () => zbuduj([50, 30, 70, 20, 40, 60, 80], 'Drzewo ze slajdu „Drzewo BST”. Spróbuj znaleźć 60 i 65 albo usunąć 50.'));
+    $('#bsPrzM').addEventListener('click', () => zbuduj([8, 3, 10, 1, 6, 14, 4, 7, 13], 'Drzewo z mini-zadania. Sprawdź znajdź(7) i znajdź(5).'));
+    $('#bsPrzR').addEventListener('click', () => zbuduj([20, 30, 40, 50, 60, 70, 80], 'Te same klucze co na slajdzie, ale wstawione rosnąco: drzewo jest listą.'));
+    $('#bsLos').addEventListener('click', () => { const t = tasuj([...Array(99).keys()].map((x) => x + 1)).slice(0, 12); zbuduj(t, `Wstawiono kolejno: ${t.join(', ')}.`); });
+    $('#bsCzysc').addEventListener('click', () => zbuduj([], 'Puste drzewo. Wstaw pierwszy klucz.'));
+    zbuduj([50, 30, 70, 20, 40, 60, 80], 'Drzewo ze slajdu „Drzewo BST”. Wpisz klucz i wybierz operację.');
+    $('#bsKlucz').value = '65';
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 2: Kolejność ma znaczenie ═════════════════════ */
+const Kolejnosc = (() => {
+  let n = 1000;
+  function wysokosc(perm) {
+    const L = new Int32Array(perm.length + 1).fill(-1), R = new Int32Array(perm.length + 1).fill(-1);
+    const korzen = perm[0]; let h = 0;
+    for (let i = 1; i < perm.length; i++) {
+      const k = perm[i]; let w = korzen, d = 0;
+      for (;;) { d++; if (k < w) { if (L[w] < 0) { L[w] = k; break; } w = L[w]; } else { if (R[w] < 0) { R[w] = k; break; } w = R[w]; } }
+      if (d > h) h = d;
+    }
+    return h;
+  }
+  function start() {
+    const R = 200, h = [];
+    const baza = [...Array(n).keys()].map((x) => x + 1);
+    for (let r = 0; r < R; r++) h.push(wysokosc(tasuj([...baza])));
+    const min = Math.floor(Math.log2(n)), sr = h.reduce((a, b) => a + b, 0) / R;
+    const lo = Math.min(...h), hi = Math.max(...h);
+    $('#koMin').textContent = String(min);
+    $('#koSr').textContent = ulamek(sr, 1);
+    $('#koZakres').textContent = `${lo} – ${hi}`;
+    $('#koRos').textContent = liczba(n - 1);
+    const a = Math.min(min, lo), b = hi, licz = Array(b - a + 1).fill(0);
+    for (const x of h) licz[x - a]++;
+    const m = Math.max(...licz);
+    $('#koHist').replaceChildren(...licz.map((c, i) => el('div', { class: a + i === min ? 'zaz' : '', style: `height: ${(100 * c) / m}%`, title: `wysokość ${a + i}: ${c} drzew` })));
+    $('#koOsL').textContent = String(a); $('#koOsP').textContent = String(b);
+    $('#koOpis').textContent = `${R} losowych kolejności ${liczba(n)} kluczy. Pomarańczowy słupek (jeśli widoczny) to najmniejsza możliwa wysokość ${min}. Drzewo wstawione rosnąco ma wysokość ${liczba(n - 1)} — ${ulamek((n - 1) / sr, 0)} razy więcej niż średnio przy losowej kolejności.`;
+  }
+  function init() {
+    seg($('#koN'), (w) => { n = Number(w); start(); });
+    $('#koStart').addEventListener('click', start);
+  }
+  let pierwszy = true;
+  return { init, wejscie: () => { if (pierwszy) { pierwszy = false; start(); } } };
+})();
+
+/* ═════════════════════ Ćwiczenie 3: Kanarek ma skórę? ═════════════════════ */
+const Siec = (() => {
+  const APLIKACJA = 'w09-siec';
+  const WARUNKI = {
+    P0: 'cecha, poziom 0 („Kanarek śpiewa”)',
+    P1: 'cecha, poziom 1 („Kanarek ma pióra”)',
+    P2: 'cecha, poziom 2 („Kanarek ma skórę”)',
+    S1: 'kategoria, poziom 1 („… jest ptakiem”)',
+    S2: 'kategoria, poziom 2 („… jest zwierzęciem”)',
+  };
+  const ZDANIA = [
+    ['P0', 'Kanarek śpiewa.'], ['P0', 'Kanarek jest żółty.'], ['P0', 'Łosoś jest różowy.'], ['P0', 'Rekin jest groźny.'],
+    ['P1', 'Kanarek ma pióra.'], ['P1', 'Kanarek ma skrzydła.'], ['P1', 'Łosoś ma skrzela.'], ['P1', 'Rekin ma płetwy.'],
+    ['P2', 'Kanarek ma skórę.'], ['P2', 'Kanarek oddycha.'], ['P2', 'Łosoś oddycha.'], ['P2', 'Rekin ma skórę.'],
+    ['S1', 'Kanarek jest ptakiem.'], ['S1', 'Wróbel jest ptakiem.'], ['S1', 'Łosoś jest rybą.'], ['S1', 'Rekin jest rybą.'],
+    ['S2', 'Kanarek jest zwierzęciem.'], ['S2', 'Wróbel jest zwierzęciem.'], ['S2', 'Łosoś jest zwierzęciem.'], ['S2', 'Rekin jest zwierzęciem.'],
+    ['F', 'Kanarek jest rybą.'], ['F', 'Łosoś jest ptakiem.'], ['F', 'Kanarek ma skrzela.'], ['F', 'Łosoś ma pióra.'],
+    ['F', 'Rekin śpiewa.'], ['F', 'Wróbel ma płetwy.'], ['F', 'Rekin jest ptakiem.'], ['F', 'Wróbel jest różowy.'],
+  ];
+  const ROZGRZEWKA = [['T', 'Pies szczeka.'], ['F', 'Kot jest rybą.'], ['T', 'Róża jest kwiatem.'], ['F', 'Dąb ma skrzela.']];
+  let proby = [], nr = 0, faza = 'nic', t0 = 0, wyniki = [], timer = null, panel = null;
+  function start() {
+    proby = [...ROZGRZEWKA.map(([w, z]) => ({ w, z, rozgrz: true })), ...tasuj(ZDANIA.map(([w, z]) => ({ w, z, rozgrz: false })))];
+    nr = 0; wyniki = [];
+    $('#swIntro').hidden = true; $('#swWynik').hidden = true; $('#swProba').hidden = false;
+    nastepna();
+  }
+  function nastepna() {
+    if (nr >= proby.length) { podsumuj(); return; }
+    const p = proby[nr];
+    $('#swNr').textContent = p.rozgrz ? `Rozgrzewka ${nr + 1} z ${ROZGRZEWKA.length}` : `Zdanie ${nr - ROZGRZEWKA.length + 1} z ${ZDANIA.length}`;
+    $('#swFaza').textContent = '';
+    $('#swZdanie').textContent = '+'; faza = 'krzyz';
+    clearTimeout(timer);
+    timer = setTimeout(() => { $('#swZdanie').textContent = p.z; faza = 'zdanie'; t0 = performance.now(); }, 500 + Math.random() * 300);
+  }
+  function odp(tak) {
+    if (faza !== 'zdanie') return;
+    const p = proby[nr], czas = performance.now() - t0, prawda = p.w !== 'F';
+    const ok = tak === prawda;
+    faza = 'przerwa';
+    if (!p.rozgrz) wyniki.push({ w: p.w, ok, czas });
+    if (!ok) { $('#swZdanie').textContent = 'Błąd'; $('#swFaza').textContent = prawda ? 'to zdanie jest prawdziwe' : 'to zdanie jest fałszywe'; }
+    else $('#swZdanie').textContent = '';
+    nr++;
+    timer = setTimeout(nastepna, ok ? 250 : 900);
+  }
+  function mediany(lista) {
+    const out = {};
+    for (const w of Object.keys(WARUNKI)) { const t = lista.filter((x) => x.w === w && x.ok).map((x) => x.czas); if (t.length) out[w] = mediana(t); }
+    return out;
+  }
+  function wykres(host, med) {
+    const max = Math.max(...Object.values(med), 1);
+    slupki(host, Object.keys(WARUNKI).filter((w) => med[w] !== undefined).map((w) => ({ lab: WARUNKI[w], pc: (100 * med[w]) / max, tekst: `${Math.round(med[w])} ms` })));
+  }
+  function podsumuj() {
+    faza = 'nic';
+    $('#swProba').hidden = true; $('#swWynik').hidden = false;
+    const med = mediany(wyniki);
+    wykres($('#swWykres'), med);
+    const bledy = wyniki.filter((x) => !x.ok).length;
+    const d = (a, b) => med[a] !== undefined && med[b] !== undefined ? Math.round(med[b] - med[a]) : null;
+    const dp = d('P0', 'P2'), ds = d('S1', 'S2');
+    $('#swWniosek').textContent = `Błędów: ${bledy} z ${wyniki.length}. ` +
+      (dp !== null ? `Cecha z poziomu 2 zajęła Ci ${dp >= 0 ? `o ${dp} ms dłużej` : `o ${-dp} ms krócej`} niż z poziomu 0. ` : '') +
+      (ds !== null ? `„… jest zwierzęciem” — ${ds >= 0 ? `o ${ds} ms dłużej` : `o ${-ds} ms krócej`} niż „… jest ptakiem/rybą”. ` : '') +
+      'Przy 4 zdaniach na warunek pojedynczy wynik jest bardzo zaszumiony; wzorzec widać dopiero w danych całej sali.';
+    if (panel) panel.gotowe(Object.entries(med).map(([w, v]) => [w, Math.round(v)]));
+  }
+  function init() {
+    $('#swStart').addEventListener('click', start);
+    $('#swJeszcze').addEventListener('click', start);
+    $('#swTak').addEventListener('click', () => odp(true));
+    $('#swNie').addEventListener('click', () => odp(false));
+    document.addEventListener('keydown', (e) => {
+      if ($('#v-siec').hidden || faza !== 'zdanie' || e.repeat) return;
+      if (e.key === 'f' || e.key === 'F') { e.preventDefault(); odp(true); }
+      if (e.key === 'j' || e.key === 'J') { e.preventDefault(); odp(false); }
+    });
+    panel = panelGrupy($('#grupa-siec'), {
+      aplikacja: APLIKACJA,
+      wiersze: (w) => w,
+      filtr: (r) => r.w in WARUNKI && r.v > 150 && r.v < 6000,
+      rysuj: (host, rows) => { const med = {}; for (const w of Object.keys(WARUNKI)) { const t = rows.filter((r) => r.w === w).map((r) => r.v); if (t.length) med[w] = mediana(t); } wykres(host, med); },
+      opis: (rows) => `Wyników: ${rows.length} (ok. ${Math.round(rows.length / 5)} ${odm(Math.round(rows.length / 5), 'osoba', 'osoby', 'osób')}). Słupki: mediana indywidualnych median.`,
+    });
+  }
+  function wyjscie() { clearTimeout(timer); if (faza === 'zdanie' || faza === 'krzyz' || faza === 'przerwa') { faza = 'nic'; $('#swProba').hidden = true; $('#swIntro').hidden = false; } panel?.stop(); }
+  return { init, wejscie: () => panel?.start(), wyjscie };
+})();
+
+/* ═════════════════════ Ćwiczenie 4: Paradoks urodzin ═════════════════════ */
+const Urodziny = (() => {
+  let m = 365, wyn = [];
+  function proba() {
+    const widz = new Map(); let i = 0;
+    for (;;) { i++; const x = Math.floor(Math.random() * m); if (widz.has(x)) return { n: i, x, pierwszy: widz.get(x) }; widz.set(x, i); }
+  }
+  function prog() { let q = 1; for (let n = 1; n <= m + 1; n++) { q *= (m - n + 1) / m; if (1 - q >= 0.5) return n; } return m + 1; }
+  function P(n) { if (n > m) return 1; let q = 1; for (let k = 0; k < n; k++) q *= (m - k) / m; return 1 - q; }
+  function rysuj() {
+    $('#urIle').textContent = liczba(wyn.length);
+    $('#urMed').textContent = wyn.length ? liczba(Math.round(mediana(wyn))) : '—';
+    $('#urWzor').textContent = liczba(prog());
+    $('#urPier').textContent = liczba(Math.round(1.1774 * Math.sqrt(m)));
+    if (!wyn.length) { $('#urHist').replaceChildren(); $('#urOsL').textContent = ''; $('#urOsP').textContent = ''; return; }
+    const lo = Math.min(...wyn), hi = Math.max(...wyn), B = Math.min(40, hi - lo + 1), szer = (hi - lo + 1) / B;
+    const kos = Array(B).fill(0); for (const x of wyn) kos[Math.min(B - 1, Math.floor((x - lo) / szer))]++;
+    const mx = Math.max(...kos), pr = prog();
+    $('#urHist').replaceChildren(...kos.map((c, i) => { const a = lo + i * szer; return el('div', { class: pr >= a && pr < a + szer ? 'zaz' : '', style: `height: ${(100 * c) / mx}%`, title: `${Math.ceil(a)}–${Math.ceil(a + szer) - 1}: ${c}` }); }));
+    $('#urOsL').textContent = liczba(lo); $('#urOsP').textContent = liczba(hi);
+  }
+  function kalk() {
+    const t = parsujInt($('#urN').value);
+    if (t === null || Number(t) < 1 || Number(t) > 10 ** 7) { $('#urP').textContent = 'wpisz liczbę od 1 do 10 000 000'; return; }
+    const n = Number(t), p = P(n);
+    $('#urP').textContent = `P(choć jedna kolizja) = ${p > 0.9999 ? '> 99,99' : ulamek(100 * p, 1)}%; par kluczy: ${liczba(n * (n - 1) / 2)}`;
+  }
+  function init() {
+    seg($('#urM'), (w) => { m = Number(w); wyn = []; $('#urProba').textContent = ''; rysuj(); kalk(); });
+    $('#urJeden').addEventListener('click', () => {
+      const r = proba(); wyn.push(r.n);
+      $('#urProba').textContent = m === 365 ? `Osoba nr ${r.n} ma urodziny tego samego dnia (nr ${r.x + 1} w roku) co osoba nr ${r.pierwszy}.` : `Klucz nr ${r.n} trafił w miejsce ${r.x}, zajęte przez klucz nr ${r.pierwszy}.`;
+      rysuj();
+    });
+    $('#urTys').addEventListener('click', () => { for (let i = 0; i < 1000; i++) wyn.push(proba().n); $('#urProba').textContent = `Dołożono 1000 prób.`; rysuj(); });
+    $('#urN').addEventListener('input', kalk);
+    rysuj(); kalk();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 5: Tablica z haszowaniem ═════════════════════ */
+const Hasz = (() => {
+  let met = 'lancuch', m = 7, klucze = [], T = [], zazn = { prob: [], nowy: null, znal: null };
+  function odbuduj() {
+    T = met === 'lancuch' ? Array.from({ length: m }, () => []) : Array(m).fill(null);
+    const stare = klucze; klucze = [];
+    for (const k of stare) wstawK(k, true);
+  }
+  function wstawK(k, cicho) {
+    const h = k % m;
+    if (met === 'lancuch') {
+      const l = T[h], ile = l.length;
+      if (l.includes(k)) return { juz: true, h, prob: [h], ile: l.indexOf(k) + 1 };
+      l.push(k); klucze.push(k);
+      return { h, prob: [h], ile, txt: `h(${k}) = ${k} mod ${m} = ${h}. ${ile ? `Komórka zajęta (lista: ${l.slice(0, -1).join(' → ')}) — kolizja; dopisujemy na koniec listy po sprawdzeniu ${ile} ${odm(ile, 'klucza', 'kluczy', 'kluczy')}.` : 'Komórka pusta — wpisujemy.'}` };
+    }
+    const prob = []; let i = h;
+    for (let p = 0; p < m; p++) {
+      prob.push(i);
+      if (T[i] === k) return { juz: true, h, prob, ile: prob.length };
+      if (T[i] === null) {
+        T[i] = k; klucze.push(k);
+        const sciezka = prob.map((c, j) => j < prob.length - 1 ? `${c} zajęta (${T[c]})` : `${c} wolna`).join(' → ');
+        return { h, prob, ile: prob.length, txt: `h(${k}) = ${k} mod ${m} = ${h}. Próby: ${sciezka}. Wstawienie kosztowało ${prob.length} ${odm(prob.length, 'próbę', 'próby', 'prób')}.` };
+      }
+      i = (i + 1) % m;
+    }
+    return { pelna: true, h, prob };
+  }
+  function znajdzK(k) {
+    const h = k % m;
+    if (met === 'lancuch') {
+      const l = T[h], i = l.indexOf(k);
+      return i >= 0 ? { ok: true, h, prob: [h], ile: i + 1 } : { ok: false, h, prob: [h], ile: l.length };
+    }
+    const prob = []; let i = h;
+    for (let p = 0; p < m; p++) { prob.push(i); if (T[i] === k) return { ok: true, h, prob, ile: prob.length, gdzie: i }; if (T[i] === null) return { ok: false, h, prob, ile: prob.length }; i = (i + 1) % m; }
+    return { ok: false, h, prob, ile: prob.length };
+  }
+  function rysuj() {
+    $('#hsTab').replaceChildren(...[...Array(m).keys()].map((c) => {
+      const kom = el('div', { class: 'kom' + (zazn.prob.includes(c) ? (zazn.znal !== null && (met === 'lancuch' ? T[c].includes(zazn.znal) : T[c] === zazn.znal) ? ' znal' : ' prob') : '') });
+      if (met === 'lancuch') {
+        if (!T[c].length) kom.append(el('span', { class: 'str', text: 'pusta' }));
+        T[c].forEach((k, j) => { if (j) kom.append(el('span', { class: 'str', text: '→' })); kom.append(el('span', { class: 'kl' + (k === zazn.nowy ? ' nowy' : '') + (k === zazn.znal ? ' znal' : ''), text: String(k) })); });
+      } else if (T[c] === null) kom.append(el('span', { class: 'str', text: 'pusta' }));
+      else kom.append(el('span', { class: 'kl' + (T[c] === zazn.nowy ? ' nowy' : '') + (T[c] === zazn.znal ? ' znal' : ''), text: String(T[c]) }), el('span', { class: 'str', text: T[c] % m !== c ? `(h = ${T[c] % m})` : '' }));
+      return el('div', { class: 'wiersz' }, el('div', { class: 'nr', text: String(c) }), kom);
+    }));
+    const n = klucze.length;
+    $('#hsN').textContent = String(n);
+    $('#hsA').textContent = ulamek(n / m, 2);
+    if (n) { let s = 0; for (const k of klucze) s += znajdzK(k).ile; $('#hsSr').textContent = ulamek(s / n, 2); } else $('#hsSr').textContent = '—';
+    if (met === 'lancuch') { $('#hsMaxK').textContent = 'najdłuższa lista'; $('#hsMax').textContent = String(Math.max(...T.map((l) => l.length))); }
+    else {
+      $('#hsMaxK').textContent = 'najdłuższy blok zajętych komórek';
+      let best = 0; if (T.every((x) => x !== null)) best = m; else { const st = T.indexOf(null); let cur = 0; for (let j = 1; j <= m; j++) { const c = (st + j) % m; if (T[c] !== null) { cur++; best = Math.max(best, cur); } else cur = 0; } }
+      $('#hsMax').textContent = String(best);
+    }
+  }
+  function klucz() {
+    const t = $('#hsKlucz').value.trim();
+    if (!/^\d{1,3}$/.test(t)) { $('#hsErr').textContent = 'Wpisz liczbę naturalną od 0 do 999.'; return null; }
+    $('#hsErr').textContent = ''; return Number(t);
+  }
+  function wstaw(k) {
+    const r = wstawK(k, false);
+    if (r.juz) { zazn = { prob: r.prob, nowy: null, znal: k }; $('#hsStatus').textContent = `${k} już jest w tablicy.`; }
+    else if (r.pelna) { zazn = { prob: [], nowy: null, znal: null }; $('#hsStatus').textContent = `Tablica jest pełna (α = 1). Przy adresowaniu otwartym nie zmieścimy już nic — trzeba ją powiększyć.`; }
+    else { zazn = { prob: r.prob, nowy: k, znal: null }; $('#hsStatus').textContent = r.txt; }
+    rysuj();
+  }
+  function przyklad(mm, t, metoda, opis) {
+    m = mm; $('#hsM').value = String(mm); $('#hsMv').textContent = String(mm);
+    if (metoda) { met = metoda; for (const b of $$('#hsMet button')) b.setAttribute('aria-pressed', b.dataset.w === metoda ? 'true' : 'false'); }
+    klucze = []; odbuduj();
+    for (const k of t) wstawK(k, true);
+    zazn = { prob: [], nowy: null, znal: null }; $('#hsStatus').textContent = opis; rysuj();
+  }
+  function init() {
+    seg($('#hsMet'), (w) => { met = w; odbuduj(); zazn = { prob: [], nowy: null, znal: null }; $('#hsStatus').textContent = `Te same klucze, wstawione w tej samej kolejności, ${w === 'lancuch' ? 'łańcuchowo' : 'z adresowaniem otwartym'}.`; rysuj(); });
+    $('#hsM').addEventListener('input', () => {
+      const nm = Number($('#hsM').value);
+      if (met === 'otwarte' && klucze.length > nm) { $('#hsM').value = String(m); $('#hsErr').textContent = `Przy adresowaniu otwartym m nie może być mniejsze niż liczba kluczy (${klucze.length}).`; return; }
+      m = nm; $('#hsMv').textContent = String(m); $('#hsErr').textContent = ''; odbuduj(); zazn = { prob: [], nowy: null, znal: null };
+      $('#hsStatus').textContent = `m = ${m}: wszystkie klucze rozmieszczone od nowa (tak robi Python, gdy powiększa tablicę).`; rysuj();
+    });
+    $('#hsWstaw').addEventListener('click', () => { const k = klucz(); if (k !== null) { wstaw(k); $('#hsKlucz').value = ''; } });
+    $('#hsKlucz').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); const k = klucz(); if (k !== null) { wstaw(k); $('#hsKlucz').value = ''; } } });
+    $('#hsZnajdz').addEventListener('click', () => {
+      const k = klucz(); if (k === null) return;
+      const r = znajdzK(k);
+      zazn = { prob: r.prob, nowy: null, znal: r.ok ? k : null };
+      $('#hsStatus').textContent = met === 'lancuch'
+        ? `h(${k}) = ${r.h}. ${r.ok ? `Znalezione na liście po ${r.ile} ${odm(r.ile, 'porównaniu', 'porównaniach', 'porównaniach')}.` : `Brak: lista w komórce ${r.h} ma ${r.ile} ${odm(r.ile, 'klucz', 'klucze', 'kluczy')}, żaden nie pasuje.`}`
+        : `h(${k}) = ${r.h}. Sprawdzone komórki: ${r.prob.join(' → ')}. ${r.ok ? `Znalezione po ${r.ile} ${odm(r.ile, 'próbie', 'próbach', 'próbach')}.` : `Brak — ${r.prob.length < m ? 'trafiliśmy na pustą komórkę, więc dalej szukać nie trzeba' : 'sprawdziliśmy całą tablicę'} (${r.ile} ${odm(r.ile, 'próba', 'próby', 'prób')}).`}`;
+      rysuj();
+    });
+    $('#hsLos').addEventListener('click', () => {
+      let dod = 0;
+      for (let g = 0; g < 200 && dod < 5; g++) { if (met === 'otwarte' && klucze.length >= m) break; const k = losuj(0, 999); if (!klucze.includes(k)) { wstawK(k, true); dod++; } }
+      zazn = { prob: [], nowy: null, znal: null }; $('#hsStatus').textContent = dod ? `Dodano ${dod} ${odm(dod, 'losowy klucz', 'losowe klucze', 'losowych kluczy')}.` : 'Tablica jest pełna.'; rysuj();
+    });
+    $('#hsPrzS').addEventListener('click', () => przyklad(7, [10, 22, 31, 4, 15, 28], null, 'Klucze 10, 22, 31, 4, 15, 28 ze slajdu „Dwa sposoby na kolizje”. Przełącz sposób rozwiązywania kolizji.'));
+    $('#hsPrzM').addEventListener('click', () => przyklad(11, [], 'otwarte', 'Mini-zadanie: m = 11, adresowanie otwarte. Wstawiaj po kolei 22, 1, 13, 11, 24, 33 i licz próby.'));
+    $('#hsPrzZ').addEventListener('click', () => { const t = []; for (let k = m; k <= 999 && t.length < Math.min(8, m - 1); k += m) t.push(k); przyklad(m, t, null, `Klucze ${t.join(', ')} — same wielokrotności m = ${m}. Wszystkie mają h(k) = 0.`); });
+    $('#hsCzysc').addEventListener('click', () => { klucze = []; odbuduj(); zazn = { prob: [], nowy: null, znal: null }; $('#hsStatus').textContent = ''; rysuj(); });
+    przyklad(7, [10, 22, 31, 4, 15, 28], 'lancuch', 'Klucze 10, 22, 31, 4, 15, 28 ze slajdu „Dwa sposoby na kolizje”. Przełącz sposób rozwiązywania kolizji.');
+  }
+  return { init };
+})();
+
+const MODULY = { bst: BST, kolejnosc: Kolejnosc, siec: Siec, urodziny: Urodziny, hasz: Hasz };
+
+/* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
+const Ustawienia = (() => {
+  let roboczy = null;
+  function domyslnaSesja() { const d = new Date(); return `${KONF.wyk}-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+  function parsujPrefill(link) {
+    let u; try { u = new URL(link.trim()); } catch (e) { throw new Error('To nie wygląda na adres internetowy.'); }
+    if (!/\/forms\/.+\/(viewform|formResponse)$/.test(u.pathname)) throw new Error('To nie jest link do Formularza Google (powinien kończyć się na /viewform?…).');
+    const f = u.origin + u.pathname.replace(/\/viewform$/, '/formResponse');
+    const e = {}; const MAP = { APLIKACJA: 'a', SESJA: 's', WARIANT: 'w', WYNIK: 'v' };
+    for (const [k, v] of u.searchParams) if (/^entry\.\d+$/.test(k) && MAP[v.trim().toUpperCase()]) e[MAP[v.trim().toUpperCase()]] = k;
+    const brak = Object.entries(MAP).filter(([, kk]) => !e[kk]).map(([nm]) => nm);
+    if (brak.length) throw new Error(`W linku brakuje pól: ${brak.join(', ')}. Wpisz te słowa w pola formularza przed pobraniem linku.`);
+    return { f, e };
+  }
+  function zbierz() {
+    const { f, e } = parsujPrefill($('#sPrefill').value);
+    const c = $('#sCsv').value.trim();
+    if (!/^https?:\/\//.test(c)) throw new Error('Podaj link do opublikowanego arkusza (CSV).');
+    const sesja = $('#sSes').value.trim();
+    if (!sesja) throw new Error('Podaj nazwę sesji.');
+    return { v: 1, f, e, c, s: sesja };
+  }
+  function baza() { return location.protocol === 'file:' ? $('#sBase').value.trim() : location.origin + location.pathname; }
+  function linki(cfg) {
+    const b = baza(); const card = $('#sLinksCard');
+    if (!b) { card.hidden = true; return; }
+    const q = `${b}?cfg=${b64e(JSON.stringify(cfg))}`;
+    for (const l of KONF.linki) $('#' + l.id).value = `${q}#${l.hash}`;
+    card.hidden = false;
+  }
+  function wypelnij(cfg) {
+    if (!cfg) return;
+    const u = new URL(cfg.f.replace(/\/formResponse$/, '/viewform'));
+    u.searchParams.set('usp', 'pp_url'); u.searchParams.set(cfg.e.a, 'APLIKACJA'); u.searchParams.set(cfg.e.s, 'SESJA'); u.searchParams.set(cfg.e.w, 'WARIANT'); u.searchParams.set(cfg.e.v, 'WYNIK');
+    $('#sPrefill').value = u.toString(); $('#sCsv').value = cfg.c; $('#sSes').value = cfg.s;
+  }
+  function out(...kids) { $('#sOut').replaceChildren(...kids); }
+  async function sprawdz() {
+    let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+    roboczy = cfg; linki(cfg);
+    const lista = el('ul');
+    const pkt = (ok, t) => lista.append(el('li', { class: ok ? 'ok' : 'err', text: `${ok ? '✓' : '✗'} ${t}` }));
+    out(lista);
+    pkt(true, 'Link formularza rozpoznany, wszystkie cztery pola znalezione.');
+    try { await Grupa.wyslij('test', 'test', 0, cfg); pkt(true, 'Wpis testowy wysłany (aplikacja = test). Przeglądarka nie potwierdza odbioru: sprawdź, czy pojawił się w arkuszu.'); }
+    catch (e) { pkt(false, `Wysyłka nie powiodła się: ${e.message}`); }
+    try {
+      const { rows, kol } = await Grupa.pobierz(cfg);
+      pkt(true, `Arkusz CSV odczytany: ${rows.length} wierszy odpowiedzi.`);
+      if (kol && !kol.znalezione) pkt(false, 'Nie znaleziono kolumn o nazwach aplikacja, sesja, wariant, wynik. Używam kolejności kolumn 2–5. Sprawdź nazwy pytań.');
+      const testy = rows.filter((r) => r.a === 'test' && r.s === cfg.s).length;
+      lista.append(el('li', { class: 'muted', text: `Wpisów testowych w tej sesji: ${testy}. Nowy wpis może pojawić się w CSV dopiero po kilku minutach; kliknij „Sprawdź” ponownie.` }));
+    } catch (e) { pkt(false, `Nie udało się odczytać CSV: ${e.message}. Sprawdź, czy arkusz jest opublikowany jako CSV.`); }
+    if (location.protocol === 'file:' && !$('#sBase').value.trim()) lista.append(el('li', { class: 'muted', text: 'Strona jest otwarta z dysku. Żeby wygenerować link dla studentów, wpisz adres strony w sieci (GitHub Pages).' }));
+  }
+  function init() {
+    $('#sSes').value = domyslnaSesja();
+    if (location.protocol === 'file:') $('#sBaseInfo').textContent = 'Strona jest otwarta z dysku, więc link musi wskazywać kopię w sieci.';
+    else { $('#sBase').value = location.origin + location.pathname; $('#sBase').readOnly = true; $('#sBaseInfo').textContent = 'Adres tej strony.'; }
+    const zapisana = store.get(CFG_KEY); if (zapisana) { try { wypelnij(JSON.parse(zapisana)); } catch (e) { /* ignoruj */ } }
+    else if (Grupa.cfg) wypelnij(Grupa.cfg);
+    $('#sPrefill').addEventListener('input', () => {
+      const i = $('#sPrefillInfo');
+      if (!$('#sPrefill').value.trim()) { i.textContent = ''; return; }
+      try { const { e } = parsujPrefill($('#sPrefill').value); i.className = 'small ok'; i.textContent = `✓ Pola: aplikacja = ${e.a}, sesja = ${e.s}, wariant = ${e.w}, wynik = ${e.v}`; }
+      catch (err) { i.className = 'small err'; i.textContent = err.message; }
+    });
+    $('#sPrefill').dispatchEvent(new Event('input'));
+    $('#sCheck').addEventListener('click', sprawdz);
+    $('#sBase').addEventListener('input', () => { if (roboczy) linki(roboczy); });
+    $('#sSave').addEventListener('click', () => {
+      let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+      const ok = store.set(CFG_KEY, JSON.stringify(cfg)); linki(cfg);
+      out(el('p', { class: ok ? 'ok' : 'err', text: ok ? 'Zapisano. W tej przeglądarce tryb grupowy będzie włączony także bez parametru w linku. Odśwież stronę, żeby go uruchomić.' : 'Ta przeglądarka nie pozwala zapisywać ustawień. Używaj linków dla studentów.' }));
+    });
+    $('#sForget').addEventListener('click', () => { store.del(CFG_KEY); out(el('p', { text: 'Usunięto zapisaną konfigurację. Po odświeżeniu strona będzie działać samodzielnie (chyba że otworzysz link z parametrem cfg).' })); });
+    for (const b of $$('[data-copy]')) b.addEventListener('click', async () => { const ok = await copyText($('#' + b.dataset.copy).value); b.textContent = ok ? 'Skopiowano' : 'Zaznacz i skopiuj'; setTimeout(() => { b.textContent = 'Kopiuj'; }, 1600); });
+    if (Grupa.cfg) linki(Grupa.cfg);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+let biezacy = null;
+function nawiguj() {
+  const ids = Object.keys(KONF.widoki);
+  const v = ids.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  if (biezacy && biezacy !== v) MODULY[biezacy]?.wyjscie?.();
+  if (biezacy !== v) MODULY[v]?.wejscie?.();
+  for (const w of ids) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = KONF.widoki[v];
+}
+Grupa.init();
+for (const m of Object.values(MODULY)) m.init?.();
+Ustawienia.init();
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+
+</script>
+</body>
+</html>
