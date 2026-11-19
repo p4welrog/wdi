@@ -1,0 +1,55 @@
+{
+ "wyklad": "W09",
+ "pytania": [
+  {
+   "id": "in",
+   "typ": "wybor",
+   "numeracja": "1",
+   "slajd": "Ile kosztuje in?",
+   "tresc": "Ile porównań kluczy wykona średnio 123456 in albumy dla słownika z milionem kluczy?",
+   "opcje": [
+    "ok. 1 000 000",
+    "ok. 20",
+    "ok. 1",
+    "zależy od tego, czy klucz jest w słowniku"
+   ],
+   "poprawna": 2
+  },
+  {
+   "id": "bst-wys",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: zbuduj drzewo",
+   "tresc": "BST z kluczy 8, 3, 10, 1, 6, 14, 4, 7, 13: jaka jest wysokość?",
+   "poprawna": 3
+  },
+  {
+   "id": "bst-7",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: zbuduj drzewo",
+   "tresc": "Ile porównań wykona znajdz(7)?",
+   "poprawna": 4
+  },
+  {
+   "id": "bst-5",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: zbuduj drzewo",
+   "tresc": "A znajdz(5)?",
+   "poprawna": 4
+  },
+  {
+   "id": "hash-33",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: wstaw do tablicy",
+   "tresc": "Ile prób kosztuje wstawienie 33?",
+   "poprawna": 6
+  },
+  {
+   "id": "hash-alfa",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: wstaw do tablicy",
+   "tresc": "Ile wynosi α po wstawieniu wszystkich kluczy? (dwa miejsca po przecinku)",
+   "poprawna": 0.55,
+   "tolerancja": 0.011
+  }
+ ]
+}

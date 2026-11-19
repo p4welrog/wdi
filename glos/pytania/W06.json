@@ -1,0 +1,48 @@
+{
+ "wyklad": "W06",
+ "pytania": [
+  {
+   "id": "przepis1",
+   "typ": "wybor",
+   "numeracja": "1",
+   "slajd": "Dwa przepisy na to samo",
+   "tresc": "Ile kroków wykona przepis 1 dla pary (1 000 000, 1)?",
+   "opcje": [
+    "ok. 20",
+    "ok. 1000",
+    "ok. 1 000 000",
+    "nigdy się nie skończy"
+   ],
+   "poprawna": 2
+  },
+  {
+   "id": "euklides-obiegi",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: policz kroki",
+   "tresc": "Euklides z resztą dla a = 1071, b = 462: ile obiegów pętli?",
+   "poprawna": 3
+  },
+  {
+   "id": "euklides-nwd",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: policz kroki",
+   "tresc": "Jaki jest wynik (NWD)?",
+   "poprawna": 21
+  },
+  {
+   "id": "euklides-odejm",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: policz kroki",
+   "tresc": "Ile odejmowań wykonałaby wersja z odejmowaniem?",
+   "poprawna": 11
+  },
+  {
+   "id": "sortowac",
+   "typ": "liczba",
+   "slajd": "Sortować czy nie sortować?",
+   "tresc": "Od jakiego k (liczby pytań) opłaca się najpierw posortować?",
+   "poprawna": 20,
+   "tolerancja": 1
+  }
+ ]
+}

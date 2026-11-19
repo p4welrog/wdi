@@ -1,0 +1,59 @@
+{
+ "wyklad": "W12",
+ "pytania": [
+  {
+   "id": "routery",
+   "typ": "wybor",
+   "numeracja": "1",
+   "slajd": "Enter → strona w mniej niż sekundę",
+   "tresc": "Przez ile routerów przechodzi zapytanie do serwera w innym kraju?",
+   "opcje": [
+    "1–2",
+    "kilka–kilkanaście",
+    "ok. stu",
+    "kilka tysięcy"
+   ]
+  },
+  {
+   "id": "kolejnosc",
+   "typ": "wybor",
+   "slajd": "Ułóż kroki w kolejności",
+   "tresc": "Ułóż kroki po wpisaniu https://www.swps.edu.pl (A GET, B DNS, C TCP, D TLS, E 200 OK):",
+   "opcje": [
+    "C, B, D, A, E",
+    "B, C, D, A, E",
+    "B, D, C, A, E",
+    "B, C, A, D, E"
+   ],
+   "poprawna": 1
+  },
+  {
+   "id": "rtt",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: policz opóźnienie",
+   "tresc": "Warszawa → Sydney (15 600 km), v = 2·10⁸ m/s: ile wynosi RTT (ms)?",
+   "poprawna": 156,
+   "tolerancja": 2,
+   "jednostka": "ms"
+  },
+  {
+   "id": "transmisja",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: policz opóźnienie",
+   "tresc": "Czas transmisji zdjęcia 4 MB łączem 20 Mb/s (s):",
+   "poprawna": 1.6,
+   "jednostka": "s"
+  },
+  {
+   "id": "co-szybciej",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: policz opóźnienie",
+   "tresc": "Co bardziej przyspieszy wysyłkę zdjęcia?",
+   "opcje": [
+    "łącze 2 razy szybsze",
+    "serwer 2 razy bliżej"
+   ],
+   "poprawna": 0
+  }
+ ]
+}

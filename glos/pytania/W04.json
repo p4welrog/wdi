@@ -1,0 +1,87 @@
+{
+ "wyklad": "W04",
+ "pytania": [
+  {
+   "id": "sprawdzacz",
+   "typ": "wybor",
+   "numeracja": "1",
+   "slajd": "Automatyczny sprawdzacz zadań",
+   "tresc": "Czy taki program da się napisać?",
+   "opcje": [
+    "Tak, wystarczy dość szybki komputer.",
+    "Tak, ale tylko dla krótkich programów.",
+    "Nie, w ogólności to niemożliwe.",
+    "To zależy od języka programowania."
+   ],
+   "poprawna": 2
+  },
+  {
+   "id": "kroki-111",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: uruchom maszynę",
+   "tresc": "Maszyna dodająca 1, wejście 111: ile kroków wykona?",
+   "poprawna": 8
+  },
+  {
+   "id": "bb3-kroki",
+   "typ": "liczba",
+   "slajd": "Kandydat dla n = 3",
+   "tresc": "Zgadnij: ile kroków wykona ta maszyna?",
+   "poprawna": 13
+  },
+  {
+   "id": "bb3-jedynki",
+   "typ": "liczba",
+   "slajd": "Kandydat dla n = 3",
+   "tresc": "Zgadnij: ile jedynek zostawi na taśmie?",
+   "poprawna": 6
+  },
+  {
+   "id": "strzalki",
+   "typ": "liczba",
+   "slajd": "Notacja strzałkowa Knutha",
+   "tresc": "3↑↑3 jest większe od 3↑3. O ile rzędów wielkości (w przybliżeniu)?",
+   "poprawna": 11,
+   "tolerancja": 1
+  },
+  {
+   "id": "klasa-a",
+   "typ": "wybor",
+   "slajd": "Sprawdź się: do której klasy?",
+   "tresc": "Najniższa klasa hierarchii dla języka: słowa nad {a, b} z parzystą liczbą liter a",
+   "opcje": [
+    "klasa 0",
+    "klasa 1",
+    "klasa 2",
+    "klasa 3"
+   ],
+   "poprawna": 3
+  },
+  {
+   "id": "klasa-nawiasy",
+   "typ": "wybor",
+   "slajd": "Sprawdź się: do której klasy?",
+   "tresc": "Najniższa klasa hierarchii dla języka: poprawnie sparowane nawiasy",
+   "opcje": [
+    "klasa 0",
+    "klasa 1",
+    "klasa 2",
+    "klasa 3"
+   ],
+   "poprawna": 2
+  },
+  {
+   "id": "klasa-ww",
+   "typ": "wybor",
+   "slajd": "Sprawdź się: do której klasy?",
+   "tresc": "Najniższa klasa hierarchii dla języka: słowa postaci ww (np. abab)",
+   "opcje": [
+    "klasa 0",
+    "klasa 1",
+    "klasa 2",
+    "klasa 3"
+   ],
+   "poprawna": 1
+  }
+ ]
+}

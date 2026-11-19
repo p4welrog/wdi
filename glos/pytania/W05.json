@@ -1,0 +1,47 @@
+{
+ "wyklad": "W05",
+ "pytania": [
+  {
+   "id": "liczba-rozkaz",
+   "typ": "wybor",
+   "numeracja": "1",
+   "slajd": "Liczba czy rozkaz?",
+   "tresc": "Czym jest to 16-bitowe słowo w pamięci komputera?",
+   "opcje": [
+    "liczbą 2565",
+    "rozkazem „załaduj zawartość komórki 5”",
+    "jednym i drugim — zależy, kto i jak je odczyta",
+    "niczym — to tylko bity"
+   ],
+   "poprawna": 2
+  },
+  {
+   "id": "petla-ile",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: pętla w PMC",
+   "tresc": "Ile razy wykona się rozkaz z komórki 2?",
+   "poprawna": 3
+  },
+  {
+   "id": "petla-mem",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: pętla w PMC",
+   "tresc": "Co będzie w MEM[11] po zatrzymaniu?",
+   "poprawna": 6
+  },
+  {
+   "id": "petla-rozkazy",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: pętla w PMC",
+   "tresc": "Ile rozkazów (łącznie ze STOP) wykona maszyna?",
+   "poprawna": 27
+  },
+  {
+   "id": "tranzystory",
+   "typ": "liczba",
+   "slajd": "Pamięć jednego bitu i rejestr",
+   "tresc": "Ile tranzystorów ma 16-bitowy rejestr z przerzutników 6 × NAND (NAND = 4 tranzystory)?",
+   "poprawna": 384
+  }
+ ]
+}

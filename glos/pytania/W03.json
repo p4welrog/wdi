@@ -1,0 +1,93 @@
+{
+ "wyklad": "W03",
+ "pytania": [
+  {
+   "id": "rowne",
+   "typ": "wybor",
+   "slajd": "Dwie zagadki na start",
+   "tresc": "0.1 + 0.2 == 0.3 — co wypisze Python?",
+   "opcje": [
+    "True",
+    "False"
+   ],
+   "poprawna": 1
+  },
+  {
+   "id": "blad",
+   "typ": "wybor",
+   "slajd": "Dwie zagadki na start",
+   "tresc": "Jeśli False — czy to błąd Pythona?",
+   "opcje": [
+    "Tak",
+    "Nie"
+   ],
+   "poprawna": 1
+  },
+  {
+   "id": "css-g",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: szesnastkowy w praktyce",
+   "tresc": "Kolor CSS #FF5733: ile wynosi składowa G (57₁₆) dziesiętnie?",
+   "poprawna": 87
+  },
+  {
+   "id": "ipv6",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: szesnastkowy w praktyce",
+   "tresc": "Ile bitów ma adres IPv6 zapisany jako 32 cyfry szesnastkowe?",
+   "poprawna": 128,
+   "jednostka": "bitów"
+  },
+  {
+   "id": "slowo-a",
+   "typ": "liczba",
+   "slajd": "Jedno słowo — cztery liczby",
+   "tresc": "Słowo 10110111 jako (a) liczba bez znaku:",
+   "poprawna": 183
+  },
+  {
+   "id": "slowo-b",
+   "typ": "liczba",
+   "slajd": "Jedno słowo — cztery liczby",
+   "tresc": "Słowo 10110111 jako (b) liczba w ZM:",
+   "poprawna": -55
+  },
+  {
+   "id": "slowo-c",
+   "typ": "liczba",
+   "slajd": "Jedno słowo — cztery liczby",
+   "tresc": "Słowo 10110111 jako (c) liczba w U2:",
+   "poprawna": -73
+  },
+  {
+   "id": "slowo-d",
+   "typ": "liczba",
+   "slajd": "Jedno słowo — cztery liczby",
+   "tresc": "Słowo 10110111 jako (d) liczba w kodzie z nadmiarem 127:",
+   "poprawna": 56
+  },
+  {
+   "id": "float-hex",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: zakoduj sam",
+   "tresc": "Jaką liczbę oznacza float o zapisie szesnastkowym 0x41200000?",
+   "poprawna": 10
+  },
+  {
+   "id": "utf8",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: bajty i litery",
+   "tresc": "Ile bajtów zajmie „Zażółć gęślą jaźń” w UTF-8?",
+   "poprawna": 26,
+   "jednostka": "B"
+  },
+  {
+   "id": "iso",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: bajty i litery",
+   "tresc": "A ile w ISO 8859-2?",
+   "poprawna": 17,
+   "jednostka": "B"
+  }
+ ]
+}

@@ -1,0 +1,115 @@
+{
+ "wyklad": "W07",
+ "pytania": [
+  {
+   "id": "edytor",
+   "typ": "wybor",
+   "slajd": "Cofnij i drukuj",
+   "tresc": "Które słowo zostanie w edytorze?",
+   "opcje": [
+    "Ala",
+    "ma",
+    "kota",
+    "żadne"
+   ],
+   "poprawna": 0
+  },
+  {
+   "id": "drukarka",
+   "typ": "wybor",
+   "slajd": "Cofnij i drukuj",
+   "tresc": "Który dokument wydrukuje się pierwszy?",
+   "opcje": [
+    "A",
+    "B",
+    "C"
+   ],
+   "poprawna": 0
+  },
+  {
+   "id": "ta-sama-zasada",
+   "typ": "wybor",
+   "slajd": "Cofnij i drukuj",
+   "tresc": "Czy edytor i drukarka porządkują zadania według tej samej zasady?",
+   "opcje": [
+    "Tak",
+    "Nie"
+   ],
+   "poprawna": 1
+  },
+  {
+   "id": "stos",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: stos czy kolejka?",
+   "tresc": "Stos: w jakiej kolejności wyjdą elementy?",
+   "opcje": [
+    "1, 2, 3",
+    "2, 3, 4",
+    "2, 4, 3",
+    "4, 3, 2"
+   ],
+   "poprawna": 2
+  },
+  {
+   "id": "kolejka",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: stos czy kolejka?",
+   "tresc": "Kolejka: w jakiej kolejności wyjdą elementy?",
+   "opcje": [
+    "2, 4, 3",
+    "1, 2, 3",
+    "1, 3, 4",
+    "4, 3, 1"
+   ],
+   "poprawna": 1
+  },
+  {
+   "id": "zajecia",
+   "typ": "wybor",
+   "numeracja": "1",
+   "slajd": "Plan sali: które zajęcia zmieścić?",
+   "tresc": "Która reguła zachłanna da najwięcej zajęć?",
+   "opcje": [
+    "bierz te, które zaczynają się najwcześniej",
+    "bierz najkrótsze",
+    "bierz te, które kończą się najwcześniej"
+   ],
+   "poprawna": 2
+  },
+  {
+   "id": "monety-zachl",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: policz tabelę",
+   "tresc": "Nominały {1, 5, 6, 9}, kwota 11: ile monet wyda metoda zachłanna?",
+   "poprawna": 3
+  },
+  {
+   "id": "monety-opt",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: policz tabelę",
+   "tresc": "Ile monet wynosi optimum?",
+   "poprawna": 2
+  },
+  {
+   "id": "onp-wynik",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: ONP na kartce",
+   "tresc": "(5 − 1) · (2 + 3) w ONP, obliczone stosem: jaki wynik?",
+   "poprawna": 20
+  },
+  {
+   "id": "onp-stos",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: ONP na kartce",
+   "tresc": "Ile najwięcej liczb leży jednocześnie na stosie?",
+   "poprawna": 3
+  },
+  {
+   "id": "onp-832",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: ONP na kartce",
+   "tresc": "Ile wynosi ONP 8 3 2 − − ?",
+   "poprawna": 7
+  }
+ ]
+}

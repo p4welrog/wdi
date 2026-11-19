@@ -1,0 +1,73 @@
+{
+ "wyklad": "W08",
+ "pytania": [
+  {
+   "id": "karty",
+   "typ": "wybor",
+   "numeracja": "1",
+   "slajd": "Jak układasz karty?",
+   "tresc": "Jak układasz karty?",
+   "opcje": [
+    "szukam najmniejszej z pozostałych i kładę ją na końcu ułożonych",
+    "wsuwam nową kartę na właściwe miejsce wśród ułożonych",
+    "dzielę karty na dwie kupki, układam każdą, potem łączę",
+    "coś innego"
+   ]
+  },
+  {
+   "id": "scal-porownania",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: scal dwie listy",
+   "tresc": "Scalanie [2, 5, 8] i [1, 3, 9, 10]: ile porównań wykonała pętla while?",
+   "poprawna": 5
+  },
+  {
+   "id": "dobierz-1",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: dobierz algorytm",
+   "tresc": "Lista 1 000 000 wyników, w której zmieniło się kilka pozycji od ostatniego sortowania.",
+   "opcje": [
+    "wstawianie",
+    "scalanie",
+    "kopcowanie (heapsort)",
+    "pozycyjne"
+   ]
+  },
+  {
+   "id": "dobierz-2",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: dobierz algorytm",
+   "tresc": "Arkusz ocen: sortuj według oceny, zachowując w każdej ocenie kolejność alfabetyczną.",
+   "opcje": [
+    "wstawianie",
+    "scalanie",
+    "kopcowanie (heapsort)",
+    "pozycyjne"
+   ]
+  },
+  {
+   "id": "dobierz-3",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: dobierz algorytm",
+   "tresc": "Mikrokontroler z bardzo małą pamięcią; potrzebna gwarancja czasu.",
+   "opcje": [
+    "wstawianie",
+    "scalanie",
+    "kopcowanie (heapsort)",
+    "pozycyjne"
+   ]
+  },
+  {
+   "id": "dobierz-4",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: dobierz algorytm",
+   "tresc": "10 milionów numerów albumów (6 cyfr).",
+   "opcje": [
+    "wstawianie",
+    "scalanie",
+    "kopcowanie (heapsort)",
+    "pozycyjne"
+   ]
+  }
+ ]
+}

@@ -1,4 +1,50 @@
 [
-  { "plik": "W01", "tytul": "Czym jest informatyka; pojęcie informacji" },
-  { "plik": "W02", "tytul": "Teoria informacji i kodowanie" }
+ {
+  "plik": "W01",
+  "tytul": "Czym jest informatyka; pojęcie informacji"
+ },
+ {
+  "plik": "W02",
+  "tytul": "Teoria informacji i kodowanie"
+ },
+ {
+  "plik": "W03",
+  "tytul": "Systemy liczbowe i reprezentacja liczb"
+ },
+ {
+  "plik": "W04",
+  "tytul": "Maszyna Turinga i granice obliczalności"
+ },
+ {
+  "plik": "W05",
+  "tytul": "Architektura von Neumanna i CPU"
+ },
+ {
+  "plik": "W06",
+  "tytul": "Algorytmy: zapis, poprawność, złożoność; wyszukiwanie"
+ },
+ {
+  "plik": "W07",
+  "tytul": "Stosy, kolejki, listy; techniki projektowania algorytmów"
+ },
+ {
+  "plik": "W08",
+  "tytul": "Sortowanie"
+ },
+ {
+  "plik": "W09",
+  "tytul": "Słowniki: BST, haszowanie"
+ },
+ {
+  "plik": "W10",
+  "tytul": "Grafy: BFS, DFS, Dijkstra, MST"
+ },
+ {
+  "plik": "W11",
+  "tytul": "Systemy operacyjne, wirtualizacja"
+ },
+ {
+  "plik": "W12",
+  "tytul": "Sieci komputerowe"
+ }
 ]

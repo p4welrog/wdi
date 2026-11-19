@@ -148,7 +148,7 @@ export function podsumuj(p, glosy, ukryte = new Set()) {
     const s = { n: xs.length };
     if (!xs.length) return { ...s, slupki: [] };
     s.mediana = xs.length % 2 ? xs[(xs.length - 1) / 2] : (xs[xs.length / 2 - 1] + xs[xs.length / 2]) / 2;
-    if (p.poprawna !== undefined) s.poprawnych = xs.filter((x) => czyPoprawna(p, x)).length;
+    if (p.poprawna != null) s.poprawnych = xs.filter((x) => czyPoprawna(p, x)).length;
     const rozne = [...new Set(xs)];
     if (rozne.length <= 12) {
       s.slupki = rozne.map((v) => ({ e: fmt(v, 4), v, k: xs.filter((x) => x === v).length }));
@@ -188,7 +188,7 @@ export function rysujWyniki(el, p, s, { odslona = false, pelne = null, naUkryj =
     const max = Math.max(1, ...s.slupki.map((b) => b.k));
     h += `<div class="slupki">` + s.slupki.map((b) => {
       let dobry = false;
-      if (odslona && pp.poprawna !== undefined) {
+      if (odslona && pp.poprawna != null) {
         if (b.v !== undefined) dobry = czyPoprawna(pp, b.v);
       }
       const proc = Math.round((100 * b.k) / s.n);
@@ -199,7 +199,7 @@ export function rysujWyniki(el, p, s, { odslona = false, pelne = null, naUkryj =
     }).join("") + `</div>`;
   } else if (s.slowa) {
     const max = Math.max(1, ...s.slowa.map((w) => w.k));
-    const dobre = odslona && pp.poprawna !== undefined ? [].concat(pp.poprawna).map(normalizujTekst) : [];
+    const dobre = odslona && pp.poprawna != null ? [].concat(pp.poprawna).map(normalizujTekst) : [];
     h += `<div class="chmura">` + s.slowa.map((w) =>
       `<span class="slowo${dobre.includes(w.e) ? " dobry" : ""}${naUkryj ? " klik" : ""}" data-s="${esc(w.e)}"
         style="font-size:${(0.9 + 2.3 * Math.sqrt(w.k / max)).toFixed(2)}em" title="${w.k}">${esc(w.e)}</span>`).join(" ") + `</div>`;

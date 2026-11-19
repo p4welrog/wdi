@@ -1,0 +1,87 @@
+{
+ "wyklad": "W11",
+ "pytania": [
+  {
+   "id": "procesy",
+   "typ": "wybor",
+   "numeracja": "1",
+   "slajd": "Kilkaset programów, kilka rdzeni",
+   "tresc": "Ile procesów działa teraz na Twoim komputerze?",
+   "opcje": [
+    "mniej niż 10",
+    "kilkadziesiąt",
+    "kilkaset",
+    "kilka tysięcy"
+   ]
+  },
+  {
+   "id": "fcfs",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: zaplanuj procesor",
+   "tresc": "Średni czas oczekiwania dla FCFS (ms):",
+   "poprawna": 5,
+   "jednostka": "ms"
+  },
+  {
+   "id": "sjf",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: zaplanuj procesor",
+   "tresc": "Średni czas oczekiwania dla SJF (ms, dwa miejsca po przecinku):",
+   "poprawna": 1.67,
+   "tolerancja": 0.011,
+   "jednostka": "ms"
+  },
+  {
+   "id": "rr",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: zaplanuj procesor",
+   "tresc": "Średni czas oczekiwania dla RR, q = 2 (ms, dwa miejsca po przecinku):",
+   "poprawna": 4.33,
+   "tolerancja": 0.011,
+   "jednostka": "ms"
+  },
+  {
+   "id": "vm-1",
+   "typ": "wybor",
+   "slajd": "Maszyna wirtualna czy kontener?",
+   "tresc": "Na macOS musisz uruchomić program działający tylko w Windows.",
+   "opcje": [
+    "maszyna wirtualna",
+    "kontener"
+   ],
+   "poprawna": 0
+  },
+  {
+   "id": "vm-2",
+   "typ": "wybor",
+   "slajd": "Maszyna wirtualna czy kontener?",
+   "tresc": "Aplikacja webowa w 50 identycznych kopiach, szybko dokładanych przy dużym ruchu.",
+   "opcje": [
+    "maszyna wirtualna",
+    "kontener"
+   ],
+   "poprawna": 1
+  },
+  {
+   "id": "vm-3",
+   "typ": "wybor",
+   "slajd": "Maszyna wirtualna czy kontener?",
+   "tresc": "Chcesz bezpiecznie otworzyć podejrzany załącznik.",
+   "opcje": [
+    "maszyna wirtualna",
+    "kontener"
+   ],
+   "poprawna": 0
+  },
+  {
+   "id": "vm-4",
+   "typ": "wybor",
+   "slajd": "Maszyna wirtualna czy kontener?",
+   "tresc": "Cała grupa ma mieć identyczne środowisko Pythona z tymi samymi bibliotekami.",
+   "opcje": [
+    "maszyna wirtualna",
+    "kontener"
+   ]
+  }
+ ]
+}

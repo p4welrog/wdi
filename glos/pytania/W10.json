@@ -1,0 +1,41 @@
+{
+ "wyklad": "W10",
+ "pytania": [
+  {
+   "id": "milgram",
+   "typ": "wybor",
+   "numeracja": "1",
+   "slajd": "Ilu pośredników do nieznajomego?",
+   "tresc": "Ilu pośredników średnio potrzebowały listy, które dotarły do celu?",
+   "opcje": [
+    "ok. 5",
+    "ok. 50",
+    "ok. 500",
+    "listy nie docierały"
+   ],
+   "poprawna": 0
+  },
+  {
+   "id": "bfs-najdalej",
+   "typ": "tekst",
+   "maks": 5,
+   "slajd": "Mini-zadanie: BFS ręcznie",
+   "tresc": "BFS z F: który wierzchołek jest najdalej od F?",
+   "poprawna": "A"
+  },
+  {
+   "id": "bfs-odl",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: BFS ręcznie",
+   "tresc": "Ile wynosi ta odległość?",
+   "poprawna": 3
+  },
+  {
+   "id": "dijkstra-e",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: policz odległości",
+   "tresc": "Dijkstra: najkrótsza odległość od A do E?",
+   "poprawna": 20
+  }
+ ]
+}
