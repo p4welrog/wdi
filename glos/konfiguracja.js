@@ -3,10 +3,12 @@
 // z założenia; dostęp do danych chronią reguły z pliku firestore.rules.
 // Dopóki projectId jest pusty, strony działają tylko w trybie próbnym (?demo=1).
 export const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  appId: "",
+  apiKey: "AIzaSyD_xjTPLWZZ37waSz-ydPmsKeg_CAwIX3E",
+  authDomain: "wdi-glos.firebaseapp.com",
+  projectId: "wdi-glos",
+  storageBucket: "wdi-glos.firebasestorage.app",
+  messagingSenderId: "177178756626",
+  appId: "1:177178756626:web:543d8683217ce9b2977acb"
 };
 
 // Publiczny adres strony dla studentów (wyświetlany pod kodem QR).
