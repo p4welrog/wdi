@@ -1,0 +1,1377 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 12 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 12 „Sieci komputerowe” (Wprowadzenie do informatyki, SWPS).">
+<style>
+
+
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+html { scroll-padding-top: 96px; }
+@media (max-width: 560px) { html { scroll-padding-top: 124px; } }
+.home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+
+/* ───────── Wspólne elementy (jak w W05) ───────── */
+.dirty { color: var(--amber); font-size: .88rem; }
+.errlist { margin: 6px 0 0; padding-left: 1.2em; color: var(--bad); font-size: .9rem; }
+.alert { border-radius: 8px; padding: 8px 12px; font-size: .92rem; margin: 6px 0; }
+.alert.bad { background: var(--bad-soft); color: var(--bad); }
+.alert.warn { background: var(--amber-soft); color: var(--amber); }
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 6px; }
+.ctrl .speed { display: flex; align-items: center; gap: 6px; font-size: .88rem; color: var(--text-2); }
+.ctrl input[type="range"] { width: 110px; }
+.status.halt { color: var(--good); }
+.status.stuck { color: var(--bad); }
+.status.limit { color: var(--amber); }
+.task { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.task h4 { margin: 0 0 4px; font-size: 1rem; }
+.task p { margin: 0 0 8px; color: var(--text-2); font-size: .94rem; }
+.task.done { border-color: var(--good); }
+.task .hint { font-size: .88rem; }
+.res td.okc { color: var(--good); font-weight: 700; }
+.res td.badc { color: var(--bad); font-weight: 700; }
+.res td.mono { font-family: var(--mono); }
+.pill { display: inline-block; font-size: .78rem; padding: 2px 9px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+details.ref { margin-top: 10px; }
+details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.fbline { font-weight: 600; font-size: 1.1rem; margin: 12px 0 4px; }
+.fbline.dobrze { color: var(--good); }
+.fbline.zle { color: var(--bad); }
+.group { border: 1px solid var(--s1); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; background: var(--surface); }
+.group h3 { display: flex; gap: 8px; align-items: center; }
+.group .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; }
+.card.most { border-left: 4px solid var(--good); }
+.card.most h3 { color: var(--good); }
+
+/* ───────── W07: elementy wspólne z W06 ───────── */
+.sk-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 720px) { .sk-grid { grid-template-columns: minmax(0, 1fr); } }
+pre.kod { font-family: var(--mono); font-size: .92rem; line-height: 1.55; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 0; margin: 0 0 10px; overflow-x: auto; }
+pre.kod span { display: block; padding: 0 12px; white-space: pre; }
+pre.kod span.cur { background: var(--hl); color: var(--hl-ink); }
+input.liczba { width: 9em; font-family: var(--mono); }
+.prpyt { font-size: 1.15rem; font-weight: 600; margin: 8px 0 10px; }
+.opbtn { min-width: 6em; }
+.opbtn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
+.opbtn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+
+/* ───────── W07: stos i kolejka ───────── */
+.stos { display: flex; flex-direction: column; gap: 4px; min-height: 60px; padding: 8px; border: 2px solid var(--border); border-top: 0; border-radius: 0 0 10px 10px; max-width: 220px; }
+.kolejka { display: flex; flex-wrap: wrap; gap: 4px; min-height: 52px; padding: 8px; border: 2px solid var(--border); border-left: 0; border-right: 0; align-items: center; }
+.el { font-family: var(--mono); font-weight: 700; padding: 6px 12px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); text-align: center; border: 1.5px solid transparent; }
+.el.wierzch { border-color: var(--accent); }
+.el.nowy { background: var(--hl); color: var(--hl-ink); }
+.pusty { color: var(--muted); font-size: .85rem; font-style: italic; padding: 4px; }
+.ops { font-size: 1rem; line-height: 1.7; background: var(--surface-2); padding: 8px 12px; border-radius: 8px; }
+
+
+/* ───────── W12: wspólne ───────── */
+.zad { font-size: 1.08rem; margin: 10px 0 8px; }
+.odp { margin: 8px 0; }
+.btn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
+.btn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+.btn.duzy { min-width: 12em; padding: 14px 16px; font-size: 1rem; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .85rem; color: var(--text-2); margin-top: 8px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.dwie { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 760px) { .dwie { grid-template-columns: minmax(0, 1fr); } }
+
+/* grafy (jak w W10) */
+svg.graf { display: block; width: 100%; height: auto; max-width: 620px; margin: 6px auto; }
+svg.graf line, svg.graf path.kr { stroke: var(--muted); stroke-width: 2; fill: none; }
+svg.graf .kr.akt { stroke: var(--amber); stroke-width: 4; stroke-dasharray: 8 5; }
+svg.graf .kr.odrz { stroke: var(--grid); stroke-width: 3; stroke-dasharray: 3 5; }
+svg.graf .kr.sciezka { stroke: var(--good); stroke-width: 5; }
+svg.graf .kr.oba { stroke: var(--good); stroke-width: 5; }
+svg.graf .klik { stroke: transparent; stroke-width: 18; cursor: pointer; }
+svg.graf .waga rect { fill: var(--surface); stroke: var(--border); }
+svg.graf .waga text { fill: var(--text); font: 700 13px var(--mono); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+svg.graf .waga { pointer-events: none; }
+svg.graf .w circle { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+svg.graf .w text { fill: var(--text); font: 700 15px var(--mono); text-anchor: middle; dominant-baseline: central; }
+svg.graf .w text.et { fill: var(--accent); font: 700 12px var(--mono); }
+svg.graf .w.start circle { stroke-width: 4; fill: var(--accent-soft); }
+svg.graf .w.cel circle { fill: var(--good-soft); stroke: var(--good); stroke-width: 3; }
+svg.graf .w.nieos circle { stroke-dasharray: 4 3; stroke: var(--bad); }
+
+/* ───────── W12: pakiety ───────── */
+svg.rozklad { width: 100%; min-width: 480px; height: auto; display: block; margin: 8px 0 0; }
+svg.rozklad .sl { fill: var(--s1); }
+svg.rozklad .sl.zle { fill: var(--bad); }
+svg.rozklad .os { stroke: var(--border); }
+svg.rozklad text { fill: var(--muted); font: 11px var(--font); text-anchor: middle; }
+svg.rozklad .gr { stroke: var(--bad); stroke-dasharray: 4 3; }
+svg.rozklad text.gr { fill: var(--bad); stroke: none; font-weight: 700; }
+
+/* ───────── W12: enkapsulacja ───────── */
+.trasa { display: flex; align-items: stretch; gap: 8px; margin: 12px 0; }
+.trasa .lacze { align-self: center; flex: 0 0 34px; height: 3px; background: var(--border); }
+.urz { flex: 1; border: 1px solid var(--border); border-radius: 10px; padding: 6px; background: var(--surface-2); min-width: 0; }
+.urz.akt { border-color: var(--amber); box-shadow: 0 0 0 2px var(--amber-soft); }
+.urz .nz { font-weight: 700; font-size: .9rem; text-align: center; margin-bottom: 4px; }
+.urz .wr { font-size: .74rem; padding: 3px 6px; border-radius: 5px; margin: 2px 0; color: var(--text-2); background: var(--surface); border: 1px solid var(--border); }
+.urz .wr.brak { visibility: hidden; }
+@media (max-width: 520px) { .trasa { gap: 4px; } .trasa .lacze { flex-basis: 8px; } .urz { padding: 4px; } .urz .wr { font-size: .64rem; padding: 3px 3px; overflow-wrap: anywhere; } }
+.urz .wr.tu { background: var(--hl); color: var(--hl-ink); border-color: var(--amber); font-weight: 700; }
+.pakiet { display: flex; flex-wrap: wrap; gap: 3px; align-items: stretch; margin: 6px 0; min-height: 58px; }
+.pakiet .cz { border-radius: 6px; padding: 5px 8px; font-size: .78rem; line-height: 1.3; border: 1px solid transparent; }
+.pakiet .cz b { display: block; font-size: .82rem; }
+.pakiet .cz.hl { background: #f5d48f; color: #1a1a1a; }
+.pakiet .cz.hn { background: #9cc3f0; color: #1a1a1a; }
+.pakiet .cz.ht { background: #f5b48f; color: #1a1a1a; }
+.pakiet .cz.m { background: #a9dcbf; color: #1a1a1a; flex: 1; min-width: 120px; font-family: var(--mono); }
+.pakiet .cz.fcs { background: #f5d48f; color: #1a1a1a; }
+.pakiet .cz.nowy { outline: 3px solid var(--amber); }
+.pakiet .bity { font-family: var(--mono); font-size: .8rem; color: var(--text-2); overflow-wrap: anywhere; padding: 6px; border: 1px dashed var(--border); border-radius: 6px; flex: 1; }
+
+/* ───────── W12: DNS ───────── */
+ol.kroki-dns { padding-left: 1.5em; margin: 6px 0; font-size: .92rem; line-height: 1.55; }
+ol.kroki-dns li { margin: 3px 0; }
+ol.kroki-dns li.cache { color: var(--good); }
+ol.kroki-dns .ser { font-family: var(--mono); font-weight: 700; }
+#dnCache td.wyg { color: var(--muted); text-decoration: line-through; }
+
+/* ───────── W12: czekanie ───────── */
+.okno { min-height: 150px; border: 1px solid var(--border); border-radius: var(--radius); margin: 10px auto; max-width: 420px; display: grid; place-items: center; background: var(--surface-2); font-size: 1.05rem; text-align: center; padding: 12px; }
+.okno.gotowe { background: var(--good-soft); color: var(--good); font-weight: 700; }
+table.t tr.naj td { font-weight: 700; }
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 12</a></div>
+    <a id="groupBadge" class="badge" href="#ustawienia" hidden></a>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#pakiety">1. Obwody czy pakiety?</a>
+    <a href="#warstwy">2. Koperta w kopercie</a>
+    <a href="#trasowanie">3. Trasowanie</a>
+    <a href="#dns">4. DNS i transport</a>
+    <a href="#opoznienie">5. Opóźnienia</a>
+    <a href="#czekanie">6. Ile czekania?</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Sieci komputerowe: ćwiczenia</h1>
+  <p class="lead">Ćwiczenia do wykładu 12, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
+  <div class="grid2">
+    <a class="tile" href="#pakiety"><span class="num">1</span><h3>Obwody czy pakiety?</h3><p>Ilu użytkowników obsłuży łącze, jeśli każdemu zarezerwujemy kanał, a ilu, jeśli będą się nim dzielić? Rozkład dwumianowy pokaże, jak rzadko wszyscy nadają naraz.</p><div class="meta">ok. 5 min · slajd „Przełączanie obwodów a przełączanie pakietów”</div></a>
+    <a class="tile" href="#warstwy"><span class="num">2</span><h3>Koperta w kopercie</h3><p>Wiadomość schodzi przez warstwy, dostaje nagłówki, przechodzi przez router i jest rozpakowywana u odbiorcy. Ile bajtów zajmują same koperty? Na koniec: która warstwa?</p><div class="meta">ok. 7 min · slajdy od „Po co warstwy?” do „Modelu OSI a TCP/IP”</div></a>
+    <a class="tile" href="#trasowanie"><span class="num">3</span><h3>Trasowanie</h3><p>Sieć ze slajdu: zmieniaj koszty łączy, psuj je i patrz, jak router A przelicza tablicę przekazywania algorytmem Dijkstry. Najtańsza trasa a najmniej przeskoków.</p><div class="meta">ok. 5 min · slajd „Trasowanie: Dijkstra w każdym routerze”</div></a>
+    <a class="tile" href="#dns"><span class="num">4</span><h3>DNS i transport</h3><p>Zapytaj o nazwę i prześledź drogę przez drzewo serwerów DNS. Drugie zapytanie obsłuży pamięć podręczna — dopóki nie minie TTL. Potem TCP czy UDP i kody HTTP.</p><div class="meta">ok. 7 min · slajdy od „Adresu IP i portu” do „HTTP i HTTPS”</div></a>
+    <a class="tile" href="#opoznienie"><span class="num">5</span><h3>Kalkulator opóźnień</h3><p>Odległość, rozmiar danych i przepustowość. Który składnik dominuje: transmisja czy propagacja? Zadania: co bardziej pomoże — szybsze łącze czy bliższy serwer?</p><div class="meta">ok. 7 min · slajdy „Cztery składniki opóźnienia” i „Przykład: Warszawa – Nowy Jork”</div></a>
+    <a class="tile" href="#czekanie"><span class="num">6</span><h3>Ile czekania zniesiesz?</h3><p>Klikasz, a odpowiedź przychodzi po krótszej lub dłuższej chwili. Oceń, jak to odbierasz. Gdzie leżą Twoje progi — i progi sali?</p><div class="meta">ok. 4 min · slajd „Ile czekania zniesie człowiek?”</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. PAKIETY ═══════════════════ -->
+<section id="v-pakiety" hidden>
+  <h2>1. Obwody czy pakiety?</h2>
+  <p class="lead">Łącze o przepustowości R. Każdy użytkownik, gdy nadaje, potrzebuje r, ale nadaje tylko przez część czasu p. Przy przełączaniu obwodów każdy dostaje stały kanał; przy przełączaniu pakietów wszyscy dzielą łącze i liczymy na to, że rzadko nadają naraz.</p>
+
+  <div class="card">
+    <div class="row" style="gap: 18px">
+      <span class="row"><label for="pkR">łącze R =</label><input id="pkR" type="number" min="1" max="10000" value="1000" style="width: 6em"><span class="small muted">kb/s</span></span>
+      <span class="row"><label for="pkr">użytkownik r =</label><input id="pkr" type="number" min="1" max="10000" value="100" style="width: 6em"><span class="small muted">kb/s</span></span>
+      <span class="row"><label for="pkP">aktywny przez p =</label><input id="pkP" type="range" min="1" max="100" value="10"><span class="mono" id="pkPv">10%</span></span>
+      <span class="row"><label for="pkN">użytkowników N =</label><input id="pkN" type="range" min="1" max="120" value="35"><span class="mono" id="pkNv">35</span></span>
+    </div>
+    <div class="stats" id="pkStaty"></div>
+    <div class="scroll-x"><svg class="rozklad" id="pkSvg" viewBox="0 0 640 220" role="img" aria-label="Rozkład liczby jednocześnie nadających użytkowników"></svg></div>
+    <div class="legend"><span><i style="background: var(--s1)"></i>łącze wystarcza</span><span><i style="background: var(--bad)"></i>więcej chętnych niż łącze uniesie: kolejka albo utrata pakietów</span></div>
+    <p class="small muted" id="pkOpis"></p>
+  </div>
+
+  <div class="card">
+    <h3>Rozkład dwumianowy w trzech zdaniach</h3>
+    <p class="small">Każdy z N użytkowników niezależnie nadaje z prawdopodobieństwem p. Liczba nadających naraz X ma rozkład dwumianowy: P(X = k) = C(N, k) · pᵏ · (1 − p)ᴺ⁻ᵏ. Łącze jest przeciążone, gdy X przekracza ⌊R / r⌋.</p>
+    <pre class="kod"><span>from math import comb</span><span>N, p, M = 35, 0.1, 10      # M = ⌊R / r⌋</span><span>sum(comb(N, k) * p**k * (1 - p)**(N - k) for k in range(M + 1, N + 1))</span></pre>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Zwiększaj N przy p = 10%. Przy ilu użytkownikach przeciążenie zdarza się częściej niż w 1% chwil? Ile to razy więcej niż przy obwodach?</li>
+      <li>Ustaw p = 100% (wszyscy nadają bez przerwy). Co zostaje z przewagi pakietów?</li>
+      <li>Założenie o niezależności: czy w przerwie między zajęciami studenci korzystają z sieci niezależnie? Co to zmienia?</li>
+    </ol>
+  </div>
+  <p class="src">J. F. Kurose, K. W. Ross, <em>Computer Networking: A Top-Down Approach</em>, 8th ed., Pearson 2021, rozdz. 1.3 (przykład 1 Mb/s, 35 użytkowników).</p>
+</section>
+
+<!-- ═══════════════════ 2. WARSTWY ═══════════════════ -->
+<section id="v-warstwy" hidden>
+  <h2>2. Koperta w kopercie</h2>
+  <p class="lead">Laptop wysyła wiadomość do serwera przez jeden router. Każda warstwa dokleja swój nagłówek, a odbiorca zdejmuje je w odwrotnej kolejności — jak ze stosu. Przechodź krok po kroku.</p>
+
+  <div class="card">
+    <div class="row">
+      <label for="enTekst">wiadomość (warstwa aplikacji)</label>
+      <input id="enTekst" type="text" value="GET / HTTP/1.1" autocomplete="off" spellcheck="false" style="flex: 1; min-width: 12em; font-family: var(--mono)">
+    </div>
+    <div class="ctrl">
+      <button type="button" class="btn ghost" id="enWstecz">← Wstecz</button>
+      <button type="button" class="btn" id="enKrok">Krok →</button>
+      <button type="button" class="btn ghost small" id="enReset">Od nowa</button>
+    </div>
+    <div class="trasa" id="enTrasa"></div>
+    <div class="pakiet" id="enPakiet"></div>
+    <p class="fbline" id="enFb" role="status"></p>
+    <div class="stats" id="enStaty"></div>
+    <p class="small muted">Rozmiary to minimalne nagłówki bez opcji: TCP 20 B, IPv4 20 B, Ethernet 14 B nagłówka + 4 B sumy kontrolnej na końcu ramki. Adresy są przykładowe (pule do dokumentacji).</p>
+  </div>
+
+  <div class="card">
+    <h3>Sprawdź się: która warstwa?</h3>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="wqNr"></span><span class="small muted" id="wqWynik"></span></div>
+    <p class="zad" id="wqQ"></p>
+    <div class="row odp" id="wqOdp"></div>
+    <p class="fbline" id="wqFb" role="status"></p>
+    <p id="wqWyj"></p>
+    <div class="row"><button type="button" class="btn" id="wqDalej" hidden>Dalej →</button></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Który nagłówek router zmienia, a którego nie rusza (poza TTL)? Dlaczego router nie zagląda do nagłówka TCP?</li>
+      <li>Wyślij wiadomość „ok”. Ile procent ramki to treść, a ile koperty? Co by było przy pliku 1 MB podzielonym na pakiety?</li>
+      <li>Ta sama strona działa przez Wi-Fi, Ethernet i 5G. Która warstwa się zmienia, a których przeglądarka „nie widzi”?</li>
+    </ol>
+  </div>
+  <p class="src">Kurose, Ross, rozdz. 1.5 (warstwy, enkapsulacja); RFC 9293 (TCP), RFC 791 (IPv4), IEEE 802.3 (Ethernet); RFC 5737 (adresy IP do dokumentacji).</p>
+</section>
+
+<!-- ═══════════════════ 3. TRASOWANIE ═══════════════════ -->
+<section id="v-trasowanie" hidden>
+  <h2>3. Trasowanie: Dijkstra w routerze</h2>
+  <p class="lead">W protokole OSPF każdy router zna mapę sieci (koszty łączy) i sam liczy najkrótsze ścieżki algorytmem Dijkstry z W10. Z wyniku buduje tablicę przekazywania: dla każdego celu — przez którego sąsiada wysłać pakiet.</p>
+
+  <div class="card">
+    <div class="row">
+      <span class="small muted" id="trTrybLab">kliknięcie łącza:</span>
+      <div class="seg" id="trTryb" role="group" aria-labelledby="trTrybLab"><button type="button" data-w="awaria" aria-pressed="true">awaria / naprawa</button><button type="button" data-w="plus" aria-pressed="false">koszt +1</button><button type="button" data-w="minus" aria-pressed="false">koszt −1</button></div>
+      <button type="button" class="btn ghost small" id="trReset">Sieć ze slajdu</button>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <span class="small muted" id="trCelLab">pokaż trasę A →</span>
+      <div class="seg" id="trCel" role="group" aria-labelledby="trCelLab"></div>
+    </div>
+    <div class="dwie" style="margin-top: 8px">
+      <svg class="graf" id="trGraf" viewBox="0 0 560 300" role="img" aria-label="Sieć routerów z kosztami łączy"></svg>
+      <div>
+        <div class="small muted">tablica przekazywania routera A</div>
+        <div class="scroll-x"><table class="t" id="trTab"></table></div>
+      </div>
+    </div>
+    <div class="legend"><span><i style="background: var(--good)"></i>najtańsza trasa</span><span><i style="background: var(--amber)"></i>trasa o najmniejszej liczbie przeskoków</span><span><i style="background: var(--grid)"></i>łącze uszkodzone</span></div>
+    <p class="fbline" id="trFb" role="status"></p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Najtańsza trasa A → F ma koszt 11 i pięć przeskoków. Dlaczego router nie wybiera trasy A–B–D–F z trzema przeskokami?</li>
+      <li>Zepsuj łącze D–E. Które wpisy w tablicy routera A się zmieniły? A które zostały, choć zmienił się ich koszt?</li>
+      <li>Zepsuj tyle łączy, żeby F stał się nieosiągalny. Co wtedy zrobi router z pakietem do F?</li>
+    </ol>
+  </div>
+  <p class="src">Kurose, Ross, rozdz. 4.1, 5.2.1 i 5.3 (przekazywanie, trasowanie stanu łączy, OSPF); E. W. Dijkstra, Numer. Math. 1, 1959. Sieć i koszty ze slajdu W12.</p>
+</section>
+
+<!-- ═══════════════════ 4. DNS ═══════════════════ -->
+<section id="v-dns" hidden>
+  <h2>4. DNS i transport</h2>
+  <p class="lead">Twój komputer pyta lokalny serwer DNS. Ten, jeśli nie zna odpowiedzi, schodzi po drzewie nazw: serwer główny → serwery domeny najwyższego poziomu → … → serwer domeny. Odpowiedzi zapamiętuje na czas TTL.</p>
+
+  <div class="card">
+    <h3>Część A: zapytaj o nazwę</h3>
+    <div class="row" id="dnNazwy"></div>
+    <div class="row" style="margin-top: 8px">
+      <span class="small muted">zegar: <b class="mono" id="dnZegar">0 s</b></span>
+      <button type="button" class="btn ghost small" id="dnCzas1">+ 1 min</button>
+      <button type="button" class="btn ghost small" id="dnCzas2">+ 1 h</button>
+      <button type="button" class="btn ghost small" id="dnCzas3">+ 2 dni</button>
+      <button type="button" class="btn ghost small" id="dnCzysc">Wyczyść pamięć podręczną</button>
+    </div>
+    <div class="dwie" style="margin-top: 10px">
+      <div><div class="small muted">przebieg ostatniego zapytania</div><ol class="kroki-dns" id="dnKroki"></ol><p class="fbline" id="dnFb" role="status"></p></div>
+      <div><div class="small muted">pamięć podręczna lokalnego serwera DNS</div><div class="scroll-x"><table class="t" id="dnCache"></table></div></div>
+    </div>
+    <div class="stats" id="dnStaty"></div>
+    <p class="small muted">Nazwy są prawdziwe, ale adresy IP i czasy TTL są przykładowe (pule do dokumentacji z RFC 5737). Prawdziwy adres sprawdzisz w Pythonie: <span class="mono">socket.gethostbyname("swps.edu.pl")</span>.</p>
+  </div>
+
+  <div class="card">
+    <h3>Część B: TCP czy UDP? Co znaczy odpowiedź?</h3>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="tqNr"></span><span class="small muted" id="tqWynik"></span></div>
+    <p class="zad" id="tqQ"></p>
+    <div class="row odp" id="tqOdp"></div>
+    <p class="fbline" id="tqFb" role="status"></p>
+    <p id="tqWyj"></p>
+    <div class="row"><button type="button" class="btn" id="tqDalej" hidden>Dalej →</button></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Zapytaj o <span class="mono">swps.edu.pl</span>, a potem o <span class="mono">uw.edu.pl</span>. Dlaczego drugie zapytanie potrzebuje mniej kroków, choć tej nazwy jeszcze nie było?</li>
+      <li>Krótki TTL czy długi? Co zyskuje, a co traci właściciel domeny, który często zmienia adres serwera?</li>
+      <li>Nazwy tworzą drzewo. Czym schodzenie po drzewie DNS przypomina szukanie w drzewie BST z W9, a czym się różni?</li>
+    </ol>
+  </div>
+  <p class="src">P. Mockapetris, RFC 1034 i RFC 1035, 1987; Kurose, Ross, rozdz. 2.2 (HTTP), 2.4 (DNS), 3 (TCP i UDP); RFC 9110 (kody odpowiedzi HTTP).</p>
+</section>
+
+<!-- ═══════════════════ 5. OPÓŹNIENIE ═══════════════════ -->
+<section id="v-opoznienie" hidden>
+  <h2>5. Kalkulator opóźnień</h2>
+  <p class="lead">Transmisja d<sub>trans</sub> = L / R zależy od rozmiaru danych i przepustowości, a nie od odległości. Propagacja d<sub>prop</sub> = s / v zależy od odległości, a nie od rozmiaru. Pomijamy kolejki i przetwarzanie.</p>
+
+  <div class="card">
+    <div class="row" id="opMiasta"></div>
+    <div class="row" style="margin-top: 10px; gap: 18px">
+      <span class="row"><label for="opS">odległość</label><input id="opS" type="number" min="0" max="40000" value="6854" style="width: 7em"><span class="small muted">km</span></span>
+      <span class="row"><label for="opL">dane</label><input id="opL" type="number" min="1" value="1500" style="width: 7em"><select id="opLj" aria-label="jednostka danych"><option value="1">B</option><option value="1000">kB</option><option value="1000000">MB</option><option value="1000000000">GB</option></select></span>
+      <span class="row"><label for="opR">łącze</label><input id="opR" type="number" min="0.001" step="any" value="100" style="width: 6em"><span class="small muted">Mb/s</span></span>
+      <span class="row"><label for="opV">v</label><select id="opV"><option value="2e8" selected>2·10⁸ m/s (światłowód)</option><option value="3e8">3·10⁸ m/s (próżnia)</option></select></span>
+    </div>
+    <div class="stats" id="opStaty"></div>
+    <div class="hbars" id="opSlupki"></div>
+    <p class="small muted" id="opOpis"></p>
+  </div>
+
+  <div class="card">
+    <h3>Co pomoże bardziej?</h3>
+    <p class="zad" id="ozQ"></p>
+    <div class="row odp" id="ozOdp">
+      <button type="button" class="btn ghost" data-w="lacze">łącze 2 razy szybsze</button>
+      <button type="button" class="btn ghost" data-w="blizej">serwer 2 razy bliżej</button>
+    </div>
+    <p class="fbline" id="ozFb" role="status"></p>
+    <p id="ozWyj"></p>
+    <div class="row"><button type="button" class="btn ghost" id="ozNowe">Nowe zadanie</button></div>
+    <div class="stats"><div class="stat"><div class="k">poprawne</div><div class="v" id="ozOk">0</div></div><div class="stat"><div class="k">zadania</div><div class="v" id="ozIle">0</div></div></div>
+    <p class="small muted">Mini-zadania ze slajdu (Sydney) tu nie ma — policz je na kartce.</p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Dla pakietu 1500 B do Nowego Jorku: o ile skróci opóźnienie łącze 10 razy szybsze? A o ile przy pliku 100 MB?</li>
+      <li>Nawet w próżni (3·10⁸ m/s) RTT do Tokio przekracza próg 0,1 s, gdy otwarcie strony wymaga kilku RTT. Co mogą zrobić duże serwisy?</li>
+      <li>Polecenie traceroute z otwarcia pokazało rzeczywiste czasy. Dlaczego są większe niż wynik kalkulatora?</li>
+    </ol>
+  </div>
+  <p class="src">Kurose, Ross, rozdz. 1.4 (opóźnienia, analogia z karawaną). Odległości: po kole wielkim (wzór haversine) między centrami miast, zaokrąglone do km.</p>
+</section>
+
+<!-- ═══════════════════ 6. CZEKANIE ═══════════════════ -->
+<section id="v-czekanie" hidden>
+  <h2>6. Ile czekania zniesiesz?</h2>
+  <p class="lead">Klikasz przycisk, a „serwer” odpowiada po chwili — od kilkudziesięciu milisekund do kilku sekund. Po każdej odpowiedzi oceń, jak odebrałeś czekanie. Na końcu zobaczysz swoje progi.</p>
+
+  <div class="card" id="czIntro">
+    <h3>Zasady</h3>
+    <ul>
+      <li>24 próby, ok. 2 minuty. Kliknij „Wyślij zapytanie”, poczekaj na odpowiedź i wybierz jedną z trzech ocen.</li>
+      <li>Nie ma dobrych ani złych odpowiedzi — pytamy o Twoje wrażenie.</li>
+      <li>Najlepiej rób to w ciszy i bez innych kart w tle.</li>
+    </ul>
+    <button type="button" class="btn" id="czStart">Zaczynamy</button>
+  </div>
+
+  <div class="card" id="czTest" hidden>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="czNr"></span></div>
+    <div class="okno" id="czOkno"><div class="ladow" id="czLadow"></div></div>
+    <div class="row" style="justify-content: center"><button type="button" class="btn duzy" id="czWyslij">Wyślij zapytanie</button></div>
+    <div class="row odp" id="czOceny" style="justify-content: center" hidden>
+      <button type="button" class="btn ghost" data-o="1">natychmiast</button>
+      <button type="button" class="btn ghost" data-o="2">zauważalnie, ale nie przeszkadza</button>
+      <button type="button" class="btn ghost" data-o="3">za długo — rozprasza</button>
+    </div>
+  </div>
+
+  <div class="card" id="czWynik" hidden>
+    <h3>Twój wynik</h3>
+    <div class="stats" id="czStaty"></div>
+    <div class="scroll-x"><table class="t" id="czTab"></table></div>
+    <p id="czOpis"></p>
+    <div class="row" style="margin-top: 10px"><button type="button" class="btn ghost small" id="czAgain">Jeszcze raz</button></div>
+  </div>
+
+  <div id="grupa-cz"></div>
+
+  <div class="card most">
+    <h3>Psychologia ↔ informatyka: progi czasu odpowiedzi</h3>
+    <p>R. B. Miller (1968) i S. K. Card z zespołem (1991) opisali trzy orientacyjne progi: ok. <b>0,1 s</b> — reakcja wydaje się natychmiastowa; ok. <b>1 s</b> — opóźnienie zauważalne, ale tok myślenia nie zostaje przerwany; ok. <b>10 s</b> — granica utrzymania uwagi na zadaniu. Tego trzeciego progu ten pomiar nie sprawdza: najdłuższe czekanie trwa tu 4 s.</p>
+    <p class="small"><b>Reguły orientacyjne.</b> Progi to praktyczne wskazówki projektowe, a nie ścisłe prawa; zależą od zadania i oczekiwań. Twoje oceny zależą też od tego, jakie czasy widziałeś wcześniej w tym pomiarze.</p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Gdzie wypadł Twój próg „natychmiast”? Czy jest bliżej 0,1 s czy 1 s?</li>
+      <li>Otwarcie strony z Nowego Jorku to co najmniej 4 RTT ≈ 274 ms. Jak oceniłbyś takie czekanie? A z serwera w Polsce?</li>
+      <li>Kręcący się wskaźnik ładowania nie skraca czekania. Dlaczego mimo to projektanci go dodają?</li>
+    </ol>
+  </div>
+  <p class="src">R. B. Miller, <em>Response Time in Man-Computer Conversational Transactions</em>, AFIPS FJCC 33, 1968, s. 267–277; S. K. Card, G. G. Robertson, J. D. Mackinlay, <em>The Information Visualizer, an Information Workspace</em>, CHI 1991.</p>
+</section>
+
+<section id="v-ustawienia" hidden>
+  <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
+  <p class="lead">Ćwiczenie 6 („Ile czekania zniesiesz?”) może wysyłać anonimowe wyniki do Formularza Google i pokazywać wyniki całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła. Można użyć tego samego formularza co w poprzednich wykładach.</p>
+
+  <div class="card">
+    <h3>Jednorazowe przygotowanie (ok. 10 min)</h3>
+    <ol>
+      <li>Utwórz nowy Formularz Google z <strong>czterema pytaniami typu „Krótka odpowiedź”</strong> o nazwach dokładnie: <code>aplikacja</code>, <code>sesja</code>, <code>wariant</code>, <code>wynik</code>. Żadne nie powinno być wymagane.</li>
+      <li>W <strong>Ustawieniach → Odpowiedzi</strong> wyłącz zbieranie adresów e-mail i <strong>ograniczenie do użytkowników SWPS</strong>. Nie włączaj „Ogranicz do 1 odpowiedzi”. Inaczej wysyłka ze strony nie zadziała.</li>
+      <li>W zakładce <strong>Odpowiedzi</strong> kliknij „Połącz z Arkuszami” i utwórz nowy arkusz.</li>
+      <li>W arkuszu: <strong>Plik → Udostępnij → Opublikuj w internecie</strong>. Wybierz arkusz z odpowiedziami i format <strong>CSV</strong>, opublikuj i skopiuj link.</li>
+      <li>W formularzu: <strong>⋮ → Pobierz link wstępnie wypełniony</strong>. Wpisz w pola kolejno <code>APLIKACJA</code>, <code>SESJA</code>, <code>WARIANT</code>, <code>WYNIK</code>, kliknij „Pobierz link” i skopiuj go.</li>
+      <li>Wklej oba linki poniżej, nadaj nazwę sesji i kliknij „Sprawdź”.</li>
+    </ol>
+    <p class="small muted">Wysyłane są tylko: nazwa ćwiczenia, nazwa sesji, rodzaj progu („natychmiast” albo „rozprasza”) i oszacowany próg w ms — najwyżej dwa wiersze na osobę. Opublikowany CSV jest publiczny, więc nie dodawaj do formularza pytań o dane osobowe.</p>
+  </div>
+
+  <div class="card">
+    <h3>Konfiguracja</h3>
+    <div class="field">
+      <label for="sPrefill">Link wstępnie wypełniony z formularza</label>
+      <textarea id="sPrefill" style="min-height:70px" placeholder="https://docs.google.com/forms/d/e/…/viewform?usp=pp_url&amp;entry.…=APLIKACJA&amp;…"></textarea>
+      <span id="sPrefillInfo" class="small"></span>
+    </div>
+    <div class="field">
+      <label for="sCsv">Link do opublikowanego arkusza (CSV)</label>
+      <input id="sCsv" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=…&amp;single=true&amp;output=csv">
+    </div>
+    <div class="field">
+      <label for="sSes">Nazwa sesji</label>
+      <input id="sSes" type="text" maxlength="60" style="max-width: 320px">
+      <span class="small muted">Wykresy pokazują tylko wyniki z tej sesji. Na kolejne zajęcia lub grupę zmień nazwę; formularz zostaje ten sam.</span>
+    </div>
+    <div class="field">
+      <label for="sBase">Adres strony w sieci (do linku dla studentów)</label>
+      <input id="sBase" type="url" placeholder="https://login.github.io/wdi/w12.html">
+      <span class="small muted" id="sBaseInfo"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="btn" id="sCheck">Sprawdź</button>
+      <button type="button" class="btn ghost" id="sSave">Zapisz w tej przeglądarce</button>
+      <button type="button" class="btn ghost" id="sForget">Usuń z tej przeglądarki</button>
+    </div>
+    <div id="sOut" class="small" style="margin-top:10px" aria-live="polite"></div>
+  </div>
+
+  <div class="card" id="sLinksCard" hidden>
+    <h3>Linki dla studentów (tryb grupowy)</h3>
+    <p class="small muted">Te linki włączają wysyłanie wyników i wykresy sali. Pokaż je na slajdzie (najlepiej jako kod QR). Zwykły adres strony, bez parametru <code>cfg</code>, działa bez wysyłania.</p>
+    <div class="field"><label for="sLink0">Ile czekania zniesiesz?</label><div class="row"><input id="sLink0" type="text" readonly style="flex:1"><button type="button" class="btn small" data-copy="sLink0">Kopiuj</button></div></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline. Wysyła dane wyłącznie w trybie grupowym, i to tylko anonimowe wyniki.</p>
+    <p><a href="#ustawienia">Dla prowadzącego: wspólne wyniki grupy</a></p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+const KONF = {"wyk": "W12", "key": "wdi-w12-grupa", "widoki": {"start": "Wykład 12 · ćwiczenia", "pakiety": "Obwody czy pakiety? · W12", "warstwy": "Koperta w kopercie · W12", "trasowanie": "Trasowanie · W12", "dns": "DNS i transport · W12", "opoznienie": "Kalkulator opóźnień · W12", "czekanie": "Ile czekania zniesiesz? · W12", "ustawienia": "Ustawienia prowadzącego · W12"}, "linki": [{"id": "sLink0", "hash": "czekanie", "label": "Ile czekania zniesiesz?"}]};
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const el = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k === 'html') e.innerHTML = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids) e.append(k);
+  return e;
+};
+const SVGNS = 'http://www.w3.org/2000/svg';
+const sv = (tag, attrs = {}, txt) => {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (txt !== undefined) e.textContent = txt;
+  return e;
+};
+const liczba = (x) => String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const ulamek = (x, d = 1) => x.toLocaleString('pl-PL', { maximumFractionDigits: d });
+const seg = (host, cb) => {
+  for (const b of $$('button', host)) b.addEventListener('click', () => {
+    for (const c of $$('button', host)) c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+    cb(b.dataset.w);
+  });
+};
+const parsujInt = (t) => { const s = String(t).trim().replace(/[\s _]/g, ''); return /^\d+$/.test(s) ? s : null; };
+const losuj = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const wybierz = (t) => t[Math.floor(Math.random() * t.length)];
+const tasuj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+const mediana = (t) => { const s = [...t].sort((a, b) => a - b); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : NaN; };
+const odm = (n, a, b, c) => n === 1 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? b : c;
+const sek = (ms) => Number.isFinite(ms) ? ulamek(ms / 1000, 1) + ' s' : '—';
+function slupki(host, dane) {
+  // dane: [{lab, pc (0–100) albo null, tekst}]
+  host.replaceChildren(...dane.map((d) => el('div', { class: 'hbar' },
+    el('div', { class: 'lab', text: d.lab }),
+    el('div', { class: 'track' }, el('div', { class: 'fill', style: `width: ${(d.pc ?? 0) * 0.45}%` }),
+      el('span', { class: 'val', style: `left: calc(${(d.pc ?? 0) * 0.45}% + 6px)`, text: d.tekst })))));
+}
+
+
+/* ═════════════════════ Tryb grupowy (jak w W01–W07) ═════════════════════ */
+const CFG_KEY = KONF.key;
+function b64e(str) { const b = new TextEncoder().encode(str); let bin = ''; b.forEach((x) => { bin += String.fromCharCode(x); }); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64d(str) { let t = str.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; const bin = atob(t); return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))); }
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* brak dostępu */ } },
+};
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) { return false; }
+}
+function cfgPoprawna(c) {
+  return c && typeof c === 'object' && /^https?:\/\//.test(c.f || '') && /^https?:\/\//.test(c.c || '') &&
+    c.e && ['a', 's', 'w', 'v'].every((k) => /^entry\.\d+$/.test(c.e[k] || '')) && typeof c.s === 'string' && c.s.trim().length > 0 && c.s.length <= 60;
+}
+function parseCSV(text) {
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(f); f = ''; }
+    else if (ch === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (ch !== '\r') f += ch;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x !== ''));
+}
+const Grupa = {
+  cfg: null, zrodlo: null,
+  init() {
+    const p = new URLSearchParams(location.search).get('cfg');
+    if (p) { try { const c = JSON.parse(b64d(p)); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'url'; } } catch (e) { /* zły parametr: tryb samodzielny */ } }
+    if (!this.cfg) { const raw = store.get(CFG_KEY); if (raw) { try { const c = JSON.parse(raw); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'local'; } } catch (e) { /* ignoruj */ } } }
+    const b = $('#groupBadge');
+    if (this.cfg) { b.hidden = false; b.textContent = `Tryb grupowy · ${this.cfg.s}`; b.title = this.zrodlo === 'local' ? 'Konfiguracja zapisana w tej przeglądarce' : 'Konfiguracja z linku'; }
+  },
+  aktywna() { return !!this.cfg; },
+  async wyslij(aplikacja, wariant, wynik, cfg = this.cfg) {
+    const body = new URLSearchParams();
+    body.set(cfg.e.a, aplikacja); body.set(cfg.e.s, cfg.s); body.set(cfg.e.w, wariant); body.set(cfg.e.v, String(wynik));
+    await fetch(cfg.f, { method: 'POST', mode: 'no-cors', body });
+  },
+  async pobierz(cfg = this.cfg) {
+    const r = await fetch(cfg.c, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`serwer odpowiedział kodem ${r.status}`);
+    const rows = parseCSV(await r.text());
+    if (rows.length === 0) return { rows: [], kol: null };
+    const head = rows[0].map((x) => x.trim().toLowerCase());
+    const idx = (n, fb) => { const i = head.indexOf(n); return i >= 0 ? i : fb; };
+    const kol = { a: idx('aplikacja', 1), s: idx('sesja', 2), w: idx('wariant', 3), v: idx('wynik', 4), znalezione: ['aplikacja', 'sesja', 'wariant', 'wynik'].every((n) => head.includes(n)) };
+    const out = rows.slice(1).map((r) => ({ a: (r[kol.a] || '').trim(), s: (r[kol.s] || '').trim(), w: (r[kol.w] || '').trim(), v: Number(String(r[kol.v] || '').replace(',', '.').trim()) }));
+    return { rows: out, kol };
+  },
+};
+// Panel wyników sali. o = { aplikacja, wiersze(paczka) → [[wariant, wynik]], filtr(wiersz) → bool, rysuj(host, wiersze), opis(wiersze) → tekst }
+function panelGrupy(host, o) {
+  if (!Grupa.aktywna()) return null;
+  let paczka = null, timer = null, aktywny = false;
+  const status = el('span', { class: 'small muted', 'aria-live': 'polite' });
+  const send = el('button', { type: 'button', class: 'btn', text: 'Wyślij moje wyniki do grupy' });
+  send.disabled = true;
+  const wyk = el('div', { class: 'hbars' });
+  const meta = el('p', { class: 'small muted' });
+  const statsP = el('p', { class: 'small' });
+  const refresh = el('button', { type: 'button', class: 'btn ghost small', text: 'Odśwież' });
+  host.append(el('div', { class: 'group' },
+    el('h3', {}, el('span', { class: 'dot' }), `Wyniki sali · sesja „${Grupa.cfg.s}”`),
+    el('div', { class: 'row' }, send, status), statsP, wyk, el('div', { class: 'row' }, refresh, meta)));
+  send.addEventListener('click', async () => {
+    if (!paczka) return;
+    send.disabled = true; status.textContent = 'Wysyłanie…';
+    try {
+      for (const [w, v] of o.wiersze(paczka)) await Grupa.wyslij(o.aplikacja, w, v);
+      status.textContent = 'Wysłano. Wyniki pojawią się na wykresie po odświeżeniu arkusza (zwykle w ciągu kilku minut).';
+      paczka = null; setTimeout(odswiez, 4000);
+    } catch (e) { status.textContent = 'Nie udało się wysłać (brak internetu?). Spróbuj ponownie.'; send.disabled = false; }
+  });
+  async function odswiez() {
+    meta.textContent = 'Pobieranie…';
+    try {
+      const { rows } = await Grupa.pobierz();
+      const dane = rows.filter((r) => r.a === o.aplikacja && r.s === Grupa.cfg.s && Number.isFinite(r.v) && o.filtr(r));
+      o.rysuj(wyk, dane);
+      statsP.textContent = dane.length ? o.opis(dane) : 'Nikt jeszcze nie wysłał wyników.';
+      meta.textContent = `Aktualizacja: ${new Date().toLocaleTimeString('pl-PL')}. Opublikowany arkusz odświeża się z opóźnieniem do kilku minut.`;
+    } catch (e) { meta.textContent = `Wyniki sali są chwilowo niedostępne (${e.message || 'błąd sieci'}).`; }
+  }
+  refresh.addEventListener('click', odswiez);
+  return {
+    gotowe(w) { paczka = w; send.disabled = false; status.textContent = ''; },
+    start() { aktywny = true; odswiez(); clearInterval(timer); timer = setInterval(() => { if (aktywny && !document.hidden) odswiez(); }, 20000); },
+    stop() { aktywny = false; clearInterval(timer); },
+  };
+}
+
+
+/* ═════════════════════ wspólne W12 ═════════════════════ */
+/** Quiz jednokrotnego wyboru (jak w W11). */
+function quizWyboru(pre, pozycje, opcjeDom, ileWRundzie = pozycje.length) {
+  let kol = [], nr = 0, dobre = 0, odp = false;
+  const start = () => { kol = tasuj([...pozycje]).slice(0, ileWRundzie); nr = 0; dobre = 0; pokaz(); };
+  function pokaz() {
+    odp = false;
+    $(`#${pre}Fb`).textContent = ''; $(`#${pre}Fb`).className = 'fbline'; $(`#${pre}Wyj`).textContent = ''; $(`#${pre}Dalej`).hidden = true;
+    const host = $(`#${pre}Odp`);
+    if (nr >= kol.length) {
+      $(`#${pre}Nr`).textContent = 'koniec'; $(`#${pre}Q`).textContent = `Wynik: ${dobre} z ${kol.length}.`;
+      host.replaceChildren(); $(`#${pre}Dalej`).hidden = false; $(`#${pre}Dalej`).textContent = 'Jeszcze raz'; return;
+    }
+    const p = kol[nr];
+    $(`#${pre}Nr`).textContent = `${nr + 1} / ${kol.length}`; $(`#${pre}Wynik`).textContent = `poprawne: ${dobre}`;
+    $(`#${pre}Q`).textContent = p.q; $(`#${pre}Dalej`).textContent = 'Dalej →';
+    host.replaceChildren(...(p.opcje || opcjeDom).map((o) => {
+      const b = el('button', { type: 'button', class: 'btn ghost', text: o });
+      b.addEventListener('click', () => wybierzO(o, b));
+      return b;
+    }));
+  }
+  function wybierzO(o, btn) {
+    if (odp) return; odp = true;
+    const p = kol[nr];
+    for (const b of $$(`#${pre}Odp button`)) { b.disabled = true; if (b.textContent === p.ok) b.className = 'btn dobra'; }
+    const fb = $(`#${pre}Fb`);
+    if (o === p.ok) { dobre++; fb.className = 'fbline dobrze'; fb.textContent = 'Dobrze.'; }
+    else { btn.className = 'btn zla'; fb.className = 'fbline zle'; fb.textContent = `Nie — ${p.ok}.`; }
+    $(`#${pre}Wyj`).textContent = p.wyj; $(`#${pre}Wynik`).textContent = `poprawne: ${dobre}`;
+    $(`#${pre}Dalej`).hidden = false; $(`#${pre}Dalej`).focus();
+  }
+  $(`#${pre}Dalej`).addEventListener('click', () => { if (nr >= kol.length) start(); else { nr++; pokaz(); } });
+  start();
+}
+/** Czas w czytelnej jednostce. */
+function czas(s) {
+  if (!Number.isFinite(s)) return '—';
+  if (s < 1e-5) return `${ulamek(s * 1e6, 1)} µs`;
+  if (s < 1) return `${ulamek(s * 1e3, s < 0.01 ? 3 : 1)} ms`;
+  if (s < 120) return `${ulamek(s, s < 10 ? 2 : 1)} s`;
+  return `${ulamek(s / 60, 1)} min`;
+}
+// G = { poz: {v: [x, y]}, kr: [[u, v, w?]] }; st = { w: {v: klasa}, et: {v: tekst}, k: {indeks: klasa}, klik }
+function rysujGraf(svg, G, st = {}) {
+  svg.replaceChildren();
+  const R = 20;
+  G.kr.forEach(([u, v, w], i) => {
+    const [x1, y1] = G.poz[u], [x2, y2] = G.poz[v];
+    const dx = x2 - x1, dy = y2 - y1, d = Math.hypot(dx, dy);
+    const a = [x1 + (dx / d) * R, y1 + (dy / d) * R], b = [x2 - (dx / d) * R, y2 - (dy / d) * R];
+    svg.append(sv('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], class: 'kr ' + ((st.k || {})[i] || '') }));
+    if (st.klik) {
+      const h = sv('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], class: 'klik', tabindex: 0, role: 'button', 'aria-label': `łącze ${u}–${v}, koszt ${w}` });
+      h.addEventListener('click', () => st.klik(i));
+      h.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); st.klik(i); } });
+      svg.append(h);
+    }
+  });
+  G.kr.forEach(([u, v, w], i) => {
+    if (w === undefined) return;
+    const [x1, y1] = G.poz[u], [x2, y2] = G.poz[v], mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const t = (st.wt || {})[i] ?? String(w), g = sv('g', { class: 'waga' });
+    g.append(sv('rect', { x: mx - 6 - 4.5 * t.length, y: my - 10, width: 12 + 9 * t.length, height: 20, rx: 5 }), sv('text', { x: mx, y: my }, t));
+    svg.append(g);
+  });
+  for (const [v, [x, y]] of Object.entries(G.poz)) {
+    const g = sv('g', { class: 'w ' + ((st.w || {})[v] || '') });
+    g.append(sv('circle', { cx: x, cy: y, r: R }), sv('text', { x, y }, v));
+    const e = (st.et || {})[v];
+    if (e !== undefined && e !== null) g.append(sv('text', { x, y: y < 150 ? y - 30 : y + 34, class: 'et' }, String(e)));
+    svg.append(g);
+  }
+}
+
+/* ═════════════════════ Ćwiczenie 1: obwody czy pakiety ═════════════════════ */
+const Pakiety = (() => {
+  /** P(X = k) dla k = 0..n, rozkład dwumianowy (przez logarytmy). */
+  function rozklad(n, p) {
+    if (p >= 1) return Array.from({ length: n + 1 }, (_, k) => (k === n ? 1 : 0));
+    const lf = [0]; for (let i = 1; i <= n; i++) lf.push(lf[i - 1] + Math.log(i));
+    return Array.from({ length: n + 1 }, (_, k) => Math.exp(lf[n] - lf[k] - lf[n - k] + k * Math.log(p) + (n - k) * Math.log(1 - p)));
+  }
+  const ogon = (P, M) => P.slice(M + 1).reduce((a, b) => a + b, 0);
+  function fmtP(x) {
+    if (x === 0) return '0';
+    if (x < 1e-6) return x.toExponential(1).replace('.', ',').replace('e', '·10^');
+    if (x < 0.01) return ulamek(x, 6);
+    return ulamek(x, 3);
+  }
+  function rysuj() {
+    const R = Math.max(1, +$('#pkR').value || 1), r = Math.max(1, +$('#pkr').value || 1);
+    const p = +$('#pkP').value / 100, N = +$('#pkN').value;
+    $('#pkPv').textContent = `${Math.round(p * 100)}%`; $('#pkNv').textContent = N;
+    const M = Math.floor(R / r);
+    const P = rozklad(N, p); const pp = N > M ? ogon(P, M) : 0;
+    // największe N przy przeciążeniu < 0,1% chwil
+    let nMax = M; for (let n = M + 1; n <= 2000; n++) { if (ogon(rozklad(n, p), M) < 0.001) nMax = n; else break; }
+    const st = $('#pkStaty'); st.replaceChildren();
+    const stat = (k, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v', text: v })));
+    stat('obwody: najwyżej użytkowników', liczba(M));
+    stat(`pakiety: P(więcej niż ${M} nadaje naraz)`, N > M ? fmtP(pp) : '0');
+    stat('pakiety: N przy przeciążeniu < 0,1% czasu', nMax >= 2000 ? 'ponad 2000' : liczba(nMax));
+    stat('średnio nadaje naraz', ulamek(N * p, 1));
+    // wykres
+    const svg = $('#pkSvg'); svg.replaceChildren();
+    const W = 640, H = 220, L = 20, B = 190, T = 14;
+    const mx = Math.max(...P) || 1, sz = (W - 2 * L) / (N + 1);
+    svg.append(sv('line', { x1: L, y1: B, x2: W - L, y2: B, class: 'os' }));
+    P.forEach((v, k) => {
+      const h = ((B - T) * v) / mx;
+      svg.append(sv('rect', { x: L + k * sz + sz * 0.1, y: B - h, width: Math.max(1, sz * 0.8), height: h, class: 'sl' + (k > M ? ' zle' : '') }));
+      const krok = N <= 40 ? 5 : N <= 80 ? 10 : 20;
+      if (k % krok === 0) svg.append(sv('text', { x: L + k * sz + sz / 2, y: B + 15 }, String(k)));
+    });
+    if (M < N) { const x = L + (M + 1) * sz; svg.append(sv('line', { x1: x, y1: T - 6, x2: x, y2: B, class: 'gr' }), sv('text', { x: Math.min(x + 4, W - 60), y: T + 4, class: 'gr', style: 'text-anchor: start' }, `łącze: ${M}`)); }
+    svg.append(sv('text', { x: W / 2, y: H - 2 }, 'liczba użytkowników nadających w tej samej chwili'));
+    let op = `Obwody: każdy z użytkowników dostaje stałe ${r} kb/s, więc łącze ${R} kb/s pomieści ${M} — nawet gdy milczą. `;
+    if (N <= M) op += `Przy ${N} użytkownikach łącze nigdy nie jest przeciążone.`;
+    else op += `Pakiety: ${N} użytkowników; łącze jest przeciążone w ok. ${pp < 1e-4 ? fmtP(pp) : ulamek(pp * 100, 2) + '%'} chwil (czerwone słupki). To ${ulamek(N / Math.max(M, 1), 1)} razy więcej użytkowników niż przy obwodach.`;
+    $('#pkOpis').textContent = op;
+  }
+  function init() { for (const id of ['#pkR', '#pkr', '#pkP', '#pkN']) $(id).addEventListener('input', rysuj); rysuj(); }
+  return { init, _t: { rozklad, ogon } };
+})();
+
+/* ═════════════════════ Ćwiczenie 2: koperta w kopercie ═════════════════════ */
+const Warstwy = (() => {
+  const WAR = ['aplikacji', 'transportowa', 'sieciowa', 'łącza danych', 'fizyczna'];
+  const MAC = { lap: '00:00:5E:00:53:0A', rt1: '00:00:5E:00:53:01', rt2: '00:00:5E:00:53:02', ser: '00:00:5E:00:53:2F' };
+  // kroki: urządzenie, warstwa (indeks), części pakietu, opis
+  function kroki() {
+    const ht = { k: 'ht', t: 'TCP', d: 'port 50123 → 80' };
+    const hn = (ttl) => ({ k: 'hn', t: 'IP', d: `192.0.2.10 → 198.51.100.7 · TTL ${ttl}` });
+    const hl1 = { k: 'hl', t: 'Ethernet', d: `${MAC.lap.slice(-5)} → ${MAC.rt1.slice(-5)}` };
+    const hl2 = { k: 'hl', t: 'Ethernet', d: `${MAC.rt2.slice(-5)} → ${MAC.ser.slice(-5)}` };
+    const fcs = { k: 'fcs', t: 'FCS', d: 'suma kontrolna' };
+    const m = { k: 'm', t: 'dane M', d: null };
+    return [
+      { u: 0, w: 0, cz: [m], op: 'Przeglądarka tworzy komunikat HTTP. Nie wie nic o kablach ani o trasie.' },
+      { u: 0, w: 1, cz: [ht, m], nowe: 'ht', op: 'Warstwa transportowa dokleja nagłówek TCP: numer portu docelowego (80 — serwer WWW) i źródłowego. Powstaje segment.' },
+      { u: 0, w: 2, cz: [hn(64), ht, m], nowe: 'hn', op: 'Warstwa sieciowa dokleja nagłówek IP: adres komputera docelowego i licznik TTL. Powstaje datagram.' },
+      { u: 0, w: 3, cz: [hl1, hn(64), ht, m, fcs], nowe: 'hl', op: 'Warstwa łącza dokleja nagłówek ramki: adres sprzętowy (MAC) najbliższego sąsiada — routera, nie serwera! Na końcu suma kontrolna.' },
+      { u: 0, w: 4, cz: 'bity', op: 'Warstwa fizyczna wysyła ramkę jako ciąg bitów: impulsy w kablu, światło w światłowodzie albo fale radiowe.' },
+      { u: 1, w: 3, cz: [hl1, hn(64), ht, m, fcs], op: 'Router odbiera całą ramkę (store-and-forward), sprawdza sumę kontrolną i zdejmuje nagłówek ramki.' },
+      { u: 1, w: 2, cz: [hn(63), ht, m], nowe: 'hn', op: 'Router czyta adres IP celu, zmniejsza TTL o 1 i w tablicy przekazywania wybiera łącze wyjściowe. Do nagłówka TCP nie zagląda — to nie jego warstwa.' },
+      { u: 1, w: 3, cz: [hl2, hn(63), ht, m, fcs], nowe: 'hl', op: 'Router pakuje datagram w nową ramkę: nowe adresy MAC na kolejnym odcinku. Nagłówek IP (poza TTL) bez zmian.' },
+      { u: 2, w: 3, cz: [hl2, hn(63), ht, m, fcs], op: 'Serwer odbiera ramkę, sprawdza sumę kontrolną i zdejmuje nagłówek ramki.' },
+      { u: 2, w: 2, cz: [hn(63), ht, m], op: 'Adres IP celu to adres serwera — datagram dotarł. Warstwa sieciowa zdejmuje nagłówek IP.' },
+      { u: 2, w: 1, cz: [ht, m], op: 'Port docelowy 80 mówi, do którego programu oddać dane: do serwera WWW. Warstwa transportowa zdejmuje nagłówek TCP.' },
+      { u: 2, w: 0, cz: [m], op: 'Serwer WWW dostaje dokładnie ten komunikat, który wysłała przeglądarka. Nagłówki doklejano i zdejmowano w odwrotnej kolejności — jak na stosie.' },
+    ];
+  }
+  const URZ = [['laptop', [0, 1, 2, 3, 4]], ['router', [2, 3, 4]], ['serwer', [0, 1, 2, 3, 4]]];
+  let k = 0;
+  const bajty = (s) => new TextEncoder().encode(s).length;
+  function rysuj() {
+    const K = kroki(); const s = K[k]; const tekst = $('#enTekst').value || ' ';
+    const tr = $('#enTrasa'); tr.replaceChildren();
+    URZ.forEach(([nz, ww], u) => {
+      if (u) tr.append(el('div', { class: 'lacze' }));
+      tr.append(el('div', { class: 'urz' + (s.u === u ? ' akt' : '') }, el('div', { class: 'nz', text: nz }),
+        ...WAR.map((w, i) => el('div', { class: 'wr' + (ww.includes(i) ? '' : ' brak') + (s.u === u && s.w === i ? ' tu' : ''), text: w }))));
+    });
+    const pk = $('#enPakiet'); pk.replaceChildren();
+    const nM = bajty(tekst);
+    if (s.cz === 'bity') {
+      const b = [...new TextEncoder().encode(tekst)].slice(0, 6).map((x) => x.toString(2).padStart(8, '0')).join(' ');
+      pk.append(el('div', { class: 'bity', text: `… ${b} … (${liczba((nM + 58) * 8)} bitów ramki)` }));
+    } else {
+      for (const c of s.cz) {
+        const d = el('div', { class: 'cz ' + c.k + (s.nowe === c.k ? ' nowy' : '') }, el('b', { text: c.t }));
+        d.append(c.k === 'm' ? tekst : c.d);
+        pk.append(d);
+      }
+    }
+    $('#enFb').className = 'fbline'; $('#enFb').textContent = `Krok ${k + 1}/${K.length} · ${URZ[s.u][0]}, warstwa ${WAR[s.w]}. ${s.op}`;
+    const st = $('#enStaty'); st.replaceChildren();
+    const stat = (a, b) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: a }), el('div', { class: 'v', text: b })));
+    const nag = 20 + 20 + 18;
+    stat('treść', `${liczba(nM)} B`); stat('nagłówki w ramce', `${nag} B`); stat('narzut w ramce', `${Math.round((100 * nag) / (nag + nM))}%`);
+    $('#enWstecz').disabled = k === 0; $('#enKrok').disabled = k === K.length - 1;
+  }
+  const WQ = WAR.slice(0, 5);
+  const POZ = [
+    { q: 'HTTP — przeglądarka prosi o stronę', ok: 'aplikacji', wyj: 'Usługa dla użytkownika: warstwa aplikacji.' },
+    { q: 'DNS — zamiana nazwy na adres IP', ok: 'aplikacji', wyj: 'DNS to też aplikacja sieciowa, choć służy innym aplikacjom.' },
+    { q: 'TCP', ok: 'transportowa', wyj: 'TCP dostarcza dane do właściwego programu, z gwarancją kolejności.' },
+    { q: 'UDP', ok: 'transportowa', wyj: 'UDP też dostarcza do programu (porty), tylko bez gwarancji.' },
+    { q: 'IP', ok: 'sieciowa', wyj: 'IP dostarcza datagram do właściwego komputera przez wiele sieci.' },
+    { q: 'OSPF — routery wymieniają mapę sieci i liczą trasy', ok: 'sieciowa', wyj: 'Protokoły trasowania należą do warstwy sieciowej: wyliczają tablice przekazywania dla IP.' },
+    { q: 'Ethernet', ok: 'łącza danych', wyj: 'Ethernet przekazuje ramki między sąsiednimi urządzeniami (i ma swoją część fizyczną).' },
+    { q: 'Wi-Fi (IEEE 802.11)', ok: 'łącza danych', wyj: 'Wi-Fi jak Ethernet: ramki między sąsiadami w sieci lokalnej; pod spodem fale radiowe (warstwa fizyczna).' },
+    { q: 'Impuls światła w światłowodzie', ok: 'fizyczna', wyj: 'Przesyłanie pojedynczych bitów to warstwa fizyczna.' },
+    { q: 'Numer portu (np. 443)', ok: 'transportowa', wyj: 'Port wskazuje program w komputerze — nagłówek warstwy transportowej.' },
+    { q: 'Licznik TTL zmniejszany przez każdy router', ok: 'sieciowa', wyj: 'TTL jest w nagłówku IP. Chroni przed pakietami krążącymi w pętli bez końca.' },
+    { q: 'Nagłówek, który zmienia się na każdym odcinku trasy', ok: 'łącza danych', wyj: 'Każdy odcinek to inne łącze i inni sąsiedzi, więc każdy router pakuje datagram w nową ramkę.' },
+    { q: 'Szyfrowanie TLS (w modelu OSI: warstwa prezentacji)', ok: 'aplikacji', wyj: 'W stosie TCP/IP nie ma warstwy prezentacji: szyfrowanie robią aplikacje i biblioteki (TLS) nad TCP.' },
+  ];
+  function init() {
+    $('#enKrok').addEventListener('click', () => { k++; rysuj(); });
+    $('#enWstecz').addEventListener('click', () => { k--; rysuj(); });
+    $('#enReset').addEventListener('click', () => { k = 0; rysuj(); });
+    $('#enTekst').addEventListener('input', rysuj);
+    rysuj();
+    quizWyboru('wq', POZ, WQ, 10);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 3: trasowanie ═════════════════════ */
+const Trasowanie = (() => {
+  const SL = { A: [0, 2.5], B: [4, 0], C: [4, 5], D: [8.5, 0], E: [8.5, 5], F: [12.5, 2.5] };
+  const POZ = Object.fromEntries(Object.entries(SL).map(([v, [x, y]]) => [v, [40 + x * 38.4, 50 + y * 40]]));
+  const KR0 = [['A', 'B', 2], ['A', 'C', 5], ['B', 'C', 2], ['B', 'D', 7], ['C', 'E', 3], ['D', 'E', 1], ['D', 'F', 3], ['E', 'F', 5]];
+  let kr = [], awaria = new Set(), tryb = 'awaria', cel = 'F';
+  const WEZ = Object.keys(SL);
+  function sasiedzi() {
+    const g = Object.fromEntries(WEZ.map((v) => [v, []]));
+    kr.forEach(([u, v, w], i) => { if (!awaria.has(i)) { g[u].push([v, w, i]); g[v].push([u, w, i]); } });
+    for (const v of WEZ) g[v].sort((a, b) => a[0].localeCompare(b[0]));
+    return g;
+  }
+  function dijkstra(s) {
+    const g = sasiedzi(); const d = { [s]: 0 }, prev = {}, gotowe = new Set();
+    while (true) {
+      let u = null; for (const v of WEZ) if (!gotowe.has(v) && d[v] !== undefined && (u === null || d[v] < d[u])) u = v;
+      if (u === null) break; gotowe.add(u);
+      for (const [v, w, i] of g[u]) if (d[v] === undefined || d[u] + w < d[v]) { d[v] = d[u] + w; prev[v] = [u, i]; }
+    }
+    return { d, prev };
+  }
+  function bfs(s) {
+    const g = sasiedzi(); const d = { [s]: 0 }, prev = {}; const q = [s];
+    while (q.length) { const u = q.shift(); for (const [v, , i] of g[u]) if (d[v] === undefined) { d[v] = d[u] + 1; prev[v] = [u, i]; q.push(v); } }
+    return { d, prev };
+  }
+  function droga(prev, s, t) { const w = [t], e = []; let x = t; while (x !== s) { if (!prev[x]) return null; e.push(prev[x][1]); x = prev[x][0]; w.unshift(x); } return { w, e }; }
+  function rysuj() {
+    const D = dijkstra('A'), Bf = bfs('A');
+    const st = { k: {}, w: { A: 'start' }, et: {}, wt: {}, klik };
+    kr.forEach((_, i) => { if (awaria.has(i)) { st.k[i] = 'odrz'; st.wt[i] = '✕'; } });
+    for (const v of WEZ) { if (v === 'A') continue; st.et[v] = D.d[v] === undefined ? '∞' : String(D.d[v]); if (D.d[v] === undefined) st.w[v] = 'nieos'; }
+    const pD = D.d[cel] !== undefined ? droga(D.prev, 'A', cel) : null, pB = Bf.d[cel] !== undefined ? droga(Bf.prev, 'A', cel) : null;
+    if (pB) for (const i of pB.e) st.k[i] = 'akt';
+    if (pD) for (const i of pD.e) st.k[i] = pB && pB.e.includes(i) ? 'oba' : 'sciezka';
+    if (D.d[cel] !== undefined) st.w[cel] = 'cel';
+    rysujGraf($('#trGraf'), { poz: POZ, kr }, st);
+    // tablica
+    const tb = WEZ.filter((v) => v !== 'A').map((v) => {
+      const p = D.d[v] !== undefined ? droga(D.prev, 'A', v) : null;
+      return el('tr', { class: v === cel ? 'naj' : '' }, el('td', { class: 'mono', text: v }), el('td', { class: 'mono', text: p ? p.w[1] : '—' }), el('td', { class: 'n', text: p ? String(D.d[v]) : '∞' }), el('td', { class: 'mono', text: p ? p.w.join('–') : 'nieosiągalny' }));
+    });
+    $('#trTab').replaceChildren(el('thead', {}, el('tr', {}, ...['cel', 'następny skok', 'koszt', 'trasa'].map((x) => el('th', { text: x })))), el('tbody', {}, ...tb));
+    const fb = $('#trFb'); fb.className = 'fbline';
+    if (!pD) { fb.className = 'fbline zle'; fb.textContent = `${cel} jest nieosiągalny z A: router odrzuci pakiet (i zwykle powiadomi nadawcę komunikatem ICMP).`; return; }
+    const kosztB = pB.e.reduce((a, i) => a + kr[i][2], 0);
+    fb.textContent = pD.e.length === pB.e.length && pD.e.every((i, j) => i === pB.e[j])
+      ? `Trasa A → ${cel}: ${pD.w.join('–')}, koszt ${D.d[cel]} — tu najtańsza trasa ma też najmniej przeskoków.`
+      : kosztB === D.d[cel] ? `Dwie trasy A → ${cel} o tym samym koszcie ${D.d[cel]}: ${pD.w.join('–')} (${pD.e.length} przeskoki) i ${pB.w.join('–')} (${pB.e.length}). Remis — router wybiera jedną z nich według swoich reguł (OSPF może też dzielić ruch między obie).` : `Najtańsza trasa A → ${cel}: ${pD.w.join('–')}, koszt ${D.d[cel]}, przeskoków ${pD.e.length}. Najmniej przeskoków: ${pB.w.join('–')} (${pB.e.length}), ale koszt ${kosztB}.`;
+  }
+  function klik(i) {
+    if (tryb === 'awaria') { if (awaria.has(i)) awaria.delete(i); else awaria.add(i); }
+    else if (!awaria.has(i)) kr[i][2] = Math.max(1, Math.min(20, kr[i][2] + (tryb === 'plus' ? 1 : -1)));
+    rysuj();
+  }
+  function reset() { kr = KR0.map((x) => [...x]); awaria = new Set(); rysuj(); }
+  function init() {
+    seg($('#trTryb'), (w) => { tryb = w; });
+    const c = $('#trCel');
+    for (const v of WEZ.filter((x) => x !== 'A')) c.append(el('button', { type: 'button', 'data-w': v, 'aria-pressed': String(v === cel), text: v }));
+    seg(c, (w) => { cel = w; rysuj(); });
+    $('#trReset').addEventListener('click', reset);
+    reset();
+  }
+  return { init, _t: { dijkstra: () => { kr = KR0.map((x) => [...x]); awaria = new Set(); return dijkstra('A').d; } } };
+})();
+
+/* ═════════════════════ Ćwiczenie 4: DNS i transport ═════════════════════ */
+const Dns = (() => {
+  // strefy: nazwa → {nad: strefa nadrzędna, ttl delegacji}; rekordy adresów
+  const STREFY = { '.': null, pl: '.', com: '.', org: '.', 'edu.pl': 'pl', 'gov.pl': 'pl', 'swps.edu.pl': 'edu.pl', 'uw.edu.pl': 'edu.pl', 'example.com': 'com', 'ietf.org': 'org' };
+  const TTL_NS = { pl: 172800, com: 172800, org: 172800, 'edu.pl': 86400, 'gov.pl': 86400, 'swps.edu.pl': 86400, 'uw.edu.pl': 86400, 'example.com': 86400, 'ietf.org': 86400 };
+  const ADR = {
+    'swps.edu.pl': ['192.0.2.10', 3600, 'swps.edu.pl'], 'www.swps.edu.pl': ['192.0.2.10', 3600, 'swps.edu.pl'],
+    'uw.edu.pl': ['192.0.2.44', 300, 'uw.edu.pl'], 'www.gov.pl': ['198.51.100.23', 600, 'gov.pl'],
+    'example.com': ['203.0.113.80', 86400, 'example.com'], 'www.ietf.org': ['203.0.113.5', 1800, 'ietf.org'],
+  };
+  let zegar = 0, cache = new Map(), ile = 0, zCache = 0, sumaZap = 0;
+  const fmtT = (s) => s >= 86400 ? `${ulamek(s / 86400, 1)} d` : s >= 3600 ? `${ulamek(s / 3600, 1)} h` : s >= 60 ? `${ulamek(s / 60, 1)} min` : `${s} s`;
+  const wazne = (k) => { const e = cache.get(k); return e && e.do > zegar ? e : null; };
+  function zapytaj(nazwa) {
+    const [ip, ttlA, strefa] = ADR[nazwa]; const kroki = []; let zap = 0;
+    kroki.push(['komputer', 'lokalny serwer DNS', `jaki adres ma ${nazwa}?`, false]);
+    const a = wazne('A ' + nazwa);
+    if (a) { kroki.push(['lokalny serwer DNS', 'komputer', `${a.wart} (z pamięci podręcznej, ważne jeszcze ${fmtT(a.do - zegar)})`, true]); zCache++; }
+    else {
+      // łańcuch stref od korzenia do strefy autorytatywnej
+      const lan = []; for (let s = strefa; s !== null; s = STREFY[s]) lan.unshift(s);
+      // najgłębsza strefa, której serwery znamy z pamięci
+      let start = 0; for (let i = lan.length - 1; i >= 1; i--) if (wazne('NS ' + lan[i])) { start = i; break; }
+      if (start > 0) kroki.push(['lokalny serwer DNS', '(pamięć podręczna)', `serwery strefy ${lan[start]} już znam — pomijam wyższe poziomy`, true]);
+      for (let i = start; i < lan.length; i++) {
+        const ser = lan[i] === '.' ? 'serwer główny' : `serwer ${lan[i]}`; zap++;
+        if (i < lan.length - 1) {
+          kroki.push(['lokalny serwer DNS', ser, `${nazwa}? → „zapytaj serwery ${lan[i + 1]}”`, false]);
+          cache.set('NS ' + lan[i + 1], { typ: 'kto zna strefę', wart: `serwery ${lan[i + 1]}`, do: zegar + TTL_NS[lan[i + 1]], ttl: TTL_NS[lan[i + 1]] });
+        } else {
+          kroki.push(['lokalny serwer DNS', ser, `${nazwa}? → ${ip} (TTL ${fmtT(ttlA)})`, false]);
+          cache.set('A ' + nazwa, { typ: 'adres IP', wart: ip, do: zegar + ttlA, ttl: ttlA });
+        }
+      }
+      kroki.push(['lokalny serwer DNS', 'komputer', `${ip} — zapisuję w pamięci podręcznej na ${fmtT(ttlA)}`, false]);
+    }
+    ile++; sumaZap += zap;
+    $('#dnKroki').replaceChildren(...kroki.map(([z, d, t, c]) => el('li', { class: c ? 'cache' : '' }, el('span', { class: 'ser', text: z }), ' → ', el('span', { class: 'ser', text: d }), `: ${t}`)));
+    const fb = $('#dnFb'); fb.className = 'fbline' + (zap === 0 ? ' dobrze' : '');
+    fb.textContent = zap === 0 ? 'Odpowiedź z pamięci podręcznej: bez żadnego zapytania do innych serwerów.' : `Zapytania do innych serwerów: ${zap}.`;
+    rysujCache();
+  }
+  function rysujCache() {
+    $('#dnZegar').textContent = fmtT(zegar);
+    const wiersze = [...cache.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([k, e]) => {
+      const wyg = e.do <= zegar;
+      return el('tr', {}, el('td', { class: 'mono' + (wyg ? ' wyg' : ''), text: k.slice(k.indexOf(' ') + 1) }), el('td', { class: wyg ? 'wyg' : '', text: e.typ }), el('td', { class: 'mono' + (wyg ? ' wyg' : ''), text: e.wart }), el('td', { class: wyg ? 'wyg' : '', text: wyg ? 'wygasło' : fmtT(e.do - zegar) }));
+    });
+    $('#dnCache').replaceChildren(el('thead', {}, el('tr', {}, ...['nazwa', 'rodzaj', 'wartość', 'ważne jeszcze'].map((x) => el('th', { text: x })))), el('tbody', {}, ...(wiersze.length ? wiersze : [el('tr', {}, el('td', { class: 'muted', text: 'pusto' }), el('td'), el('td'), el('td'))])));
+    const st = $('#dnStaty'); st.replaceChildren();
+    const stat = (a, b) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: a }), el('div', { class: 'v', text: b })));
+    stat('zapytania komputera', String(ile)); stat('z pamięci podręcznej', String(zCache)); stat('śr. zapytań do innych serwerów', ile ? ulamek(sumaZap / ile, 2) : '—');
+  }
+  const TU = ['TCP', 'UDP'];
+  const POZ = [
+    { q: 'Pobieranie pliku PDF z platformy e-learningowej.', ok: 'TCP', opcje: TU, wyj: 'Każdy bajt musi dotrzeć, i to we właściwej kolejności — inaczej plik jest uszkodzony.' },
+    { q: 'Zapytanie DNS o adres serwera.', ok: 'UDP', opcje: TU, wyj: 'Krótkie pytanie i krótka odpowiedź (port 53). Gdy odpowiedź nie przyjdzie, łatwiej zapytać jeszcze raz niż nawiązywać połączenie.' },
+    { q: 'Rozmowa wideo na żywo.', ok: 'UDP', opcje: TU, wyj: 'Spóźniony fragment obrazu jest bezużyteczny — lepiej go pominąć niż czekać na ponowne wysłanie.' },
+    { q: 'Wysłanie wiadomości e-mail do serwera poczty.', ok: 'TCP', opcje: TU, wyj: 'Treść wiadomości musi dotrzeć w całości i bez zmian.' },
+    { q: 'Gra wieloosobowa: pozycje graczy wysyłane 30 razy na sekundę.', ok: 'UDP', opcje: TU, wyj: 'Za chwilę przyjdzie nowsza pozycja; czekanie na starą tylko zwiększa opóźnienie.' },
+    { q: 'Strona WWW przez HTTP/1.1 lub HTTP/2.', ok: 'TCP', opcje: TU, wyj: 'HTTP/1.1 i HTTP/2 działają na TCP. (HTTP/3 korzysta z QUIC, który działa na UDP i sam zapewnia niezawodność.)' },
+    { q: 'Serwer odpowiedział kodem 404. Co to znaczy?', ok: 'nie znaleziono', opcje: ['OK', 'nie znaleziono', 'błąd serwera'], wyj: 'Kody 4xx oznaczają błąd po stronie żądania (np. zły adres), 5xx — błąd serwera.' },
+    { q: 'Serwer odpowiedział kodem 500. Co to znaczy?', ok: 'błąd serwera', opcje: ['OK', 'nie znaleziono', 'błąd serwera'], wyj: 'Żądanie było poprawne, ale program na serwerze zawiódł.' },
+    { q: 'Kłódka przy adresie strony oznacza, że…', ok: 'połączenie jest szyfrowane z serwerem tej domeny', opcje: ['połączenie jest szyfrowane z serwerem tej domeny', 'właściciel strony jest uczciwy', 'strona nie zawiera wirusów'], wyj: 'Certyfikat można uzyskać dla każdej domeny, którą się kontroluje — także dla strony wyłudzającej dane.' },
+  ];
+  function init() {
+    $('#dnNazwy').replaceChildren(el('span', { class: 'small muted', text: 'Zapytaj o:' }), ...Object.keys(ADR).map((n) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small mono', text: n }); b.addEventListener('click', () => zapytaj(n)); return b;
+    }));
+    const dodaj = (s) => { zegar += s; rysujCache(); };
+    $('#dnCzas1').addEventListener('click', () => dodaj(60)); $('#dnCzas2').addEventListener('click', () => dodaj(3600)); $('#dnCzas3').addEventListener('click', () => dodaj(172800));
+    $('#dnCzysc').addEventListener('click', () => { cache = new Map(); rysujCache(); });
+    rysujCache();
+    quizWyboru('tq', POZ, TU);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 5: opóźnienia ═════════════════════ */
+const Opoznienie = (() => {
+  const W = [52.2297, 21.0122];
+  const MIASTA = [['Kraków', 50.0647, 19.945], ['Berlin', 52.52, 13.405], ['Frankfurt', 50.1109, 8.6821], ['Londyn', 51.5074, -0.1278], ['Nowy Jork', 40.7128, -74.006], ['Tokio', 35.6762, 139.6503], ['San Francisco', 37.7749, -122.4194], ['Kapsztad', -33.9249, 18.4241]];
+  function km(a, b) {
+    const r = (x) => (x * Math.PI) / 180, R = 6371.0088;
+    const [la1, lo1, la2, lo2] = [a[0], a[1], b[0], b[1]].map(r);
+    return 2 * R * Math.asin(Math.sqrt(Math.sin((la2 - la1) / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin((lo2 - lo1) / 2) ** 2));
+  }
+  const odl = MIASTA.map(([n, la, lo]) => [n, Math.round(km(W, [la, lo]))]);
+  const licz = (sKm, Lb, Rmb, v) => ({ prop: (sKm * 1000) / v, trans: Lb / (Rmb * 1e6) });
+  function rysuj() {
+    const s = Math.max(0, +$('#opS').value || 0), L = Math.max(0, +$('#opL').value || 0) * +$('#opLj').value * 8, R = Math.max(1e-3, +$('#opR').value || 1e-3), v = +$('#opV').value;
+    const { prop, trans } = licz(s, L, R, v);
+    const st = $('#opStaty'); st.replaceChildren();
+    const stat = (a, b) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: a }), el('div', { class: 'v', text: b })));
+    stat('d_prop (w jedną stronę)', czas(prop)); stat('RTT (tam i z powrotem)', czas(2 * prop)); stat('d_trans', czas(trans)); stat('d_prop + d_trans', czas(prop + trans));
+    const mx = Math.max(prop, trans) || 1;
+    slupki($('#opSlupki'), [['propagacja', prop], ['transmisja', trans]].map(([lab, x]) => ({ lab, pc: (100 * x) / mx, tekst: czas(x) })));
+    const strona = 4 * 2 * prop;
+    let op = trans > prop ? `Dominuje transmisja (${ulamek(trans / Math.max(prop, 1e-12), 1)} razy dłuższa): szybsze łącze pomoże, bliższy serwer niewiele.` : `Dominuje propagacja (${ulamek(prop / Math.max(trans, 1e-12), 1)} razy dłuższa): szybsze łącze niewiele da, pomoże tylko bliższy serwer.`;
+    op += ` Otwarcie strony z tego serwera (DNS + TCP + TLS + HTTP ≈ 4 RTT, bez kolejek): ok. ${czas(strona)}${strona > 0.1 ? ' — ponad próg 0,1 s.' : '.'}`;
+    $('#opOpis').textContent = op;
+  }
+  /* zadania */
+  const ROZ = [[100, '100 B (ruch w grze)'], [1500, '1500 B (jeden pakiet)'], [50e3, '50 kB (mała strona)'], [2e6, '2 MB (zdjęcie)'], [500e6, '500 MB (film)']];
+  let Z = null, ok = 0, ile = 0;
+  function nowe() {
+    let z;
+    for (let g = 0; g < 100; g++) {
+      const [m, s] = wybierz(odl.filter(([, d]) => d > 300)), [L, opis] = wybierz(ROZ), R = wybierz([10, 50, 100, 1000]);
+      const { prop, trans } = licz(s, L * 8, R, 2e8);
+      const zysk = { lacze: trans / 2, blizej: prop / 2 };
+      if (Math.max(zysk.lacze, zysk.blizej) / Math.min(zysk.lacze, zysk.blizej) < 1.5) continue;
+      z = { m, s, L, opis, R, zysk, ok: zysk.lacze > zysk.blizej ? 'lacze' : 'blizej' }; break;
+    }
+    Z = { ...z, zal: false }; ile++;
+    $('#ozQ').textContent = `Wysyłasz ${Z.opis} z Warszawy do serwera w mieście ${Z.m} (ok. ${liczba(Z.s)} km) łączem ${Z.R} Mb/s. Co bardziej skróci d_prop + d_trans?`;
+    for (const b of $$('#ozOdp button')) { b.disabled = false; b.className = 'btn ghost'; }
+    $('#ozFb').textContent = ''; $('#ozFb').className = 'fbline'; $('#ozWyj').textContent = ''; $('#ozIle').textContent = ile;
+  }
+  function odp(w, btn) {
+    if (!Z || Z.zal) return; Z.zal = true;
+    for (const b of $$('#ozOdp button')) { b.disabled = true; if (b.dataset.w === Z.ok) b.className = 'btn dobra'; }
+    const fb = $('#ozFb');
+    if (w === Z.ok) { ok++; $('#ozOk').textContent = ok; fb.className = 'fbline dobrze'; fb.textContent = 'Dobrze.'; } else { btn.className = 'btn zla'; fb.className = 'fbline zle'; fb.textContent = 'Nie.'; }
+    $('#ozWyj').textContent = `Łącze 2× szybsze oszczędza połowę transmisji: ${czas(Z.zysk.lacze)}. Serwer 2× bliżej oszczędza połowę propagacji: ${czas(Z.zysk.blizej)}. ${Z.ok === 'lacze' ? 'Dla dużych danych wygrywa przepustowość.' : 'Dla małych danych wygrywa odległość.'}`;
+  }
+  function init() {
+    $('#opMiasta').replaceChildren(el('span', { class: 'small muted', text: 'z Warszawy do:' }), ...odl.map(([n, d]) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small', text: `${n} (${liczba(d)} km)` });
+      b.addEventListener('click', () => { $('#opS').value = d; rysuj(); }); return b;
+    }));
+    for (const id of ['#opS', '#opL', '#opLj', '#opR', '#opV']) $(id).addEventListener('input', rysuj);
+    rysuj();
+    for (const b of $$('#ozOdp button')) b.addEventListener('click', () => odp(b.dataset.w, b));
+    $('#ozNowe').addEventListener('click', nowe);
+    nowe(); ile = 1; $('#ozIle').textContent = ile;
+  }
+  return { init, _t: { odl, licz } };
+})();
+
+/* ═════════════════════ Ćwiczenie 6: ile czekania ═════════════════════ */
+const Czekanie = (() => {
+  const APLIKACJA = 'w12-czekanie';
+  const OP = [50, 100, 200, 400, 700, 1000, 2000, 4000];
+  let proby = [], i = 0, wyn = [], t0 = 0, tm = null, panel = null, faza = 'nic';
+  const OCENY = { 1: 'natychmiast', 2: 'zauważalnie', 3: 'rozprasza' };
+  function pokaz() {
+    if (i >= proby.length) return koniec();
+    faza = 'czeka';
+    $('#czNr').textContent = `${i + 1} / ${proby.length}`;
+    const o = $('#czOkno'); o.className = 'okno'; o.textContent = 'Kliknij „Wyślij zapytanie”.';
+    $('#czWyslij').disabled = false; $('#czWyslij').hidden = false; $('#czOceny').hidden = true;
+  }
+  function wyslij() {
+    if (faza !== 'czeka') return; faza = 'leci';
+    $('#czWyslij').disabled = true; $('#czOkno').textContent = '';
+    t0 = performance.now();
+    tm = setTimeout(() => {
+      const o = $('#czOkno'); o.className = 'okno gotowe'; o.textContent = '✓ Odpowiedź serwera: strona gotowa';
+      requestAnimationFrame(() => { proby[i].faktyczne = performance.now() - t0; faza = 'ocena'; $('#czWyslij').hidden = true; $('#czOceny').hidden = false; });
+    }, proby[i].d);
+  }
+  function ocen(o) { if (faza !== 'ocena') return; wyn.push({ d: proby[i].d, f: proby[i].faktyczne, o }); i++; pokaz(); }
+  /** Opóźnienie, przy którym odsetek spełniający warunek przekracza 50% (interpolacja w skali log). */
+  function prog(frac, rosnie) {
+    const pk = OP.map((d) => [d, frac(d)]);
+    const war = (f) => (rosnie ? f >= 0.5 : f < 0.5);
+    if (war(pk[0][1])) return { lt: true };
+    for (let j = 1; j < pk.length; j++) if (war(pk[j][1])) {
+      const [d0, f0] = pk[j - 1], [d1, f1] = pk[j]; const t = f1 === f0 ? 0.5 : (0.5 - f0) / (f1 - f0);
+      return { v: Math.exp(Math.log(d0) + t * (Math.log(d1) - Math.log(d0))) };
+    }
+    return { gt: true };
+  }
+  function koniec() {
+    faza = 'nic'; $('#czTest').hidden = true; $('#czWynik').hidden = false;
+    const fr = (o) => (d) => { const t = wyn.filter((w) => w.d === d); return t.length ? t.filter((w) => w.o === o).length / t.length : 0; };
+    const fr12 = (d) => { const t = wyn.filter((w) => w.d === d); return t.length ? t.filter((w) => w.o >= 2).length / t.length : 0; };
+    const p1 = prog(fr12, true), p3 = prog(fr(3), true);
+    const fmt = (p) => (p.lt ? 'poniżej 50 ms' : p.gt ? 'powyżej 4 s' : czas(p.v / 1000));
+    const st = $('#czStaty'); st.replaceChildren();
+    const stat = (a, b) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: a }), el('div', { class: 'v', text: b })));
+    stat('koniec „natychmiast” (50% ocen)', fmt(p1)); stat('początek „rozprasza” (50% ocen)', fmt(p3));
+    $('#czTab').replaceChildren(el('thead', {}, el('tr', {}, ...['opóźnienie', 'faktycznie (średnio)', 'natychmiast', 'zauważalnie', 'rozprasza'].map((x) => el('th', { text: x })))),
+      el('tbody', {}, ...OP.map((d) => { const t = wyn.filter((w) => w.d === d); const n = (o) => String(t.filter((w) => w.o === o).length);
+        return el('tr', {}, el('td', { class: 'n', text: `${d} ms` }), el('td', { class: 'n', text: t.length ? `${Math.round(t.reduce((a, w) => a + w.f, 0) / t.length)} ms` : '—' }), el('td', { class: 'n', text: n(1) }), el('td', { class: 'n', text: n(2) }), el('td', { class: 'n', text: n(3) })); })));
+    let op = 'Kolumna „faktycznie” to zmierzony czas od kliknięcia do pokazania odpowiedzi (przeglądarka może dołożyć kilka–kilkanaście ms). ';
+    if (p1.v) op += p1.v < 300 ? 'Twój próg „natychmiast” leży blisko 0,1 s — jak w regułach Millera i Carda. ' : 'Twój próg „natychmiast” jest wyraźnie powyżej 0,1 s. Progi z literatury to reguły orientacyjne; zależą też od zadania i od tego, czego się spodziewasz. ';
+    if (p3.gt) op += 'Żadne z czekań do 4 s nie rozpraszało Cię w większości prób — trzeci próg (ok. 10 s) leży poza zakresem pomiaru.';
+    $('#czOpis').textContent = op;
+    if (panel && (p1.v || p3.v)) panel.gotowe([...(p1.v ? [['natychmiast', Math.round(p1.v)]] : []), ...(p3.v ? [['rozprasza', Math.round(p3.v)]] : [])]);
+  }
+  function start() {
+    proby = tasuj(OP.flatMap((d) => [d, d, d]).map((d) => ({ d }))); i = 0; wyn = [];
+    $('#czIntro').hidden = true; $('#czWynik').hidden = true; $('#czTest').hidden = false; pokaz();
+  }
+  function init() {
+    $('#czStart').addEventListener('click', start); $('#czAgain').addEventListener('click', start);
+    $('#czWyslij').addEventListener('click', wyslij);
+    for (const b of $$('#czOceny button')) b.addEventListener('click', () => ocen(+b.dataset.o));
+    panel = panelGrupy($('#grupa-cz'), {
+      aplikacja: APLIKACJA,
+      wiersze: (w) => w,
+      filtr: (r) => ['natychmiast', 'rozprasza'].includes(r.w) && r.v >= 30 && r.v <= 5000,
+      rysuj: (host, rows) => {
+        const m = (w) => mediana(rows.filter((r) => r.w === w).map((r) => r.v));
+        const a = m('natychmiast'), b = m('rozprasza'); const mx = Math.max(...[a, b].filter(Number.isFinite)) || 1;
+        slupki(host, [['koniec „natychmiast”', a, 'natychmiast'], ['początek „rozprasza”', b, 'rozprasza']].map(([lab, x, w]) => ({ lab, pc: Number.isFinite(x) ? (100 * x) / mx : null, tekst: Number.isFinite(x) ? `mediana ${czas(x / 1000)} (${rows.filter((r) => r.w === w).length} osób)` : 'brak danych' })));
+      },
+      opis: (rows) => `Osób: ok. ${rows.filter((r) => r.w === 'natychmiast').length || rows.length}.`,
+    });
+  }
+  return { init, wejscie: () => panel?.start(), wyjscie: () => { clearTimeout(tm); panel?.stop(); if (!$('#czTest').hidden) { faza = 'nic'; $('#czTest').hidden = true; $('#czIntro').hidden = false; } }, _t: { prog } };
+})();
+
+const MODULY = { pakiety: Pakiety, warstwy: Warstwy, trasowanie: Trasowanie, dns: Dns, opoznienie: Opoznienie, czekanie: Czekanie };
+
+/* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
+const Ustawienia = (() => {
+  let roboczy = null;
+  function domyslnaSesja() { const d = new Date(); return `${KONF.wyk}-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+  function parsujPrefill(link) {
+    let u; try { u = new URL(link.trim()); } catch (e) { throw new Error('To nie wygląda na adres internetowy.'); }
+    if (!/\/forms\/.+\/(viewform|formResponse)$/.test(u.pathname)) throw new Error('To nie jest link do Formularza Google (powinien kończyć się na /viewform?…).');
+    const f = u.origin + u.pathname.replace(/\/viewform$/, '/formResponse');
+    const e = {}; const MAP = { APLIKACJA: 'a', SESJA: 's', WARIANT: 'w', WYNIK: 'v' };
+    for (const [k, v] of u.searchParams) if (/^entry\.\d+$/.test(k) && MAP[v.trim().toUpperCase()]) e[MAP[v.trim().toUpperCase()]] = k;
+    const brak = Object.entries(MAP).filter(([, kk]) => !e[kk]).map(([nm]) => nm);
+    if (brak.length) throw new Error(`W linku brakuje pól: ${brak.join(', ')}. Wpisz te słowa w pola formularza przed pobraniem linku.`);
+    return { f, e };
+  }
+  function zbierz() {
+    const { f, e } = parsujPrefill($('#sPrefill').value);
+    const c = $('#sCsv').value.trim();
+    if (!/^https?:\/\//.test(c)) throw new Error('Podaj link do opublikowanego arkusza (CSV).');
+    const sesja = $('#sSes').value.trim();
+    if (!sesja) throw new Error('Podaj nazwę sesji.');
+    return { v: 1, f, e, c, s: sesja };
+  }
+  function baza() { return location.protocol === 'file:' ? $('#sBase').value.trim() : location.origin + location.pathname; }
+  function linki(cfg) {
+    const b = baza(); const card = $('#sLinksCard');
+    if (!b) { card.hidden = true; return; }
+    const q = `${b}?cfg=${b64e(JSON.stringify(cfg))}`;
+    for (const l of KONF.linki) $('#' + l.id).value = `${q}#${l.hash}`;
+    card.hidden = false;
+  }
+  function wypelnij(cfg) {
+    if (!cfg) return;
+    const u = new URL(cfg.f.replace(/\/formResponse$/, '/viewform'));
+    u.searchParams.set('usp', 'pp_url'); u.searchParams.set(cfg.e.a, 'APLIKACJA'); u.searchParams.set(cfg.e.s, 'SESJA'); u.searchParams.set(cfg.e.w, 'WARIANT'); u.searchParams.set(cfg.e.v, 'WYNIK');
+    $('#sPrefill').value = u.toString(); $('#sCsv').value = cfg.c; $('#sSes').value = cfg.s;
+  }
+  function out(...kids) { $('#sOut').replaceChildren(...kids); }
+  async function sprawdz() {
+    let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+    roboczy = cfg; linki(cfg);
+    const lista = el('ul');
+    const pkt = (ok, t) => lista.append(el('li', { class: ok ? 'ok' : 'err', text: `${ok ? '✓' : '✗'} ${t}` }));
+    out(lista);
+    pkt(true, 'Link formularza rozpoznany, wszystkie cztery pola znalezione.');
+    try { await Grupa.wyslij('test', 'test', 0, cfg); pkt(true, 'Wpis testowy wysłany (aplikacja = test). Przeglądarka nie potwierdza odbioru: sprawdź, czy pojawił się w arkuszu.'); }
+    catch (e) { pkt(false, `Wysyłka nie powiodła się: ${e.message}`); }
+    try {
+      const { rows, kol } = await Grupa.pobierz(cfg);
+      pkt(true, `Arkusz CSV odczytany: ${rows.length} wierszy odpowiedzi.`);
+      if (kol && !kol.znalezione) pkt(false, 'Nie znaleziono kolumn o nazwach aplikacja, sesja, wariant, wynik. Używam kolejności kolumn 2–5. Sprawdź nazwy pytań.');
+      const testy = rows.filter((r) => r.a === 'test' && r.s === cfg.s).length;
+      lista.append(el('li', { class: 'muted', text: `Wpisów testowych w tej sesji: ${testy}. Nowy wpis może pojawić się w CSV dopiero po kilku minutach; kliknij „Sprawdź” ponownie.` }));
+    } catch (e) { pkt(false, `Nie udało się odczytać CSV: ${e.message}. Sprawdź, czy arkusz jest opublikowany jako CSV.`); }
+    if (location.protocol === 'file:' && !$('#sBase').value.trim()) lista.append(el('li', { class: 'muted', text: 'Strona jest otwarta z dysku. Żeby wygenerować link dla studentów, wpisz adres strony w sieci (GitHub Pages).' }));
+  }
+  function init() {
+    $('#sSes').value = domyslnaSesja();
+    if (location.protocol === 'file:') $('#sBaseInfo').textContent = 'Strona jest otwarta z dysku, więc link musi wskazywać kopię w sieci.';
+    else { $('#sBase').value = location.origin + location.pathname; $('#sBase').readOnly = true; $('#sBaseInfo').textContent = 'Adres tej strony.'; }
+    const zapisana = store.get(CFG_KEY); if (zapisana) { try { wypelnij(JSON.parse(zapisana)); } catch (e) { /* ignoruj */ } }
+    else if (Grupa.cfg) wypelnij(Grupa.cfg);
+    $('#sPrefill').addEventListener('input', () => {
+      const i = $('#sPrefillInfo');
+      if (!$('#sPrefill').value.trim()) { i.textContent = ''; return; }
+      try { const { e } = parsujPrefill($('#sPrefill').value); i.className = 'small ok'; i.textContent = `✓ Pola: aplikacja = ${e.a}, sesja = ${e.s}, wariant = ${e.w}, wynik = ${e.v}`; }
+      catch (err) { i.className = 'small err'; i.textContent = err.message; }
+    });
+    $('#sPrefill').dispatchEvent(new Event('input'));
+    $('#sCheck').addEventListener('click', sprawdz);
+    $('#sBase').addEventListener('input', () => { if (roboczy) linki(roboczy); });
+    $('#sSave').addEventListener('click', () => {
+      let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+      const ok = store.set(CFG_KEY, JSON.stringify(cfg)); linki(cfg);
+      out(el('p', { class: ok ? 'ok' : 'err', text: ok ? 'Zapisano. W tej przeglądarce tryb grupowy będzie włączony także bez parametru w linku. Odśwież stronę, żeby go uruchomić.' : 'Ta przeglądarka nie pozwala zapisywać ustawień. Używaj linków dla studentów.' }));
+    });
+    $('#sForget').addEventListener('click', () => { store.del(CFG_KEY); out(el('p', { text: 'Usunięto zapisaną konfigurację. Po odświeżeniu strona będzie działać samodzielnie (chyba że otworzysz link z parametrem cfg).' })); });
+    for (const b of $$('[data-copy]')) b.addEventListener('click', async () => { const ok = await copyText($('#' + b.dataset.copy).value); b.textContent = ok ? 'Skopiowano' : 'Zaznacz i skopiuj'; setTimeout(() => { b.textContent = 'Kopiuj'; }, 1600); });
+    if (Grupa.cfg) linki(Grupa.cfg);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+let biezacy = null;
+function nawiguj() {
+  const ids = Object.keys(KONF.widoki);
+  const v = ids.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  if (biezacy && biezacy !== v) MODULY[biezacy]?.wyjscie?.();
+  if (biezacy !== v) MODULY[v]?.wejscie?.();
+  for (const w of ids) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = KONF.widoki[v];
+}
+Grupa.init();
+for (const m of Object.values(MODULY)) m.init?.();
+Ustawienia.init();
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+
+</script>
+</body>
+</html>
