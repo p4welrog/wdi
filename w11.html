@@ -1,0 +1,1491 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 11 · ćwiczenia</title>
+<meta name="description" content="Interaktywne ćwiczenia do wykładu 11 „Systemy operacyjne, architektury systemów i wirtualizacja” (Wprowadzenie do informatyki, SWPS).">
+<style>
+
+
+/* ───────── Tokeny ───────── */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --surface-2: #f3f5f8; --border: #dfe3e8;
+  --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280;
+  --accent: #1f4e79; --accent-ink: #ffffff; --accent-soft: #e8eef5;
+  --bad: #b3403d; --bad-soft: #fbeceb; --good: #2e7d5b; --good-soft: #e7f3ed;
+  --amber: #9a6413; --amber-soft: #fbf3e4;
+  --s1: #2a78d6; --s2: #eb6834; --grid: #e5e7eb;
+  --hl: #ffd166; --hl-ink: #1a1a1a;
+  --head-bg: #1f4e79; --head-ink: #ffffff;
+  --radius: 10px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+    --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+    --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+    --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+    --amber: #e6b25c; --amber-soft: #33281a;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+    --hl: #e0b34a; --hl-ink: #111418;
+    --head-bg: #182a3f; --head-ink: #eceff3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111418; --surface: #16191d; --surface-2: #1d2228; --border: #2c333b;
+  --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1;
+  --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39;
+  --bad: #f08a87; --bad-soft: #3a1f1f; --good: #6cc49a; --good-soft: #17302a;
+  --amber: #e6b25c; --amber-soft: #33281a;
+  --s1: #3987e5; --s2: #d95926; --grid: #2a3038;
+  --hl: #e0b34a; --hl-ink: #111418;
+  --head-bg: #182a3f; --head-ink: #eceff3;
+  color-scheme: dark;
+}
+
+/* ───────── Podstawy ───────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 1.7rem; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.08rem; }
+p { margin: 0 0 .8em; }
+code, .mono { font-family: var(--mono); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .88rem; }
+[hidden] { display: none !important; }
+
+/* ───────── Nagłówek i zakładki ───────── */
+.top { background: var(--head-bg); color: var(--head-ink); position: sticky; top: 0; z-index: 20; }
+.top .bar { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding-top: 10px; padding-bottom: 6px; }
+.brand { color: inherit; text-decoration: none; font-weight: 600; font-size: .95rem; }
+.top .lft { display: flex; align-items: baseline; gap: 6px 14px; flex-wrap: wrap; min-width: 0; }
+html { scroll-padding-top: 96px; }
+@media (max-width: 560px) { html { scroll-padding-top: 124px; } }
+.home { color: inherit; opacity: .85; text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.home:hover, .home:focus-visible { opacity: 1; text-decoration: underline; }
+.badge { font-size: .78rem; padding: 3px 9px; border-radius: 99px; background: rgba(255,255,255,.18); color: inherit; text-decoration: none; white-space: nowrap; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs a { color: inherit; text-decoration: none; padding: 6px 12px; border-radius: 99px; white-space: nowrap; font-size: .92rem; opacity: .85; }
+.tabs a[aria-current="page"] { background: var(--head-ink); color: var(--head-bg); opacity: 1; font-weight: 600; }
+.tabs a:focus-visible { outline: 2px solid var(--head-ink); outline-offset: 2px; }
+
+main { padding-top: 22px; padding-bottom: 40px; }
+.lead { font-size: 1.05rem; color: var(--text-2); max-width: 70ch; }
+
+/* ───────── Karty ───────── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.card > h3:first-child { margin-top: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .15s, transform .15s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.tile h3 { margin-bottom: .3em; }
+.tile p { color: var(--text-2); margin: 0; font-size: .94rem; }
+.tile .meta { margin-top: 8px; font-size: .82rem; color: var(--muted); }
+
+.think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
+.think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
+.src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
+
+/* ───────── Formularze i przyciski ───────── */
+label { font-weight: 500; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.field { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+input[type="text"], input[type="number"], input[type="url"], textarea, select {
+  font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; min-height: 40px; max-width: 100%;
+}
+textarea { width: 100%; min-height: 110px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 8px 16px; min-height: 40px; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 4px 10px; min-height: 32px; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 99px; padding: 3px; background: var(--surface-2); flex-wrap: wrap; }
+.seg button { font: inherit; border: 0; background: transparent; color: var(--text-2); padding: 6px 14px; border-radius: 99px; cursor: pointer; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.err { color: var(--bad); font-size: .9rem; }
+.ok { color: var(--good); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 6px 0 10px; }
+.stat .k { font-size: .78rem; color: var(--muted); }
+.stat .v { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Słupki poziome (HTML) */
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(150px, 34%) 1fr; gap: 10px; align-items: center; }
+.hbar .lab { font-size: .9rem; color: var(--text-2); }
+.hbar .track { position: relative; height: 22px; }
+.hbar .fill { position: absolute; left: 0; top: 3px; height: 16px; background: var(--s1); border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar .val { position: absolute; top: 0; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--text); white-space: nowrap; line-height: 22px; }
+@media (max-width: 560px) { .hbar { grid-template-columns: 1fr; gap: 2px; } }
+
+/* Tabela */
+table.t { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+@media (max-width: 640px) {
+  table.stack thead { display: none; }
+  table.stack tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+  table.stack td { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; border: 0; padding: 2px 0; text-align: left !important; }
+  table.stack td::before { content: attr(data-l); color: var(--muted); font-size: .8rem; }
+  table.stack td:first-child { font-weight: 600; grid-template-columns: 1fr; }
+  table.stack td:first-child::before { content: none; }
+  table.stack td:empty { display: none; }
+}
+
+
+/* ───────── Wspólne elementy (jak w W05) ───────── */
+.dirty { color: var(--amber); font-size: .88rem; }
+.errlist { margin: 6px 0 0; padding-left: 1.2em; color: var(--bad); font-size: .9rem; }
+.alert { border-radius: 8px; padding: 8px 12px; font-size: .92rem; margin: 6px 0; }
+.alert.bad { background: var(--bad-soft); color: var(--bad); }
+.alert.warn { background: var(--amber-soft); color: var(--amber); }
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 6px; }
+.ctrl .speed { display: flex; align-items: center; gap: 6px; font-size: .88rem; color: var(--text-2); }
+.ctrl input[type="range"] { width: 110px; }
+.status.halt { color: var(--good); }
+.status.stuck { color: var(--bad); }
+.status.limit { color: var(--amber); }
+.task { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.task h4 { margin: 0 0 4px; font-size: 1rem; }
+.task p { margin: 0 0 8px; color: var(--text-2); font-size: .94rem; }
+.task.done { border-color: var(--good); }
+.task .hint { font-size: .88rem; }
+.res td.okc { color: var(--good); font-weight: 700; }
+.res td.badc { color: var(--bad); font-weight: 700; }
+.res td.mono { font-family: var(--mono); }
+.pill { display: inline-block; font-size: .78rem; padding: 2px 9px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+details.ref { margin-top: 10px; }
+details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.fbline { font-weight: 600; font-size: 1.1rem; margin: 12px 0 4px; }
+.fbline.dobrze { color: var(--good); }
+.fbline.zle { color: var(--bad); }
+.group { border: 1px solid var(--s1); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; background: var(--surface); }
+.group h3 { display: flex; gap: 8px; align-items: center; }
+.group .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; }
+.card.most { border-left: 4px solid var(--good); }
+.card.most h3 { color: var(--good); }
+
+/* ───────── W07: elementy wspólne z W06 ───────── */
+.sk-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 720px) { .sk-grid { grid-template-columns: minmax(0, 1fr); } }
+pre.kod { font-family: var(--mono); font-size: .92rem; line-height: 1.55; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 0; margin: 0 0 10px; overflow-x: auto; }
+pre.kod span { display: block; padding: 0 12px; white-space: pre; }
+pre.kod span.cur { background: var(--hl); color: var(--hl-ink); }
+input.liczba { width: 9em; font-family: var(--mono); }
+.prpyt { font-size: 1.15rem; font-weight: 600; margin: 8px 0 10px; }
+.opbtn { min-width: 6em; }
+.opbtn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
+.opbtn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+
+/* ───────── W07: stos i kolejka ───────── */
+.stos { display: flex; flex-direction: column; gap: 4px; min-height: 60px; padding: 8px; border: 2px solid var(--border); border-top: 0; border-radius: 0 0 10px 10px; max-width: 220px; }
+.kolejka { display: flex; flex-wrap: wrap; gap: 4px; min-height: 52px; padding: 8px; border: 2px solid var(--border); border-left: 0; border-right: 0; align-items: center; }
+.el { font-family: var(--mono); font-weight: 700; padding: 6px 12px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); text-align: center; border: 1.5px solid transparent; }
+.el.wierzch { border-color: var(--accent); }
+.el.nowy { background: var(--hl); color: var(--hl-ink); }
+.pusty { color: var(--muted); font-size: .85rem; font-style: italic; padding: 4px; }
+.ops { font-size: 1rem; line-height: 1.7; background: var(--surface-2); padding: 8px 12px; border-radius: 8px; }
+
+
+/* ───────── W11: wspólne ───────── */
+.zad { font-size: 1.08rem; margin: 10px 0 8px; }
+.odp { margin: 8px 0; }
+.btn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
+.btn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+kbd { font-family: var(--mono); font-size: .85em; padding: 1px 6px; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; background: var(--surface-2); }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .85rem; color: var(--text-2); margin-top: 8px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+/* ───────── W11: stany procesu ───────── */
+svg.stany { width: 100%; min-width: 620px; height: auto; display: block; margin: 6px 0; }
+svg.stany .st rect { fill: var(--surface-2); stroke: var(--border); stroke-width: 2; }
+svg.stany .st text { fill: var(--text); font: 600 15px var(--font); text-anchor: middle; dominant-baseline: central; }
+svg.stany .pr path.l { fill: none; stroke: var(--muted); stroke-width: 2.2; }
+svg.stany .pr path.hit { fill: none; stroke: transparent; stroke-width: 18; cursor: pointer; }
+svg.stany .pr:hover path.l, svg.stany .pr:focus-visible path.l { stroke: var(--accent); stroke-width: 3.5; }
+svg.stany .pr.dobra path.l { stroke: var(--good); stroke-width: 4; }
+svg.stany .pr.zla path.l { stroke: var(--bad); stroke-width: 4; }
+svg.stany .pr text { fill: var(--text-2); font: 12px var(--font); text-anchor: middle; }
+svg.stany .grot { fill: var(--muted); }
+svg.stany .pr.dobra .grot { fill: var(--good); }
+
+/* ───────── W11: planista ───────── */
+#plZad input { width: 5em; font-family: var(--mono); }
+#plZad input.nazwa { width: 4.5em; }
+.gantt { margin: 8px 0 14px; }
+.gantt .gl { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 4px; font-size: .92rem; }
+.gantt .gl b { font-size: 1rem; }
+.gantt .pas { display: flex; height: 34px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+.gantt .sg { display: grid; place-items: center; font-family: var(--mono); font-size: .8rem; font-weight: 700; border-right: 1px solid var(--surface); color: #1a1a1a; overflow: hidden; white-space: nowrap; }
+.gantt .sg.sw { background: repeating-linear-gradient(135deg, var(--grid), var(--grid) 4px, var(--surface-2) 4px, var(--surface-2) 8px); color: var(--muted); }
+.gantt .os { position: relative; height: 16px; font-size: .68rem; color: var(--muted); font-family: var(--mono); }
+.gantt .os span { position: absolute; transform: translateX(-50%); }
+.c0 { background: #9cc3f0; } .c1 { background: #f5b48f; } .c2 { background: #a9dcbf; } .c3 { background: #e8c86e; } .c4 { background: #d1b3ec; } .c5 { background: #f0a3b4; }
+.kropka { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 6px; }
+table.t tr.naj td { font-weight: 700; }
+
+/* ───────── W11: przełączanie zadań ───────── */
+.klawisze { display: flex; gap: 14px; flex-wrap: wrap; margin: 6px 0 10px; }
+.klawisz { display: flex; gap: 10px; align-items: center; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); }
+.klawisz kbd { font-size: 1.1rem; }
+.bodziec { min-height: 210px; display: grid; place-items: center; align-content: center; gap: 6px; margin: 10px auto; max-width: 340px; border-radius: 14px; border: 4px solid transparent; }
+.bodziec.parz { border-color: var(--s1); }
+.bodziec.wiel { border-color: var(--s2); }
+.bodziec .wskazowka { font-weight: 700; letter-spacing: .08em; font-size: 1.05rem; min-height: 1.4em; }
+.bodziec.parz .wskazowka { color: var(--s1); }
+.bodziec.wiel .wskazowka { color: var(--s2); }
+.bodziec .cyfra { font-size: 5rem; font-weight: 700; line-height: 1; min-height: 1em; font-family: var(--mono); }
+.bodziec.blad .cyfra { color: var(--bad); font-size: 1.6rem; }
+.btn.duzy { min-width: 12em; padding: 14px 16px; font-size: 1rem; }
+
+/* ───────── W11: pamięć wirtualna ───────── */
+.adrbity { display: inline-flex; gap: 2px; margin: 10px 0 2px; font-family: var(--mono); }
+.adrbity .b { width: 20px; text-align: center; padding: 3px 0; border-radius: 4px; font-size: .85rem; color: #fff; }
+.adrbity .b.s { background: var(--s1); }
+.adrbity .b.p { background: var(--s2); }
+.adrbity .b.gr { margin-left: 6px; }
+#pmTab tr.akt td { background: var(--hl); color: var(--hl-ink); }
+.wynikpm { border-radius: var(--radius); padding: 10px 14px; border: 1px solid var(--border); background: var(--surface-2); }
+.wynikpm.ok { border-color: var(--good); background: var(--good-soft); }
+.wynikpm.bad { border-color: var(--bad); background: var(--bad-soft); }
+.wynikpm.warn { border-color: var(--amber); background: var(--amber-soft); }
+.wynikpm h4 { margin: 0 0 6px; }
+.wynikpm .mono { font-size: 1.05rem; }
+
+/* ───────── W11: architektury ───────── */
+.trzywarstwy { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 2px 0 12px; }
+.trzywarstwy .wa { padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: .92rem; }
+.wa-p { background: var(--accent-soft); color: var(--accent); }
+.wa-l { background: var(--good-soft); color: var(--good); }
+.wa-d { background: var(--amber-soft); color: var(--amber); }
+
+/* ───────── W11: wirtualizacja ───────── */
+.warstwy { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+.warstwy .rz { display: flex; gap: 4px; }
+.warstwy .w { flex: 1; text-align: center; padding: 7px 4px; border-radius: 6px; font-size: .85rem; font-weight: 600; }
+.warstwy .w.app { background: var(--accent-soft); color: var(--accent); }
+.warstwy .w.os { background: var(--good-soft); color: var(--good); }
+.warstwy .w.hv { background: var(--amber-soft); color: var(--amber); }
+.warstwy .w.hw { background: var(--surface-2); color: var(--text-2); border: 1px solid var(--border); }
+.warstwy .w.nie { background: var(--bad-soft); color: var(--bad); }
+table.odpow td.kom { cursor: pointer; text-align: center; font-weight: 600; user-select: none; }
+table.odpow td.kom.ty { background: var(--accent-soft); color: var(--accent); }
+table.odpow td.kom.dost { background: var(--surface-2); color: var(--text-2); }
+table.odpow td.kom.blok { cursor: default; opacity: .8; }
+table.odpow td.kom.zle { outline: 2px solid var(--bad); outline-offset: -2px; }
+table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <div class="lft"><a class="home" href="index.html">← Wszystkie wykłady</a><a class="brand" href="#start">Wprowadzenie do informatyki · Wykład 11</a></div>
+    <a id="groupBadge" class="badge" href="#ustawienia" hidden></a>
+  </div>
+  <nav class="wrap tabs" aria-label="Ćwiczenia">
+    <a href="#start">Start</a>
+    <a href="#stany">1. Stany procesu</a>
+    <a href="#planista">2. Planista</a>
+    <a href="#przelaczanie">3. Przełączanie zadań</a>
+    <a href="#pamiec">4. Pamięć wirtualna</a>
+    <a href="#architektury">5. Gdzie to działa?</a>
+    <a href="#wirtualizacja">6. VM, kontener, chmura</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════ START ═══════════════════ -->
+<section id="v-start">
+  <h1>Systemy operacyjne, architektury i wirtualizacja: ćwiczenia</h1>
+  <p class="lead">Ćwiczenia do wykładu 11, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
+  <div class="grid2">
+    <a class="tile" href="#stany"><span class="num">1</span><h3>Stany procesu</h3><p>Diagram stanów procesu i dziesięć zdarzeń z życia programu: wczytanie pliku, koniec kwantu, naciśnięty klawisz. Wskaż przejście, które wykona system.</p><div class="meta">ok. 4 min · slajdy „Program a proces” i „Stany procesu”</div></a>
+    <a class="tile" href="#planista"><span class="num">2</span><h3>Planista procesora</h3><p>Zadania, cztery reguły planowania i wykresy Gantta. Średni czas oczekiwania, czas do pierwszego uruchomienia, koszt przełączania kontekstu i wybór kwantu. Na koniec ułóż kolejkę sam.</p><div class="meta">ok. 10 min · slajdy od „Przełączania kontekstu” do „Przykładu: cztery zadania, trzy reguły”</div></a>
+    <a class="tile" href="#przelaczanie"><span class="num">3</span><h3>Przełączanie zadań u ludzi</h3><p>Krótki eksperyment: oceniaj cyfry raz według parzystości, raz według wielkości. Czy zmiana zadania kosztuje czas? Twój wynik i — w trybie grupowym — wynik sali.</p><div class="meta">ok. 5 min · slajd „Przełączanie się między zadaniami u ludzi”</div></a>
+    <a class="tile" href="#pamiec"><span class="num">4</span><h3>Pamięć wirtualna</h3><p>Adres wirtualny rozłożony na stronę i przesunięcie, tablice stron dwóch procesów, adres fizyczny. Co się stanie przy zapisie do kodu, wykonaniu danych albo odwołaniu do strony na dysku?</p><div class="meta">ok. 7 min · slajdy „Pamięć wirtualna” i „Ochrona: izolacja, uprawnienia, bit NX”</div></a>
+    <a class="tile" href="#architektury"><span class="num">5</span><h3>Gdzie to działa?</h3><p>Elementy systemu zapisów na zajęcia rozdziel między warstwy: prezentację, logikę i dane. Potem rozpoznaj klienta, serwer i sieć peer-to-peer.</p><div class="meta">ok. 5 min · slajdy od „Klient–serwer i peer-to-peer” do „Monolitu czy mikroserwisów?”</div></a>
+    <a class="tile" href="#wirtualizacja"><span class="num">6</span><h3>Maszyna wirtualna, kontener, chmura</h3><p>Warstwy maszyn wirtualnych i kontenerów obok siebie. Tabela „kto czym zarządza” w IaaS, PaaS i SaaS do uzupełnienia oraz scenariusze do rozstrzygnięcia.</p><div class="meta">ok. 8 min · slajdy od „Maszyny wirtualnej” do „Częstych błędów o chmurze”</div></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 1. STANY PROCESU ═══════════════════ -->
+<section id="v-stany" hidden>
+  <h2>1. Stany procesu</h2>
+  <p class="lead">Proces przechodzi między stanami: czeka w kolejce gotowych, dostaje procesor, czeka na dysk albo klawiaturę, kończy pracę. Przeczytaj zdarzenie i kliknij strzałkę przejścia, które wykona system.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between"><span class="pill" id="snNr"></span><span class="small muted" id="snWynik"></span></div>
+    <p class="zad" id="snQ"></p>
+    <div class="scroll-x"><svg class="stany" id="snSvg" viewBox="0 0 760 270" role="img" aria-label="Diagram stanów procesu: kliknij strzałkę przejścia"></svg></div>
+    <div class="row" id="snPrzyciski" aria-label="Przejścia (alternatywa dla klikania w diagram)"></div>
+    <p class="fbline" id="snFb" role="status"></p>
+    <p id="snWyj"></p>
+    <div class="row"><button type="button" class="btn" id="snDalej" hidden>Dalej →</button></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Dlaczego proces, któremu właśnie dotarły dane z dysku, nie wraca od razu do stanu „wykonywany”?</li>
+      <li>Większość z kilkuset procesów na Twoim komputerze jest teraz w stanie oczekującym. Na co mogą czekać?</li>
+      <li>Które przejście wymusza przerwanie zegarowe, a które wywołuje sam proces?</li>
+    </ol>
+  </div>
+  <p class="src">A. Silberschatz, P. B. Galvin, G. Gagne, <em>Operating System Concepts</em>, 10th ed., Wiley 2018, rozdz. 3.1; J. G. Brookshear, D. Brylow, <em>Computer Science: An Overview</em>, 13th ed., rozdz. 3.</p>
+</section>
+
+<!-- ═══════════════════ 2. PLANISTA ═══════════════════ -->
+<section id="v-planista" hidden>
+  <h2>2. Planista procesora</h2>
+  <p class="lead">Wszystkie zadania są gotowe w chwili 0, a procesor ma jeden rdzeń. Zmieniaj czasy pracy, kwant i koszt przełączenia i patrz, jak zmienia się kolejność i średni czas oczekiwania.</p>
+
+  <div class="card">
+    <h3>Zadania</h3>
+    <div class="row" id="plPrzyk"></div>
+    <div class="scroll-x"><table class="t" id="plZad"></table></div>
+    <div class="row" style="margin-top: 8px">
+      <button type="button" class="btn ghost small" id="plDodaj">+ zadanie</button>
+      <span class="small muted">Czas pracy w ms (1–20). Priorytet: 1 = najważniejsze.</span>
+    </div>
+    <div class="row" style="margin-top: 12px; gap: 18px">
+      <span class="row"><label for="plQ">kwant q =</label><input type="range" id="plQ" min="1" max="10" value="2"><span class="mono" id="plQv">2</span></span>
+      <span class="row"><label for="plC">koszt przełączenia c =</label><input type="range" id="plC" min="0" max="3" value="0"><span class="mono" id="plCv">0</span><span class="small muted">ms</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Przebieg (wykres Gantta)</h3>
+    <div id="plGantt"></div>
+    <div class="scroll-x"><table class="t" id="plTab"></table></div>
+    <p class="small muted">Czas oczekiwania = chwila zakończenia − czas pracy (wszystkie zadania przyszły w chwili 0). Czas do pierwszego uruchomienia mówi, jak szybko zadanie „dostaje głos”. Szare pola to przełączenia kontekstu.</p>
+  </div>
+
+  <div class="card">
+    <h3>Jaki kwant wybrać?</h3>
+    <p class="small muted">Reguła rotacyjna dla tych samych zadań i kosztu przełączenia c, dla różnych q.</p>
+    <div class="scroll-x"><table class="t" id="plKwanty"></table></div>
+  </div>
+
+  <div class="card">
+    <h3>Ułóż kolejkę sam</h3>
+    <p class="small muted">Klikaj zadania w kolejności, w jakiej mają dostać procesor (bez wywłaszczania). Czy da się mieć mniejszy średni czas oczekiwania niż SJF?</p>
+    <div class="row" id="ukPrzyciski"></div>
+    <div id="ukGantt"></div>
+    <p class="fbline" id="ukFb" role="status"></p>
+    <div class="row"><button type="button" class="btn ghost small" id="ukReset">Od nowa</button></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>W przykładzie ze slajdu SJF ma najmniejszy średni czas oczekiwania. Dlaczego w prawdziwym systemie trudno go stosować?</li>
+      <li>Ustaw q = 1, a potem koszt przełączenia c = 1. Co się dzieje z liczbą przełączeń i z czasem, w którym procesor robi coś pożytecznego?</li>
+      <li>Ustaw q większe od najdłuższego zadania. Z którą regułą zrównuje się wtedy reguła rotacyjna?</li>
+      <li>W regule priorytetowej daj długiemu zadaniu najniższy priorytet i dodawaj krótkie zadania o wyższym. Kiedy długie zadanie dostanie procesor? Jak temu zapobiega „starzenie” (aging)?</li>
+    </ol>
+  </div>
+  <p class="src">A. Silberschatz, P. B. Galvin, G. Gagne, <em>Operating System Concepts</em>, 10th ed., Wiley 2018, rozdz. 5 (planowanie przydziału procesora). Przykład P1–P4 ze slajdu. Mini-zadania ze slajdu tu nie ma — zrób je na kartce.</p>
+</section>
+
+<!-- ═══════════════════ 3. PRZEŁĄCZANIE ZADAŃ ═══════════════════ -->
+<section id="v-przelaczanie" hidden>
+  <h2>3. Przełączanie zadań u ludzi</h2>
+  <p class="lead">Na ekranie pojawia się cyfra. Napis nad nią mówi, co z nią zrobić: ocenić <b>parzystość</b> albo <b>wielkość</b> (mniejsza czy większa od 5). Mierzymy czas reakcji, gdy zadanie się powtarza, i gdy się zmienia.</p>
+
+  <div class="card" id="tsIntro">
+    <h3>Zasady</h3>
+    <div class="klawisze">
+      <div class="klawisz"><kbd>F</kbd><span><b>parzysta</b> · <b>mniejsza od 5</b></span></div>
+      <div class="klawisz"><kbd>J</kbd><span><b>nieparzysta</b> · <b>większa od 5</b></span></div>
+    </div>
+    <ul>
+      <li>Odpowiadaj klawiszami <kbd>F</kbd> i <kbd>J</kbd> (na telefonie — przyciskami pod cyfrą), szybko, ale bez zgadywania.</li>
+      <li>Trzy części: tylko parzystość (16 prób), tylko wielkość (16 prób), a potem zadania na zmianę: dwa razy parzystość, dwa razy wielkość i tak dalej (40 prób). Na początku 8 prób na rozgrzewkę.</li>
+      <li>Całość trwa ok. 3 minut. Wynik zobaczysz na końcu.</li>
+    </ul>
+    <button type="button" class="btn" id="tsStart">Zaczynamy</button>
+  </div>
+
+  <div class="card" id="tsTest" hidden>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="tsFaza"></span><span class="small muted" id="tsLicz"></span></div>
+    <div class="bodziec" id="tsBodziec" aria-live="off">
+      <div class="wskazowka" id="tsWsk"></div>
+      <div class="cyfra" id="tsCyfra"></div>
+    </div>
+    <div class="row odp" style="justify-content: center">
+      <button type="button" class="btn ghost duzy" id="tsF">F · parzysta / mniejsza</button>
+      <button type="button" class="btn ghost duzy" id="tsJ">J · nieparzysta / większa</button>
+    </div>
+    <p class="small muted" style="text-align: center" id="tsInfo"></p>
+  </div>
+
+  <div class="card" id="tsWynik" hidden>
+    <h3>Twój wynik</h3>
+    <div class="stats" id="tsStaty"></div>
+    <div class="hbars" id="tsSlupki"></div>
+    <p id="tsOpis"></p>
+    <div class="row" style="margin-top: 10px"><button type="button" class="btn ghost small" id="tsAgain">Jeszcze raz</button></div>
+  </div>
+
+  <div id="grupa-ts"></div>
+
+  <div class="card most">
+    <h3>Psychologia ↔ informatyka: koszt przełączenia</h3>
+    <p>W badaniach z przełączaniem zadań (np. Rogers i Monsell, 1995) odpowiedź po <em>zmianie</em> zadania jest zwykle wolniejsza i częściej błędna niż po jego <em>powtórzeniu</em>, nawet gdy zmiana jest przewidywalna. To <em>koszt przełączenia</em>. Często wolniejsze są też powtórzenia w bloku mieszanym niż w bloku jednorodnym — to <em>koszt mieszania</em>: trzeba trzymać w gotowości dwa zestawy reguł.</p>
+    <p class="small"><b>Tylko analogia.</b> Przełączenie kontekstu w komputerze to zapis i odczyt rejestrów; u człowieka — rekonfiguracja „zestawu zadaniowego” w kontroli poznawczej. Wspólna jest tylko lekcja: przełączanie nie jest darmowe.</p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Czy u Ciebie odpowiedzi po zmianie zadania były wolniejsze niż po powtórzeniu? A trafność?</li>
+      <li>Zmiana była przewidywalna (zawsze co dwie próby), a napis nad cyfrą ją zapowiadał. Dlaczego mimo to koszt może nie zniknąć?</li>
+      <li>Pojedynczy pomiar jednej osoby jest zaszumiony. Ile prób albo osób potrzeba, żeby wynik był wiarygodny? Porównaj z wynikiem sali.</li>
+      <li>Czy pisanie notatek i jednoczesne odpisywanie na wiadomości to „wielozadaniowość”, czy szybkie przełączanie?</li>
+    </ol>
+  </div>
+  <p class="src">R. D. Rogers, S. Monsell, <em>Costs of a predictable switch between simple cognitive tasks</em>, J. Exp. Psychol. Gen. 124(2), 1995, s. 207–231; J. S. Rubinstein, D. E. Meyer, J. E. Evans, J. Exp. Psychol. Hum. Percept. Perform. 27(4), 2001, s. 763–797; S. Monsell, <em>Task switching</em>, Trends Cogn. Sci. 7(3), 2003, s. 134–140.</p>
+</section>
+
+<!-- ═══════════════════ 4. PAMIĘĆ WIRTUALNA ═══════════════════ -->
+<section id="v-pamiec" hidden>
+  <h2>4. Pamięć wirtualna</h2>
+  <p class="lead">Każdy proces widzi własne adresy. Procesor (MMU) dzieli adres na <em>numer strony</em> i <em>przesunięcie</em>, szuka strony w tablicy stron procesu i składa adres fizyczny. Przy okazji sprawdza uprawnienia.</p>
+
+  <div class="card">
+    <div class="row">
+      <label for="pmAdr">adres wirtualny</label>
+      <input id="pmAdr" type="text" value="0x00403A7C" autocomplete="off" spellcheck="false" style="font-family: var(--mono); width: 11em">
+      <div class="seg" id="pmProc" role="group" aria-label="Proces"><button type="button" data-w="A" aria-pressed="true">proces A</button><button type="button" data-w="B" aria-pressed="false">proces B</button></div>
+      <div class="seg" id="pmDost" role="group" aria-label="Rodzaj dostępu"><button type="button" data-w="r" aria-pressed="true">odczyt</button><button type="button" data-w="w" aria-pressed="false">zapis</button><button type="button" data-w="x" aria-pressed="false">wykonanie</button></div>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <span class="small muted" id="pmRozLab">rozmiar strony</span>
+      <div class="seg" id="pmRoz" role="group" aria-labelledby="pmRozLab"><button type="button" data-w="10" aria-pressed="false">1 KiB</button><button type="button" data-w="12" aria-pressed="true">4 KiB</button><button type="button" data-w="14" aria-pressed="false">16 KiB</button></div>
+    </div>
+    <div class="row" id="pmPrzyk" style="margin-top: 8px"></div>
+    <p class="err" id="pmErr"></p>
+    <div class="scroll-x"><div class="adrbity" id="pmBity"></div></div>
+    <div class="legend"><span><i style="background: var(--s1)"></i>numer strony</span><span><i style="background: var(--s2)"></i>przesunięcie w stronie</span></div>
+    <div class="sk-grid" style="margin-top: 10px">
+      <div><div class="small muted" id="pmTabLab">tablica stron procesu A</div><div class="scroll-x"><table class="t" id="pmTab"></table></div></div>
+      <div><div id="pmWynik"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Sprawdź się: rozbij adres (strony 4 KiB)</h3>
+    <p class="zad" id="pzQ"></p>
+    <div class="row">
+      <label for="pzS">strona (hex)</label><input id="pzS" type="text" autocomplete="off" spellcheck="false" style="font-family: var(--mono); width: 8em">
+      <label for="pzP">przesunięcie (hex)</label><input id="pzP" type="text" autocomplete="off" spellcheck="false" style="font-family: var(--mono); width: 6em">
+      <button type="button" class="btn" id="pzOk">Sprawdź</button>
+      <button type="button" class="btn ghost" id="pzNowe">Nowy adres</button>
+    </div>
+    <p class="fbline" id="pzFb" role="status"></p>
+    <p class="small muted" id="pzHint"></p>
+    <div class="stats"><div class="stat"><div class="k">poprawne</div><div class="v" id="pzIleOk">0</div></div><div class="stat"><div class="k">adresy</div><div class="v" id="pzIle">0</div></div></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Wpisz ten sam adres dla procesu A i B. Dlaczego adresy fizyczne są różne i co to daje?</li>
+      <li>Przy stronach 4 KiB przesunięcie to dokładnie trzy ostatnie cyfry szesnastkowe. Dlaczego? Co się zmienia przy stronach 1 KiB?</li>
+      <li>Atak z W5 wstrzykiwał rozkazy jako dane. Które pole tablicy stron mu przeszkadza?</li>
+      <li>Strona „na dysku” nie jest błędem programu. Kto i jak naprawia tę sytuację? Dlaczego program tego nie zauważa — poza czasem?</li>
+    </ol>
+  </div>
+  <p class="src">A. Silberschatz, P. B. Galvin, G. Gagne, <em>Operating System Concepts</em>, 10th ed., Wiley 2018, rozdz. 9–10 (stronicowanie, pamięć wirtualna). Tablice stron na tej stronie są uproszczone (jeden poziom, przykładowe ramki).</p>
+</section>
+
+<!-- ═══════════════════ 5. ARCHITEKTURY ═══════════════════ -->
+<section id="v-architektury" hidden>
+  <h2>5. Gdzie to działa?</h2>
+  <p class="lead">System zapisów na zajęcia w architekturze trójwarstwowej: prezentacja (przeglądarka, aplikacja), logika (serwer aplikacji) i dane (baza danych). Do której warstwy należy każdy element? Potem: klient–serwer czy peer-to-peer?</p>
+
+  <div class="card">
+    <div class="trzywarstwy" aria-hidden="true"><div class="wa wa-p">prezentacja</div><span>⇄</span><div class="wa wa-l">logika</div><span>⇄</span><div class="wa wa-d">dane</div></div>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="arNr"></span><span class="small muted" id="arWynik"></span></div>
+    <p class="zad" id="arQ"></p>
+    <div class="row odp" id="arOdp"></div>
+    <p class="fbline" id="arFb" role="status"></p>
+    <p id="arWyj"></p>
+    <div class="row"><button type="button" class="btn" id="arDalej" hidden>Dalej →</button></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Przycisk „Zapisz” jest wyszarzony, gdy brak miejsc. Czy to wystarczy, żeby nikt nie zapisał się ponad limit? Dlaczego?</li>
+      <li>Jupyter w przeglądarce i jądro Pythona działają na tym samym laptopie. Co tu jest klientem, a co serwerem?</li>
+      <li>Zespół trzech osób buduje system zapisów dla jednego wydziału. Monolit czy mikroserwisy? A dla całego kraju i trzydziestu zespołów?</li>
+    </ol>
+  </div>
+  <p class="src">J. F. Kurose, K. W. Ross, <em>Computer Networking: A Top-Down Approach</em>, 8th ed., Pearson 2021, rozdz. 1.2 i 2.1; J. G. Brookshear, D. Brylow, <em>Computer Science: An Overview</em>, 13th ed., rozdz. 0 (abstrakcja).</p>
+</section>
+
+<!-- ═══════════════════ 6. WIRTUALIZACJA ═══════════════════ -->
+<section id="v-wirtualizacja" hidden>
+  <h2>6. Maszyna wirtualna, kontener, chmura</h2>
+  <p class="lead">Maszyna wirtualna udaje cały komputer i ma własny system. Kontener to proces z „własnym widokiem” plików, sieci i procesów, ale współdzieli jądro gospodarza. Chmura udostępnia jedno i drugie na żądanie.</p>
+
+  <div class="card">
+    <h3>Część A: warstwy obok siebie</h3>
+    <div class="row">
+      <label for="wzN">aplikacje:</label><input type="range" id="wzN" min="1" max="4" value="2"><span class="mono" id="wzNv">2</span>
+      <label class="row" style="gap: 6px"><input type="checkbox" id="wzWin"> aplikacja B wymaga systemu Windows, a gospodarzem jest Linux</label>
+    </div>
+    <div class="sk-grid" style="margin-top: 10px">
+      <div><div class="small muted" style="text-align: center">maszyny wirtualne (hiperwizor typu 1)</div><div class="warstwy" id="wzVm"></div></div>
+      <div><div class="small muted" style="text-align: center">kontenery</div><div class="warstwy" id="wzKt"></div></div>
+    </div>
+    <div class="stats" id="wzStaty"></div>
+    <p class="small muted" id="wzOpis"></p>
+  </div>
+
+  <div class="card">
+    <h3>Część B: kto czym zarządza?</h3>
+    <p class="small muted">Kliknij komórkę, żeby przełączyć „Ty” ↔ „dostawca”. Kolumna „własny serwer” jest wypełniona jako przykład.</p>
+    <div class="scroll-x"><table class="t odpow" id="odTab"></table></div>
+    <div class="row" style="margin-top: 8px">
+      <button type="button" class="btn" id="odSpr">Sprawdź</button>
+      <button type="button" class="btn ghost small" id="odPokaz">Pokaż odpowiedź</button>
+      <button type="button" class="btn ghost small" id="odReset">Od nowa</button>
+    </div>
+    <p class="fbline" id="odFb" role="status"></p>
+  </div>
+
+  <div class="card">
+    <h3>Część C: co wybierzesz?</h3>
+    <p class="small muted">Scenariusze są inne niż w zadaniu ze slajdu.</p>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="scNr"></span><span class="small muted" id="scWynik"></span></div>
+    <p class="zad" id="scQ"></p>
+    <div class="row odp" id="scOdp"></div>
+    <p class="fbline" id="scFb" role="status"></p>
+    <p id="scWyj"></p>
+    <div class="row"><button type="button" class="btn" id="scDalej" hidden>Dalej →</button></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>W części A zaznacz „wymaga Windows”. Dlaczego kontener na gospodarzu z Linuksem nie pomoże, a maszyna wirtualna tak?</li>
+      <li>Ile jąder systemu pracuje przy czterech maszynach wirtualnych, a ile przy czterech kontenerach? Co z tego wynika dla pamięci i dla izolacji?</li>
+      <li>W tabeli „kto czym zarządza” przy SaaS zostają Ci tylko dane. Dlaczego to nadal Twoja odpowiedzialność?</li>
+    </ol>
+  </div>
+  <p class="src">G. J. Popek, R. P. Goldberg, Comm. ACM 17(7), 1974, s. 412–421; P. Mell, T. Grance, <em>The NIST Definition of Cloud Computing</em>, NIST SP 800-145, 2011; dokumentacja Dockera (docs.docker.com). Tabela „kto czym zarządza” jest uproszczeniem: granice zależą od konkretnej usługi.</p>
+</section>
+
+<section id="v-ustawienia" hidden>
+  <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
+  <p class="lead">Ćwiczenie 3 („Przełączanie zadań u ludzi”) może wysyłać anonimowe wyniki do Formularza Google i pokazywać wyniki całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła. Można użyć tego samego formularza co w poprzednich wykładach.</p>
+
+  <div class="card">
+    <h3>Jednorazowe przygotowanie (ok. 10 min)</h3>
+    <ol>
+      <li>Utwórz nowy Formularz Google z <strong>czterema pytaniami typu „Krótka odpowiedź”</strong> o nazwach dokładnie: <code>aplikacja</code>, <code>sesja</code>, <code>wariant</code>, <code>wynik</code>. Żadne nie powinno być wymagane.</li>
+      <li>W <strong>Ustawieniach → Odpowiedzi</strong> wyłącz zbieranie adresów e-mail i <strong>ograniczenie do użytkowników SWPS</strong>. Nie włączaj „Ogranicz do 1 odpowiedzi”. Inaczej wysyłka ze strony nie zadziała.</li>
+      <li>W zakładce <strong>Odpowiedzi</strong> kliknij „Połącz z Arkuszami” i utwórz nowy arkusz.</li>
+      <li>W arkuszu: <strong>Plik → Udostępnij → Opublikuj w internecie</strong>. Wybierz arkusz z odpowiedziami i format <strong>CSV</strong>, opublikuj i skopiuj link.</li>
+      <li>W formularzu: <strong>⋮ → Pobierz link wstępnie wypełniony</strong>. Wpisz w pola kolejno <code>APLIKACJA</code>, <code>SESJA</code>, <code>WARIANT</code>, <code>WYNIK</code>, kliknij „Pobierz link” i skopiuj go.</li>
+      <li>Wklej oba linki poniżej, nadaj nazwę sesji i kliknij „Sprawdź”.</li>
+    </ol>
+    <p class="small muted">Wysyłane są tylko: nazwa ćwiczenia, nazwa sesji, rodzaj próby (blok jednorodny, powtórzenie, zmiana) i mediana czasu reakcji w ms — trzy wiersze na osobę. Opublikowany CSV jest publiczny, więc nie dodawaj do formularza pytań o dane osobowe.</p>
+  </div>
+
+  <div class="card">
+    <h3>Konfiguracja</h3>
+    <div class="field">
+      <label for="sPrefill">Link wstępnie wypełniony z formularza</label>
+      <textarea id="sPrefill" style="min-height:70px" placeholder="https://docs.google.com/forms/d/e/…/viewform?usp=pp_url&amp;entry.…=APLIKACJA&amp;…"></textarea>
+      <span id="sPrefillInfo" class="small"></span>
+    </div>
+    <div class="field">
+      <label for="sCsv">Link do opublikowanego arkusza (CSV)</label>
+      <input id="sCsv" type="url" placeholder="https://docs.google.com/spreadsheets/d/e/…/pub?gid=…&amp;single=true&amp;output=csv">
+    </div>
+    <div class="field">
+      <label for="sSes">Nazwa sesji</label>
+      <input id="sSes" type="text" maxlength="60" style="max-width: 320px">
+      <span class="small muted">Wykresy pokazują tylko wyniki z tej sesji. Na kolejne zajęcia lub grupę zmień nazwę; formularz zostaje ten sam.</span>
+    </div>
+    <div class="field">
+      <label for="sBase">Adres strony w sieci (do linku dla studentów)</label>
+      <input id="sBase" type="url" placeholder="https://login.github.io/wdi/w11.html">
+      <span class="small muted" id="sBaseInfo"></span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="btn" id="sCheck">Sprawdź</button>
+      <button type="button" class="btn ghost" id="sSave">Zapisz w tej przeglądarce</button>
+      <button type="button" class="btn ghost" id="sForget">Usuń z tej przeglądarki</button>
+    </div>
+    <div id="sOut" class="small" style="margin-top:10px" aria-live="polite"></div>
+  </div>
+
+  <div class="card" id="sLinksCard" hidden>
+    <h3>Linki dla studentów (tryb grupowy)</h3>
+    <p class="small muted">Te linki włączają wysyłanie wyników i wykresy sali. Pokaż je na slajdzie (najlepiej jako kod QR). Zwykły adres strony, bez parametru <code>cfg</code>, działa bez wysyłania.</p>
+    <div class="field"><label for="sLink0">Przełączanie zadań u ludzi</label><div class="row"><input id="sLink0" type="text" readonly style="flex:1"><button type="button" class="btn small" data-copy="sLink0">Kopiuj</button></div></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Wprowadzenie do informatyki · dr Paweł Róg · Uniwersytet SWPS. Strona działa offline. Wysyła dane wyłącznie w trybie grupowym, i to tylko anonimowe wyniki.</p>
+    <p><a href="#ustawienia">Dla prowadzącego: wspólne wyniki grupy</a></p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+const KONF = {"wyk": "W11", "key": "wdi-w11-grupa", "widoki": {"start": "Wykład 11 · ćwiczenia", "stany": "Stany procesu · W11", "planista": "Planista procesora · W11", "przelaczanie": "Przełączanie zadań u ludzi · W11", "pamiec": "Pamięć wirtualna · W11", "architektury": "Gdzie to działa? · W11", "wirtualizacja": "Maszyna wirtualna, kontener, chmura · W11", "ustawienia": "Ustawienia prowadzącego · W11"}, "linki": [{"id": "sLink0", "hash": "przelaczanie", "label": "Przełączanie zadań u ludzi"}]};
+/* ═════════════════════ Narzędzia ═════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const el = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k === 'html') e.innerHTML = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids) e.append(k);
+  return e;
+};
+const SVGNS = 'http://www.w3.org/2000/svg';
+const sv = (tag, attrs = {}, txt) => {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (txt !== undefined) e.textContent = txt;
+  return e;
+};
+const liczba = (x) => String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const ulamek = (x, d = 1) => x.toLocaleString('pl-PL', { maximumFractionDigits: d });
+const seg = (host, cb) => {
+  for (const b of $$('button', host)) b.addEventListener('click', () => {
+    for (const c of $$('button', host)) c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+    cb(b.dataset.w);
+  });
+};
+const parsujInt = (t) => { const s = String(t).trim().replace(/[\s _]/g, ''); return /^\d+$/.test(s) ? s : null; };
+const losuj = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const wybierz = (t) => t[Math.floor(Math.random() * t.length)];
+const tasuj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+const mediana = (t) => { const s = [...t].sort((a, b) => a - b); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : NaN; };
+const odm = (n, a, b, c) => n === 1 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? b : c;
+const sek = (ms) => Number.isFinite(ms) ? ulamek(ms / 1000, 1) + ' s' : '—';
+function slupki(host, dane) {
+  // dane: [{lab, pc (0–100) albo null, tekst}]
+  host.replaceChildren(...dane.map((d) => el('div', { class: 'hbar' },
+    el('div', { class: 'lab', text: d.lab }),
+    el('div', { class: 'track' }, el('div', { class: 'fill', style: `width: ${(d.pc ?? 0) * 0.45}%` }),
+      el('span', { class: 'val', style: `left: calc(${(d.pc ?? 0) * 0.45}% + 6px)`, text: d.tekst })))));
+}
+
+
+/* ═════════════════════ Tryb grupowy (jak w W01–W07) ═════════════════════ */
+const CFG_KEY = KONF.key;
+function b64e(str) { const b = new TextEncoder().encode(str); let bin = ''; b.forEach((x) => { bin += String.fromCharCode(x); }); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64d(str) { let t = str.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; const bin = atob(t); return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))); }
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { /* brak dostępu */ } },
+};
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) { return false; }
+}
+function cfgPoprawna(c) {
+  return c && typeof c === 'object' && /^https?:\/\//.test(c.f || '') && /^https?:\/\//.test(c.c || '') &&
+    c.e && ['a', 's', 'w', 'v'].every((k) => /^entry\.\d+$/.test(c.e[k] || '')) && typeof c.s === 'string' && c.s.trim().length > 0 && c.s.length <= 60;
+}
+function parseCSV(text) {
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(f); f = ''; }
+    else if (ch === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (ch !== '\r') f += ch;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter((r) => r.some((x) => x !== ''));
+}
+const Grupa = {
+  cfg: null, zrodlo: null,
+  init() {
+    const p = new URLSearchParams(location.search).get('cfg');
+    if (p) { try { const c = JSON.parse(b64d(p)); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'url'; } } catch (e) { /* zły parametr: tryb samodzielny */ } }
+    if (!this.cfg) { const raw = store.get(CFG_KEY); if (raw) { try { const c = JSON.parse(raw); if (cfgPoprawna(c)) { this.cfg = c; this.zrodlo = 'local'; } } catch (e) { /* ignoruj */ } } }
+    const b = $('#groupBadge');
+    if (this.cfg) { b.hidden = false; b.textContent = `Tryb grupowy · ${this.cfg.s}`; b.title = this.zrodlo === 'local' ? 'Konfiguracja zapisana w tej przeglądarce' : 'Konfiguracja z linku'; }
+  },
+  aktywna() { return !!this.cfg; },
+  async wyslij(aplikacja, wariant, wynik, cfg = this.cfg) {
+    const body = new URLSearchParams();
+    body.set(cfg.e.a, aplikacja); body.set(cfg.e.s, cfg.s); body.set(cfg.e.w, wariant); body.set(cfg.e.v, String(wynik));
+    await fetch(cfg.f, { method: 'POST', mode: 'no-cors', body });
+  },
+  async pobierz(cfg = this.cfg) {
+    const r = await fetch(cfg.c, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`serwer odpowiedział kodem ${r.status}`);
+    const rows = parseCSV(await r.text());
+    if (rows.length === 0) return { rows: [], kol: null };
+    const head = rows[0].map((x) => x.trim().toLowerCase());
+    const idx = (n, fb) => { const i = head.indexOf(n); return i >= 0 ? i : fb; };
+    const kol = { a: idx('aplikacja', 1), s: idx('sesja', 2), w: idx('wariant', 3), v: idx('wynik', 4), znalezione: ['aplikacja', 'sesja', 'wariant', 'wynik'].every((n) => head.includes(n)) };
+    const out = rows.slice(1).map((r) => ({ a: (r[kol.a] || '').trim(), s: (r[kol.s] || '').trim(), w: (r[kol.w] || '').trim(), v: Number(String(r[kol.v] || '').replace(',', '.').trim()) }));
+    return { rows: out, kol };
+  },
+};
+// Panel wyników sali. o = { aplikacja, wiersze(paczka) → [[wariant, wynik]], filtr(wiersz) → bool, rysuj(host, wiersze), opis(wiersze) → tekst }
+function panelGrupy(host, o) {
+  if (!Grupa.aktywna()) return null;
+  let paczka = null, timer = null, aktywny = false;
+  const status = el('span', { class: 'small muted', 'aria-live': 'polite' });
+  const send = el('button', { type: 'button', class: 'btn', text: 'Wyślij moje wyniki do grupy' });
+  send.disabled = true;
+  const wyk = el('div', { class: 'hbars' });
+  const meta = el('p', { class: 'small muted' });
+  const statsP = el('p', { class: 'small' });
+  const refresh = el('button', { type: 'button', class: 'btn ghost small', text: 'Odśwież' });
+  host.append(el('div', { class: 'group' },
+    el('h3', {}, el('span', { class: 'dot' }), `Wyniki sali · sesja „${Grupa.cfg.s}”`),
+    el('div', { class: 'row' }, send, status), statsP, wyk, el('div', { class: 'row' }, refresh, meta)));
+  send.addEventListener('click', async () => {
+    if (!paczka) return;
+    send.disabled = true; status.textContent = 'Wysyłanie…';
+    try {
+      for (const [w, v] of o.wiersze(paczka)) await Grupa.wyslij(o.aplikacja, w, v);
+      status.textContent = 'Wysłano. Wyniki pojawią się na wykresie po odświeżeniu arkusza (zwykle w ciągu kilku minut).';
+      paczka = null; setTimeout(odswiez, 4000);
+    } catch (e) { status.textContent = 'Nie udało się wysłać (brak internetu?). Spróbuj ponownie.'; send.disabled = false; }
+  });
+  async function odswiez() {
+    meta.textContent = 'Pobieranie…';
+    try {
+      const { rows } = await Grupa.pobierz();
+      const dane = rows.filter((r) => r.a === o.aplikacja && r.s === Grupa.cfg.s && Number.isFinite(r.v) && o.filtr(r));
+      o.rysuj(wyk, dane);
+      statsP.textContent = dane.length ? o.opis(dane) : 'Nikt jeszcze nie wysłał wyników.';
+      meta.textContent = `Aktualizacja: ${new Date().toLocaleTimeString('pl-PL')}. Opublikowany arkusz odświeża się z opóźnieniem do kilku minut.`;
+    } catch (e) { meta.textContent = `Wyniki sali są chwilowo niedostępne (${e.message || 'błąd sieci'}).`; }
+  }
+  refresh.addEventListener('click', odswiez);
+  return {
+    gotowe(w) { paczka = w; send.disabled = false; status.textContent = ''; },
+    start() { aktywny = true; odswiez(); clearInterval(timer); timer = setInterval(() => { if (aktywny && !document.hidden) odswiez(); }, 20000); },
+    stop() { aktywny = false; clearInterval(timer); },
+  };
+}
+
+
+/* ═════════════════════ wspólne W11 ═════════════════════ */
+const nwd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+/** Średnia jako ułamek: „33/4 = 8,25” albo „5”. */
+function sredniaU(suma, n) {
+  if (!n) return '—';
+  if (!Number.isInteger(suma)) return ulamek(suma / n, 2);
+  const g = nwd(suma, n), l = suma / g, m = n / g;
+  return m === 1 ? String(l) : `${l}/${m} = ${ulamek(l / m, 2)}`;
+}
+/** Quiz jednokrotnego wyboru: pozycje [{q, ok, opcje?, wyj}], opcje domyślne. */
+function quizWyboru(pre, pozycje, opcjeDom, ileWRundzie = pozycje.length) {
+  let kol = [], nr = 0, dobre = 0, odp = false;
+  const start = () => { kol = tasuj([...pozycje]).slice(0, ileWRundzie); nr = 0; dobre = 0; pokaz(); };
+  function pokaz() {
+    odp = false;
+    $(`#${pre}Fb`).textContent = ''; $(`#${pre}Fb`).className = 'fbline'; $(`#${pre}Wyj`).textContent = ''; $(`#${pre}Dalej`).hidden = true;
+    const host = $(`#${pre}Odp`);
+    if (nr >= kol.length) {
+      $(`#${pre}Nr`).textContent = 'koniec'; $(`#${pre}Q`).textContent = `Wynik: ${dobre} z ${kol.length}.`;
+      host.replaceChildren(); $(`#${pre}Dalej`).hidden = false; $(`#${pre}Dalej`).textContent = 'Jeszcze raz'; return;
+    }
+    const p = kol[nr];
+    $(`#${pre}Nr`).textContent = `${nr + 1} / ${kol.length}`; $(`#${pre}Wynik`).textContent = `poprawne: ${dobre}`;
+    $(`#${pre}Q`).textContent = p.q; $(`#${pre}Dalej`).textContent = 'Dalej →';
+    host.replaceChildren(...(p.opcje || opcjeDom).map((o) => {
+      const b = el('button', { type: 'button', class: 'btn ghost', text: o });
+      b.addEventListener('click', () => wybierzO(o, b));
+      return b;
+    }));
+  }
+  function wybierzO(o, btn) {
+    if (odp) return; odp = true;
+    const p = kol[nr];
+    for (const b of $$(`#${pre}Odp button`)) { b.disabled = true; if (b.textContent === p.ok) b.className = 'btn dobra'; }
+    const fb = $(`#${pre}Fb`);
+    if (o === p.ok) { dobre++; fb.className = 'fbline dobrze'; fb.textContent = 'Dobrze.'; }
+    else { btn.className = 'btn zla'; fb.className = 'fbline zle'; fb.textContent = `Nie — ${p.ok}.`; }
+    $(`#${pre}Wyj`).textContent = p.wyj; $(`#${pre}Wynik`).textContent = `poprawne: ${dobre}`;
+    $(`#${pre}Dalej`).hidden = false; $(`#${pre}Dalej`).focus();
+  }
+  $(`#${pre}Dalej`).addEventListener('click', () => { if (nr >= kol.length) start(); else { nr++; pokaz(); } });
+  start();
+}
+
+/* ═════════════════════ Ćwiczenie 1: stany procesu ═════════════════════ */
+const Stany = (() => {
+  const ST = { nowy: [70, 60, 100], gotowy: [250, 60, 110], wyk: [500, 60, 140], kon: [690, 60, 120], ocz: [375, 210, 140] };
+  const NAZWA = { nowy: 'nowy', gotowy: 'gotowy', wyk: 'wykonywany', kon: 'zakończony', ocz: 'oczekujący' };
+  // przejścia: id, ścieżka, punkt podpisu, podpis
+  const PR = [
+    { id: 'nowy-gotowy', d: 'M120,60 L195,60', lab: [157, 48], t: 'przyjęty' },
+    { id: 'gotowy-wyk', d: 'M305,50 L430,50', lab: [367, 38], t: 'przydział procesora' },
+    { id: 'wyk-gotowy', d: 'M430,72 L305,72', lab: [367, 92], t: 'koniec kwantu / wywłaszczenie' },
+    { id: 'wyk-kon', d: 'M570,60 L630,60', lab: [600, 26], t: 'koniec pracy' },
+    { id: 'wyk-ocz', d: 'M500,80 L500,210 L445,210', lab: [510, 150], t: 'czeka na dysk, sieć…', a: 'start' },
+    { id: 'ocz-gotowy', d: 'M305,210 L250,210 L250,80', lab: [240, 150], t: 'dane gotowe', a: 'end' },
+  ];
+  const OPIS = { 'nowy-gotowy': 'nowy → gotowy', 'gotowy-wyk': 'gotowy → wykonywany', 'wyk-gotowy': 'wykonywany → gotowy', 'wyk-kon': 'wykonywany → zakończony', 'wyk-ocz': 'wykonywany → oczekujący', 'ocz-gotowy': 'oczekujący → gotowy' };
+  const ZDARZ = [
+    ['Klikasz ikonę programu. System tworzy proces, przydziela mu pamięć i wstawia go do kolejki.', 'nowy-gotowy', 'Nowy proces najpierw trafia do kolejki gotowych. Procesor dostanie, gdy wybierze go planista.'],
+    ['Planista wybiera proces z początku kolejki gotowych i ładuje jego rejestry.', 'gotowy-wyk', 'Przydział procesora: przełączenie kontekstu wczytuje zapisany licznik rozkazów i rejestry procesu.'],
+    ['Przerwanie zegarowe: proces wykorzystał swój kwant czasu, a w kolejce czekają inne.', 'wyk-gotowy', 'Proces niczego nie potrzebuje, po prostu skończył mu się czas. Wraca na koniec kolejki gotowych.'],
+    ['Proces wywołał open() i read(): chce przeczytać plik z dysku.', 'wyk-ocz', 'Dysk jest bardzo wolny w porównaniu z procesorem. Proces oddaje procesor i czeka, a w tym czasie pracują inne.'],
+    ['Dysk skończył wczytywać dane, o które prosił proces czekający.', 'ocz-gotowy', 'Proces nie wraca od razu do wykonywania: trafia do kolejki gotowych. Procesor może być teraz zajęty przez kogoś innego.'],
+    ['Program w Pythonie wykonał input() i czeka, aż użytkownik coś wpisze.', 'wyk-ocz', 'Czekanie na klawiaturę to też oczekiwanie na urządzenie. Taki proces nie zużywa procesora.'],
+    ['Użytkownik nacisnął Enter. Wpisany tekst jest gotowy dla procesu.', 'ocz-gotowy', 'Zdarzenie, na które czekał proces, nastąpiło. Proces staje się gotowy i czeka na swoją kolej.'],
+    ['Proces wykonał ostatnią instrukcję programu (koniec skryptu, sys.exit()).', 'wyk-kon', 'Proces kończy pracę. System zwalnia jego pamięć i zamyka otwarte pliki.'],
+    ['Program wywołał time.sleep(5).', 'wyk-ocz', 'Proces czeka na upływ czasu — to zdarzenie zgłosi zegar. Przez 5 sekund nie potrzebuje procesora.'],
+    ['W kolejce pojawił się proces o wyższym priorytecie i planista odbiera procesor bieżącemu procesowi.', 'wyk-gotowy', 'Wywłaszczenie: proces mógłby pracować dalej, ale planista woli innego. Bieżący wraca do gotowych, nie do oczekujących — na nic nie czeka.'],
+    ['Odpowiedź z serwera WWW dotarła do procesu przeglądarki, który na nią czekał.', 'ocz-gotowy', 'Dane z sieci są gotowe, więc proces przechodzi do gotowych. Wykonywany będzie, gdy planista go wybierze.'],
+  ];
+  let kol = [], nr = 0, dobre = 0, odp = false;
+  function rysuj(zazn = {}) {
+    const svg = $('#snSvg'); svg.replaceChildren();
+    const defs = sv('defs');
+    for (const [id, kl] of [['snGrot', 'grot'], ['snGrotOk', 'grot ok']]) {
+      const m = sv('marker', { id, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' });
+      m.append(sv('path', { d: 'M0,0 L10,5 L0,10 z', class: kl, style: id === 'snGrotOk' ? 'fill: var(--good)' : '' })); defs.append(m);
+    }
+    svg.append(defs);
+    for (const p of PR) {
+      const g = sv('g', { class: 'pr ' + (zazn[p.id] || ''), tabindex: 0, role: 'button', 'aria-label': 'przejście ' + OPIS[p.id] });
+      g.append(sv('path', { d: p.d, class: 'l', 'marker-end': `url(#${zazn[p.id] === 'dobra' ? 'snGrotOk' : 'snGrot'})` }), sv('path', { d: p.d, class: 'hit' }));
+      if (odp) g.append(sv('text', { x: p.lab[0], y: p.lab[1], style: `text-anchor: ${p.a || 'middle'}` }, p.t));
+      g.addEventListener('click', () => wybierzP(p.id));
+      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); wybierzP(p.id); } });
+      svg.append(g);
+    }
+    for (const [k, [x, y, w]] of Object.entries(ST)) {
+      const g = sv('g', { class: 'st' });
+      g.append(sv('rect', { x: x - w / 2, y: y - 20, width: w, height: 40, rx: k === 'nowy' || k === 'kon' ? 20 : 8 }), sv('text', { x, y }, NAZWA[k]));
+      svg.append(g);
+    }
+  }
+  function pokaz() {
+    odp = false;
+    $('#snFb').textContent = ''; $('#snFb').className = 'fbline'; $('#snWyj').textContent = ''; $('#snDalej').hidden = true;
+    if (nr >= kol.length) {
+      $('#snNr').textContent = 'koniec'; $('#snQ').textContent = `Wynik: ${dobre} z ${kol.length}.`;
+      $('#snDalej').hidden = false; $('#snDalej').textContent = 'Jeszcze raz'; odp = true; rysuj(); return;
+    }
+    $('#snNr').textContent = `${nr + 1} / ${kol.length}`; $('#snWynik').textContent = `poprawne: ${dobre}`;
+    $('#snQ').textContent = kol[nr][0]; $('#snDalej').textContent = 'Dalej →';
+    rysuj();
+  }
+  function wybierzP(id) {
+    if (odp) return; odp = true;
+    const [, ok, wyj] = kol[nr]; const z = { [ok]: 'dobra' };
+    const fb = $('#snFb');
+    if (id === ok) { dobre++; fb.className = 'fbline dobrze'; fb.textContent = `Dobrze: ${OPIS[ok]}.`; }
+    else { z[id] = 'zla'; fb.className = 'fbline zle'; fb.textContent = `Nie — to przejście ${OPIS[ok]}.`; }
+    $('#snWyj').textContent = wyj; $('#snWynik').textContent = `poprawne: ${dobre}`;
+    rysuj(z); $('#snDalej').hidden = false;
+  }
+  function init() {
+    $('#snPrzyciski').replaceChildren(el('span', { class: 'small muted', text: 'albo wybierz:' }), ...PR.map((p) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small', text: OPIS[p.id] });
+      b.addEventListener('click', () => wybierzP(p.id));
+      return b;
+    }));
+    $('#snDalej').addEventListener('click', () => { if (nr >= kol.length) { kol = tasuj([...ZDARZ]).slice(0, 10); nr = 0; dobre = 0; } else nr++; pokaz(); });
+    kol = tasuj([...ZDARZ]).slice(0, 10); pokaz();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 2: planista ═════════════════════ */
+const Planista = (() => {
+  const PRZYK = [
+    { n: 'Slajd: P1–P4', z: [['P1', 8, 3], ['P2', 4, 1], ['P3', 1, 2], ['P4', 2, 4]] },
+    { n: 'Konwój: długie na początku', z: [['D', 12, 2], ['a', 1, 1], ['b', 1, 1], ['c', 1, 1], ['d', 1, 1]] },
+    { n: 'Równe zadania', z: [['A', 4, 1], ['B', 4, 1], ['C', 4, 1]] },
+  ];
+  let zad = [], q = 2, c = 0, uk = [];
+  /** Symulacja. Zwraca {seg:[{p|sw, s, e}], kon:{i:t}, start:{i:t}, prz}. */
+  function symuluj(alg, Z = zad, kw = q, koszt = c) {
+    const seg = [], kon = {}, start = {}; let t = 0, prz = 0, ostatni = null;
+    const uruchom = (i, d) => {
+      if (ostatni !== null && ostatni !== i) { prz++; if (koszt > 0) { seg.push({ sw: true, s: t, e: t + koszt }); t += koszt; } }
+      if (start[i] === undefined) start[i] = t;
+      seg.push({ p: i, s: t, e: t + d }); t += d; ostatni = i;
+    };
+    const idx = Z.map((_, i) => i);
+    if (alg === 'rr') {
+      const rem = Z.map((z) => z.t); const kolejka = [...idx];
+      while (kolejka.length) {
+        const i = kolejka.shift(); const d = Math.min(kw, rem[i]);
+        uruchom(i, d); rem[i] -= d;
+        if (rem[i] > 0) kolejka.push(i); else kon[i] = t;
+      }
+    } else {
+      let ord = idx;
+      if (alg === 'sjf') ord = [...idx].sort((a, b) => Z[a].t - Z[b].t || a - b);
+      if (alg === 'prio') ord = [...idx].sort((a, b) => Z[a].p - Z[b].p || a - b);
+      if (Array.isArray(alg)) ord = alg;
+      for (const i of ord) { uruchom(i, Z[i].t); kon[i] = t; }
+    }
+    // scal sąsiednie segmenty tego samego procesu (RR, gdy został jeden)
+    const sc = [];
+    for (const s of seg) { const o = sc[sc.length - 1]; if (o && !o.sw && !s.sw && o.p === s.p && o.e === s.s) o.e = s.e; else sc.push({ ...s }); }
+    return { seg: sc, kon, start, prz, koniec: t };
+  }
+  const czekanie = (Z, r) => Z.reduce((a, z, i) => a + r.kon[i] - z.t, 0);
+  const odp1 = (Z, r) => Z.reduce((a, z, i) => a + r.start[i], 0);
+  function gantt(host, tyt, r, Z = zad, extra = '') {
+    const T = r.koniec || 1;
+    const pas = el('div', { class: 'pas' }, ...r.seg.map((s) => el('div', {
+      class: 'sg ' + (s.sw ? 'sw' : 'c' + (s.p % 6)), style: `width: ${(100 * (s.e - s.s)) / T}%`,
+      title: s.sw ? `przełączenie ${s.s}–${s.e}` : `${Z[s.p].n}: ${s.s}–${s.e}`, text: s.sw ? '' : Z[s.p].n })));
+    const os = el('div', { class: 'os' });
+    const kroki = T <= 30 ? 1 : T <= 60 ? 5 : 10;
+    const pkty = new Set([0, T]); for (const s of r.seg) { pkty.add(s.s); pkty.add(s.e); }
+    for (const p of [...pkty].sort((a, b) => a - b)) if (p === 0 || p === T || T <= 40 || p % kroki === 0) os.append(el('span', { style: `left: ${(100 * p) / T}%`, text: String(p) }));
+    host.append(el('div', { class: 'gantt' }, el('div', { class: 'gl' }, el('b', { text: tyt }), el('span', { class: 'small muted', text: extra })), pas, os));
+  }
+  const ALG = [['fcfs', 'FCFS (kto pierwszy)'], ['sjf', 'SJF (najkrótsze najpierw)'], ['rr', 'rotacyjna (RR)'], ['prio', 'priorytetowa']];
+  function rysujZad() {
+    const t = $('#plZad'); t.replaceChildren();
+    t.append(el('thead', {}, el('tr', {}, el('th', { text: '' }), el('th', { text: 'zadanie' }), el('th', { text: 'czas pracy' }), el('th', { text: 'priorytet' }), el('th', { text: '' }))));
+    const tb = el('tbody');
+    zad.forEach((z, i) => {
+      const inp = (pole, kl, typ) => {
+        const e = el('input', { type: typ, class: kl, value: String(z[pole]), 'aria-label': `${pole} zadania ${i + 1}` });
+        if (typ === 'number') { e.min = '1'; e.max = '20'; }
+        e.addEventListener('input', () => {
+          if (pole === 'n') z.n = e.value.trim().slice(0, 4) || `Z${i + 1}`;
+          else { const v = Math.round(+e.value); if (v >= 1 && v <= 20) z[pole] = v; else return; }
+          uk = []; przelicz();
+        });
+        return e;
+      };
+      const usun = el('button', { type: 'button', class: 'btn ghost small', text: 'usuń', 'aria-label': `usuń zadanie ${z.n}` });
+      usun.disabled = zad.length <= 2;
+      usun.addEventListener('click', () => { zad.splice(i, 1); uk = []; rysujZad(); przelicz(); });
+      tb.append(el('tr', {}, el('td', {}, el('span', { class: 'kropka c' + (i % 6) })), el('td', {}, inp('n', 'nazwa', 'text')), el('td', {}, inp('t', '', 'number')), el('td', {}, inp('p', '', 'number')), el('td', {}, usun)));
+    });
+    t.append(tb);
+    $('#plDodaj').disabled = zad.length >= 6;
+  }
+  function przelicz() {
+    const g = $('#plGantt'); g.replaceChildren();
+    const wyn = ALG.map(([a, nazwa]) => {
+      const r = symuluj(a); const w = czekanie(zad, r), o = odp1(zad, r);
+      gantt(g, nazwa + (a === 'rr' ? `, q = ${q}` : ''), r, zad, `średnie czekanie ${sredniaU(w, zad.length)}`);
+      return { nazwa: nazwa + (a === 'rr' ? `, q = ${q}` : ''), w, o, prz: r.prz, kon: r.koniec };
+    });
+    const min = Math.min(...wyn.map((x) => x.w));
+    const praca = zad.reduce((a, z) => a + z.t, 0);
+    $('#plTab').replaceChildren(el('thead', {}, el('tr', {}, ...['reguła', 'średni czas oczekiwania', 'średni czas do 1. uruchomienia', 'przełączenia', 'procesor pracuje'].map((x) => el('th', { text: x })))),
+      el('tbody', {}, ...wyn.map((x) => el('tr', { class: x.w === min ? 'naj' : '' }, el('td', { text: x.nazwa }), el('td', { class: 'mono', text: sredniaU(x.w, zad.length) }), el('td', { class: 'mono', text: sredniaU(x.o, zad.length) }), el('td', { class: 'n', text: String(x.prz) }), el('td', { class: 'n', text: `${Math.round((100 * praca) / x.kon)}%` })))));
+    // tabela kwantów
+    const maxT = Math.max(...zad.map((z) => z.t));
+    const wiersze = [];
+    for (let k = 1; k <= Math.min(10, maxT); k++) { const r = symuluj('rr', zad, k); wiersze.push(el('tr', { class: k === q ? 'naj' : '' }, el('td', { class: 'n', text: String(k) }), el('td', { class: 'mono', text: sredniaU(czekanie(zad, r), zad.length) }), el('td', { class: 'mono', text: sredniaU(odp1(zad, r), zad.length) }), el('td', { class: 'n', text: String(r.prz) }), el('td', { class: 'n', text: `${Math.round((100 * praca) / r.koniec)}%` }))); }
+    $('#plKwanty').replaceChildren(el('thead', {}, el('tr', {}, ...['q', 'średni czas oczekiwania', 'do 1. uruchomienia', 'przełączenia', 'procesor pracuje'].map((x) => el('th', { text: x })))), el('tbody', {}, ...wiersze));
+    rysujUk();
+  }
+  function rysujUk() {
+    const p = $('#ukPrzyciski'); p.replaceChildren();
+    zad.forEach((z, i) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small', text: `${z.n} (${z.t})` });
+      b.disabled = uk.includes(i);
+      b.addEventListener('click', () => { uk.push(i); rysujUk(); });
+      p.append(b);
+    });
+    const g = $('#ukGantt'); g.replaceChildren(); const fb = $('#ukFb'); fb.className = 'fbline'; fb.textContent = '';
+    if (!uk.length) return;
+    const Z2 = uk.map((i) => zad[i]);
+    const r = symuluj(Z2.map((_, j) => j), Z2, q, c);
+    // gantt z oryginalnymi kolorami
+    const r2 = { ...r, seg: r.seg.map((s) => (s.sw ? s : { ...s, p: uk[s.p] })) };
+    gantt(g, 'Twoja kolejność', r2, zad);
+    if (uk.length === zad.length) {
+      const w = czekanie(Z2, r); const s = symuluj('sjf'); const ws = czekanie(zad, s);
+      if (w === ws) { fb.className = 'fbline dobrze'; fb.textContent = `Średnie czekanie ${sredniaU(w, zad.length)} — tyle samo co SJF. Lepiej się nie da (bez wywłaszczania, gdy wszystkie zadania są gotowe w chwili 0).`; }
+      else { fb.className = 'fbline zle'; fb.textContent = `Średnie czekanie ${sredniaU(w, zad.length)}, a SJF daje ${sredniaU(ws, zad.length)}. Spróbuj inaczej: kto czeka na długie zadanie postawione wcześnie?`; }
+    }
+  }
+  function ustaw(p) { zad = p.z.map(([n, t, pr]) => ({ n, t, p: pr })); uk = []; rysujZad(); przelicz(); }
+  function init() {
+    $('#plPrzyk').replaceChildren(el('span', { class: 'small muted', text: 'Zestawy:' }), ...PRZYK.map((p) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small', text: p.n }); b.addEventListener('click', () => ustaw(p)); return b;
+    }), (() => {
+      const b = el('button', { type: 'button', class: 'btn ghost small', text: 'Losuj' });
+      b.addEventListener('click', () => { const n = losuj(3, 5); ustaw({ z: Array.from({ length: n }, (_, i) => [`Z${i + 1}`, losuj(1, 12), losuj(1, 5)]) }); });
+      return b;
+    })());
+    $('#plDodaj').addEventListener('click', () => { if (zad.length < 6) { zad.push({ n: `Z${zad.length + 1}`, t: 3, p: 3 }); uk = []; rysujZad(); przelicz(); } });
+    $('#plQ').addEventListener('input', () => { q = +$('#plQ').value; $('#plQv').textContent = q; przelicz(); });
+    $('#plC').addEventListener('input', () => { c = +$('#plC').value; $('#plCv').textContent = c; przelicz(); });
+    $('#ukReset').addEventListener('click', () => { uk = []; rysujUk(); });
+    ustaw(PRZYK[0]);
+  }
+  return { init, _t: { symuluj: (alg, Z, kw, koszt) => { const r = symuluj(alg, Z.map(([n, t, p]) => ({ n, t, p: p || 1 })), kw, koszt); return { ...r, w: czekanie(Z.map(([n, t]) => ({ n, t })), r), o: odp1(Z, r) }; } } };
+})();
+
+/* ═════════════════════ Ćwiczenie 3: przełączanie zadań ═════════════════════ */
+const Przelaczanie = (() => {
+  const APLIKACJA = 'w11-przelaczanie';
+  const CYFRY = [1, 2, 3, 4, 6, 7, 8, 9];
+  const ZAD = { parz: 'PARZYSTOŚĆ', wiel: 'WIELKOŚĆ' };
+  let proby = [], i = 0, t0 = 0, czeka = false, wyniki = [], timerTo = null, panel = null, biegnie = false;
+  function plan() {
+    const bl = [];
+    const blok = (faza, n, f) => { let pop = null; for (let k = 0; k < n; k++) { let d; do { d = wybierz(CYFRY); } while (d === pop); pop = d; bl.push({ faza, k, d, z: f(k) }); } };
+    blok('rozgrzewka', 8, (k) => (Math.floor(k / 2) % 2 ? 'wiel' : 'parz'));
+    blok('czyste-parz', 16, () => 'parz');
+    blok('czyste-wiel', 16, () => 'wiel');
+    blok('mieszane', 40, (k) => (Math.floor(k / 2) % 2 ? 'wiel' : 'parz'));
+    return bl;
+  }
+  const FAZA = { rozgrzewka: 'Rozgrzewka (nie liczy się)', 'czyste-parz': 'Część 1: tylko parzystość', 'czyste-wiel': 'Część 2: tylko wielkość', mieszane: 'Część 3: na zmianę' };
+  const poprawna = (p) => (p.z === 'parz' ? (p.d % 2 === 0 ? 'F' : 'J') : (p.d < 5 ? 'F' : 'J'));
+  let przerwaAkt = false;
+  function pokazProbe() {
+    if (i >= proby.length) return koniec();
+    const p = proby[i];
+    if (p.k === 0 && i > 0) return przerwa(p);
+    pokazBodziec();
+  }
+  function przerwa(p) {
+    $('#tsBodziec').className = 'bodziec'; $('#tsWsk').textContent = ''; $('#tsCyfra').textContent = '';
+    $('#tsFaza').textContent = FAZA[p.faza]; $('#tsLicz').textContent = '';
+    $('#tsInfo').textContent = `Następna część: ${FAZA[p.faza].replace(/^Część \d: /, '')}. Naciśnij spację, F, J albo przycisk, żeby zacząć.`;
+    czeka = false; przerwaAkt = true;
+  }
+  function pokazBodziec() {
+    const p = proby[i];
+    $('#tsFaza').textContent = FAZA[p.faza]; $('#tsLicz').textContent = `${p.k + 1} / ${proby.filter((x) => x.faza === p.faza).length}`;
+    $('#tsBodziec').className = 'bodziec ' + p.z; $('#tsWsk').textContent = ZAD[p.z]; $('#tsCyfra').textContent = ''; $('#tsInfo').textContent = '';
+    setTimeout(() => {
+      if (!biegnie) return;
+      $('#tsCyfra').textContent = String(p.d);
+      requestAnimationFrame(() => { t0 = performance.now(); czeka = true; clearTimeout(timerTo); timerTo = setTimeout(() => odpowiedz(null), 3000); });
+    }, 350);
+  }
+  function odpowiedz(k) {
+    if (przerwaAkt) { przerwaAkt = false; pokazBodziec(); return; }
+    if (!czeka) return;
+    czeka = false; clearTimeout(timerTo);
+    const p = proby[i]; const rt = performance.now() - t0; const ok = k === poprawna(p);
+    const poprz = i > 0 ? proby[i - 1] : null;
+    const typ = p.k === 0 ? 'pierwsza' : p.faza === 'mieszane' ? (poprz.z === p.z ? 'powt' : 'zmiana') : 'czyste';
+    if (p.faza !== 'rozgrzewka') wyniki.push({ typ, rt, ok, brak: k === null });
+    i++;
+    if (!ok) {
+      $('#tsBodziec').classList.add('blad'); $('#tsCyfra').textContent = k === null ? 'za wolno' : 'błąd';
+      setTimeout(() => { if (biegnie) pokazProbe(); }, 700);
+    } else { $('#tsCyfra').textContent = ''; setTimeout(() => { if (biegnie) pokazProbe(); }, 250); }
+  }
+  function podsumuj(typ) {
+    const t = wyniki.filter((w) => w.typ === typ);
+    const ok = t.filter((w) => w.ok);
+    return { n: t.length, traf: t.length ? (100 * ok.length) / t.length : NaN, med: mediana(ok.filter((w) => w.rt >= 150).map((w) => w.rt)) };
+  }
+  function koniec() {
+    biegnie = false;
+    $('#tsTest').hidden = true; $('#tsWynik').hidden = false;
+    const C = podsumuj('czyste'), P = podsumuj('powt'), Z = podsumuj('zmiana');
+    const ms = (x) => Number.isFinite(x) ? `${Math.round(x)} ms` : '—';
+    const st = $('#tsStaty'); st.replaceChildren();
+    const stat = (k, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v', text: v })));
+    stat('koszt przełączenia (zmiana − powtórzenie)', Number.isFinite(Z.med - P.med) ? `${Math.round(Z.med - P.med)} ms` : '—');
+    stat('koszt mieszania (powtórzenie − blok czysty)', Number.isFinite(P.med - C.med) ? `${Math.round(P.med - C.med)} ms` : '—');
+    const mx = Math.max(C.med, P.med, Z.med) || 1;
+    slupki($('#tsSlupki'), [['bloki jednorodne', C], ['mieszany: powtórzenie', P], ['mieszany: zmiana', Z]].map(([lab, x]) => ({ lab, pc: Number.isFinite(x.med) ? (100 * x.med) / mx : null, tekst: `mediana ${ms(x.med)} · trafność ${Number.isFinite(x.traf) ? Math.round(x.traf) + '%' : '—'} (${x.n} prób)` })));
+    let opis = 'Mediana liczona z poprawnych odpowiedzi; pierwsza próba każdej części nie wchodzi do wyniku. ';
+    const roz = Z.med - P.med;
+    if (Number.isFinite(roz)) opis += roz > 20 ? 'U Ciebie odpowiedzi po zmianie zadania były wolniejsze niż po powtórzeniu — tak jak w badaniach. ' : roz < -20 ? 'U Ciebie odpowiedzi po zmianie były nawet szybsze niż po powtórzeniu. Pojedynczy pomiar jest zaszumiony: porównaj z wynikiem sali albo spróbuj jeszcze raz. ' : 'U Ciebie różnica między zmianą a powtórzeniem jest niewielka — w granicach szumu pojedynczego pomiaru. Porównaj z wynikiem sali. ';
+    if (Number.isFinite(Z.traf) && Number.isFinite(P.traf) && Z.traf < P.traf) opis += 'Po zmianie zadania było też więcej błędów.';
+    $('#tsOpis').textContent = opis;
+    if (panel && [C.med, P.med, Z.med].every(Number.isFinite)) panel.gotowe([['czyste', Math.round(C.med)], ['powt', Math.round(P.med)], ['zmiana', Math.round(Z.med)]]);
+  }
+  function start() {
+    proby = plan(); i = 0; wyniki = []; biegnie = true; przerwaAkt = false; czeka = false;
+    $('#tsIntro').hidden = true; $('#tsWynik').hidden = true; $('#tsTest').hidden = false;
+    pokazBodziec();
+  }
+  function stop() { biegnie = false; czeka = false; clearTimeout(timerTo); }
+  function init() {
+    $('#tsStart').addEventListener('click', start);
+    $('#tsAgain').addEventListener('click', start);
+    $('#tsF').addEventListener('click', () => odpowiedz('F'));
+    $('#tsJ').addEventListener('click', () => odpowiedz('J'));
+    document.addEventListener('keydown', (e) => {
+      if (!biegnie || $('#v-przelaczanie').hidden || e.repeat) return;
+      const k = e.key.toUpperCase();
+      if (przerwaAkt && (k === ' ' || k === 'F' || k === 'J')) { e.preventDefault(); odpowiedz(null); return; }
+      if (k === 'F' || k === 'J') { e.preventDefault(); odpowiedz(k); }
+    });
+    panel = panelGrupy($('#grupa-ts'), {
+      aplikacja: APLIKACJA,
+      wiersze: (w) => w,
+      filtr: (r) => ['czyste', 'powt', 'zmiana'].includes(r.w) && r.v >= 150 && r.v <= 3000,
+      rysuj: (host, rows) => {
+        const med = (w) => mediana(rows.filter((r) => r.w === w).map((r) => r.v));
+        const m = { czyste: med('czyste'), powt: med('powt'), zmiana: med('zmiana') }; const mx = Math.max(...Object.values(m).filter(Number.isFinite)) || 1;
+        slupki(host, [['bloki jednorodne', 'czyste'], ['mieszany: powtórzenie', 'powt'], ['mieszany: zmiana', 'zmiana']].map(([lab, w]) => ({ lab, pc: Number.isFinite(m[w]) ? (100 * m[w]) / mx : null, tekst: Number.isFinite(m[w]) ? `mediana median ${Math.round(m[w])} ms (${rows.filter((r) => r.w === w).length} osób)` : 'brak danych' })));
+      },
+      opis: (rows) => {
+        const n = rows.filter((r) => r.w === 'zmiana').length;
+        const z = mediana(rows.filter((r) => r.w === 'zmiana').map((r) => r.v)), p = mediana(rows.filter((r) => r.w === 'powt').map((r) => r.v));
+        return `Osób: ${n}. Koszt przełączenia w sali (mediana zmian − mediana powtórzeń): ${Number.isFinite(z - p) ? Math.round(z - p) + ' ms' : '—'}.`;
+      },
+    });
+  }
+  return { init, wejscie: () => panel?.start(), wyjscie: () => { stop(); panel?.stop(); if (!$('#tsTest').hidden) { $('#tsTest').hidden = true; $('#tsIntro').hidden = false; } } };
+})();
+
+/* ═════════════════════ Ćwiczenie 4: pamięć wirtualna ═════════════════════ */
+const Pamiec = (() => {
+  // regiony przestrzeni adresowej (te same w obu procesach): [nazwa, początek, koniec (wył.), uprawnienia]
+  const REG = [
+    ['kod programu', 0x00400000, 0x00406000, 'r-x'],
+    ['dane', 0x00600000, 0x00604000, 'rw-'],
+    ['stos', 0x7FFFC000, 0x80000000, 'rw-'],
+  ];
+  let bity = 12, proc = 'A', dost = 'r';
+  /** Tablica stron procesu: [{s (nr strony), ramka, upr, region, dysk}] */
+  function tablica(pr, b) {
+    const roz = 2 ** b; const T = []; let seed = pr === 'A' ? 7 : 13; const uzyte = new Set();
+    const los = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed >>> 12; };
+    for (const [nazwa, p, k, upr] of REG) {
+      for (let s = Math.floor(p / roz); s * roz < k; s++) {
+        let f; do { f = (los() % 4096) + (pr === 'A' ? 0 : 4096); } while (uzyte.has(f)); uzyte.add(f);
+        T.push({ s, ramka: f, upr, region: nazwa, dysk: false });
+      }
+    }
+    // jedna strona danych „na dysku”
+    const d = T.filter((x) => x.region === 'dane'); if (d.length > 1) d[d.length - 1].dysk = true;
+    return T;
+  }
+  const hx = (v, n) => '0x' + v.toString(16).toUpperCase().padStart(n, '0');
+  function parsujAdr(t) {
+    const s = t.trim().replace(/^0x/i, '').replace(/[\s_]/g, '');
+    if (!/^[0-9a-f]{1,8}$/i.test(s)) return null;
+    return parseInt(s, 16);
+  }
+  function rysuj() {
+    const a = parsujAdr($('#pmAdr').value);
+    $('#pmErr').textContent = a === null ? 'Wpisz adres szesnastkowo, najwyżej 8 cyfr, np. 0x00403A7C.' : '';
+    const T = tablica(proc, bity);
+    $('#pmTabLab').textContent = `tablica stron procesu ${proc} (strony po ${2 ** (bity - 10)} KiB)`;
+    const s = a === null ? -1 : Math.floor(a / 2 ** bity), off = a === null ? 0 : a % 2 ** bity;
+    const cyfrS = Math.ceil((32 - bity) / 4), cyfrP = Math.ceil(bity / 4);
+    $('#pmTab').replaceChildren(el('thead', {}, el('tr', {}, ...['strona', 'region', 'ramka w RAM', 'uprawnienia'].map((x) => el('th', { text: x })))),
+      el('tbody', {}, ...T.map((r) => el('tr', { class: r.s === s ? 'akt' : '' }, el('td', { class: 'mono', text: hx(r.s, cyfrS) }), el('td', { text: r.region }), el('td', { class: 'mono', text: r.dysk ? 'na dysku' : hx(r.ramka, 4) }), el('td', { class: 'mono', text: r.upr }))),
+        el('tr', {}, el('td', { class: 'muted', text: '…' }), el('td', { class: 'muted', text: 'pozostałe strony: brak w tablicy' }), el('td', {}), el('td', {}))));
+    const bx = $('#pmBity'); bx.replaceChildren();
+    if (a === null) { $('#pmWynik').replaceChildren(); return; }
+    const bin = a.toString(2).padStart(32, '0');
+    [...bin].forEach((c, k) => bx.append(el('span', { class: 'b ' + (k < 32 - bity ? 's' : 'p') + (k === 32 - bity ? ' gr' : ''), text: c })));
+    const w = $('#pmWynik'); w.replaceChildren();
+    const r = T.find((x) => x.s === s);
+    const box = (kl, h, ...p) => w.append(el('div', { class: 'wynikpm ' + kl }, el('h4', { text: h }), ...p));
+    const linia = (t) => el('p', { class: 'small', text: t });
+    const rozklad = el('p', { class: 'mono', text: `${hx(a, 8)} → strona ${hx(s, cyfrS)} (${liczba(s)}), przesunięcie ${hx(off, cyfrP)} (${liczba(off)})` });
+    const DOST = { r: 'odczyt', w: 'zapis', x: 'wykonanie' };
+    if (!r) { box('bad', 'Naruszenie ochrony pamięci', rozklad, linia(`Strony ${hx(s, cyfrS)} nie ma w tablicy stron procesu ${proc}: ten adres nie należy do procesu. Procesor zgłasza wyjątek, a system kończy proces (w Linuksie: „Segmentation fault”). Inne procesy działają dalej.`)); return; }
+    const bit = { r: r.upr[0] === 'r', w: r.upr[1] === 'w', x: r.upr[2] === 'x' }[dost];
+    if (!bit) {
+      const nx = dost === 'x' ? ' To działanie bitu NX: strony z danymi nie wolno wykonywać, więc dane wstrzyknięte przez atakującego (W5) nie zostaną uruchomione jak rozkazy.' : dost === 'w' ? ' Kod programu jest tylko do odczytu i wykonania: program nie może przypadkiem (ani celowo) nadpisać własnych rozkazów.' : '';
+      box('bad', 'Błąd ochrony: brak uprawnienia', rozklad, linia(`Strona należy do regionu „${r.region}” z uprawnieniami ${r.upr}, a proces próbuje: ${DOST[dost]}.${nx} System kończy proces.`)); return;
+    }
+    if (r.dysk) { box('warn', 'Błąd strony (page fault) — to nie jest błąd programu', rozklad, linia('Strona jest w tablicy, ale leży na dysku (w pliku wymiany). System wstrzymuje proces (stan „oczekujący”), wczytuje stronę do wolnej ramki, poprawia tablicę i powtarza dostęp. Program niczego nie zauważa — poza tym, że ten dostęp trwał tysiące razy dłużej.')); return; }
+    const fiz = r.ramka * 2 ** bity + off;
+    box('ok', `Dostęp dozwolony: ${DOST[dost]}`, rozklad,
+      el('p', { class: 'mono', text: `adres fizyczny = ${hx(r.ramka, 4)} × ${2 ** (bity - 10)} KiB + ${hx(off, cyfrP)} = ${hx(fiz, 8)}` }),
+      linia(`Adres fizyczny = ramka × ${liczba(2 ** bity)} + przesunięcie. Przesunięcie przechodzi bez zmian; zmienia się tylko numer strony na numer ramki. Region: ${r.region} (${r.upr}).`));
+  }
+  const PRZYK = [
+    ['Slajd: 0x00403A7C', '0x00403A7C', 'A', 'r'], ['ten sam adres w B', '0x00403A7C', 'B', 'r'], ['zapis do kodu', '0x00401000', 'A', 'w'],
+    ['wykonanie danych (NX)', '0x00600120', 'A', 'x'], ['wskaźnik pusty 0x00000010', '0x00000010', 'A', 'r'], ['strona na dysku', '0x00603F00', 'A', 'r'], ['stos', '0x7FFFDFF0', 'B', 'w'],
+  ];
+  function ustawSeg(id, w) { for (const b of $$(`#${id} button`)) b.setAttribute('aria-pressed', String(b.dataset.w === w)); }
+  /* zadania */
+  let Z = null, ok = 0, ile = 0;
+  function nowe() {
+    const [, p, k] = wybierz(REG); const a = p + losuj(0, Math.floor((k - p) / 4) - 1) * 4 + losuj(0, 3);
+    Z = { a, s: Math.floor(a / 4096), p: a % 4096, zal: false, proby: 0 }; ile++;
+    $('#pzQ').replaceChildren('Adres wirtualny ', el('b', { class: 'mono', text: hx(a, 8) }), '. Podaj numer strony i przesunięcie (szesnastkowo).');
+    $('#pzS').value = ''; $('#pzP').value = ''; $('#pzFb').textContent = ''; $('#pzFb').className = 'fbline'; $('#pzHint').textContent = '';
+    $('#pzIle').textContent = ile;
+  }
+  function sprawdz() {
+    if (!Z || Z.zal) return;
+    const s = parsujAdr($('#pzS').value), p = parsujAdr($('#pzP').value);
+    const fb = $('#pzFb'), hn = $('#pzHint');
+    if (s === null || p === null) { fb.className = 'fbline zle'; fb.textContent = 'Wpisz obie liczby szesnastkowo.'; return; }
+    if (s === Z.s && p === Z.p) { Z.zal = true; ok++; $('#pzIleOk').textContent = ok; fb.className = 'fbline dobrze'; fb.textContent = `Dobrze: strona ${hx(Z.s, 5)}, przesunięcie ${hx(Z.p, 3)}.`; hn.textContent = 'Wpisz ten adres w kalkulator powyżej, żeby zobaczyć adres fizyczny.'; return; }
+    Z.proby++; fb.className = 'fbline zle'; fb.textContent = 'Jeszcze nie.';
+    if (p === Z.a % 256 || p === Z.a % 65536) hn.textContent = 'Strona ma 4 KiB = 2¹² B, więc przesunięcie to 12 bitów = dokładnie 3 ostatnie cyfry szesnastkowe.';
+    else if (s === Z.a) hn.textContent = 'To cały adres. Numer strony to adres bez 3 ostatnich cyfr szesnastkowych.';
+    else if (s === Math.floor(Z.a / 256) || s === Math.floor(Z.a / 65536)) hn.textContent = 'Odcinasz złą liczbę cyfr: 12 bitów przesunięcia to 3 cyfry szesnastkowe.';
+    else hn.textContent = Z.proby >= 2 ? `Odpowiedź: strona ${hx(Z.s, 5)}, przesunięcie ${hx(Z.p, 3)}.` : 'Podziel adres: wszystko poza 3 ostatnimi cyframi szesnastkowymi to numer strony.';
+  }
+  function init() {
+    $('#pmPrzyk').replaceChildren(el('span', { class: 'small muted', text: 'Przykłady:' }), ...PRZYK.map(([n, a, p, d]) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small', text: n });
+      b.addEventListener('click', () => { $('#pmAdr').value = a; proc = p; dost = d; bity = 12; ustawSeg('pmProc', p); ustawSeg('pmDost', d); ustawSeg('pmRoz', '12'); rysuj(); });
+      return b;
+    }));
+    seg($('#pmProc'), (w) => { proc = w; rysuj(); });
+    seg($('#pmDost'), (w) => { dost = w; rysuj(); });
+    seg($('#pmRoz'), (w) => { bity = +w; rysuj(); });
+    $('#pmAdr').addEventListener('input', rysuj);
+    rysuj();
+    $('#pzOk').addEventListener('click', sprawdz); $('#pzNowe').addEventListener('click', nowe);
+    for (const id of ['#pzS', '#pzP']) $(id).addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); Z && Z.zal ? nowe() : sprawdz(); } });
+    nowe(); ile = 1; $('#pzIle').textContent = ile;
+  }
+  return { init, _t: { tablica } };
+})();
+
+/* ═════════════════════ Ćwiczenie 5: architektury ═════════════════════ */
+const Architektury = (() => {
+  const W3 = ['prezentacja', 'logika', 'dane'], KS = ['klient–serwer', 'peer-to-peer'];
+  const POZ = [
+    { q: 'Przycisk „Zapisz się” i komunikat „Zapisano!” w przeglądarce.', ok: 'prezentacja', opcje: W3, wyj: 'To, co widzi i klika student, to warstwa prezentacji.' },
+    { q: 'Sprawdzenie, czy w grupie jest jeszcze miejsce (najwyżej 30 osób).', ok: 'logika', opcje: W3, wyj: 'Reguła biznesowa należy do logiki na serwerze. Przeglądarkę użytkownik może obejść, serwera — nie.' },
+    { q: 'Tabela zapisów: kto, do której grupy i kiedy się zapisał.', ok: 'dane', opcje: W3, wyj: 'Trwałe przechowywanie to warstwa danych (baza danych).' },
+    { q: 'Sprawdzenie, czy nowe zajęcia nie kolidują z planem studenta.', ok: 'logika', opcje: W3, wyj: 'Porównanie terminów to obliczenie według reguł — logika. Dane o planie leżą w bazie, ale decyzję podejmuje serwer aplikacji.' },
+    { q: 'Ekran logowania w aplikacji mobilnej.', ok: 'prezentacja', opcje: W3, wyj: 'Aplikacja mobilna to druga prezentacja tej samej logiki — można ją dodać bez zmiany bazy danych.' },
+    { q: 'Lista kursów z limitami miejsc, zapisana trwale.', ok: 'dane', opcje: W3, wyj: 'Dane o kursach przechowuje baza. Logika z nich korzysta, prezentacja je pokazuje.' },
+    { q: 'Wyszarzenie przycisku „Zapisz się”, gdy brak miejsc.', ok: 'prezentacja', opcje: W3, wyj: 'To wygoda dla użytkownika w prezentacji. Nie zastępuje sprawdzenia w logice: ktoś może wysłać żądanie z pominięciem przycisku.' },
+    { q: 'Naliczenie opłaty za powtarzany przedmiot.', ok: 'logika', opcje: W3, wyj: 'Obliczenie według regulaminu — logika.' },
+    { q: 'Przeglądarka pobiera stronę główną uczelni.', ok: 'klient–serwer', opcje: KS, wyj: 'Przeglądarka (klient) wysyła żądanie, serwer WWW odpowiada.' },
+    { q: 'BitTorrent: pobierasz kawałki pliku od wielu osób i jednocześnie wysyłasz innym te, które już masz.', ok: 'peer-to-peer', opcje: KS, wyj: 'Każdy węzeł jest jednocześnie klientem i serwerem.' },
+    { q: 'Jupyter: przeglądarka i jądro Pythona działają na tym samym laptopie.', ok: 'klient–serwer', opcje: KS, wyj: '„Serwer” to rola programu, nie rodzaj sprzętu. Jądro Pythona jest serwerem dla przeglądarki, choć oba działają na jednym komputerze.' },
+    { q: 'Aplikacja bankowa w telefonie pokazuje saldo.', ok: 'klient–serwer', opcje: KS, wyj: 'Saldo przechowuje i pilnuje serwer banku; aplikacja jest klientem.' },
+    { q: 'Komputery sieci kryptowaluty przekazują sobie nowe bloki bez centralnego serwera.', ok: 'peer-to-peer', opcje: KS, wyj: 'Węzły są równorzędne i wymieniają dane bezpośrednio. Brak jednego punktu awarii, ale trudniej kontrolować dane.' },
+  ];
+  function init() { quizWyboru('ar', POZ, W3, 10); }
+  return { init };
+})();
+
+/* ═════════════════════ Ćwiczenie 6: wirtualizacja ═════════════════════ */
+const Wirtualizacja = (() => {
+  function warstwy() {
+    const n = +$('#wzN').value; $('#wzNv').textContent = n; const win = $('#wzWin').checked && n >= 2;
+    const app = (i) => String.fromCharCode(65 + i);
+    const rz = (...w) => el('div', { class: 'rz' }, ...w);
+    const w = (kl, t) => el('div', { class: 'w ' + kl, text: t });
+    const vm = $('#wzVm'); vm.replaceChildren(
+      rz(...Array.from({ length: n }, (_, i) => w('app', 'aplikacja ' + app(i)))),
+      rz(...Array.from({ length: n }, (_, i) => w('os', win && i === 1 ? 'Windows' : 'Linux (gość)'))),
+      rz(w('hv', 'hiperwizor')), rz(w('hw', 'sprzęt')));
+    const kt = $('#wzKt'); kt.replaceChildren(
+      rz(...Array.from({ length: n }, (_, i) => (win && i === 1 ? w('nie', 'aplikacja B ✗') : w('app', 'aplikacja ' + app(i))))),
+      rz(w('hv', 'środowisko kontenerów (np. Docker)')), rz(w('os', 'jedno jądro: Linux gospodarza')), rz(w('hw', 'sprzęt')));
+    const st = $('#wzStaty'); st.replaceChildren();
+    const stat = (k, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v', text: v })));
+    stat('jądra systemów: maszyny wirtualne', String(n)); stat('jądra systemów: kontenery', '1');
+    $('#wzOpis').textContent = win
+      ? 'Kontener współdzieli jądro gospodarza, więc na Linuksie uruchomi tylko programy dla Linuksa. Program dla Windows potrzebuje maszyny wirtualnej z Windows (albo innego gospodarza).'
+      : 'Każda maszyna wirtualna ma własny system gościa z własnym jądrem: silniejsza izolacja i dowolny system, ale więcej pamięci i dłuższy start. Kontenery to procesy jednego jądra: lżejsze i szybsze, za to słabiej odizolowane.';
+  }
+  /* tabela odpowiedzialności */
+  const WARSTWY = ['aplikacja (Twój program)', 'dane', 'środowisko uruchomieniowe (Python, biblioteki)', 'system operacyjny', 'wirtualizacja', 'serwery i dyski', 'sieć i budynek'];
+  const KOL = ['własny serwer', 'IaaS', 'PaaS', 'SaaS'];
+  // true = Ty
+  const DOBRE = [
+    [true, true, true, false], [true, true, true, true], [true, true, false, false], [true, true, false, false], [true, false, false, false], [true, false, false, false], [true, false, false, false],
+  ];
+  let stan = null;
+  function resetOd() { stan = WARSTWY.map((_, r) => KOL.map((_, k) => (k === 0 ? true : null))); rysujOd(); $('#odFb').textContent = ''; }
+  function rysujOd(zle = new Set()) {
+    const t = $('#odTab'); t.replaceChildren(el('thead', {}, el('tr', {}, el('th', { text: 'warstwa' }), ...KOL.map((k) => el('th', { text: k })))));
+    const tb = el('tbody');
+    WARSTWY.forEach((nm, r) => tb.append(el('tr', {}, el('td', { text: nm }), ...KOL.map((_, k) => {
+      const v = stan[r][k];
+      const td = el('td', { class: 'kom ' + (v === true ? 'ty' : v === false ? 'dost' : '') + (k === 0 ? ' blok' : '') + (zle.has(`${r},${k}`) ? ' zle' : ''), text: v === true ? 'Ty' : v === false ? 'dostawca' : '?' });
+      if (k > 0) {
+        td.tabIndex = 0; td.setAttribute('role', 'button'); td.setAttribute('aria-label', `${nm}, ${KOL[k]}: ${td.textContent}`);
+        const przel = () => { stan[r][k] = stan[r][k] === true ? false : true; rysujOd(); };
+        td.addEventListener('click', przel);
+        td.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); przel(); } });
+      }
+      return td;
+    }))));
+    t.append(tb);
+  }
+  function sprOd() {
+    const zle = new Set(); let puste = 0;
+    WARSTWY.forEach((_, r) => KOL.forEach((_, k) => { if (k === 0) return; if (stan[r][k] === null) puste++; else if (stan[r][k] !== DOBRE[r][k]) zle.add(`${r},${k}`); }));
+    rysujOd(zle);
+    const fb = $('#odFb');
+    if (puste) { fb.className = 'fbline zle'; fb.textContent = `Uzupełnij wszystkie komórki (zostało ${puste}).`; return; }
+    if (!zle.size) { fb.className = 'fbline dobrze'; fb.textContent = 'Wszystko dobrze. Im dalej w prawo, tym mniej zostaje po Twojej stronie — ale dane są Twoje zawsze.'; return; }
+    fb.className = 'fbline zle'; fb.textContent = `Błędne komórki: ${zle.size} (zaznaczone). Wskazówka: IaaS — dostajesz maszynę wirtualną; PaaS — wgrywasz tylko swój kod; SaaS — korzystasz z gotowej aplikacji.`;
+  }
+  /* scenariusze */
+  const VKE = ['maszyna wirtualna', 'kontener', 'emulacja (np. QEMU)'], CH = ['IaaS', 'PaaS', 'SaaS', 'to nie jest chmura'];
+  const SCEN = [
+    { q: 'Chcesz sprawdzić swój program pod trzema dystrybucjami Linuksa (różne biblioteki i narzędzia) na laptopie z Linuksem — szybko i bez instalowania trzech systemów.', ok: 'kontener', opcje: VKE, wyj: 'Dystrybucje różnią się narzędziami i bibliotekami, a jądro może być wspólne. Kontener z obrazem każdej dystrybucji startuje szybko.' },
+    { q: 'Testujesz własną, zmodyfikowaną wersję jądra Linuksa.', ok: 'maszyna wirtualna', opcje: VKE, wyj: 'Kontener korzysta z jądra gospodarza, więc nie da się w nim uruchomić innego jądra. Maszyna wirtualna ma własny system z własnym jądrem.' },
+    { q: 'Program skompilowany na procesor ARM chcesz uruchomić na komputerze z procesorem x86.', ok: 'emulacja (np. QEMU)', opcje: VKE, wyj: 'Wirtualizacja wykonuje rozkazy wprost na procesorze, więc wymaga tej samej architektury. Inny zestaw rozkazów trzeba emulować rozkaz po rozkazie — jak uniwersalna maszyna Turinga (W4). Działa, ale wolniej.' },
+    { q: 'Archiwalny program działa tylko w starym systemie Windows, a masz nowy komputer z Linuksem.', ok: 'maszyna wirtualna', opcje: VKE, wyj: 'Potrzebny jest inny system operacyjny (inne jądro), więc maszyna wirtualna. Kontener tu nie pomoże.' },
+    { q: 'Firma przenosi serwery do chmury, ale chce sama instalować system i całe oprogramowanie.', ok: 'IaaS', opcje: CH, wyj: 'Infrastruktura jako usługa: dostajesz maszyny wirtualne, dyski i sieć; systemem i aplikacjami zarządzasz sam.' },
+    { q: 'Wgrywasz swoją aplikację webową, a platforma sama ją uruchamia, aktualizuje system i dokłada kopie przy dużym ruchu.', ok: 'PaaS', opcje: CH, wyj: 'Platforma jako usługa: zarządzasz tylko swoim kodem i danymi.' },
+    { q: 'Dział kadr korzysta z poczty i dokumentów w przeglądarce.', ok: 'SaaS', opcje: CH, wyj: 'Oprogramowanie jako usługa: gotowa aplikacja; zarządzasz tylko swoimi danymi.' },
+    { q: 'Uczelnia wynajmuje miejsce, prąd i łącze w cudzej serwerowni dla własnego serwera.', ok: 'to nie jest chmura', opcje: CH, wyj: 'To kolokacja: brak samoobsługi na żądanie, elastyczności i rozliczania za zużycie.' },
+    { q: 'Uruchamiasz kontenery Dockera na laptopie bez dostępu do internetu.', ok: 'to nie jest chmura', opcje: CH, wyj: 'Docker to narzędzie do kontenerów, nie usługa chmurowa. Działa także zupełnie lokalnie.' },
+  ];
+  function init() {
+    $('#wzN').addEventListener('input', warstwy); $('#wzWin').addEventListener('change', warstwy); warstwy();
+    $('#odSpr').addEventListener('click', sprOd);
+    $('#odPokaz').addEventListener('click', () => { stan = DOBRE.map((r) => [...r]); rysujOd(); $('#odFb').className = 'fbline'; $('#odFb').textContent = 'Odpowiedź (uproszczona: granice zależą od konkretnej usługi).'; });
+    $('#odReset').addEventListener('click', resetOd);
+    resetOd();
+    quizWyboru('sc', SCEN, VKE);
+  }
+  return { init };
+})();
+
+const MODULY = { stany: Stany, planista: Planista, przelaczanie: Przelaczanie, pamiec: Pamiec, architektury: Architektury, wirtualizacja: Wirtualizacja };
+
+/* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
+const Ustawienia = (() => {
+  let roboczy = null;
+  function domyslnaSesja() { const d = new Date(); return `${KONF.wyk}-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+  function parsujPrefill(link) {
+    let u; try { u = new URL(link.trim()); } catch (e) { throw new Error('To nie wygląda na adres internetowy.'); }
+    if (!/\/forms\/.+\/(viewform|formResponse)$/.test(u.pathname)) throw new Error('To nie jest link do Formularza Google (powinien kończyć się na /viewform?…).');
+    const f = u.origin + u.pathname.replace(/\/viewform$/, '/formResponse');
+    const e = {}; const MAP = { APLIKACJA: 'a', SESJA: 's', WARIANT: 'w', WYNIK: 'v' };
+    for (const [k, v] of u.searchParams) if (/^entry\.\d+$/.test(k) && MAP[v.trim().toUpperCase()]) e[MAP[v.trim().toUpperCase()]] = k;
+    const brak = Object.entries(MAP).filter(([, kk]) => !e[kk]).map(([nm]) => nm);
+    if (brak.length) throw new Error(`W linku brakuje pól: ${brak.join(', ')}. Wpisz te słowa w pola formularza przed pobraniem linku.`);
+    return { f, e };
+  }
+  function zbierz() {
+    const { f, e } = parsujPrefill($('#sPrefill').value);
+    const c = $('#sCsv').value.trim();
+    if (!/^https?:\/\//.test(c)) throw new Error('Podaj link do opublikowanego arkusza (CSV).');
+    const sesja = $('#sSes').value.trim();
+    if (!sesja) throw new Error('Podaj nazwę sesji.');
+    return { v: 1, f, e, c, s: sesja };
+  }
+  function baza() { return location.protocol === 'file:' ? $('#sBase').value.trim() : location.origin + location.pathname; }
+  function linki(cfg) {
+    const b = baza(); const card = $('#sLinksCard');
+    if (!b) { card.hidden = true; return; }
+    const q = `${b}?cfg=${b64e(JSON.stringify(cfg))}`;
+    for (const l of KONF.linki) $('#' + l.id).value = `${q}#${l.hash}`;
+    card.hidden = false;
+  }
+  function wypelnij(cfg) {
+    if (!cfg) return;
+    const u = new URL(cfg.f.replace(/\/formResponse$/, '/viewform'));
+    u.searchParams.set('usp', 'pp_url'); u.searchParams.set(cfg.e.a, 'APLIKACJA'); u.searchParams.set(cfg.e.s, 'SESJA'); u.searchParams.set(cfg.e.w, 'WARIANT'); u.searchParams.set(cfg.e.v, 'WYNIK');
+    $('#sPrefill').value = u.toString(); $('#sCsv').value = cfg.c; $('#sSes').value = cfg.s;
+  }
+  function out(...kids) { $('#sOut').replaceChildren(...kids); }
+  async function sprawdz() {
+    let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+    roboczy = cfg; linki(cfg);
+    const lista = el('ul');
+    const pkt = (ok, t) => lista.append(el('li', { class: ok ? 'ok' : 'err', text: `${ok ? '✓' : '✗'} ${t}` }));
+    out(lista);
+    pkt(true, 'Link formularza rozpoznany, wszystkie cztery pola znalezione.');
+    try { await Grupa.wyslij('test', 'test', 0, cfg); pkt(true, 'Wpis testowy wysłany (aplikacja = test). Przeglądarka nie potwierdza odbioru: sprawdź, czy pojawił się w arkuszu.'); }
+    catch (e) { pkt(false, `Wysyłka nie powiodła się: ${e.message}`); }
+    try {
+      const { rows, kol } = await Grupa.pobierz(cfg);
+      pkt(true, `Arkusz CSV odczytany: ${rows.length} wierszy odpowiedzi.`);
+      if (kol && !kol.znalezione) pkt(false, 'Nie znaleziono kolumn o nazwach aplikacja, sesja, wariant, wynik. Używam kolejności kolumn 2–5. Sprawdź nazwy pytań.');
+      const testy = rows.filter((r) => r.a === 'test' && r.s === cfg.s).length;
+      lista.append(el('li', { class: 'muted', text: `Wpisów testowych w tej sesji: ${testy}. Nowy wpis może pojawić się w CSV dopiero po kilku minutach; kliknij „Sprawdź” ponownie.` }));
+    } catch (e) { pkt(false, `Nie udało się odczytać CSV: ${e.message}. Sprawdź, czy arkusz jest opublikowany jako CSV.`); }
+    if (location.protocol === 'file:' && !$('#sBase').value.trim()) lista.append(el('li', { class: 'muted', text: 'Strona jest otwarta z dysku. Żeby wygenerować link dla studentów, wpisz adres strony w sieci (GitHub Pages).' }));
+  }
+  function init() {
+    $('#sSes').value = domyslnaSesja();
+    if (location.protocol === 'file:') $('#sBaseInfo').textContent = 'Strona jest otwarta z dysku, więc link musi wskazywać kopię w sieci.';
+    else { $('#sBase').value = location.origin + location.pathname; $('#sBase').readOnly = true; $('#sBaseInfo').textContent = 'Adres tej strony.'; }
+    const zapisana = store.get(CFG_KEY); if (zapisana) { try { wypelnij(JSON.parse(zapisana)); } catch (e) { /* ignoruj */ } }
+    else if (Grupa.cfg) wypelnij(Grupa.cfg);
+    $('#sPrefill').addEventListener('input', () => {
+      const i = $('#sPrefillInfo');
+      if (!$('#sPrefill').value.trim()) { i.textContent = ''; return; }
+      try { const { e } = parsujPrefill($('#sPrefill').value); i.className = 'small ok'; i.textContent = `✓ Pola: aplikacja = ${e.a}, sesja = ${e.s}, wariant = ${e.w}, wynik = ${e.v}`; }
+      catch (err) { i.className = 'small err'; i.textContent = err.message; }
+    });
+    $('#sPrefill').dispatchEvent(new Event('input'));
+    $('#sCheck').addEventListener('click', sprawdz);
+    $('#sBase').addEventListener('input', () => { if (roboczy) linki(roboczy); });
+    $('#sSave').addEventListener('click', () => {
+      let cfg; try { cfg = zbierz(); } catch (e) { out(el('p', { class: 'err', text: e.message })); return; }
+      const ok = store.set(CFG_KEY, JSON.stringify(cfg)); linki(cfg);
+      out(el('p', { class: ok ? 'ok' : 'err', text: ok ? 'Zapisano. W tej przeglądarce tryb grupowy będzie włączony także bez parametru w linku. Odśwież stronę, żeby go uruchomić.' : 'Ta przeglądarka nie pozwala zapisywać ustawień. Używaj linków dla studentów.' }));
+    });
+    $('#sForget').addEventListener('click', () => { store.del(CFG_KEY); out(el('p', { text: 'Usunięto zapisaną konfigurację. Po odświeżeniu strona będzie działać samodzielnie (chyba że otworzysz link z parametrem cfg).' })); });
+    for (const b of $$('[data-copy]')) b.addEventListener('click', async () => { const ok = await copyText($('#' + b.dataset.copy).value); b.textContent = ok ? 'Skopiowano' : 'Zaznacz i skopiuj'; setTimeout(() => { b.textContent = 'Kopiuj'; }, 1600); });
+    if (Grupa.cfg) linki(Grupa.cfg);
+  }
+  return { init };
+})();
+
+/* ═════════════════════ Nawigacja ═════════════════════ */
+let biezacy = null;
+function nawiguj() {
+  const ids = Object.keys(KONF.widoki);
+  const v = ids.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  if (biezacy && biezacy !== v) MODULY[biezacy]?.wyjscie?.();
+  if (biezacy !== v) MODULY[v]?.wejscie?.();
+  for (const w of ids) $('#v-' + w).hidden = w !== v;
+  for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
+  if (biezacy !== null) window.scrollTo(0, 0);
+  biezacy = v;
+  document.title = KONF.widoki[v];
+}
+Grupa.init();
+for (const m of Object.values(MODULY)) m.init?.();
+Ustawienia.init();
+window.addEventListener('hashchange', nawiguj);
+nawiguj();
+
+</script>
+</body>
+</html>
