@@ -252,6 +252,22 @@ ol.latki li { margin: 4px 0; }
 .knwzor { font-size: 1.35rem; font-weight: 600; margin: 0 0 6px; word-break: break-word; }
 .stat .v.sm { font-size: 1.05rem; }
 .kncyfry { max-height: 260px; overflow: auto; font-size: .8rem; word-break: break-all; background: var(--surface-2); border-radius: 8px; padding: 10px; margin-top: 8px; }
+
+/* ───────── 6. Gramatyki i automaty ───────── */
+.sk2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; margin-top: 10px; }
+@media (max-width: 720px) { .sk2 { grid-template-columns: minmax(0, 1fr); } }
+ol.wypr { margin: 6px 0; padding-left: 1.6em; font-size: 1rem; line-height: 1.9; }
+ol.wypr .nt { font-family: var(--mono); font-weight: 700; padding: 1px 7px; border-radius: 6px; border: 1.5px solid var(--accent); background: var(--accent-soft); color: var(--accent); cursor: pointer; }
+ol.wypr .nt.wyb { background: var(--hl); color: var(--hl-ink); border-color: var(--amber); }
+ol.wypr .tm { font-family: var(--mono); }
+.slowa { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 10px; }
+.slowa .sl { font-family: var(--mono); font-size: .9rem; padding: 2px 8px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); }
+.pill.stan { font-family: var(--mono); background: var(--surface-2); color: var(--text-2); border: 1.5px solid var(--border); }
+.pill.stan.akc { border-style: double; border-width: 3px; }
+.pill.stan.cur { background: var(--hl); color: var(--hl-ink); border-color: var(--amber); }
+.btn.zla { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+.btn.dobra { background: var(--good); border-color: var(--good); color: #fff; opacity: 1; }
+.zad { font-size: 1.08rem; margin: 10px 0 6px; }
 </style>
 </head>
 <body>
@@ -268,6 +284,7 @@ ol.latki li { margin: 4px 0; }
     <a href="#stop">3. Czy to się zatrzyma?</a>
     <a href="#przekora">4. Przekora</a>
     <a href="#wieze">5. Wieże Knutha</a>
+    <a href="#jezyki">6. Gramatyki i automaty</a>
   </nav>
 </header>
 
@@ -283,6 +300,7 @@ ol.latki li { margin: 4px 0; }
     <a class="tile" href="#stop"><span class="num">3</span><h3>Czy to się zatrzyma?</h3><p>Dwanaście krótkich programów w Pythonie i jedno pytanie: zakończy się czy nie? Mierzymy trafność i czas odpowiedzi. Na końcu dwa programy, o których nie wie tego nikt.</p><div class="meta">ok. 10 min · slajdy „Problem stopu”, „Nierozstrzygalny ≠ beznadziejny” i „Czy umysł jest maszyną Turinga?”</div></a>
     <a class="tile" href="#przekora"><span class="num">4</span><h3>Przekora</h3><p>Wybierz sposób wykrywania pętli nieskończonych i sprawdź go na zwykłych programach. Potem zbuduj program, który go oszuka — dla każdego detektora, nawet po kolejnych łatkach. Argument Turinga krok po kroku.</p><div class="meta">ok. 10 min · slajdy „Problem stopu” i „Nierozstrzygalny ≠ beznadziejny”</div></a>
     <a class="tile" href="#wieze"><span class="num">5</span><h3>Wieże Knutha</h3><p>Kalkulator notacji strzałkowej: a↑b, a↑↑b, a↑↑↑b. Liczba cyfr, porównanie z liczbą atomów we Wszechświecie i z pamięcią komputera — aż do liczb, których nie da się nawet opisać cyframi.</p><div class="meta">ok. 5 min · slajdy „Czy to rekord? Znane wartości” i „Co znaczy 2↑↑↑5?”</div></a>
+    <a class="tile" href="#jezyki"><span class="num">6</span><h3>Gramatyki i automaty</h3><p>Dla chętnych. Wyprowadzaj słowa z gramatyki i sprawdzaj, czy zdanie należy do języka. Porównaj pamięć automatu skończonego i licznika, a potem przyporządkuj dwanaście języków do klas hierarchii Chomsky'ego.</p><div class="meta">ok. 10 min · sekcja „Dla chętnych: języki formalne”</div></a>
   </div>
 </section>
 
@@ -612,6 +630,97 @@ ol.latki li { margin: 4px 0; }
     </ol>
   </div>
   <p class="src">D. E. Knuth, <em>Mathematics and Computer Science: Coping with Finiteness</em>, Science 194 (1976), s. 1235–1242; S(6) &gt; 2↑↑↑5: rekord z czerwca 2025 r., wiki.bbchallenge.org/wiki/BB(6) (dostęp 24.10.2026).</p>
+</section>
+
+<!-- ═══════════════════ 6. JĘZYKI ═══════════════════ -->
+<section id="v-jezyki" hidden>
+  <h2>6. Gramatyki i automaty <span class="small muted">(dla chętnych)</span></h2>
+  <p class="lead">Język to zbiór słów. Gramatyka podaje przepis na wszystkie jego słowa, a automat (albo maszyna Turinga) sprawdza, czy dane słowo do języka należy. Hierarchia Chomsky'ego porządkuje języki według tego, <em>ile pamięci</em> potrzeba do ich rozpoznania.</p>
+
+  <div class="card">
+    <h3>Część A: gramatyka w działaniu</h3>
+    <div class="row" id="grPrzyk"></div>
+    <div class="sk2">
+      <div>
+        <label for="grTekst" class="small muted">Produkcje (pierwsza lewa strona to symbol startowy; symbole oddzielaj spacjami; „|” — alternatywa; „ε” — słowo puste)</label>
+        <textarea id="grTekst" rows="6" spellcheck="false" style="width: 100%; font-family: var(--mono)"></textarea>
+        <p class="err" id="grErr"></p>
+      </div>
+      <div>
+        <div class="small muted">Wyprowadzenie (kliknij nieterminal w ostatnim wierszu albo losuj)</div>
+        <ol class="wypr" id="grWypr"></ol>
+        <div class="row" id="grWybor"></div>
+        <div class="row" style="margin-top: 8px">
+          <button type="button" class="btn ghost small" id="grLos">Losowe wyprowadzenie</button>
+          <button type="button" class="btn ghost small" id="grOdNowa">Od nowa</button>
+        </div>
+      </div>
+    </div>
+    <h4 class="rk">Słowa języka L(G)</h4>
+    <div class="row">
+      <label for="grMax" class="small muted">najwyżej symboli w słowie</label>
+      <input id="grMax" type="range" min="2" max="10" value="6"><span class="mono" id="grMaxV">6</span>
+    </div>
+    <p class="small muted" id="grIle"></p>
+    <div class="slowa" id="grSlowa"></div>
+    <h4 class="rk">Czy to słowo należy do języka?</h4>
+    <div class="row">
+      <input id="grTest" type="text" style="flex: 1; min-width: 14em; font-family: var(--mono)" value="Psa Onufry karmi ." aria-label="Słowo do sprawdzenia" autocomplete="off" spellcheck="false">
+      <button type="button" class="btn" id="grTestOk">Sprawdź</button>
+    </div>
+    <p class="fbline" id="grTestFb" role="status"></p>
+    <ol class="wypr" id="grTestWypr"></ol>
+  </div>
+
+  <div class="card">
+    <h3>Część B: ile pamięci potrzeba?</h3>
+    <div class="row">
+      <div class="seg" id="rzJezyk" role="group" aria-label="Język">
+        <button type="button" data-w="abc" aria-pressed="true">a⁺b⁺c⁺ (automat)</button>
+        <button type="button" data-w="liczba" aria-pressed="false">liczba bez zer wiodących (automat)</button>
+        <button type="button" data-w="anbn" aria-pressed="false">aⁿbⁿ (licznik)</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 10px">
+      <input id="rzSlowo" type="text" style="flex: 1; min-width: 12em; font-family: var(--mono)" value="aabccc" aria-label="Słowo" autocomplete="off" spellcheck="false">
+      <button type="button" class="btn" id="rzKrok">Krok</button>
+      <button type="button" class="btn ghost" id="rzKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="rzReset">Od nowa</button>
+    </div>
+    <div class="row" style="margin-top: 6px" id="rzPrzyk"></div>
+    <div class="tapebox"><div class="tape" id="rzTasma"></div></div>
+    <div class="row" id="rzPamiec" style="gap: 6px"></div>
+    <p class="fbline" id="rzFb" role="status"></p>
+    <p class="small muted" id="rzOpis"></p>
+    <div class="stats" id="rzStaty"></div>
+  </div>
+
+  <div class="card">
+    <h3>Część C: do której klasy?</h3>
+    <p class="small muted">Podaj <em>najniższą</em> klasę hierarchii, do której należy język. Wskazówka: ile trzeba pamiętać, czytając słowo od lewej do prawej? Pytania są inne niż w zadaniu ze slajdu.</p>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="klNr"></span><span class="small muted" id="klWynik"></span></div>
+    <p class="zad" id="klQ"></p>
+    <div class="row odp" id="klOdp">
+      <button type="button" class="btn ghost" data-k="3">3 · regularny</button>
+      <button type="button" class="btn ghost" data-k="2">2 · bezkontekstowy</button>
+      <button type="button" class="btn ghost" data-k="1">1 · kontekstowy</button>
+      <button type="button" class="btn ghost" data-k="0">0 · bez ograniczeń</button>
+    </div>
+    <p class="fbline" id="klFb" role="status"></p>
+    <p id="klWyj"></p>
+    <div class="row"><button type="button" class="btn" id="klDalej" hidden>Dalej →</button></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>W części A wybierz gramatykę zdań i sprawdź „Psa Onufry karmi .”. Dlaczego odpowiedź „nie należy” nie znaczy, że zdanie jest niepoprawne po polsku?</li>
+      <li>Gramatyka aⁿbⁿ ma tylko dwie produkcje, a język jest nieskończony. Która produkcja za to odpowiada? Co by się stało bez produkcji S → a b?</li>
+      <li>W części B automat dla a⁺b⁺c⁺ ma kilka stanów niezależnie od długości słowa. Licznik dla aⁿbⁿ rośnie. Co by się stało, gdyby licznik mógł liczyć tylko do 100?</li>
+      <li>Język {aⁿbⁿ : n ≤ 1000} jest regularny, a {aⁿbⁿ : n ≥ 1} nie. Jak to możliwe, skoro pierwszy jest „prawie taki sam”?</li>
+    </ol>
+  </div>
+  <p class="src">N. Chomsky, <em>Three Models for the Description of Language</em>, IRE Trans. Inf. Theory 2(3), 1956; M. Sipser, <em>Introduction to the Theory of Computation</em>, rozdz. 1–2 (automaty skończone, gramatyki bezkontekstowe, lemat o pompowaniu).</p>
 </section>
 
 <!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
@@ -2053,6 +2162,298 @@ const Wieze = (() => {
   return { init };
 })();
 
+/* ═════════════════════ 6. Gramatyki i automaty ═════════════════════ */
+const Jezyki = (() => {
+  /* ─── Część A: gramatyka ─── */
+  const GRAM = [
+    { n: 'Zdania (slajd)', g: 'ZDANIE → PODM ORZ DOP .\nPODM → Onufry | Pies\nORZ → karmi | gryzie | goni\nDOP → Onufrego | psa', test: 'Psa Onufry karmi .', max: 4 },
+    { n: 'aⁿbⁿ', g: 'S → a S b | a b', test: 'aaabbb', max: 8 },
+    { n: 'a⁺b⁺c⁺ (regularna)', g: 'S → a S | a B\nB → b B | b C\nC → c C | c', test: 'aabbbc', max: 5 },
+    { n: 'Wyrażenia', g: 'E → E + T | T\nT → T * F | F\nF → ( E ) | 2 | 3', test: '(2+3)*2', max: 5 },
+  ];
+  let G = null, wypr = [], wybrany = null;
+  function parsuj(txt) {
+    const P = new Map(); let start = null;
+    const linie = txt.split('\n').map((l) => l.trim()).filter(Boolean);
+    for (const [nr, l] of linie.entries()) {
+      const m = l.match(/^(\S+)\s*(→|->)\s*(.*)$/);
+      if (!m) return { err: `Wiersz ${nr + 1}: brak strzałki „→” (albo „->”) po lewej stronie produkcji.` };
+      const A = m[1]; if (start === null) start = A;
+      const alt = m[3].split('|').map((a) => a.trim().split(/\s+/).filter((x) => x && x !== 'ε'));
+      if (!P.has(A)) P.set(A, []);
+      P.get(A).push(...alt);
+    }
+    if (start === null) return { err: 'Wpisz co najmniej jedną produkcję.' };
+    const N = new Set(P.keys());
+    const T = new Set(); for (const alts of P.values()) for (const a of alts) for (const x of a) if (!N.has(x)) T.add(x);
+    const jedno = [...T].every((t) => [...t].length === 1);
+    return { P, N, T, start, jedno };
+  }
+  const czyN = (x) => G.N.has(x);
+  const slowo = (f) => G.jedno ? f.join('') : f.join(' ').replace(/ ([.,!?])/g, '$1');
+  const forma = (f) => f.length ? f.join(' ') : 'ε';
+
+  function rysujWypr() {
+    const ol = $('#grWypr'); ol.replaceChildren();
+    wypr.forEach((f, k) => {
+      const li = el('li');
+      if (k === wypr.length - 1) {
+        if (!f.length) li.append(el('span', { class: 'mono', text: 'ε' }));
+        f.forEach((x, i) => {
+          if (czyN(x)) {
+            const b = el('button', { type: 'button', class: 'nt' + (wybrany === i ? ' wyb' : ''), text: x, title: 'Rozwiń ten symbol' });
+            b.addEventListener('click', () => { wybrany = i; rysujWypr(); });
+            li.append(b, ' ');
+          } else li.append(el('span', { class: 'tm', text: x }), ' ');
+        });
+        if (f.every((x) => !czyN(x))) li.append(el('span', { class: 'pill ok', text: 'słowo języka: ' + slowo(f) }));
+      } else li.append(el('span', { class: 'mono', text: (k ? '⇒ ' : '') + forma(f) }));
+      ol.append(li);
+    });
+    const w = $('#grWybor'); w.replaceChildren();
+    const f = wypr[wypr.length - 1];
+    if (wybrany !== null && czyN(f[wybrany])) {
+      w.append(el('span', { class: 'small muted', text: 'Zastąp ' + f[wybrany] + ':' }));
+      for (const alt of G.P.get(f[wybrany])) {
+        const b = el('button', { type: 'button', class: 'btn ghost small mono', text: `${f[wybrany]} → ${forma(alt)}` });
+        b.addEventListener('click', () => { wypr.push([...f.slice(0, wybrany), ...alt, ...f.slice(wybrany + 1)]); wybrany = null; rysujWypr(); });
+        w.append(b);
+      }
+    }
+  }
+  function losuj() {
+    let f = [G.start]; wypr = [f]; wybrany = null;
+    for (let k = 0; k < 40; k++) {
+      const i = f.findIndex(czyN); if (i < 0) break;
+      let alts = G.P.get(f[i]);
+      if (k >= 6) { const min = Math.min(...alts.map((a) => a.filter(czyN).length)); alts = alts.filter((a) => a.filter(czyN).length === min); }
+      const alt = alts[Math.floor(Math.random() * alts.length)];
+      f = [...f.slice(0, i), ...alt, ...f.slice(i + 1)]; wypr.push(f);
+    }
+    rysujWypr();
+  }
+  /** Wszystkie słowa o długości ≤ max (wyprowadzenia lewostronne, BFS). */
+  function slowa(max) {
+    const wynik = new Set(), widziane = new Set(); const kol = [[G.start]]; let ile = 0, uciete = false;
+    while (kol.length) {
+      const f = kol.shift();
+      if (++ile > 40000) { uciete = true; break; }
+      const i = f.findIndex(czyN);
+      if (i < 0) { wynik.add(slowo(f)); continue; }
+      for (const alt of G.P.get(f[i])) {
+        const g = [...f.slice(0, i), ...alt, ...f.slice(i + 1)];
+        if (g.filter((x) => !czyN(x)).length > max || g.length > max + 12) continue;
+        const k = g.join('\u0001'); if (widziane.has(k)) continue; widziane.add(k); kol.push(g);
+      }
+    }
+    return { lista: [...wynik].sort((a, b) => a.length - b.length || a.localeCompare(b, 'pl')), uciete };
+  }
+  function rysujSlowa() {
+    const max = +$('#grMax').value; $('#grMaxV').textContent = max;
+    const { lista, uciete } = slowa(max);
+    $('#grIle').textContent = `${lista.length} ${lista.length === 1 ? 'słowo' : (lista.length % 10 >= 2 && lista.length % 10 <= 4 && (lista.length % 100 < 10 || lista.length % 100 >= 20)) ? 'słowa' : 'słów'} o długości do ${max} symboli` + (lista.length > 120 ? ' (pokazujemy pierwsze 120)' : '') + (uciete ? '. Przeszukiwanie przerwano — lista może być niepełna.' : '.');
+    $('#grSlowa').replaceChildren(...lista.slice(0, 120).map((s) => el('span', { class: 'sl', text: s === '' ? 'ε' : s })));
+  }
+  /** Czy słowo należy do L(G)? Zwraca wyprowadzenie albo null. */
+  function nalezy(txt) {
+    const cel = G.jedno && !/\s/.test(txt.trim()) ? [...txt.trim()] : txt.trim().split(/\s+/).filter(Boolean);
+    const n = cel.length; const ojciec = new Map(); const start = [G.start];
+    const klucz = (f) => f.join('\u0001'); ojciec.set(klucz(start), null);
+    const kol = [start]; let ile = 0;
+    while (kol.length) {
+      const f = kol.shift(); if (++ile > 60000) return { limit: true };
+      const i = f.findIndex(czyN);
+      if (i < 0) {
+        if (f.length === n && f.every((x, j) => x === cel[j])) {
+          const droga = []; let k = klucz(f); while (k !== null) { droga.unshift(k.split('\u0001').filter((x) => x !== '')); k = ojciec.get(k); }
+          return { droga };
+        }
+        continue;
+      }
+      for (const alt of G.P.get(f[i])) {
+        const g = [...f.slice(0, i), ...alt, ...f.slice(i + 1)];
+        const j = g.findIndex(czyN); const pref = j < 0 ? g : g.slice(0, j);
+        if (pref.length > n || pref.some((x, q) => x !== cel[q])) continue;
+        if (g.filter((x) => !czyN(x)).length > n || g.length > n + 12) continue;
+        const k = klucz(g); if (ojciec.has(k)) continue; ojciec.set(k, klucz(f)); kol.push(g);
+      }
+    }
+    return { droga: null };
+  }
+  function test() {
+    const fb = $('#grTestFb'), ol = $('#grTestWypr'); ol.replaceChildren();
+    if (!G) return;
+    const r = nalezy($('#grTest').value);
+    if (r.limit) { fb.className = 'fbline otw'; fb.textContent = 'Przeszukiwanie trwa za długo — skróć słowo.'; return; }
+    if (r.droga) {
+      fb.className = 'fbline dobrze'; fb.textContent = 'Należy do L(G). Wyprowadzenie lewostronne:';
+      r.droga.forEach((f, k) => ol.append(el('li', { class: 'mono', text: (k ? '⇒ ' : '') + forma(f) })));
+    } else {
+      fb.className = 'fbline zle';
+      fb.textContent = 'Nie należy do L(G): żadne wyprowadzenie nie daje tego słowa.' + (G.jedno ? '' : ' (Symbole oddzielaj spacjami, także kropkę.)');
+    }
+  }
+  function zaladuj() {
+    const r = parsuj($('#grTekst').value);
+    $('#grErr').textContent = r.err || '';
+    if (r.err) { G = null; return; }
+    G = r; wypr = [[G.start]]; wybrany = null;
+    rysujWypr(); rysujSlowa(); $('#grTestFb').textContent = ''; $('#grTestWypr').replaceChildren();
+  }
+
+  /* ─── Część B: rozpoznawacze ─── */
+  const AUT = {
+    abc: {
+      stany: ['q0', 'qa', 'qb', 'qc', '✗'], start: 'q0', akc: ['qc'],
+      opis: { q0: 'start', qa: 'czytam a', qb: 'czytam b', qc: 'czytam c (akceptuj)', '✗': 'odrzuć' },
+      d(s, z) { const T = { q0: { a: 'qa' }, qa: { a: 'qa', b: 'qb' }, qb: { b: 'qb', c: 'qc' }, qc: { c: 'qc' } }; return (T[s] && T[s][z]) || '✗'; },
+      przyk: ['aabccc', 'abcabc', 'abbbbbbbbc', 'ac'],
+    },
+    liczba: {
+      stany: ['s', 'zero', 'liczba', '✗'], start: 's', akc: ['zero', 'liczba'],
+      opis: { s: 'start', zero: 'samo 0 (akceptuj)', liczba: 'cyfry (akceptuj)', '✗': 'odrzuć' },
+      d(s, z) { const c = /[0-9]/.test(z); if (s === 's') return z === '0' ? 'zero' : c ? 'liczba' : '✗'; if (s === 'liczba') return c ? 'liczba' : '✗'; return '✗'; },
+      przyk: ['2026', '007', '0', '12a'],
+    },
+  };
+  let jz = 'abc', R = null;
+  function rReset() {
+    const w = [...$('#rzSlowo').value.trim()].slice(0, 40);
+    if (jz === 'anbn') R = { w, i: 0, licz: 0, maks: 0, byloB: false, zle: false, koniec: false };
+    else R = { w, i: 0, s: AUT[jz].start, koniec: false };
+    rRysuj();
+  }
+  function rKrok() {
+    if (R.koniec) return;
+    if (R.i >= R.w.length) { R.koniec = true; rRysuj(); return; }
+    const z = R.w[R.i];
+    if (jz === 'anbn') {
+      if (z === 'a' && !R.byloB) { R.licz++; R.maks = Math.max(R.maks, R.licz); }
+      else if (z === 'b' && R.licz > 0) { R.byloB = true; R.licz--; }
+      else { R.zle = true; R.koniec = true; }
+    } else { R.s = AUT[jz].d(R.s, z); if (R.s === '✗') R.koniec = true; }
+    R.i++;
+    if (R.i >= R.w.length && !R.koniec) R.koniec = true;
+    rRysuj();
+  }
+  function rRysuj() {
+    const tasma = $('#rzTasma'); tasma.replaceChildren();
+    const stEt = jz === 'anbn' ? `licznik = ${R.licz}` : R.s;
+    (R.w.length ? R.w : ['']).forEach((z, k) => {
+      const c = el('div', { class: 'cell' + (z === '' ? ' blank' : '') + (!R.koniec && k === R.i ? ' head' : ''), 'data-st': stEt }, z || '␣', el('span', { class: 'ix', text: String(k) }));
+      tasma.append(c);
+    });
+    const pam = $('#rzPamiec'); pam.replaceChildren();
+    if (jz === 'anbn') {
+      pam.append(el('span', { class: 'small muted', text: 'pamięć:' }), el('span', { class: 'pill', text: `licznik = ${R.licz}` }), el('span', { class: 'pill', text: R.byloB ? 'faza: b' : 'faza: a' }));
+    } else {
+      pam.append(el('span', { class: 'small muted', text: 'stan:' }), ...AUT[jz].stany.map((s) => el('span', { class: 'pill stan' + (s === R.s ? ' cur' : '') + (AUT[jz].akc.includes(s) ? ' akc' : ''), title: AUT[jz].opis[s], text: s })));
+    }
+    const fb = $('#rzFb');
+    let ok = null;
+    if (R.koniec) ok = jz === 'anbn' ? (!R.zle && R.byloB && R.licz === 0) : AUT[jz].akc.includes(R.s) && R.i >= R.w.length;
+    fb.className = 'fbline' + (ok === true ? ' dobrze' : ok === false ? ' zle' : '');
+    if (!R.koniec) fb.textContent = R.i === 0 ? 'Naciśnij „Krok”.' : `Przeczytano ${R.i} z ${R.w.length} symboli.`;
+    else if (ok) fb.textContent = 'Słowo należy do języka.';
+    else {
+      let pow = 'Słowo nie należy do języka';
+      if (jz === 'anbn') pow += R.zle ? `: symbol „${R.w[R.i - 1]}” na pozycji ${R.i - 1} psuje wzorzec.` : R.licz > 0 ? `: zabrakło ${R.licz} liter b.` : !R.w.length ? ' (słowo puste, a n ≥ 1).' : '.';
+      else pow += R.s === '✗' ? `: symbol „${R.w[R.i - 1]}” na pozycji ${R.i - 1} prowadzi do stanu odrzucenia.` : `: koniec słowa w stanie ${R.s}, który nie jest akceptujący.`;
+      fb.textContent = pow;
+    }
+    const st = $('#rzStaty'); st.replaceChildren();
+    const stat = (k, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v', text: v })));
+    stat('długość słowa', String(R.w.length));
+    if (jz === 'anbn') {
+      stat('największy licznik', String(R.maks));
+      stat('bity na licznik', String(Math.max(1, Math.ceil(Math.log2(R.maks + 1)))));
+      $('#rzOpis').textContent = 'Licznik działa jak najprostszy stos (W7). Jego wartość rośnie z długością słowa: dla aⁿbⁿ potrzeba ok. log₂ n bitów, więc żadna stała pamięć nie wystarczy dla wszystkich n.';
+    } else {
+      const k = AUT[jz].stany.length;
+      stat('liczba stanów', String(k));
+      stat('bity na stan', String(Math.ceil(Math.log2(k))));
+      $('#rzOpis').textContent = `Automat skończony pamięta tylko bieżący stan: ${Math.ceil(Math.log2(k))} bity, bez względu na długość słowa. Najedź na stan, żeby zobaczyć, co oznacza.`;
+    }
+    $('#rzKrok').disabled = R.koniec; $('#rzKoniec').disabled = R.koniec;
+  }
+  function rPrzyk() {
+    const P = jz === 'anbn' ? ['aaabbb', 'aabbb', 'abab', 'aaaaaaaaaaaabbbbbbbbbbbb'] : AUT[jz].przyk;
+    $('#rzPrzyk').replaceChildren(el('span', { class: 'small muted', text: 'Przykłady:' }), ...P.map((p) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small mono', text: p });
+      b.addEventListener('click', () => { $('#rzSlowo').value = p; rReset(); });
+      return b;
+    }));
+  }
+
+  /* ─── Część C: do której klasy? ─── */
+  const PYT = [
+    ['Identyfikatory w Pythonie (tylko ASCII): litera lub „_”, potem dowolnie wiele liter, cyfr i „_”.', 3, 'Wystarczą stany „początek”, „w środku identyfikatora” i „błąd”. Pamięć stała.'],
+    ['Liczby w zapisie dwójkowym podzielne przez 3, np. 11, 110, 1001.', 3, 'Czytając bity od lewej, wystarczy pamiętać resztę z dzielenia przez 3: dopisanie bitu b zmienia resztę r na (2r + b) mod 3. Trzy stany.'],
+    ['Palindromy nad {a, b}, np. abba, aba.', 2, 'Trzeba zapamiętać pierwszą połowę i porównać ją z drugą w odwrotnej kolejności — to robi stos. Automat skończony nie zapamięta dowolnie długiej połowy.'],
+    ['Słowa nad {a, b}, w których jest tyle samo liter a co b, w dowolnej kolejności (np. abba, baab).', 2, 'Wystarczy licznik różnicy (a − b), ale może on rosnąć bez ograniczeń. Licznik to najprostszy stos; stała pamięć nie wystarczy.'],
+    ['aⁿb²ⁿ: n liter a, potem dwa razy więcej liter b (n ≥ 1).', 2, 'Jak aⁿbⁿ: licznik (stos), tylko każde a „zamawia” dwa b. Gramatyka: S → a S b b | a b b.'],
+    ['Słowa nad {a, b} kończące się na „ab”.', 3, 'Wystarczy pamiętać dwa ostatnie symbole: kilka stanów.'],
+    ['{aⁿbⁿ : 1 ≤ n ≤ 1000}', 3, 'Ten język jest skończony (1000 słów), a każdy język skończony jest regularny: automat może mieć osobny stan na każde n ≤ 1000. Ograniczenie n zmienia klasę.'],
+    ['aⁿbᵐ: najpierw co najmniej jedno a, potem co najmniej jedno b (n i m dowolne, niezależne).', 3, 'Nie trzeba porównywać n z m, więc nie trzeba liczyć. Wystarczą stany „czytam a” i „czytam b”. Porównaj z aⁿbⁿ.'],
+    ['aᵖ, gdzie p jest liczbą pierwszą (a, aa, aaa, aaaaa, …).', 1, 'Nie jest bezkontekstowy (bez dowodu; dla alfabetu jednoliterowego języki bezkontekstowe są regularne, a ten nie jest). Sprawdzenie pierwszości długości mieści się w pamięci proporcjonalnej do długości słowa.'],
+    ['a^(n²): słowa, których długość jest kwadratem liczby naturalnej (a, aaaa, aaaaaaaaa, …).', 1, 'Jak przy liczbach pierwszych: to nie jest język bezkontekstowy (bez dowodu), ale da się go rozpoznać w pamięci liniowej względem długości słowa.'],
+    ['Programy w Pythonie, które zatrzymują się po uruchomieniu bez danych wejściowych.', 0, 'To język stopu. Maszyna Turinga potwierdzi zatrzymanie, uruchamiając program, ale dla programów zapętlonych nie da odpowiedzi „nie”. Klasa 0 i nierozstrzygalny (W4).'],
+    ['Wszystkie słowa nad {a, b} (Σ*), łącznie ze słowem pustym.', 3, 'Automat z jednym stanem akceptującym wszystko. Większy język nie znaczy trudniejszy: Σ* zawiera każdy inny język nad {a, b}.'],
+  ];
+  let kol = [], nr = 0, dobre = 0, odp = false;
+  function kStart() { kol = [...PYT].sort(() => Math.random() - 0.5).slice(0, 10); nr = 0; dobre = 0; kPokaz(); }
+  function kPokaz() {
+    odp = false;
+    for (const b of $$('#klOdp button')) { b.disabled = false; b.className = 'btn ghost'; }
+    $('#klFb').textContent = ''; $('#klFb').className = 'fbline'; $('#klWyj').textContent = ''; $('#klDalej').hidden = true;
+    if (nr >= kol.length) {
+      $('#klNr').textContent = 'koniec'; $('#klQ').textContent = `Wynik: ${dobre} z ${kol.length}.`;
+      for (const b of $$('#klOdp button')) b.disabled = true;
+      $('#klDalej').hidden = false; $('#klDalej').textContent = 'Jeszcze raz'; return;
+    }
+    $('#klNr').textContent = `${nr + 1} / ${kol.length}`; $('#klWynik').textContent = `poprawne: ${dobre}`;
+    $('#klQ').textContent = kol[nr][0]; $('#klDalej').textContent = 'Dalej →';
+  }
+  function kOdp(k, btn) {
+    if (odp || nr >= kol.length) return;
+    odp = true; const [, dob, wyj] = kol[nr];
+    for (const b of $$('#klOdp button')) { b.disabled = true; if (+b.dataset.k === dob) b.className = 'btn dobra'; }
+    if (k === dob) { dobre++; $('#klFb').className = 'fbline dobrze'; $('#klFb').textContent = 'Dobrze.'; }
+    else { btn.className = 'btn ghost zla'; $('#klFb').className = 'fbline zle'; $('#klFb').textContent = `Nie — najniższa klasa to ${dob}.`; }
+    $('#klWyj').textContent = wyj; $('#klWynik').textContent = `poprawne: ${dobre}`;
+    $('#klDalej').hidden = false;
+  }
+
+  function init() {
+    $('#grPrzyk').replaceChildren(el('span', { class: 'small muted', text: 'Gramatyki:' }), ...GRAM.map((q) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small', text: q.n });
+      b.addEventListener('click', () => { $('#grTekst').value = q.g; $('#grTest').value = q.test; $('#grMax').value = q.max; zaladuj(); });
+      return b;
+    }));
+    $('#grTekst').value = GRAM[0].g; $('#grMax').value = GRAM[0].max;
+    $('#grTekst').addEventListener('input', zaladuj);
+    $('#grMax').addEventListener('input', () => { if (G) rysujSlowa(); });
+    $('#grLos').addEventListener('click', () => { if (G) losuj(); });
+    $('#grOdNowa').addEventListener('click', () => { if (G) { wypr = [[G.start]]; wybrany = null; rysujWypr(); } });
+    $('#grTestOk').addEventListener('click', test);
+    $('#grTest').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); test(); } });
+    zaladuj();
+    for (const b of $$('#rzJezyk button')) b.addEventListener('click', () => {
+      for (const c of $$('#rzJezyk button')) c.setAttribute('aria-pressed', String(c === b));
+      jz = b.dataset.w; rPrzyk(); $('#rzSlowo').value = jz === 'anbn' ? 'aaabbb' : AUT[jz].przyk[0]; rReset();
+    });
+    $('#rzSlowo').addEventListener('input', rReset);
+    $('#rzKrok').addEventListener('click', rKrok);
+    $('#rzKoniec').addEventListener('click', () => { let g = 0; while (!R.koniec && g++ < 100) rKrok(); });
+    $('#rzReset').addEventListener('click', rReset);
+    rPrzyk(); rReset();
+    for (const b of $$('#klOdp button')) b.addEventListener('click', () => kOdp(+b.dataset.k, b));
+    $('#klDalej').addEventListener('click', () => { if (nr >= kol.length) kStart(); else { nr++; kPokaz(); } });
+    kStart();
+  }
+  return { init, _t: { parsuj, nalezy: (g, w) => { G = parsuj(g); return nalezy(w); }, slowa: (g, m) => { G = parsuj(g); return slowa(m); } } };
+})();
+
 /* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
 const Ustawienia = (() => {
   let roboczy = null;
@@ -2135,7 +2536,7 @@ const Ustawienia = (() => {
 })();
 
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'warsztat', 'wyscig', 'stop', 'przekora', 'wieze', 'ustawienia'];
+const WIDOKI = ['start', 'warsztat', 'wyscig', 'stop', 'przekora', 'wieze', 'jezyki', 'ustawienia'];
 let biezacy = null;
 function nawiguj() {
   const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
@@ -2148,7 +2549,7 @@ function nawiguj() {
   for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 4 · ćwiczenia', warsztat: 'Warsztat maszyny Turinga · W4', wyscig: 'Wyścig bobrów · W4', stop: 'Czy to się zatrzyma? · W4', przekora: 'Przekora · W4', wieze: 'Wieże Knutha · W4', ustawienia: 'Ustawienia prowadzącego · W4' }[v];
+  document.title = { start: 'Wykład 4 · ćwiczenia', warsztat: 'Warsztat maszyny Turinga · W4', wyscig: 'Wyścig bobrów · W4', stop: 'Czy to się zatrzyma? · W4', przekora: 'Przekora · W4', wieze: 'Wieże Knutha · W4', jezyki: 'Gramatyki i automaty · W4', ustawienia: 'Ustawienia prowadzącego · W4' }[v];
 }
 Grupa.init();
 Warsztat.init();
@@ -2156,6 +2557,7 @@ Bobry.init();
 Stop.init();
 Przekora.init();
 Wieze.init();
+Jezyki.init();
 Ustawienia.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
