@@ -78,8 +78,12 @@ bezczynności, a zjazdy NST odbywają się co dwa tygodnie.
 2. Slajd z pytaniem ma kod QR. W widoku prowadzącego kliknij pytanie → **Otwórz**.
 3. **Zamknij** zatrzymuje przyjmowanie głosów. **Odsłoń** pokazuje poprawną odpowiedź i wyniki
    na telefonach.
-4. Klawisze: `O` otwórz/zamknij, `S` odsłoń, `→`/`←` następne/poprzednie, `P` pełny ekran wykresu.
-5. Kilka grup naraz: parametr `?sala=nazwa` w obu adresach (domyślnie `wyklad`).
+4. Klawisze: `O` otwórz/zamknij, `S` odsłoń, `N` nowa runda, `→`/`←` następne/poprzednie,
+   `P` projekcja w tym oknie (powrót: `P` lub `Esc`), `W` osobne okno projekcji.
+5. **Okno projekcji** (`W` lub przycisk): osobne okno z pytaniem, wynikami i kodem QR, sterowane z panelu.
+   Przeciągnij je na rzutnik (w Chrome/Edge otworzy się od razu na drugim ekranie po jednorazowej zgodzie),
+   `F` lub dwuklik = pełny ekran. Okno nie łączy się z bazą: dostaje stan od panelu w tej samej przeglądarce.
+6. Kilka grup naraz: parametr `?sala=nazwa` w obu adresach (domyślnie `wyklad`).
 
 SDK Firebase jest ładowane z `www.gstatic.com/firebasejs/13.4.0/`. Jeśli ta wersja przestanie być
 dostępna, zmień numer w `wspolne.js`.

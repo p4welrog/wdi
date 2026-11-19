@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Głosowanie · projekcja</title>
+<link rel="stylesheet" href="glos.css">
+<style>
+body { font-size: clamp(14px, min(2vw, 3.2vh), 34px); height: 100vh; margin: 0; display: grid; grid-template-columns: 1fr auto; overflow: hidden; }
+main { padding: 3vh 2vw 2vh 4vw; max-width: none; overflow: hidden; }
+.tresc { font-size: 1.45em; margin-bottom: .5em; }
+#licznik { color: var(--text-2); margin: .3em 0; }
+#licznik b { font-size: 1.3em; color: var(--text); }
+.slupki { gap: .3em; }
+.wiersz .tor { height: 1.15em; }
+.dolny { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: .4em; padding: 0 3vw 4vh 1vw; color: var(--text-2); text-align: center; font-size: .8em; }
+.dolny img { width: 8em; height: 8em; background: #fff; padding: .25em; border-radius: .3em; }
+.dolny .adr { font-weight: 700; color: var(--text); }
+#czekaj { color: var(--muted); }
+#pomoc { position: fixed; top: 8px; right: 12px; font-size: 13px; color: var(--muted); opacity: .8; }
+:fullscreen #pomoc { display: none; }
+</style>
+</head>
+<body>
+<div id="pomoc">Przeciągnij okno na rzutnik, potem F lub dwuklik = pełny ekran</div>
+<main>
+  <p class="tresc" id="tresc"><span id="czekaj">Czekam na panel prowadzącego…</span></p>
+  <div id="opis"></div>
+  <div id="poprawna"></div>
+  <div id="licznik"></div>
+  <div id="wyniki"></div>
+</main>
+<div class="dolny">
+  <img src="qr.svg" alt="Kod QR do strony głosowania">
+  <div>Głosuj na telefonie:<br><span class="adr" id="adr"></span></div>
+</div>
+<script type="module">
+import { SALA, esc, rysujWyniki, opisPoprawnej } from "./wspolne.js";
+import { adresPubliczny } from "./konfiguracja.js";
+const $ = (id) => document.getElementById(id);
+$("adr").textContent = adresPubliczny + (SALA !== "wyklad" ? "?sala=" + SALA : "");
+
+// Okno dostaje stan wyłącznie od panelu prowadzącego (ta sama przeglądarka), bez własnych zapytań do bazy.
+const kanal = new BroadcastChannel("glos-projekcja:" + SALA);
+kanal.onmessage = ({ data: d }) => {
+  if (!d || d.typ !== "stan") return;
+  if (!d.p) { $("tresc").innerHTML = `<span id="czekaj">Za chwilę pytanie.</span>`; ["opis", "poprawna", "licznik", "wyniki"].forEach((x) => $(x).innerHTML = ""); return; }
+  const p = d.p;
+  $("tresc").textContent = p.tresc;
+  $("opis").innerHTML = p.typ === "skala" && p.etykiety ? `<p class="info">${p.min} = ${esc(p.etykiety[0])}, ${p.max} = ${esc(p.etykiety[1])}</p>` : "";
+  const op = d.odslona ? opisPoprawnej(p) : null;
+  $("poprawna").innerHTML = op ? `<div class="poprawna">Poprawna odpowiedź: ${esc(op)}</div>` : "";
+  $("licznik").innerHTML = d.zadane ? `Odpowiedzi: <b>${d.licznik}</b>${d.otwarte ? " · głosowanie otwarte" : ""}` : "";
+  if (d.s) rysujWyniki($("wyniki"), p, d.s, { odslona: d.odslona, pelne: p });
+  else $("wyniki").innerHTML = "";
+};
+kanal.postMessage({ typ: "witaj" });
+
+const pelny = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+document.addEventListener("keydown", (e) => { if (e.key.toLowerCase() === "f") pelny(); });
+document.addEventListener("dblclick", pelny);
+</script>
+</body>
+</html>

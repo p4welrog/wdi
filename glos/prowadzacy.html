@@ -90,7 +90,7 @@ label.ch { display: flex; gap: 6px; align-items: center; font-size: .9rem; color
           <button id="bSym" hidden>Symuluj 30 głosów</button>
           <button id="bWyl">Wyloguj</button>
         </div>
-        <p class="male">Klawisze: O otwórz/zamknij · S odsłoń · N nowa runda · ←/→ poprzednie/następne · P projekcja</p>
+        <p class="male">Klawisze: O otwórz/zamknij · S odsłoń · N nowa runda · ←/→ poprzednie/następne · P projekcja w tym oknie · W okno projekcji</p>
       </div>
     </aside>
 
@@ -102,6 +102,7 @@ label.ch { display: flex; gap: 6px; align-items: center; font-size: .9rem; color
           <button id="bZamknij">Zamknij</button>
           <button id="bOdslon">Odsłoń</button>
           <button id="bNowa">Nowa runda</button>
+          <button id="bOkno" title="Osobne okno z pytaniem i wynikami na rzutnik">Okno projekcji</button>
           <button id="bProj">Projekcja</button>
         </div>
         <p id="slajd" class="male tylko-pulpit"></p>
@@ -225,19 +226,42 @@ function rysujPytanie() {
 
 function rysujWynikiBiez() {
   const p = biezace();
-  if (!p) return;
+  if (!p) { nadaj(null); return; }
   const r = rundy.get(p.pid);
   const g = (r && glosy.get(r)) || [];
   $("licznik").innerHTML = `Odpowiedzi: <b>${g.length}</b>`;
   const naSali = czyNaSali(p);
-  if (!r || ($("ukryjWyniki").checked && naSali && sala.otwarte)) { $("wyniki").innerHTML = ""; return; }
   const odsl = naSali && sala.odslona;
+  const stanOkna = { typ: "stan", p, zadane: !!r, licznik: g.length, otwarte: naSali && sala.otwarte, odslona: odsl, s: null };
+  if (!r || ($("ukryjWyniki").checked && naSali && sala.otwarte)) { $("wyniki").innerHTML = ""; nadaj(stanOkna); return; }
   const uk = ukryte.get(r) || new Set();
-  rysujWyniki($("wyniki"), p, podsumuj(p, g, uk), {
+  stanOkna.s = podsumuj(p, g, uk);
+  nadaj(stanOkna);
+  rysujWyniki($("wyniki"), p, stanOkna.s, {
     odslona: odsl, pelne: p,
     naUkryj: p.typ === "tekst" ? (s) => { uk.add(s); ukryte.set(r, uk); rysujWynikiBiez(); if (odsl) publikuj(); } : null,
   });
 }
+
+// ───────── okno projekcji (osobne okno tej samej przeglądarki, stan przez BroadcastChannel) ─────────
+const kanalOkna = new BroadcastChannel("glos-projekcja:" + SALA);
+let ostatniStan = { typ: "stan", p: null };
+function nadaj(st) { ostatniStan = st || { typ: "stan", p: null }; kanalOkna.postMessage(ostatniStan); }
+kanalOkna.onmessage = ({ data }) => { if (data && data.typ === "witaj") kanalOkna.postMessage(ostatniStan); };
+$("bOkno").addEventListener("click", async () => {
+  const url = "projekcja.html" + location.search;
+  let cechy = "popup,width=1280,height=720";
+  // Chrome/Edge: jeśli przeglądarka zna drugi ekran, otwórz okno od razu na nim (pyta raz o zgodę).
+  try {
+    if ("getScreenDetails" in window) {
+      const d = await window.getScreenDetails();
+      const inny = d.screens.find((s) => s !== d.currentScreen);
+      if (inny) cechy = `popup,left=${inny.availLeft},top=${inny.availTop},width=${inny.availWidth},height=${inny.availHeight}`;
+    }
+  } catch { /* brak zgody — zwykłe okno */ }
+  const w = window.open(url, "glos-projekcja", cechy);
+  if (!w) $("blad").textContent = "Przeglądarka zablokowała okno — zezwól na wyskakujące okna dla tej strony.";
+});
 
 // ───────── akcje ─────────
 async function otworz(nowa = false) {
@@ -347,6 +371,7 @@ document.addEventListener("keydown", (e) => {
   if (k === "o") { const p = biezace(); czyNaSali(p) && sala.otwarte ? zamknij() : otworz(false); }
   else if (k === "s") odslon();
   else if (k === "n") otworz(true);
+  else if (k === "w") $("bOkno").click();
   else if (k === "p" || (k === "escape" && document.body.classList.contains("projekcja"))) document.body.classList.toggle("projekcja");
   else if (e.key === "ArrowRight") wybierz(akt + 1);
   else if (e.key === "ArrowLeft") wybierz(akt - 1);
