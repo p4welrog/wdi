@@ -1,0 +1,25 @@
+{
+  "wyklad": "W02",
+  "pytania": [
+    { "id": "zaskoczenie", "typ": "wybor", "slajd": "Która wiadomość zaskoczy bardziej?",
+      "tresc": "Która wiadomość bardziej Państwa zaskoczy?",
+      "opcje": ["„Jutro wzejdzie słońce”", "„Jutro zajęcia są odwołane”"], "poprawna": 1 },
+    { "id": "logarytmy", "typ": "skala", "min": 1, "max": 5, "etykiety": ["wcale", "bardzo pewnie"],
+      "tresc": "Jak pewnie czujesz się z logarytmami (np. log₂ 8 = 3)?" },
+    { "id": "kod-II", "typ": "liczba", "slajd": "Odczytaj 001001 w kodzie II",
+      "tresc": "Na ile sposobów można odczytać ciąg 001001 w kodzie II?",
+      "poprawna": 2, "min": 0, "max": 100 },
+    { "id": "prefiksowy", "typ": "wybor", "slajd": "Kod a → 0, b → 01, c → 11",
+      "tresc": "Kod: a → 0, b → 01, c → 11. Czy jest prefiksowy?",
+      "opcje": ["Tak", "Nie"], "poprawna": 1 },
+    { "id": "jednoznaczny", "typ": "wybor", "slajd": "Kod a → 0, b → 01, c → 11",
+      "tresc": "Czy każdy ciąg zer i jedynek zakodowany tym kodem da się odczytać jednoznacznie?",
+      "opcje": ["Tak", "Nie"], "poprawna": 0 },
+    { "id": "kraft", "typ": "liczba", "slajd": "Kod a → 0, b → 01, c → 11",
+      "tresc": "Policz sumę 2^(−l₁) + 2^(−l₂) + 2^(−l₃) dla tego kodu.",
+      "poprawna": 1, "tolerancja": 0.001 },
+    { "id": "abrakadabra", "typ": "liczba", "slajd": "Huffman: ABRAKADABRA", "jednostka": "bitów",
+      "tresc": "Ile bitów zajmie słowo ABRAKADABRA zakodowane kodem Huffmana?",
+      "poprawna": 23, "min": 0, "max": 1000 }
+  ]
+}

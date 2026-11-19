@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Głosowanie · Wprowadzenie do informatyki</title>
+<link rel="stylesheet" href="glos.css">
+</head>
+<body>
+<header><div class="wrap"><h1>Głosowanie</h1><span class="sub">Wprowadzenie do informatyki · SWPS</span></div></header>
+<main class="wrap">
+  <div id="demo" class="demo" hidden>Tryb próbny: głosy zostają w tej przeglądarce.</div>
+  <div id="ekran" class="karta"><p class="info">Łączenie…</p></div>
+  <p class="info" style="font-size:.85rem">Głosowanie jest anonimowe. Nie zbieramy danych osobowych.</p>
+</main>
+<script type="module">
+import { polacz, SALA, znak, esc, parsujLiczbe, rysujWyniki, opisPoprawnej } from "./wspolne.js";
+
+const ekran = document.getElementById("ekran");
+let api, stan = null, wyslane = {}, wybor = null;
+try { wyslane = JSON.parse(localStorage.getItem("glos-wyslane:" + SALA)) || {}; } catch {}
+const zapamietaj = (runda, w) => {
+  wyslane = { [runda]: w }; // tylko bieżąca runda
+  localStorage.setItem("glos-wyslane:" + SALA, JSON.stringify(wyslane));
+};
+
+function opisGlosu(p, w) {
+  if (p.typ === "wybor") return znak(p, w) + (p.opcje[w] ? ". " + p.opcje[w] : "");
+  if (p.typ === "tekst") return String(w).split("\n").join(", ");
+  return String(w).replace(".", ",") + (p.jednostka ? " " + p.jednostka : "");
+}
+
+async function wyslij(w) {
+  const r = stan.runda;
+  const potw = ekran.querySelector(".potw");
+  try {
+    await api.glosuj(r, w);
+    zapamietaj(r, w);
+    if (stan && stan.runda === r) rysuj();
+  } catch (e) {
+    console.error(e);
+    if (potw) { potw.className = "potw blad"; potw.textContent = "Nie udało się wysłać. Głosowanie mogło zostać zamknięte."; }
+  }
+}
+
+function formularz(p) {
+  const moj = wyslane[stan.runda];
+  if (p.typ === "wybor") {
+    return `<div class="opcje">${p.opcje.map((o, i) =>
+      `<button class="opcja${moj === i ? " wybrana" : ""}" data-w="${i}"><span class="lit">${znak(p, i)}</span><span>${esc(o)}</span></button>`).join("")}</div>`;
+  }
+  if (p.typ === "skala") {
+    let b = "";
+    for (let v = p.min; v <= p.max; v++) b += `<button class="${moj === v ? "wybrana" : ""}" data-w="${v}">${v}</button>`;
+    const et = p.etykiety || [];
+    return `<div class="skala">${b}</div><div class="skala-et"><span>${esc(et[0] || "")}</span><span>${esc(et[1] || "")}</span></div>`;
+  }
+  if (p.typ === "liczba") {
+    return `<form class="pola"><input type="text" inputmode="decimal" autocomplete="off" name="x"
+      placeholder="Wpisz liczbę${p.jednostka ? " (" + esc(p.jednostka) + ")" : ""}" value="${moj !== undefined ? String(moj).replace(".", ",") : ""}">
+      <button class="glowny">Wyślij</button></form>`;
+  }
+  const ile = Math.min(3, Math.max(1, p.ile || 1)), maks = Math.min(60, p.maks || 40);
+  const stare = moj !== undefined ? String(moj).split("\n") : [];
+  let pola = "";
+  for (let i = 0; i < ile; i++) pola += `<input type="text" maxlength="${maks}" autocomplete="off" name="t${i}"
+    placeholder="${ile > 1 ? "Słowo " + (i + 1) : "Twoja odpowiedź"}" value="${esc(stare[i] || "")}">`;
+  return `<form class="pola">${pola}<button class="glowny">Wyślij</button></form>`;
+}
+
+function rysuj() {
+  if (!stan || !stan.pytanie) {
+    ekran.innerHTML = `<p class="tresc">Czekaj na pytanie.</p><p class="info">Pytanie pojawi się tu samo, gdy prowadzący je otworzy. Nie trzeba odświeżać strony.</p>`;
+    return;
+  }
+  const p = stan.pytanie, moj = wyslane[stan.runda];
+  let h = `<p class="tresc">${esc(p.tresc)}</p>`;
+  if (stan.odslona) {
+    const pelne = { ...p, poprawna: stan.poprawna, tolerancja: stan.tolerancja };
+    const op = opisPoprawnej(pelne);
+    if (op) h += `<div class="poprawna">Poprawna odpowiedź: ${esc(op)}</div>`;
+    if (moj !== undefined) h += `<p class="info">Twoja odpowiedź: <b>${esc(opisGlosu(p, moj))}</b></p>`;
+    h += `<div id="wyniki"></div>`;
+    ekran.innerHTML = h;
+    rysujWyniki(document.getElementById("wyniki"), p, stan.wyniki, { odslona: true, pelne });
+    return;
+  }
+  if (!stan.otwarte) {
+    h += `<p class="info">Głosowanie zamknięte.</p>`;
+    if (moj !== undefined) h += `<p class="info">Twoja odpowiedź: <b>${esc(opisGlosu(p, moj))}</b></p>`;
+    ekran.innerHTML = h;
+    return;
+  }
+  h += formularz(p);
+  h += `<div class="potw">${moj !== undefined ? "Zapisano: " + esc(opisGlosu(p, moj)) + ". Możesz zmienić odpowiedź do zamknięcia głosowania." : ""}</div>`;
+  ekran.innerHTML = h;
+  ekran.querySelectorAll("[data-w]").forEach((b) => b.addEventListener("click", () => wyslij(Number(b.dataset.w))));
+  const f = ekran.querySelector("form");
+  if (f) f.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const potw = ekran.querySelector(".potw");
+    if (p.typ === "liczba") {
+      const x = parsujLiczbe(f.x.value);
+      if (x === null) { potw.className = "potw blad"; potw.textContent = "To nie jest liczba (przykład: 2,5)."; return; }
+      if ((p.min !== undefined && x < p.min) || (p.max !== undefined && x > p.max)) {
+        potw.className = "potw blad"; potw.textContent = `Podaj liczbę z zakresu ${p.min ?? "−∞"}…${p.max ?? "∞"}.`; return;
+      }
+      wyslij(x);
+    } else {
+      const t = [...f.querySelectorAll("input")].map((i) => i.value.trim().replace(/\s+/g, " ")).filter(Boolean);
+      if (!t.length) { potw.className = "potw blad"; potw.textContent = "Wpisz odpowiedź."; return; }
+      wyslij(t.join("\n"));
+    }
+  });
+}
+
+(async () => {
+  try {
+    api = await polacz();
+    document.getElementById("demo").hidden = !api.demo;
+    await api.zalogujAnonimowo();
+    api.sluchajSali((s) => {
+      const nowaRunda = !stan || !s || stan.runda !== s.runda;
+      const bylFormularz = stan && s && !nowaRunda && stan.otwarte === s.otwarte && stan.odslona === s.odslona;
+      stan = s;
+      // nie przerysowuj formularza w trakcie pisania, jeśli stan się istotnie nie zmienił
+      if (!bylFormularz) rysuj();
+    }, (e) => { console.error(e); ekran.innerHTML = `<p class="blad">Brak połączenia z serwerem głosowania. Odśwież stronę.</p>`; });
+  } catch (e) {
+    console.error(e);
+    ekran.innerHTML = `<p class="blad">Nie udało się połączyć. Sprawdź internet i odśwież stronę.</p>`;
+  }
+})();
+</script>
+</body>
+</html>

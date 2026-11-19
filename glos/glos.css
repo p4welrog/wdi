@@ -1,0 +1,50 @@
+:root { --head-bg: #1f4e79; --head-ink: #fff; --bg: #f6f7f9; --surface: #fff; --border: #dfe3e8; --text: #1a1a1a; --text-2: #4b5563; --muted: #6b7280; --accent: #1f4e79; --accent-ink: #fff; --accent-soft: #e8eef5; --ok: #2e7d5b; --ok-soft: #e3f2ea; --gold: #b7791f; --gold-soft: #fbf3e4; --err: #c0504d; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #111418; --surface: #16191d; --border: #2c333b; --text: #eceff3; --text-2: #b8c0ca; --muted: #8b95a1; --accent: #7fb0e0; --accent-ink: #0b1520; --accent-soft: #1c2a39; --head-bg: #182a3f; --head-ink: #eceff3; --ok: #5fc596; --ok-soft: #173126; --gold: #e0a84a; --gold-soft: #2c2415; --err: #e57873; color-scheme: dark; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.5 "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+header { background: var(--head-bg); color: var(--head-ink); padding: 14px 0; }
+header .wrap { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+header h1 { margin: 0; font-size: 1.15rem; }
+header .sub { opacity: .8; font-size: .9rem; }
+.wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+main { padding: 20px 0 40px; }
+.karta { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin: 12px 0; }
+.tresc { font-size: 1.25em; font-weight: 600; margin: 0 0 14px; white-space: pre-line; }
+.info { color: var(--text-2); }
+.pusto { color: var(--muted); }
+.blad { color: var(--err); }
+.demo { background: var(--gold-soft); color: var(--gold); border: 1px solid var(--gold); border-radius: 8px; padding: 6px 10px; font-size: .85rem; margin: 8px 0; }
+button, .btn { font: inherit; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); padding: 10px 14px; cursor: pointer; }
+button:disabled { opacity: .5; cursor: default; }
+button.glowny { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+input[type=text], input[type=email], input[type=password], select, textarea { font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); width: 100%; }
+.opcje { display: grid; gap: 10px; }
+.opcja { text-align: left; display: flex; gap: 12px; align-items: center; padding: 14px; font-size: 1.05rem; }
+.opcja .lit { flex: none; width: 2em; height: 2em; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.opcja.wybrana { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent) inset; }
+.skala { display: flex; gap: 6px; }
+.skala button { flex: 1; padding: 14px 0; font-size: 1.15rem; font-weight: 600; }
+.skala button.wybrana { background: var(--accent); color: var(--accent-ink); }
+.skala-et { display: flex; justify-content: space-between; color: var(--muted); font-size: .85rem; margin-top: 6px; gap: 12px; }
+.pola { display: grid; gap: 8px; margin-bottom: 10px; }
+.potw { margin-top: 12px; color: var(--ok); font-weight: 600; }
+.poprawna { background: var(--ok-soft); color: var(--ok); border-radius: 8px; padding: 8px 12px; font-weight: 600; margin: 8px 0 12px; }
+/* wyniki */
+.slupki { display: grid; gap: 8px; }
+.wiersz { display: grid; grid-template-columns: minmax(6em, 38%) 1fr 5.5em; gap: 10px; align-items: center; }
+.wiersz .et { overflow-wrap: anywhere; }
+.wiersz .tor { background: var(--accent-soft); border-radius: 6px; height: 1.4em; overflow: hidden; }
+.wiersz .pas { background: var(--accent); height: 100%; border-radius: 6px; transition: width .4s; }
+.wiersz.dobry .pas { background: var(--ok); }
+.wiersz.dobry .et { color: var(--ok); font-weight: 700; }
+.wiersz .ile { text-align: right; font-variant-numeric: tabular-nums; }
+.wiersz .ile span { color: var(--muted); font-size: .85em; }
+.chmura { text-align: center; line-height: 1.25; padding: 8px 0; }
+.slowo { display: inline-block; margin: 2px 8px; color: var(--accent); font-weight: 600; }
+.slowo:nth-child(3n+2) { color: var(--gold); }
+.slowo:nth-child(3n) { color: var(--text-2); }
+.slowo.dobry { color: var(--ok); text-decoration: underline; }
+.slowo.klik { cursor: pointer; }
+.slowo.klik:hover { text-decoration: line-through; }
+.staty { color: var(--muted); margin-top: 12px; font-size: .85em; }
+.staty b { color: var(--text); }

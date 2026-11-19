@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Głosowanie · prowadzący</title>
+<link rel="stylesheet" href="glos.css">
+<style>
+body { font-size: 18px; }
+.wrap { max-width: 1400px; }
+.uklad { display: grid; grid-template-columns: 320px 1fr; gap: 18px; align-items: start; }
+aside .karta { padding: 12px; }
+.lista { display: grid; gap: 6px; max-height: 60vh; overflow: auto; }
+.poz { text-align: left; padding: 8px 10px; font-size: .9rem; display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; }
+.poz .nr { color: var(--muted); font-variant-numeric: tabular-nums; grid-row: span 2; }
+.poz .typ { color: var(--muted); font-size: .8rem; }
+.poz.akt { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent) inset; }
+.poz.ma::after { content: "●"; color: var(--gold); position: absolute; }
+.pasek { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 10px 0; }
+.status { font-weight: 700; padding: 4px 10px; border-radius: 999px; font-size: .85rem; background: var(--accent-soft); color: var(--accent); }
+.status.otwarte { background: var(--ok-soft); color: var(--ok); }
+.status.odsloniete { background: var(--gold-soft); color: var(--gold); }
+#glowny .tresc { font-size: 1.6em; }
+#licznik { font-size: 1.1em; color: var(--text-2); }
+#licznik b { font-size: 1.5em; color: var(--text); }
+#wyniki { font-size: 1.15em; min-height: 120px; }
+.dolny { display: flex; gap: 16px; align-items: center; justify-content: flex-end; color: var(--text-2); }
+.dolny img { width: 110px; height: 110px; background: #fff; padding: 6px; border-radius: 8px; }
+.dolny .adr { font-size: 1.3em; font-weight: 700; color: var(--text); }
+.szybkie { display: grid; gap: 8px; }
+.szybkie .r { display: flex; gap: 8px; }
+.male { font-size: .85rem; color: var(--muted); }
+label.ch { display: flex; gap: 6px; align-items: center; font-size: .9rem; color: var(--text-2); }
+.projekcja aside, .projekcja header, .projekcja .tylko-pulpit { display: none !important; }
+.projekcja { font-size: 26px; }
+.projekcja #demo { display: none; }
+.projekcja .uklad { grid-template-columns: 1fr; }
+.projekcja #glowny { border: none; background: transparent; }
+.projekcja .dolny img { width: 220px; height: 220px; }
+.projekcja .wrap { max-width: none; padding: 0 3vw; }
+@media (max-width: 900px) { .uklad { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Głosowanie · prowadzący</h1><span class="sub" id="kto"></span></div></header>
+<main class="wrap">
+  <div id="demo" class="demo" hidden>Tryb próbny: dane tylko w tej przeglądarce. Otwórz stronę studenta w drugiej karcie z <code>?demo=1</code>.</div>
+  <div id="blad" class="blad"></div>
+
+  <section id="logowanie" class="karta" hidden style="max-width:420px">
+    <form id="fLog" class="pola">
+      <input type="email" name="e" placeholder="E-mail" autocomplete="username" required>
+      <input type="password" name="h" placeholder="Hasło" autocomplete="current-password" required>
+      <button class="glowny">Zaloguj</button>
+    </form>
+  </section>
+
+  <div id="panel" class="uklad" hidden>
+    <aside>
+      <div class="karta">
+        <select id="wyklad"></select>
+        <div class="pasek"><label class="ch"><input type="checkbox" id="ukryjWyniki"> ukryj wyniki do zamknięcia</label></div>
+        <div id="lista" class="lista"></div>
+      </div>
+      <div class="karta">
+        <b>Szybkie pytanie</b> <span class="male">(treść na slajdzie)</span>
+        <form id="fSzybkie" class="szybkie" style="margin-top:8px">
+          <input type="text" name="tresc" placeholder="Treść (opcjonalnie)">
+          <div class="r">
+            <select name="typ">
+              <option value="abcd">A B C D</option>
+              <option value="abcde">A B C D E</option>
+              <option value="n4">1 2 3 4</option>
+              <option value="n5">1 2 3 4 5</option>
+              <option value="tn">Tak / Nie</option>
+              <option value="liczba">Liczba</option>
+              <option value="slowo">Słowo</option>
+              <option value="slowa3">Trzy słowa</option>
+              <option value="skala5">Skala 1–5</option>
+            </select>
+            <input type="text" name="poprawna" placeholder="Poprawna" style="max-width:150px">
+          </div>
+          <button class="glowny">Otwórz szybkie pytanie</button>
+        </form>
+      </div>
+      <div class="karta tylko-pulpit">
+        <div class="pasek" style="margin:0">
+          <button id="bCsv">Eksport CSV</button>
+          <button id="bSym" hidden>Symuluj 30 głosów</button>
+          <button id="bWyl">Wyloguj</button>
+        </div>
+        <p class="male">Klawisze: O otwórz/zamknij · S odsłoń · N nowa runda · ←/→ poprzednie/następne · P projekcja</p>
+      </div>
+    </aside>
+
+    <section>
+      <div id="glowny" class="karta">
+        <div class="pasek tylko-pulpit">
+          <span id="status" class="status">—</span>
+          <button id="bOtworz" class="glowny">Otwórz</button>
+          <button id="bZamknij">Zamknij</button>
+          <button id="bOdslon">Odsłoń</button>
+          <button id="bNowa">Nowa runda</button>
+          <button id="bProj">Projekcja</button>
+        </div>
+        <p id="slajd" class="male tylko-pulpit"></p>
+        <p class="tresc" id="tresc">Wybierz pytanie z listy.</p>
+        <div id="opisOpcji"></div>
+        <div id="poprawna"></div>
+        <div id="licznik"></div>
+        <div id="wyniki"></div>
+      </div>
+      <div class="dolny">
+        <div style="text-align:right">Głosuj na telefonie:<br><span class="adr" id="adr"></span></div>
+        <img src="qr.svg" alt="Kod QR do strony głosowania">
+      </div>
+    </section>
+  </div>
+</main>
+<script type="module">
+import { polacz, SALA, LITERY, znak, esc, czescPubliczna, podsumuj, rysujWyniki, opisPoprawnej, parsujLiczbe } from "./wspolne.js";
+import { adresPubliczny } from "./konfiguracja.js";
+
+const $ = (id) => document.getElementById(id);
+const pokazBlad = (e) => {
+  console.error(e);
+  const m = String(e && e.message || e);
+  $("blad").textContent = /permission|insufficient/i.test(m)
+    ? "Brak uprawnień. Sprawdź, czy UID prowadzącego jest wpisany w regułach Firestore (firestore.rules)."
+    : "Błąd: " + m;
+};
+
+let api;
+let pytania = [];           // bieżący zestaw (z pliku albo szybkie)
+let akt = -1;               // indeks wybranego pytania
+let sala = null;            // stan dokumentu sali
+const rundy = new Map();    // id pytania → ostatnia runda
+const glosy = new Map();    // runda → [{uid, w}]
+const ukryte = new Map();   // runda → Set ukrytych słów
+let odsluch = null, odsluchRunda = null;
+const meta = new Map();     // runda → {pid, tresc, typ}
+
+$("adr").textContent = adresPubliczny + (SALA !== "wyklad" ? "?sala=" + SALA : "");
+
+// ───────── wczytywanie pytań ─────────
+function sprawdzPytanie(p, i) {
+  const bl = [];
+  if (!p.id) bl.push("brak id");
+  if (!p.tresc) bl.push("brak treści");
+  if (p.typ === "wybor") {
+    if (!Array.isArray(p.opcje) || p.opcje.length < 2 || p.opcje.length > 10) bl.push("opcje: 2–10");
+    if (p.poprawna !== undefined && !(Number.isInteger(p.poprawna) && p.poprawna >= 0 && p.poprawna < p.opcje.length)) bl.push("poprawna: indeks opcji");
+  } else if (p.typ === "skala") {
+    if (!Number.isInteger(p.min) || !Number.isInteger(p.max) || p.max <= p.min || p.max - p.min > 10) bl.push("skala: całkowite min < max, do 11 stopni");
+  } else if (p.typ === "liczba") {
+    if (p.poprawna !== undefined && typeof p.poprawna !== "number") bl.push("poprawna: liczba");
+  } else if (p.typ !== "tekst") bl.push("nieznany typ " + p.typ);
+  return bl.length ? `Pytanie ${i + 1} (${p.id || "?"}): ${bl.join(", ")}` : null;
+}
+
+async function wczytajWyklad(nazwa) {
+  try {
+    const r = await fetch(`pytania/${nazwa}.json`, { cache: "no-cache" });
+    if (!r.ok) throw new Error(`Brak pliku pytania/${nazwa}.json`);
+    const d = await r.json();
+    const bledy = d.pytania.map(sprawdzPytanie).filter(Boolean);
+    $("blad").textContent = bledy.join(" · ");
+    pytania = d.pytania.map((p) => ({ ...p, pid: nazwa + ":" + p.id }));
+    akt = -1;
+    // jeśli sala ma otwarte pytanie z tego zestawu, zaznacz je
+    if (sala && sala.pid) { const i = pytania.findIndex((p) => p.pid === sala.pid); if (i >= 0) { rundy.set(sala.pid, sala.runda); akt = i; } }
+    rysujListe(); wybierz(akt >= 0 ? akt : 0);
+  } catch (e) { pokazBlad(e); }
+}
+
+function rysujListe() {
+  const nazwy = { wybor: "wybór", liczba: "liczba", tekst: "tekst", skala: "skala" };
+  $("lista").innerHTML = pytania.map((p, i) => `<button class="poz${i === akt ? " akt" : ""}" data-i="${i}">
+    <span class="nr">${i + 1}.</span><span>${esc(p.tresc.length > 70 ? p.tresc.slice(0, 68) + "…" : p.tresc)}</span>
+    <span class="typ">${nazwy[p.typ] || p.typ}${p.slajd ? " · " + esc(p.slajd) : ""}${rundy.has(p.pid) ? " · ●" : ""}</span></button>`).join("");
+  $("lista").querySelectorAll(".poz").forEach((b) => b.addEventListener("click", () => wybierz(Number(b.dataset.i))));
+}
+
+// ───────── wybór i rysowanie pytania ─────────
+const biezace = () => pytania[akt];
+const czyNaSali = (p) => p && sala && sala.pid === p.pid && sala.runda === rundy.get(p.pid);
+
+function wybierz(i) {
+  if (i < 0 || i >= pytania.length) return;
+  akt = i;
+  rysujListe();
+  sluchajRundy(rundy.get(biezace().pid) || null);
+  rysujPytanie();
+}
+
+function sluchajRundy(r) {
+  if (r === odsluchRunda) return;
+  if (odsluch) odsluch();
+  odsluch = null; odsluchRunda = r;
+  if (!r) return;
+  odsluch = api.sluchajGlosow(r, (g) => { glosy.set(r, g); if (r === odsluchRunda) rysujWynikiBiez(); }, pokazBlad);
+}
+
+function rysujPytanie() {
+  const p = biezace();
+  if (!p) return;
+  $("tresc").textContent = p.tresc;
+  $("slajd").textContent = p.slajd ? "Slajd: " + p.slajd : "";
+  $("opisOpcji").innerHTML = "";
+  if (p.typ === "skala" && p.etykiety) $("opisOpcji").innerHTML = `<p class="info">${p.min} = ${esc(p.etykiety[0])}, ${p.max} = ${esc(p.etykiety[1])}</p>`;
+  const naSali = czyNaSali(p);
+  const st = !rundy.has(p.pid) ? ["nie zadane", ""] : !naSali ? ["wyniki archiwalne", ""]
+    : sala.odslona ? ["odsłonięte", "odsloniete"] : sala.otwarte ? ["głosowanie otwarte", "otwarte"] : ["zamknięte", ""];
+  $("status").textContent = st[0]; $("status").className = "status " + st[1];
+  $("bOtworz").textContent = naSali && !sala.otwarte && !sala.odslona ? "Otwórz ponownie" : "Otwórz";
+  $("bOtworz").disabled = naSali && sala.otwarte;
+  $("bZamknij").disabled = !(naSali && sala.otwarte);
+  $("bOdslon").disabled = !naSali || sala.odslona;
+  $("bNowa").disabled = !rundy.has(p.pid);
+  const op = opisPoprawnej(p);
+  $("poprawna").innerHTML = op && naSali && sala.odslona ? `<div class="poprawna">Poprawna odpowiedź: ${esc(op)}</div>` : "";
+  rysujWynikiBiez();
+}
+
+function rysujWynikiBiez() {
+  const p = biezace();
+  if (!p) return;
+  const r = rundy.get(p.pid);
+  const g = (r && glosy.get(r)) || [];
+  $("licznik").innerHTML = `Odpowiedzi: <b>${g.length}</b>`;
+  const naSali = czyNaSali(p);
+  if (!r || ($("ukryjWyniki").checked && naSali && sala.otwarte)) { $("wyniki").innerHTML = ""; return; }
+  const odsl = naSali && sala.odslona;
+  const uk = ukryte.get(r) || new Set();
+  rysujWyniki($("wyniki"), p, podsumuj(p, g, uk), {
+    odslona: odsl, pelne: p,
+    naUkryj: p.typ === "tekst" ? (s) => { uk.add(s); ukryte.set(r, uk); rysujWynikiBiez(); if (odsl) publikuj(); } : null,
+  });
+}
+
+// ───────── akcje ─────────
+async function otworz(nowa = false) {
+  const p = biezace();
+  if (!p) return;
+  $("blad").textContent = "";
+  try {
+    const stara = rundy.get(p.pid);
+    if (!nowa && stara && czyNaSali(p)) { await api.zmienSale({ otwarte: true, odslona: false, wyniki: null, poprawna: null, tolerancja: null }); return; }
+    const r = p.pid.replace(/[^a-z0-9:_-]/gi, "") + "-" + Date.now().toString(36);
+    rundy.set(p.pid, r);
+    meta.set(r, { pid: p.pid, tresc: p.tresc, typ: p.typ, p });
+    await api.ustawSale({ runda: r, pid: p.pid, otwarte: true, odslona: false,
+      pytanie: czescPubliczna(p), wyniki: null, poprawna: null, tolerancja: null });
+    sluchajRundy(r); rysujListe(); rysujPytanie();
+  } catch (e) { pokazBlad(e); }
+}
+async function zamknij() { if (czyNaSali(biezace())) try { await api.zmienSale({ otwarte: false }); } catch (e) { pokazBlad(e); } }
+async function publikuj() {
+  const p = biezace(), r = rundy.get(p.pid);
+  await api.zmienSale({ otwarte: false, odslona: true, poprawna: p.poprawna ?? null, tolerancja: p.tolerancja ?? null,
+    wyniki: podsumuj(p, glosy.get(r) || [], ukryte.get(r)) });
+}
+async function odslon() { if (czyNaSali(biezace())) try { await publikuj(); } catch (e) { pokazBlad(e); } }
+
+// szybkie pytanie
+let licznikSzybkich = 0;
+$("fSzybkie").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.target, typ = f.typ.value, poprStr = f.poprawna.value.trim();
+  const tresc = f.tresc.value.trim();
+  let p;
+  if (typ === "abcd" || typ === "abcde") {
+    const n = typ === "abcd" ? 4 : 5;
+    p = { typ: "wybor", opcje: Array(n).fill("") };
+    const k = LITERY.indexOf(poprStr.toUpperCase());
+    if (poprStr && k >= 0 && k < n) p.poprawna = k;
+  } else if (typ === "n4" || typ === "n5") {
+    const n = typ === "n4" ? 4 : 5;
+    p = { typ: "wybor", opcje: Array(n).fill(""), numeracja: "1" };
+    const k = parseInt(poprStr, 10) - 1;
+    if (k >= 0 && k < n) p.poprawna = k;
+  } else if (typ === "tn") {
+    p = { typ: "wybor", opcje: ["Tak", "Nie"] };
+    if (/^t/i.test(poprStr)) p.poprawna = 0; else if (/^n/i.test(poprStr)) p.poprawna = 1;
+  } else if (typ === "liczba") {
+    p = { typ: "liczba" }; const x = parsujLiczbe(poprStr); if (x !== null) p.poprawna = x;
+  } else if (typ === "slowo" || typ === "slowa3") {
+    p = { typ: "tekst", ile: typ === "slowa3" ? 3 : 1, maks: 40 };
+    if (poprStr) p.poprawna = poprStr;
+  } else p = { typ: "skala", min: 1, max: 5 };
+  licznikSzybkich++;
+  p.id = "s" + licznikSzybkich;
+  p.tresc = tresc || "Pytanie ze slajdu";
+  p.pid = "szybkie:" + Date.now().toString(36);
+  pytania.push(p);
+  rysujListe(); wybierz(pytania.length - 1); otworz(true);
+  f.reset();
+});
+
+// eksport CSV ze wszystkich rund tej sesji
+$("bCsv").addEventListener("click", () => {
+  const w = [["runda", "pytanie", "tresc", "uczestnik", "odpowiedz"]];
+  for (const [r, g] of glosy) {
+    const m = meta.get(r) || pytania.map((p) => ({ pid: p.pid, tresc: p.tresc, p })).find((x) => rundy.get(x.pid) === r) || {};
+    const anon = new Map();
+    for (const x of g) {
+      if (!anon.has(x.uid)) anon.set(x.uid, "u" + (anon.size + 1));
+      let o = x.w;
+      if (m.p && m.p.typ === "wybor") o = znak(m.p, x.w);
+      w.push([r, m.pid || "", m.tresc || "", anon.get(x.uid), String(o).replace(/\n/g, " | ")]);
+    }
+  }
+  const csv = w.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" }));
+  a.download = `glosowanie-${SALA}-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+});
+
+// tryb próbny: losowe głosy
+$("bSym").addEventListener("click", async () => {
+  const p = biezace();
+  if (!p || !czyNaSali(p) || !sala.otwarte) { $("blad").textContent = "Najpierw otwórz pytanie."; return; }
+  const slowa = ["algorytm", "komputer", "programowanie", "dane", "informacja", "internet", "AI", "matematyka", "logika", "sieci"];
+  for (let k = 0; k < 30; k++) {
+    let w;
+    if (p.typ === "wybor") w = Math.random() < 0.5 && p.poprawna !== undefined ? p.poprawna : Math.floor(Math.random() * p.opcje.length);
+    else if (p.typ === "skala") w = p.min + Math.floor(Math.random() * (p.max - p.min + 1));
+    else if (p.typ === "liczba") w = Math.random() < 0.5 && p.poprawna !== undefined ? p.poprawna : Math.round(Math.random() * 40);
+    else w = Array.from({ length: p.ile || 1 }, () => slowa[Math.floor(Math.random() * slowa.length)]).join("\n");
+    await api.glosuj(sala.runda, w, "sym-" + Math.random().toString(36).slice(2, 9));
+  }
+});
+
+$("bOtworz").addEventListener("click", () => otworz(false));
+$("bNowa").addEventListener("click", () => otworz(true));
+$("bZamknij").addEventListener("click", zamknij);
+$("bOdslon").addEventListener("click", odslon);
+$("bProj").addEventListener("click", () => document.body.classList.toggle("projekcja"));
+$("ukryjWyniki").addEventListener("change", rysujWynikiBiez);
+$("bWyl").addEventListener("click", async () => { await api.wyloguj(); location.reload(); });
+
+document.addEventListener("keydown", (e) => {
+  if (e.target.closest("input, select, textarea") || e.ctrlKey || e.metaKey || e.altKey) return;
+  const k = e.key.toLowerCase();
+  if (k === "o") { const p = biezace(); czyNaSali(p) && sala.otwarte ? zamknij() : otworz(false); }
+  else if (k === "s") odslon();
+  else if (k === "n") otworz(true);
+  else if (k === "p" || (k === "escape" && document.body.classList.contains("projekcja"))) document.body.classList.toggle("projekcja");
+  else if (e.key === "ArrowRight") wybierz(akt + 1);
+  else if (e.key === "ArrowLeft") wybierz(akt - 1);
+  else return;
+  e.preventDefault();
+});
+
+// ───────── start ─────────
+async function start() {
+  $("panel").hidden = false; $("logowanie").hidden = true;
+  $("bSym").hidden = !api.demo;
+  api.sluchajSali((s) => { sala = s; if (s && s.pid && !rundy.has(s.pid)) rundy.set(s.pid, s.runda); rysujListe(); rysujPytanie(); }, pokazBlad);
+  try {
+    const spis = await (await fetch("pytania/spis.json", { cache: "no-cache" })).json();
+    $("wyklad").innerHTML = spis.map((w) => `<option value="${esc(w.plik)}">${esc(w.plik)} · ${esc(w.tytul)}</option>`).join("");
+    $("wyklad").addEventListener("change", () => wczytajWyklad($("wyklad").value));
+    const zap = localStorage.getItem("glos-wyklad");
+    if (zap && spis.some((w) => w.plik === zap)) $("wyklad").value = zap;
+    $("wyklad").addEventListener("change", () => localStorage.setItem("glos-wyklad", $("wyklad").value));
+    if (spis.length) await wczytajWyklad($("wyklad").value);
+  } catch (e) { pokazBlad(e); }
+}
+
+(async () => {
+  try {
+    api = await polacz();
+    $("demo").hidden = !api.demo;
+    const kto = await api.biezacyProwadzacy();
+    if (kto) { $("kto").textContent = kto + " · sala: " + SALA; start(); return; }
+    $("logowanie").hidden = false;
+    $("fLog").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try { $("kto").textContent = (await api.zalogujProwadzacego(e.target.e.value, e.target.h.value)) + " · sala: " + SALA; start(); }
+      catch (err) { $("blad").textContent = "Logowanie nieudane: " + (err.code || err.message); }
+    });
+  } catch (e) { pokazBlad(e); }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+rules_version = '2';
+// Reguły Firestore dla głosowania na wykładzie (wdi/glos).
+// Przed publikacją wpisz UID konta prowadzącego (Authentication → Users) w funkcji admin().
+service cloud.firestore {
+  match /databases/{db}/documents {
+
+    function admin() {
+      return request.auth != null && request.auth.uid == 'ADMIN_UID';
+    }
+
+    // Czy wartość głosu pasuje do typu bieżącego pytania.
+    function wartoscOK(p, w) {
+      return (p.typ == 'wybor'  && w is int && w >= 0 && w < p.opcje.size())
+          || (p.typ == 'skala'  && w is int && w >= p.min && w <= p.max)
+          || (p.typ == 'liczba' && w is number && w > -1000000000000 && w < 1000000000000)
+          || (p.typ == 'tekst'  && w is string && w.size() >= 1 && w.size() <= 200);
+    }
+
+    function glosOK(sala, id) {
+      let s = get(/databases/$(db)/documents/sale/$(sala)).data;
+      let d = request.resource.data;
+      return request.auth != null
+          && d.keys().hasOnly(['runda', 'uid', 'w', 't'])
+          && d.uid == request.auth.uid
+          && d.runda is string
+          && id == d.runda + '_' + request.auth.uid
+          && d.t == request.time
+          && s.otwarte == true
+          && s.runda == d.runda
+          && wartoscOK(s.pytanie, d.w);
+    }
+
+    match /sale/{sala} {
+      // Stan sali (bieżące pytanie, opublikowane wyniki) czyta każdy zalogowany, także anonimowo.
+      allow read: if request.auth != null;
+      allow write: if admin();
+
+      match /glosy/{id} {
+        allow read, delete: if admin();
+        allow create, update: if glosOK(sala, id);
+      }
+    }
+  }
+}
