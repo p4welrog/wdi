@@ -271,6 +271,12 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
 .plan button.zaj[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
 .plan button.zaj.kol { background: var(--bad); border-color: var(--bad); color: #fff; }
 
+
+/* ───────── W07: ONP ───────── */
+.znak.nowy { background: var(--hl); color: var(--hl-ink); border-color: var(--amber); }
+.wyjscie { min-height: 46px; align-items: center; margin: 0; padding: 6px; border: 2px dashed var(--border); border-radius: 10px; }
+.zad { font-size: 1.05rem; margin: 12px 0 8px; }
+.zad .big { font-size: 1.3rem; font-weight: 700; background: var(--surface-2); padding: 2px 8px; border-radius: 6px; }
 </style>
 </head>
 <body>
@@ -288,6 +294,7 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
     <a href="#rekurencja">4. Drzewo wywołań</a>
     <a href="#reszta">5. Kasjer</a>
     <a href="#plan">6. Plan sali</a>
+    <a href="#onp">7. ONP</a>
   </nav>
 </header>
 
@@ -301,9 +308,10 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
     <a class="tile" href="#struktury"><span class="num">1</span><h3>Stos czy kolejka?</h3><p>Wkładaj i wyjmuj elementy, a stos i kolejka pokażą, co z nich wychodzi. Potem sześć zagadek: przewidź wyjście albo rozpoznaj strukturę po tym, co z niej wyszło.</p><div class="meta">ok. 6 min · slajdy od „Cofnij i drukuj” do „Mini-zadania: stos czy kolejka?”</div></a>
     <a class="tile" href="#nawiasy"><span class="num">2</span><h3>Nawiasy i zdania</h3><p>Sprawdzanie nawiasów krok po kroku ze stosem na widoku. Potem pomiar: zdania z coraz głębiej zagnieżdżonymi zdaniami podrzędnymi — trafność i czas czytania, także dla całej sali.</p><div class="meta">ok. 8 min · slajdy „Przykład: czy nawiasy są poprawne?” i „Zdania jak nawiasy”</div></a>
     <a class="tile" href="#pamiec"><span class="num">3</span><h3>Pamięć pod lupą</h3><p>Ta sama lista liczb jako tablica i jako lista wiązana, komórka po komórce, z adresami jak w PMC. Licznik pokazuje, ile kosztuje każda operacja.</p><div class="meta">ok. 6 min · slajdy od „Częstych błędów” do „Tablicy a listy wiązanej”</div></a>
-    <a class="tile" href="#rekurencja"><span class="num">4</span><h3>Drzewo wywołań</h3><p>Rekurencyjne fib(n) jako drzewo: przejdź je krok po kroku ze stosem wywołań obok i zobacz, ile razy liczy to samo. Potem ta sama funkcja z pamięcią.</p><div class="meta">ok. 6 min · slajdy od „Rekurencji i stosu wywołań” do „Zapamiętaj, zamiast liczyć ponownie”</div></a>
+    <a class="tile" href="#rekurencja"><span class="num">4</span><h3>Drzewo wywołań</h3><p>Rekurencyjne fib(n) jako drzewo: przejdź je krok po kroku ze stosem wywołań obok i zobacz, ile razy liczy to samo. Potem ta sama funkcja z pamięcią i szybkie potęgowanie: ile mnożeń naprawdę trzeba?</p><div class="meta">ok. 8 min · slajdy od „Rekurencji i stosu wywołań” do „Zapamiętaj, zamiast liczyć ponownie”, w tym „Przykład: szybkie potęgowanie”</div></a>
     <a class="tile" href="#reszta"><span class="num">5</span><h3>Kasjer</h3><p>Wydawanie reszty dla dowolnych nominałów: metoda zachłanna kontra programowanie dynamiczne, tabela M(s) wypełniana komórka po komórce i poszukiwanie najmniejszego kontrprzykładu.</p><div class="meta">ok. 7 min · slajdy od „Bierz to, co teraz najlepsze” do „Mini-zadania: policz tabelę”</div></a>
     <a class="tile" href="#plan"><span class="num">6</span><h3>Plan sali</h3><p>Ułóż w jednej sali jak najwięcej zajęć. Trzy plany, czas i porównanie z trzema regułami zachłannymi. Czy szukasz optimum, czy zadowalasz się „wystarczająco dobrym”?</p><div class="meta">ok. 7 min · slajdy „Plan sali”, „Wynik: trzy reguły zachłanne” i „Ograniczona racjonalność”</div></a>
+    <a class="tile" href="#onp"><span class="num">7</span><h3>Stacja rozrządowa i ONP</h3><p>Dla chętnych. Zapis szkolny przełożony na odwrotną notację polską krok po kroku, obliczanie ONP stosem i zadania z podpowiedziami przy typowych błędach (łączność, kolejność argumentów).</p><div class="meta">ok. 10 min · sekcja „Dla chętnych: odwrotna notacja polska”</div></a>
   </div>
 </section>
 
@@ -526,6 +534,20 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
     <p class="small muted">Bez pamięci: 2·F(n+1) − 1 wywołań. Z pamięcią: 2n − 1 (dla n ≥ 1), bo każde fib(k) liczone jest raz, a drugie wywołanie trafia od razu do pamięci.</p>
   </div>
 
+  <div class="card">
+    <h3>Szybkie potęgowanie: ile mnożeń?</h3>
+    <p class="small muted">Funkcja ze slajdu: <span class="mono">h = potega(x, n // 2)</span>, potem <span class="mono">h * h</span> (n parzyste) albo <span class="mono">x * h * h</span> (n nieparzyste). Każde wywołanie zmniejsza n o połowę, więc stos wywołań jest płytki.</p>
+    <div class="row">
+      <label for="ptX">x =</label><input id="ptX" type="text" value="2" inputmode="numeric" style="width: 5em; font-family: var(--mono)">
+      <label for="ptN">n =</label><input id="ptN" type="text" value="10" inputmode="numeric" style="width: 10em; font-family: var(--mono)">
+      <span class="row" id="ptPrzyk"></span>
+    </div>
+    <p class="err" id="ptErr"></p>
+    <div class="stats" id="ptStaty"></div>
+    <div class="scroll-x"><table class="t" id="ptTab"></table></div>
+    <p class="small muted" id="ptWynik"></p>
+  </div>
+
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
@@ -629,6 +651,81 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
     </ol>
   </div>
   <p class="src">H. A. Simon, <em>A Behavioral Model of Rational Choice</em>, Q. J. Econ. 69(1), 1955, s. 99–118; T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, „Problem wyboru zajęć” (rozdział o algorytmach zachłannych).</p>
+</section>
+
+<!-- ═══════════════════ 7. ONP ═══════════════════ -->
+<section id="v-onp" hidden>
+  <h2>7. Stacja rozrządowa i ONP <span class="small muted">(dla chętnych)</span></h2>
+  <p class="lead">W odwrotnej notacji polskiej (ONP) operator stoi <em>za</em> argumentami: <span class="mono">(3 + 4) * 2</span> to <span class="mono">3 4 + 2 *</span>. Nie potrzeba nawiasów ani priorytetów, a do obliczenia wystarczy stos. Algorytm stacji rozrządowej (Dijkstra, 1961) przekłada zwykły zapis na ONP — też za pomocą stosu.</p>
+
+  <div class="card">
+    <h3>Część A: z zapisu szkolnego do ONP</h3>
+    <div class="row">
+      <input id="onWej" type="text" style="flex: 1; min-width: 14em; font-family: var(--mono)" value="3 + 4 * 2 - 1" aria-label="Wyrażenie w zapisie szkolnym" autocomplete="off" spellcheck="false">
+      <button type="button" class="btn" id="onKrok">Krok</button>
+      <button type="button" class="btn ghost" id="onKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="onReset">Od nowa</button>
+    </div>
+    <div class="row" style="margin-top: 6px" id="onPrzyk"></div>
+    <p class="small muted" style="margin-top: 6px">Liczby całkowite, operatory <span class="mono">+ - * / ^</span> i nawiasy. Priorytety: <span class="mono">^</span> &gt; <span class="mono">* /</span> &gt; <span class="mono">+ -</span>; <span class="mono">^</span> jest prawostronnie łączne, pozostałe lewostronnie.</p>
+    <p class="err" id="onErr"></p>
+    <div class="small muted">wejście</div>
+    <div class="znaki" id="onZnaki"></div>
+    <div class="sk-grid">
+      <div><div class="small muted">stos operatorów (wierzch po prawej)</div><div class="stospoz" id="onStos"></div></div>
+      <div><div class="small muted">wyjście (ONP)</div><div class="znaki wyjscie" id="onWyj"></div></div>
+    </div>
+    <p class="fbline" id="onFb" role="status"></p>
+    <details style="margin-top: 6px"><summary class="small">Tabela kroków (jak na slajdzie)</summary><div class="scroll-x"><table class="t" id="onTab"></table></div></details>
+  </div>
+
+  <div class="card">
+    <h3>Część B: obliczanie ONP stosem</h3>
+    <div class="row">
+      <input id="obWej" type="text" style="flex: 1; min-width: 14em; font-family: var(--mono)" value="3 4 + 2 *" aria-label="Wyrażenie w ONP" autocomplete="off" spellcheck="false">
+      <button type="button" class="btn" id="obKrok">Krok</button>
+      <button type="button" class="btn ghost" id="obKoniec">Do końca</button>
+      <button type="button" class="btn ghost small" id="obReset">Od nowa</button>
+      <button type="button" class="btn ghost small" id="obZA" title="Weź wynik z części A">ONP z części A</button>
+    </div>
+    <p class="err" id="obErr"></p>
+    <div class="znaki" id="obZnaki"></div>
+    <div><div class="small muted">stos liczb (wierzch po prawej)</div><div class="stospoz" id="obStos"></div></div>
+    <p class="fbline" id="obFb" role="status"></p>
+    <div class="scroll-x"><table class="t" id="obNot"></table></div>
+  </div>
+
+  <div class="card">
+    <h3>Sprawdź się</h3>
+    <div class="row">
+      <div class="seg" id="spTyp" role="group" aria-label="Rodzaj zadania">
+        <button type="button" data-w="naonp" aria-pressed="true">Zamień na ONP</button>
+        <button type="button" data-w="oblicz" aria-pressed="false">Oblicz ONP</button>
+      </div>
+      <button type="button" class="btn ghost small" id="spNowe">Nowe zadanie</button>
+    </div>
+    <p class="zad" id="spQ"></p>
+    <div class="row">
+      <input id="spA" type="text" style="flex: 1; min-width: 12em; font-family: var(--mono)" aria-label="Twoja odpowiedź" autocomplete="off" spellcheck="false">
+      <button type="button" class="btn" id="spOk">Sprawdź</button>
+      <button type="button" class="btn ghost" id="spPokaz" hidden>Pokaż odpowiedź</button>
+    </div>
+    <p class="fbline" id="spFb" role="status"></p>
+    <p class="small muted" id="spHint"></p>
+    <div class="stats"><div class="stat"><div class="k">poprawne</div><div class="v" id="spIleOk">0</div></div><div class="stat"><div class="k">zadania</div><div class="v" id="spIle">0</div></div></div>
+    <p class="small muted">Symbole w ONP oddzielaj spacjami, np. <span class="mono">3 4 + 2 *</span>. Mini-zadania ze slajdu tu nie ma — zrób je na kartce.</p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Przepuść przez stację <span class="mono">8 - 3 - 2</span> i <span class="mono">2 ^ 3 ^ 2</span>. W którym kroku algorytm postępuje inaczej i dlaczego?</li>
+      <li>W części B wpisz <span class="mono">8 3 -</span> i <span class="mono">3 8 -</span>. Który element stosu jest lewym argumentem odejmowania?</li>
+      <li>Wpisz w części B błędne ONP, np. <span class="mono">3 + 4</span> albo <span class="mono">3 4 5 +</span>. Po czym algorytm poznaje, że wyrażenie jest niepoprawne?</li>
+      <li>Liczby w ONP stoją w tej samej kolejności co w zapisie szkolnym, zmienia się tylko miejsce operatorów. Dlaczego?</li>
+    </ol>
+  </div>
+  <p class="src">E. W. Dijkstra, raport o translatorze ALGOL 60, Mathematisch Centrum, Amsterdam 1961; J. Łukasiewicz, <em>Elementy logiki matematycznej</em>, Warszawa 1929; dokumentacja Pythona, moduł <span class="mono">dis</span>.</p>
 </section>
 
 <!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
@@ -1532,9 +1629,317 @@ const Ustawienia = (() => {
   return { init };
 })();
 
+
+/* ═════════════════════ 4b. Szybkie potęgowanie ═════════════════════ */
+const Potega = (() => {
+  function rysuj() {
+    const xs = parsujInt($('#ptX').value), ns = parsujInt($('#ptN').value);
+    const err = $('#ptErr'); err.textContent = '';
+    $('#ptTab').replaceChildren(); $('#ptStaty').replaceChildren(); $('#ptWynik').textContent = '';
+    if (xs === null || ns === null) { err.textContent = 'Wpisz liczby całkowite nieujemne.'; return; }
+    const n = Number(ns), x = BigInt(xs);
+    if (!Number.isSafeInteger(n) || n > 1e15) { err.textContent = 'n może mieć najwyżej 10¹⁵.'; return; }
+    // łańcuch wywołań: n, n//2, ..., 0
+    const lanc = []; for (let k = n; ; k = Math.floor(k / 2)) { lanc.push(k); if (k === 0) break; }
+    let suma = 0;
+    const wiersze = lanc.map((k, i) => {
+      const m = k === 0 ? 0 : (k % 2 === 0 ? 1 : 2); suma += m;
+      return el('tr', {},
+        el('td', { class: 'n', text: String(i + 1) }),
+        el('td', { class: 'mono', text: `potega(x, ${liczba(k)})` }),
+        el('td', { text: k === 0 ? 'n = 0: zwraca 1' : k % 2 === 0 ? 'parzyste: h * h' : 'nieparzyste: x * h * h' }),
+        el('td', { class: 'n', text: String(m) }));
+    });
+    $('#ptTab').append(el('thead', {}, el('tr', {}, el('th', { class: 'n', text: 'poziom' }), el('th', { text: 'wywołanie' }), el('th', { text: 'po powrocie z wywołania' }), el('th', { class: 'n', text: 'mnożenia' }))), el('tbody', {}, ...wiersze));
+    const st = $('#ptStaty');
+    const stat = (k, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v', text: v })));
+    stat('mnożenia naiwnie (n − 1)', n === 0 ? '0' : liczba(n - 1));
+    stat('mnożenia w tym kodzie', liczba(suma));
+    stat('głębokość stosu wywołań', String(lanc.length));
+    stat('⌊log₂ n⌋ + 1', n === 0 ? '—' : String(Math.floor(Math.log2(n)) + 1));
+    let opis = '';
+    const log10x = x > 1n ? Math.log10(Number(x)) : 0;
+    if (x <= 1n) opis = `${xs}^${liczba(n)} = ${n === 0 ? 1 : xs}.`;
+    else if (n * log10x < 3000) {
+      const w = (x ** BigInt(n)).toString();
+      opis = `${xs}^${liczba(n)} = ${w.length <= 60 ? liczba(w) : w.slice(0, 20) + '…' + w.slice(-10) + ` (${liczba(w.length)} cyfr)`}.`;
+    } else opis = `${xs}^${liczba(n)} ma ok. ${liczba(Math.floor(n * log10x) + 1)} cyfr — wyniku nie wypisujemy, ale liczba mnożeń jest dokładna.`;
+    if (n === 1 || lanc.includes(1)) opis += ' Ostatnie wywołanie z n = 1 liczy x * 1 * 1: jedno z tych mnożeń jest zbędne, ale tak działa kod ze slajdu.';
+    $('#ptWynik').textContent = opis;
+  }
+  function init() {
+    $('#ptPrzyk').replaceChildren(...[10, 1000, 1000000].map((n) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small mono', text: 'n = ' + liczba(n) });
+      b.addEventListener('click', () => { $('#ptN').value = n; rysuj(); });
+      return b;
+    }));
+    $('#ptX').addEventListener('input', rysuj); $('#ptN').addEventListener('input', rysuj);
+    rysuj();
+  }
+  return { init };
+})();
+
+/* ═════════════════════ 7. Stacja rozrządowa i ONP ═════════════════════ */
+const Onp = (() => {
+  const PRIO = { '+': 1, '-': 1, '*': 2, '/': 2, '^': 3 };
+  const OPS = Object.keys(PRIO);
+  const ZN = { '-': '−', '*': '·' };
+  const pokaz = (t) => t;
+
+  function tokeny(s) {
+    const out = []; const re = /\s*(\d+|[-+*/^()])\s*/y; let i = 0; s = s.trim();
+    while (i < s.length) {
+      re.lastIndex = i; const m = re.exec(s);
+      if (!m) return { err: `Nieznany znak „${s[i]}”. Dozwolone: liczby całkowite, + - * / ^ i nawiasy.` };
+      out.push(m[1]); i = re.lastIndex;
+    }
+    return { t: out };
+  }
+  /** Sprawdza składnię zapisu szkolnego. */
+  function skladnia(t) {
+    if (!t.length) return 'Wpisz wyrażenie.';
+    let arg = true, gl = 0;
+    for (let i = 0; i < t.length; i++) {
+      const x = t[i];
+      if (arg) {
+        if (/^\d+$/.test(x)) arg = false;
+        else if (x === '(') gl++;
+        else if (x === '-' || x === '+') return `Minus (lub plus) jednoargumentowy na pozycji ${i + 1} nie jest obsługiwany — to inny operator niż odejmowanie (slajd „Częste błędy”). Zapisz np. (0 - 5).`;
+        else return `Na pozycji ${i + 1} brakuje liczby przed „${x}”.`;
+      } else {
+        if (OPS.includes(x)) arg = true;
+        else if (x === ')') { gl--; if (gl < 0) return `Nawias „)” na pozycji ${i + 1} nie ma pary.`; }
+        else return `Na pozycji ${i + 1} brakuje operatora przed „${x}”.`;
+      }
+    }
+    if (arg) return 'Wyrażenie kończy się operatorem albo nawiasem „(”.';
+    if (gl > 0) return `Brakuje ${gl} ${gl === 1 ? 'nawiasu' : 'nawiasów'} „)”.`;
+    return null;
+  }
+  /** Algorytm stacji rozrządowej z zapisem kroków. */
+  function stacja(t) {
+    const wyj = [], stos = [], kroki = [];
+    const zapisz = (i, opis) => kroki.push({ i, wyj: [...wyj], stos: [...stos], opis });
+    t.forEach((x, i) => {
+      if (/^\d+$/.test(x)) { wyj.push(x); zapisz(i, `Liczba ${x} → od razu na wyjście.`); }
+      else if (x === '(') { stos.push(x); zapisz(i, '„(” → na stos. Czeka na swój „)”.'); }
+      else if (x === ')') {
+        const prz = []; while (stos[stos.length - 1] !== '(') { const o = stos.pop(); wyj.push(o); prz.push(o); }
+        stos.pop();
+        zapisz(i, `„)” → przenieś ze stosu na wyjście ${prz.length ? prz.map((o) => '„' + o + '”').join(', ') : 'nic'} aż do „(”, a nawias usuń.`);
+      } else {
+        const p = PRIO[x]; const prz = [];
+        while (stos.length && stos[stos.length - 1] !== '(' && (PRIO[stos[stos.length - 1]] > p || (PRIO[stos[stos.length - 1]] === p && x !== '^'))) { const o = stos.pop(); wyj.push(o); prz.push(o); }
+        const wierzch = stos[stos.length - 1];
+        stos.push(x);
+        let opis = `Operator „${x}”: `;
+        if (prz.length) opis += `najpierw przenieś na wyjście ${prz.map((o) => '„' + o + '”' + (PRIO[o] > p ? ' (wyższy priorytet)' : ' (równy priorytet, „' + x + '” jest lewostronnie łączny)')).join(', ')}, potem połóż „${x}” na stos.`;
+        else if (x === '^' && stos.length >= 2 && stos[stos.length - 2] === '^') opis += 'na wierzchu leży „^” o równym priorytecie, ale potęgowanie jest prawostronnie łączne, więc go nie zdejmujemy. Połóż „^” na stos.';
+        else opis += wierzch === undefined ? `stos pusty — połóż „${x}” na stos.` : wierzch === '(' ? `na wierzchu „(”, przy nim się zatrzymujemy — połóż „${x}” na stos.` : `na wierzchu „${wierzch}” o niższym priorytecie — zostaje; połóż „${x}” na stos.`;
+        zapisz(i, opis);
+      }
+    });
+    const reszta = [...stos].reverse(); while (stos.length) wyj.push(stos.pop());
+    zapisz(t.length, reszta.length ? `Koniec wejścia → przenieś resztę stosu na wyjście: ${reszta.map((o) => '„' + o + '”').join(', ')}.` : 'Koniec wejścia, stos pusty.');
+    return { wyj, kroki };
+  }
+  const DZ = { '+': (a, b) => a + b, '-': (a, b) => a - b, '*': (a, b) => a * b, '/': (a, b) => a / b, '^': (a, b) => a ** b };
+  const fmt = (v) => !Number.isFinite(v) ? (Number.isNaN(v) ? 'nieokreślone' : (v > 0 ? '∞' : '−∞')) : Number.isInteger(v) ? liczba(v).replace('-', '−') : ulamek(v, 4).replace('-', '−');
+  /** Oblicza ONP z zapisem kroków. zamiana=true: celowo zły porządek argumentów (do diagnozy). */
+  function oblicz(t, zamiana = false) {
+    const stos = [], kroki = [];
+    for (let i = 0; i < t.length; i++) {
+      const x = t[i];
+      if (/^\d+$/.test(x)) { stos.push(Number(x)); kroki.push({ i, stos: [...stos], opis: `Liczba ${x} → na stos.` }); }
+      else if (OPS.includes(x)) {
+        if (stos.length < 2) return { kroki, err: `Operator „${x}” na pozycji ${i + 1} potrzebuje dwóch liczb, a na stosie ${stos.length === 0 ? 'nie ma żadnej' : 'jest tylko jedna'}. To nie jest poprawne ONP.`, i };
+        let b = stos.pop(), a = stos.pop();
+        if (zamiana) [a, b] = [b, a];
+        const w = DZ[x](a, b); stos.push(w);
+        kroki.push({ i, stos: [...stos], opis: `„${x}”: zdejmij ${fmt(b)} (prawy argument), potem ${fmt(a)} (lewy); połóż ${fmt(a)} ${ZN[x] || x} ${fmt(b)} = ${fmt(w)}.` + (x === '/' && b === 0 ? ' Dzielenie przez zero!' : '') });
+      } else return { kroki, err: `„${x}” nie może wystąpić w ONP${x === '(' || x === ')' ? ' — w ONP nie ma nawiasów' : ''}.`, i };
+    }
+    if (stos.length !== 1) return { kroki, err: stos.length ? `Koniec, a na stosie ${stos.length >= 2 && stos.length <= 4 ? 'zostały' : 'zostało'} ${stos.length} ${stos.length >= 2 && stos.length <= 4 ? 'liczby' : 'liczb'}. Brakuje operatorów — to nie jest poprawne ONP.` : 'Puste wyrażenie.', i: t.length };
+    return { kroki, w: stos[0] };
+  }
+  /** Drzewo z ONP → zapisy w trzech notacjach. */
+  function drzewo(t) {
+    const s = [];
+    for (const x of t) { if (OPS.includes(x)) { const b = s.pop(), a = s.pop(); s.push({ op: x, a, b }); } else s.push({ v: x }); }
+    return s[0];
+  }
+  const pelny = (n) => n.v !== undefined ? n.v : `(${pelny(n.a)} ${n.op} ${pelny(n.b)})`;
+  const prefiks = (n) => n.v !== undefined ? n.v : `${n.op} ${prefiks(n.a)} ${prefiks(n.b)}`;
+  function minimalny(n) {
+    if (n.v !== undefined) return n.v;
+    const p = PRIO[n.op];
+    const L = n.a.v === undefined && (PRIO[n.a.op] < p || (PRIO[n.a.op] === p && n.op === '^')) ? `(${minimalny(n.a)})` : minimalny(n.a);
+    const R = n.b.v === undefined && (PRIO[n.b.op] < p || (PRIO[n.b.op] === p && n.op !== '^')) ? `(${minimalny(n.b)})` : minimalny(n.b);
+    return `${L} ${n.op} ${R}`;
+  }
+
+  /* ─── Część A ─── */
+  let A = null;
+  function resetA() {
+    const r = tokeny($('#onWej').value);
+    const e = r.err || skladnia(r.t);
+    $('#onErr').textContent = e || '';
+    A = e ? { t: r.t || [], kroki: [], k: -1, blad: true } : { t: r.t, ...stacja(r.t), k: -1, blad: false };
+    rysujA();
+  }
+  function rysujA() {
+    const k = A.k; const kr = k >= 0 ? A.kroki[k] : null;
+    const cur = kr ? kr.i : -1;
+    $('#onZnaki').replaceChildren(...A.t.map((x, i) => el('span', { class: 'znak' + (kr && i < cur ? ' byl' : '') + (i === cur ? ' cur' : ''), text: x })));
+    const stos = kr ? kr.stos : [];
+    $('#onStos').replaceChildren(...(stos.length ? stos.map((x, j) => el('div', { class: 'el' + (j === stos.length - 1 ? ' wierzch' : ''), text: x })) : [el('div', { class: 'pusty', text: 'pusty' })]));
+    const wyj = kr ? kr.wyj : []; const prev = k > 0 ? A.kroki[k - 1].wyj.length : 0;
+    $('#onWyj').replaceChildren(...(wyj.length ? wyj.map((x, j) => el('span', { class: 'znak' + (j >= prev ? ' nowy' : ''), text: x })) : [el('span', { class: 'pusty', text: 'puste' })]));
+    const fb = $('#onFb'); const kon = !A.blad && k === A.kroki.length - 1;
+    fb.className = 'fbline' + (kon ? ' dobrze' : '');
+    fb.textContent = A.blad ? '' : kr ? `Krok ${k + 1}/${A.kroki.length}. ${kr.opis}` + (kon ? ` Wynik: ${wyj.join(' ')}` : '') : 'Naciśnij „Krok”.';
+    $('#onKrok').disabled = A.blad || kon; $('#onKoniec').disabled = A.blad || kon;
+    // tabela kroków do bieżącego
+    const tab = $('#onTab');
+    tab.replaceChildren(el('thead', {}, el('tr', {}, el('th', { text: 'symbol' }), el('th', { text: 'wyjście' }), el('th', { text: 'stos' }))),
+      el('tbody', {}, ...A.kroki.slice(0, k + 1).map((q) => el('tr', {}, el('td', { class: 'mono', text: q.i < A.t.length ? A.t[q.i] : 'koniec' }), el('td', { class: 'mono', text: q.wyj.join(' ') }), el('td', { class: 'mono', text: q.stos.join(' ') })))));
+  }
+
+  /* ─── Część B ─── */
+  let B = null;
+  function resetB() {
+    const r = tokeny($('#obWej').value);
+    if (r.err) { B = { t: [], kroki: [], k: -1, err: r.err, bladOd: 0 }; $('#obErr').textContent = r.err; rysujB(); return; }
+    const o = oblicz(r.t);
+    B = { t: r.t, kroki: o.kroki, k: -1, err: o.err || null, iErr: o.i, w: o.w };
+    $('#obErr').textContent = '';
+    rysujB();
+  }
+  function rysujB() {
+    const k = B.k; const kr = k >= 0 ? B.kroki[k] : null;
+    const zaKoncem = k === B.kroki.length; // pokazujemy błąd
+    const cur = zaKoncem ? B.iErr : kr ? kr.i : -1;
+    $('#obZnaki').replaceChildren(...B.t.map((x, i) => el('span', { class: 'znak' + (i < cur ? ' byl' : '') + (i === cur && !zaKoncem ? ' cur' : '') + (zaKoncem && i === B.iErr ? ' zly' : ''), text: x })));
+    const stos = zaKoncem ? (B.kroki.length ? B.kroki[B.kroki.length - 1].stos : []) : kr ? kr.stos : [];
+    $('#obStos').replaceChildren(...(stos.length ? stos.map((x, j) => el('div', { class: 'el' + (j === stos.length - 1 ? ' wierzch' : ''), text: fmt(x) })) : [el('div', { class: 'pusty', text: 'pusty' })]));
+    const fb = $('#obFb');
+    const kon = !B.err && k === B.kroki.length - 1;
+    if (zaKoncem) { fb.className = 'fbline zle'; fb.textContent = B.err; }
+    else { fb.className = 'fbline' + (kon ? ' dobrze' : ''); fb.textContent = kr ? `Krok ${k + 1}. ${kr.opis}` + (kon ? ` Na stosie została jedna liczba — to wynik: ${fmt(B.w)}.` : '') : (B.t.length ? 'Naciśnij „Krok”.' : ''); }
+    const koniec = kon || zaKoncem || (!B.err && !B.kroki.length);
+    $('#obKrok').disabled = koniec; $('#obKoniec').disabled = koniec;
+    const not = $('#obNot');
+    if (!B.err && B.t.length) {
+      const d = drzewo(B.t);
+      not.replaceChildren(el('thead', {}, el('tr', {}, el('th', { text: 'notacja' }), el('th', { text: 'to samo wyrażenie' }))), el('tbody', {},
+        el('tr', {}, el('td', { text: 'szkolna (infiksowa)' }), el('td', { class: 'mono', text: minimalny(d) })),
+        el('tr', {}, el('td', { text: 'szkolna, wszystkie nawiasy' }), el('td', { class: 'mono', text: pelny(d) })),
+        el('tr', {}, el('td', { text: 'polska (prefiksowa)' }), el('td', { class: 'mono', text: prefiks(d) })),
+        el('tr', {}, el('td', { text: 'odwrotna polska (ONP)' }), el('td', { class: 'mono', text: B.t.join(' ') }))));
+    } else not.replaceChildren();
+  }
+  function krokB() { if (B.k < B.kroki.length - 1) B.k++; else if (B.err) B.k = B.kroki.length; rysujB(); }
+
+  /* ─── Sprawdź się ─── */
+  const MINI = '5 1 - 2 3 + *';
+  let typ = 'naonp', Z = null, ok = 0, ile = 0;
+  function losDrzewo(liscie, calk) {
+    if (liscie === 1) return { v: String(losuj(2, 9)) };
+    const l = losuj(1, liscie - 1);
+    const op = ['+', '-', '*', '+', '-', '*', '/', '^'][losuj(0, 7)];
+    if (op === '^') return { op, a: losDrzewo(Math.max(1, liscie - 1), calk), b: { v: String(losuj(2, 3)) } };
+    return { op, a: losDrzewo(l, calk), b: losDrzewo(liscie - l, calk) };
+  }
+  function wartosc(n) { if (n.v !== undefined) return Number(n.v); return DZ[n.op](wartosc(n.a), wartosc(n.b)); }
+  function calkowite(n) { if (n.v !== undefined) return true; const w = wartosc(n); return calkowite(n.a) && calkowite(n.b) && Number.isInteger(w) && Math.abs(w) <= 5000; }
+  const postfiks = (n) => n.v !== undefined ? n.v : `${postfiks(n.a)} ${postfiks(n.b)} ${n.op}`;
+  function nowe() {
+    let d, infiks, onp;
+    for (let g = 0; g < 500; g++) {
+      d = losDrzewo(losuj(3, 5));
+      if (!calkowite(d)) continue;
+      infiks = minimalny(d);
+      onp = stacja(tokeny(infiks).t).wyj.join(' ');
+      if (onp === MINI) continue;
+      if (typ === 'naonp' && !/[()]|- \d+ -|\^ \d+ \^/.test(infiks) && Math.random() < 0.5) continue; // częściej nawiasy i łączność
+      break;
+    }
+    Z = { infiks, onp, w: wartosc(drzewo(onp.split(' '))), proby: 0, zal: false }; ile++;
+    $('#spQ').replaceChildren(...(typ === 'naonp'
+      ? ['Zapisz w ONP: ', el('span', { class: 'mono big', text: infiks })]
+      : ['Oblicz: ', el('span', { class: 'mono big', text: onp })]));
+    $('#spA').value = ''; $('#spFb').textContent = ''; $('#spFb').className = 'fbline'; $('#spHint').textContent = ''; $('#spPokaz').hidden = true;
+    $('#spIle').textContent = ile;
+  }
+  function sprawdz() {
+    if (!Z || Z.zal) return;
+    const txt = $('#spA').value.trim(); if (!txt) return;
+    const fb = $('#spFb'), hint = $('#spHint'); let rada = '';
+    if (typ === 'naonp') {
+      const r = tokeny(txt);
+      const odp = r.t ? r.t.join(' ') : null;
+      if (odp === Z.onp) return dobrze(`Dobrze: ${Z.infiks} → ${Z.onp}.`);
+      if (r.err) rada = r.err;
+      else if (r.t.some((x) => x === '(' || x === ')')) rada = 'W ONP nie ma nawiasów: kolejność działań wynika z miejsca operatorów.';
+      else {
+        const liczbyU = r.t.filter((x) => /^\d+$/.test(x)).join(' '), liczbyZ = Z.onp.split(' ').filter((x) => /^\d+$/.test(x)).join(' ');
+        const o = oblicz(r.t);
+        if (o.err) rada = o.err;
+        else if (liczbyU !== liczbyZ) rada = 'Liczby w ONP stoją w tej samej kolejności co w zapisie szkolnym — przestawiają się tylko operatory.';
+        else if (Math.abs(o.w - Z.w) < 1e-9) rada = `Wynik wychodzi ten sam, ale Twoje ONP to inne wyrażenie: ${minimalny(drzewo(r.t))}. Sprawdź łączność: a − b − c to (a − b) − c, a a ^ b ^ c to a ^ (b ^ c).`;
+        else rada = `Twoje ONP oznacza ${minimalny(drzewo(r.t))} = ${fmt(o.w)}, a powinno ${Z.infiks} = ${fmt(Z.w)}. Przejdź przykład w części A.`;
+      }
+    } else {
+      const v = Number(txt.replace(/\s/g, '').replace(',', '.').replace('−', '-'));
+      if (!Number.isFinite(v)) { fb.className = 'fbline zle'; fb.textContent = 'Wpisz liczbę.'; return; }
+      if (Math.abs(v - Z.w) < 1e-9) return dobrze(`Dobrze: ${Z.onp} = ${fmt(Z.w)}.`);
+      const zam = oblicz(Z.onp.split(' '), true);
+      if (!zam.err && Math.abs(zam.w - v) < 1e-9) rada = 'Masz wynik dla odwrotnej kolejności argumentów. Pierwsza zdjęta ze stosu liczba to PRAWY argument: dla „8 3 −” liczymy 8 − 3.';
+      else rada = 'Przejdź to wyrażenie krok po kroku w części B albo po dwóch próbach użyj „Pokaż odpowiedź”.';
+    }
+    Z.proby++; fb.className = 'fbline zle'; fb.textContent = 'Jeszcze nie.'; hint.textContent = rada;
+    if (Z.proby >= 2) $('#spPokaz').hidden = false;
+  }
+  function dobrze(t) {
+    Z.zal = true; ok++; $('#spIleOk').textContent = ok;
+    $('#spFb').className = 'fbline dobrze'; $('#spFb').textContent = t; $('#spHint').textContent = '';
+  }
+  function pokazOdp() {
+    Z.zal = true;
+    $('#spFb').className = 'fbline'; $('#spFb').textContent = typ === 'naonp' ? `Odpowiedź: ${Z.onp}` : `Odpowiedź: ${fmt(Z.w)}`;
+    $('#spHint').textContent = 'Wyrażenie wpisano w części A i B — przejdź je krok po kroku.';
+    $('#onWej').value = Z.infiks; resetA(); $('#obWej').value = Z.onp; resetB();
+  }
+
+  function init() {
+    const P = ['3 + 4 * 2 - 1', '( 3 + 4 ) * 2', '8 - 3 - 2', '2 ^ 3 ^ 2'];
+    $('#onPrzyk').replaceChildren(el('span', { class: 'small muted', text: 'Ze slajdów:' }), ...P.map((p) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small mono', text: p });
+      b.addEventListener('click', () => { $('#onWej').value = p; resetA(); });
+      return b;
+    }));
+    $('#onWej').addEventListener('input', resetA);
+    $('#onKrok').addEventListener('click', () => { A.k++; rysujA(); });
+    $('#onKoniec').addEventListener('click', () => { A.k = A.kroki.length - 1; rysujA(); });
+    $('#onReset').addEventListener('click', resetA);
+    $('#obWej').addEventListener('input', resetB);
+    $('#obKrok').addEventListener('click', krokB);
+    $('#obKoniec').addEventListener('click', () => { B.k = B.kroki.length - 1; if (B.err) B.k = B.kroki.length; rysujB(); });
+    $('#obReset').addEventListener('click', resetB);
+    $('#obZA').addEventListener('click', () => { if (A && !A.blad) { $('#obWej').value = stacja(A.t).wyj.join(' '); resetB(); } });
+    seg($('#spTyp'), (w) => { typ = w; nowe(); });
+    $('#spNowe').addEventListener('click', nowe);
+    $('#spOk').addEventListener('click', sprawdz);
+    $('#spA').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); Z && Z.zal ? nowe() : sprawdz(); } });
+    $('#spPokaz').addEventListener('click', pokazOdp);
+    resetA(); resetB(); nowe(); ile = 1; $('#spIle').textContent = ile;
+  }
+  return { init, _t: { tokeny, stacja, oblicz, skladnia, minimalny, drzewo } };
+})();
+
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'struktury', 'nawiasy', 'pamiec', 'rekurencja', 'reszta', 'plan', 'ustawienia'];
-const TYTULY = { start: 'Wykład 7 · ćwiczenia', struktury: 'Stos czy kolejka? · W7', nawiasy: 'Nawiasy i zdania · W7', pamiec: 'Pamięć pod lupą · W7', rekurencja: 'Drzewo wywołań · W7', reszta: 'Kasjer · W7', plan: 'Plan sali · W7', ustawienia: 'Ustawienia prowadzącego · W7' };
+const WIDOKI = ['start', 'struktury', 'nawiasy', 'pamiec', 'rekurencja', 'reszta', 'plan', 'onp', 'ustawienia'];
+const TYTULY = { start: 'Wykład 7 · ćwiczenia', struktury: 'Stos czy kolejka? · W7', nawiasy: 'Nawiasy i zdania · W7', pamiec: 'Pamięć pod lupą · W7', rekurencja: 'Drzewo wywołań · W7', reszta: 'Kasjer · W7', plan: 'Plan sali · W7', onp: 'Stacja rozrządowa i ONP · W7', ustawienia: 'Ustawienia prowadzącego · W7' };
 let biezacy = null;
 function nawiguj() {
   const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
@@ -1557,6 +1962,8 @@ Pamiec.init();
 Drzewo.init();
 Kasjer.init();
 Plan.init();
+Potega.init();
+Onp.init();
 Ustawienia.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
