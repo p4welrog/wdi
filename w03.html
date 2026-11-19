@@ -311,6 +311,24 @@ table.t th.n { text-align: right; }
 .iewzor { font-family: var(--mono); font-size: 1.05rem; margin: 10px 0; padding: 8px 12px; background: var(--surface-2); border-radius: 8px; overflow-x: auto; white-space: nowrap; }
 #ieTab th { color: var(--muted); font-weight: 600; font-size: .82rem; vertical-align: top; }
 #ieTab td { word-break: break-word; }
+/* ───────── 6. Rentgen tekstu ───────── */
+.txtab td.zn { font-size: 1.35rem; text-align: center; min-width: 2.2em; }
+.txtab td.zn .lbl { font-size: .72rem; font-family: var(--mono); color: var(--muted); }
+.u8b { font-family: var(--mono); white-space: nowrap; }
+.u8b .byte { display: inline-block; margin-right: .6em; }
+.u8b .pf { color: var(--s2); font-weight: 700; }
+.u8b .pl { color: var(--s1); }
+.u8hex { font-family: var(--mono); white-space: nowrap; font-weight: 600; }
+.txtab td.brak { color: var(--bad); }
+.ctl { display: inline-block; font-family: var(--mono); font-size: .7em; line-height: 1.1; padding: 1px 3px; margin: 0 1px; border: 1px dashed var(--muted); border-radius: 3px; color: var(--muted); vertical-align: middle; }
+.bajty { display: flex; flex-wrap: wrap; gap: 4px; margin: 12px 0 8px; }
+.bajty .bt { padding: 2px 6px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--border); font-size: .9rem; }
+.bajty .bt.wys { background: var(--amber-soft); border-color: var(--amber); }
+.bajty .bt.zly { background: var(--bad-soft); border-color: var(--bad); }
+.krwynik { font-size: 1.5rem; padding: 10px 14px; border-radius: var(--radius); background: var(--surface-2); border: 1px solid var(--border); min-height: 2.2em; overflow-wrap: anywhere; }
+.dtnapis { font-size: 1.5rem; padding: 6px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--border); display: inline-block; margin: 6px 0; overflow-wrap: anywhere; }
+#v-tekst .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .85rem; color: var(--text-2); margin-top: 8px; }
+#v-tekst .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
 </style>
 </head>
 <body>
@@ -326,6 +344,7 @@ table.t th.n { text-align: right; }
     <a href="#u2">3. Licznik U2</a>
     <a href="#os">4. Oś liczb</a>
     <a href="#ieee">5. IEEE 754</a>
+    <a href="#tekst">6. Rentgen tekstu</a>
   </nav>
 </header>
 
@@ -341,6 +360,7 @@ table.t th.n { text-align: right; }
     <a class="tile" href="#u2"><span class="num">3</span><h3>Licznik U2</h3><p>Koło liczb 3-, 4- i 5-bitowych z odczytem bez znaku, w ZM, U1 i U2. Sumator kolumnowy z flagami C i OF pokazuje, że przeniesienie i nadmiar to dwie różne rzeczy.</p><div class="meta">ok. 8 min · slajdy od „Kod uzupełnień do dwóch (U2)” do „Jedno słowo — cztery liczby”</div></a>
     <a class="tile" href="#os"><span class="num">4</span><h3>Mikroskop na oś liczb</h3><p>Wszystkie liczby formatu zabawkowego i stałoprzecinkowego na jednej osi. Przybliżaj, klikaj i porównuj błąd bezwzględny i względny.</p><div class="meta">ok. 7 min · slajdy od „Zapisu stałoprzecinkowego” do „Logarytmicznej osi liczb w głowie”</div></a>
     <a class="tile" href="#ieee"><span class="num">5</span><h3>Rentgen IEEE 754</h3><p>Bity prawdziwego float i double: znak, cecha, mantysa, wartość dokładna co do cyfry, sąsiednie liczby, wartości specjalne i rozwiązanie zagadki 0.1 + 0.2.</p><div class="meta">ok. 8 min · slajdy od „Standardu IEEE 754” do „Rozwiązania zagadki”</div></a>
+    <a class="tile" href="#tekst"><span class="num">6</span><h3>Rentgen tekstu</h3><p>Napis rozłożony na punkty kodowe Unicode i bajty UTF-8, ręczne kodowanie znaków w UTF-8, fabryka „krzaczków” i detektyw pomylonych kodowań.</p><div class="meta">ok. 10 min · slajdy od „ASCII: 128 znaków, 7 bitów” do „Mini-zadania: bajty i litery”</div></a>
   </div>
 </section>
 
@@ -709,6 +729,92 @@ table.t th.n { text-align: right; }
     </ol>
   </div>
   <p class="src">IEEE Std 754-2019, <em>IEEE Standard for Floating-Point Arithmetic</em>, §3.4 (kodowanie formatów binarnych); D. Goldberg, ACM Comput. Surv. 23(1), 1991.</p>
+</section>
+
+<!-- ═══════════════════ 6. RENTGEN TEKSTU ═══════════════════ -->
+<section id="v-tekst" hidden>
+  <h2>6. Rentgen tekstu</h2>
+  <p class="lead">Komputer nie przechowuje liter, tylko ich <em>numery</em>. Unicode nadaje każdemu znakowi numer (punkt kodowy), a kodowanie, np. UTF-8, mówi, jakimi bajtami ten numer zapisać. Wpisz dowolny napis i zobacz, z czego się składa.</p>
+
+  <div class="card">
+    <h3>Napis pod lupą</h3>
+    <div class="row">
+      <label for="txIn">Napis</label>
+      <input id="txIn" type="text" value="gęś" autocomplete="off" spellcheck="false" style="flex: 1; min-width: 200px">
+    </div>
+    <div class="row" id="txPresety" style="margin-top:10px"></div>
+    <div class="row" style="margin-top:10px">
+      <span class="small muted" id="txJbLab">Porównaj z kodowaniem jednobajtowym</span>
+      <div class="seg" id="txJb" role="group" aria-labelledby="txJbLab">
+        <button type="button" data-e="iso" aria-pressed="true">ISO 8859-2</button><button type="button" data-e="w1250">Windows-1250</button><button type="button" data-e="cp852">CP852 (DOS)</button>
+      </div>
+    </div>
+    <div class="stats" id="txStaty"></div>
+    <div class="scroll-x"><table class="t txtab" id="txTab"></table></div>
+    <div class="legend"><span><i style="background: var(--s2)"></i>bity wzorca UTF-8 (znaczniki)</span><span><i style="background: var(--s1)"></i>bity numeru znaku</span></div>
+    <p class="note" id="txNote" hidden></p>
+  </div>
+
+  <div class="card">
+    <h3>Zakoduj ręcznie w UTF-8</h3>
+    <p class="small muted">Wzorce: U+0000…007F → <span class="mono">0xxxxxxx</span>; U+0080…07FF → <span class="mono">110xxxxx 10xxxxxx</span>; U+0800…FFFF → <span class="mono">1110xxxx 10xxxxxx 10xxxxxx</span>; U+10000…10FFFF → <span class="mono">11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</span>. Bity numeru wpisujemy w miejsca <span class="mono">x</span> od prawej, brakujące uzupełniamy zerami z lewej.</p>
+    <div class="quiz">
+      <div class="qtask" id="u8Q"></div>
+      <div class="row">
+        <input id="u8A" type="text" autocomplete="off" spellcheck="false" aria-label="Bajty szesnastkowo" placeholder="np. C4 85" style="font-family: var(--mono); flex: 1; min-width: 180px">
+        <button class="btn" id="u8Check">Sprawdź</button>
+        <button class="btn ghost" id="u8New">Nowy znak</button>
+        <button class="btn ghost" id="u8Krok">Krok po kroku</button>
+      </div>
+      <div class="qfb" id="u8Fb" aria-live="polite"></div>
+      <div class="scroll-x"><table class="t krokwiz" id="u8Kroki" hidden></table></div>
+      <div class="stats"><div class="stat"><div class="k">Poprawne</div><div class="v" id="u8Ok">0</div></div><div class="stat"><div class="k">Znaki</div><div class="v" id="u8Ile">0</div></div></div>
+      <p class="small muted">Bajty wpisz szesnastkowo, np. <span class="mono">C4 85</span>, <span class="mono">c485</span> albo <span class="mono">\xc4\x85</span>. Litery „ł” celowo tu nie ma (także w przykładach powyżej i poniżej): to mini-zadanie z wykładu.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Fabryka krzaczków</h3>
+    <p class="small muted">Plik tekstowy zwykle nie mówi, w jakim kodowaniu go zapisano. Zapisz napis według jednej umowy i odczytaj według innej.</p>
+    <div class="row">
+      <label for="krIn">Napis</label>
+      <input id="krIn" type="text" value="Pięść, ćma i źródło" autocomplete="off" spellcheck="false" style="flex: 1; min-width: 200px">
+    </div>
+    <div class="row" style="margin-top:10px">
+      <span class="small muted" id="krZLab">zapisano w</span>
+      <div class="seg" id="krZ" role="group" aria-labelledby="krZLab"></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <span class="small muted" id="krOLab">odczytano jako</span>
+      <div class="seg" id="krO" role="group" aria-labelledby="krOLab"></div>
+    </div>
+    <div class="scroll-x"><div class="bajty mono" id="krBajty" aria-label="Zapisane bajty"></div></div>
+    <div class="krwynik" id="krWynik" aria-live="polite"></div>
+    <p class="small muted" id="krOpis"></p>
+  </div>
+
+  <div class="card">
+    <h3>Detektyw kodowań</h3>
+    <p class="small muted">Ktoś zapisał tekst w jednym kodowaniu, a program odczytał go w innym. Co się stało?</p>
+    <div class="quiz">
+      <div class="qtask" id="dtQ"></div>
+      <div class="row" id="dtOpcje"></div>
+      <div class="qfb" id="dtFb" aria-live="polite"></div>
+      <div class="row"><button class="btn ghost" id="dtNew">Następna zagadka</button></div>
+      <div class="stats"><div class="stat"><div class="k">Rozwiązane za 1. razem</div><div class="v" id="dtOk">0</div></div><div class="stat"><div class="k">Zagadki</div><div class="v" id="dtIle">0</div></div></div>
+    </div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Wpisz „é” (dwa punkty kodowe) i skopiuj obok „é” z przycisku „é (jeden)”. Wyglądają tak samo. Czy Python uzna je za równe? Co z tego wynika dla wyszukiwania w tekście?</li>
+      <li>W UTF-8 bajt zaczynający się od <span class="mono">10</span> nigdy nie rozpoczyna znaku. Dlaczego to ułatwia odczyt pliku, w którym zgubił się jeden bajt?</li>
+      <li>W fabryce krzaczków zapisz napis w UTF-8 i odczytaj jako Windows-1250. Ile obcych znaków powstaje z jednej polskiej litery i dlaczego akurat tyle?</li>
+      <li>Ile bajtów zajmuje emoji „rodzina”, a ile znaków widzisz na ekranie? Które z tych liczb zwraca <span class="mono">len()</span> w Pythonie?</li>
+    </ol>
+  </div>
+  <p class="src">F. Yergeau, <em>UTF-8, a transformation format of ISO 10646</em>, RFC 3629, 2003, rozdz. 3; The Unicode Consortium, <em>The Unicode Standard</em>, rozdz. 2 i 3.9; tablice ISO/IEC 8859-2, Windows-1250 i CP852 wg modułu <span class="mono">codecs</span> Pythona.</p>
 </section>
 
 </main>
@@ -1736,8 +1842,276 @@ const IEEE = (() => {
   return { init };
 })();
 
+
+/* ═════════════════════ 6. Rentgen tekstu ═════════════════════ */
+const Tekst = (() => {
+  /* TABL: znaki odpowiadające bajtom 0x80–0xFF (U+FFFF = bajt niezdefiniowany); wygenerowane z codecs Pythona */
+  const TABL = {"iso": "\u0080\u0081\u0082\u0083\u0084\u0085\u0086\u0087\u0088\u0089\u008a\u008b\u008c\u008d\u008e\u008f\u0090\u0091\u0092\u0093\u0094\u0095\u0096\u0097\u0098\u0099\u009a\u009b\u009c\u009d\u009e\u009f\u00a0\u0104\u02d8\u0141\u00a4\u013d\u015a\u00a7\u00a8\u0160\u015e\u0164\u0179\u00ad\u017d\u017b\u00b0\u0105\u02db\u0142\u00b4\u013e\u015b\u02c7\u00b8\u0161\u015f\u0165\u017a\u02dd\u017e\u017c\u0154\u00c1\u00c2\u0102\u00c4\u0139\u0106\u00c7\u010c\u00c9\u0118\u00cb\u011a\u00cd\u00ce\u010e\u0110\u0143\u0147\u00d3\u00d4\u0150\u00d6\u00d7\u0158\u016e\u00da\u0170\u00dc\u00dd\u0162\u00df\u0155\u00e1\u00e2\u0103\u00e4\u013a\u0107\u00e7\u010d\u00e9\u0119\u00eb\u011b\u00ed\u00ee\u010f\u0111\u0144\u0148\u00f3\u00f4\u0151\u00f6\u00f7\u0159\u016f\u00fa\u0171\u00fc\u00fd\u0163\u02d9", "w1250": "\u20ac\uffff\u201a\uffff\u201e\u2026\u2020\u2021\uffff\u2030\u0160\u2039\u015a\u0164\u017d\u0179\uffff\u2018\u2019\u201c\u201d\u2022\u2013\u2014\uffff\u2122\u0161\u203a\u015b\u0165\u017e\u017a\u00a0\u02c7\u02d8\u0141\u00a4\u0104\u00a6\u00a7\u00a8\u00a9\u015e\u00ab\u00ac\u00ad\u00ae\u017b\u00b0\u00b1\u02db\u0142\u00b4\u00b5\u00b6\u00b7\u00b8\u0105\u015f\u00bb\u013d\u02dd\u013e\u017c\u0154\u00c1\u00c2\u0102\u00c4\u0139\u0106\u00c7\u010c\u00c9\u0118\u00cb\u011a\u00cd\u00ce\u010e\u0110\u0143\u0147\u00d3\u00d4\u0150\u00d6\u00d7\u0158\u016e\u00da\u0170\u00dc\u00dd\u0162\u00df\u0155\u00e1\u00e2\u0103\u00e4\u013a\u0107\u00e7\u010d\u00e9\u0119\u00eb\u011b\u00ed\u00ee\u010f\u0111\u0144\u0148\u00f3\u00f4\u0151\u00f6\u00f7\u0159\u016f\u00fa\u0171\u00fc\u00fd\u0163\u02d9", "cp852": "\u00c7\u00fc\u00e9\u00e2\u00e4\u016f\u0107\u00e7\u0142\u00eb\u0150\u0151\u00ee\u0179\u00c4\u0106\u00c9\u0139\u013a\u00f4\u00f6\u013d\u013e\u015a\u015b\u00d6\u00dc\u0164\u0165\u0141\u00d7\u010d\u00e1\u00ed\u00f3\u00fa\u0104\u0105\u017d\u017e\u0118\u0119\u00ac\u017a\u010c\u015f\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u00c1\u00c2\u011a\u015e\u2563\u2551\u2557\u255d\u017b\u017c\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u0102\u0103\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u00a4\u0111\u0110\u010e\u00cb\u010f\u0147\u00cd\u00ce\u011b\u2518\u250c\u2588\u2584\u0162\u016e\u2580\u00d3\u00df\u00d4\u0143\u0144\u0148\u0160\u0161\u0154\u00da\u0155\u0170\u00fd\u00dd\u0163\u00b4\u00ad\u02dd\u02db\u02c7\u02d8\u00a7\u00f7\u00b8\u00b0\u00a8\u02d9\u0171\u0158\u0159\u25a0\u00a0"};
+  const ENC = { utf8: 'UTF-8', iso: 'ISO 8859-2', w1250: 'Windows-1250', cp852: 'CP852 (DOS)' };
+  const hex2 = (b) => b.toString(16).toUpperCase().padStart(2, '0');
+  const odm = (n, a, b, c) => n === 1 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? b : c;
+  const uplus = (cp) => 'U+' + cp.toString(16).toUpperCase().padStart(4, '0');
+  const te = new TextEncoder();
+  const utf8 = (ch) => [...te.encode(ch)];
+  const ileU8 = (cp) => cp < 0x80 ? 1 : cp < 0x800 ? 2 : cp < 0x10000 ? 3 : 4;
+  const PREF = { 1: ['0'], 2: ['110', '10'], 3: ['1110', '10', '10'], 4: ['11110', '10', '10', '10'] };
+  const PAYLOAD = { 1: 7, 2: 11, 3: 16, 4: 21 };
+
+  /** Kodowanie jednobajtowe: [{b, brak}] dla każdego punktu kodowego. */
+  function zakoduj1(str, e) {
+    const out = [];
+    for (const ch of str) {
+      const cp = ch.codePointAt(0);
+      if (cp < 0x80) { out.push({ b: cp, brak: false }); continue; }
+      const i = TABL[e].indexOf(ch);
+      out.push(i >= 0 ? { b: 0x80 + i, brak: false } : { b: 0x3F, brak: true });
+    }
+    return out;
+  }
+  function zakoduj(str, e) {
+    if (e === 'utf8') return [...str].flatMap((ch) => utf8(ch).map((b) => ({ b, brak: false })));
+    return zakoduj1(str, e);
+  }
+  function odkoduj(bajty, e) {
+    if (e === 'utf8') return new TextDecoder('utf-8').decode(new Uint8Array(bajty));
+    return bajty.map((b) => b < 0x80 ? String.fromCharCode(b) : (TABL[e][b - 0x80] === '￿' ? '�' : TABL[e][b - 0x80])).join('');
+  }
+  /** Napis do wyświetlenia: znaki sterujące i niewidoczne jako ramki z kodem. */
+  function pokazNapis(str) {
+    const frag = document.createDocumentFragment();
+    for (const ch of str) {
+      const cp = ch.codePointAt(0);
+      if (cp < 0x20 || (cp >= 0x7F && cp <= 0x9F)) frag.append(h('span', { class: 'ctl', title: 'znak sterujący ' + uplus(cp), text: hex2(cp) }));
+      else if (/\p{Cf}/u.test(ch)) frag.append(h('span', { class: 'ctl', title: 'znak niewidoczny ' + uplus(cp), text: cp === 0x200D ? 'ZWJ' : uplus(cp) }));
+      else frag.append(ch);
+    }
+    return frag;
+  }
+  function etykietaZnaku(ch) {
+    const cp = ch.codePointAt(0);
+    if (ch === ' ') return h('span', { class: 'lbl', text: 'spacja' });
+    if (cp === 0x200D) return h('span', { class: 'lbl', text: 'ZWJ (łącznik)' });
+    if (/\p{Cf}|\p{Cc}/u.test(ch)) return h('span', { class: 'lbl', text: 'niewidoczny' });
+    if (/\p{M}/u.test(ch)) return h('span', {}, '◌' + ch, h('br'), h('span', { class: 'lbl', text: 'znak łączący' }));
+    return ch;
+  }
+  /** Bity UTF-8 z podziałem na znaczniki wzorca i bity numeru. */
+  function bityU8(bajty) {
+    const n = bajty.length; const w = h('span', { class: 'u8b' });
+    bajty.forEach((b, i) => {
+      const s = b.toString(2).padStart(8, '0'); const k = PREF[n][i].length;
+      w.append(h('span', { class: 'byte' }, h('span', { class: 'pf', text: s.slice(0, k) }), h('span', { class: 'pl', text: s.slice(k) })));
+    });
+    return w;
+  }
+
+  /* ─── Napis pod lupą ─── */
+  let jb = 'iso';
+  const PRESETY = [
+    ['gęś', 'gęś'], ['Gdańsk, Kraków', 'Gdańsk, Kraków'], ['A a 7', 'A a 7'], ['€ 5', '€ 5'],
+    ['é (jeden)', 'é'], ['é (dwa)', 'é'], ['π ≈ 3,14', 'π ≈ 3,14'], ['😀', '😀'],
+    ['rodzina', '\u{1F468}‍\u{1F469}‍\u{1F467}'],
+  ];
+  function grafemy(str) {
+    if (typeof Intl !== 'undefined' && Intl.Segmenter) return [...new Intl.Segmenter('pl', { granularity: 'grapheme' }).segment(str)].length;
+    return null;
+  }
+  function rysuj() {
+    const str = $('#txIn').value;
+    const pk = [...str];
+    const u8 = te.encode(str).length;
+    const j1 = zakoduj1(str, jb); const nBrak = j1.filter((x) => x.brak).length;
+    const g = grafemy(str);
+    const st = $('#txStaty'); st.innerHTML = '';
+    const stat = (k, v) => st.append(h('div', { class: 'stat' }, h('div', { class: 'k', text: k }), h('div', { class: 'v', text: v })));
+    stat('punkty kodowe (len)', fmtInt(pk.length));
+    if (g !== null) stat('znaki widoczne', fmtInt(g));
+    stat('bajty w UTF-8', fmtInt(u8));
+    stat('bajty w ' + ENC[jb], nBrak ? `— (${nBrak} ${odm(nBrak, 'znak się nie mieści', 'znaki się nie mieszczą', 'znaków się nie mieści')})` : fmtInt(j1.length));
+    const t = $('#txTab'); t.innerHTML = '';
+    t.append(h('thead', {}, h('tr', {}, h('th', { text: 'znak' }), h('th', { text: 'punkt kodowy' }), h('th', { class: 'n', text: 'dziesiętnie' }), h('th', { text: 'UTF-8: bity' }), h('th', { text: 'UTF-8: bajty' }), h('th', { text: ENC[jb] }))));
+    const tb = h('tbody');
+    pk.slice(0, 60).forEach((ch, i) => {
+      const cp = ch.codePointAt(0); const b = utf8(ch);
+      tb.append(h('tr', {},
+        h('td', { class: 'zn' }, etykietaZnaku(ch)),
+        h('td', { class: 'mono', text: uplus(cp) }),
+        h('td', { class: 'n mono', text: String(cp) }),
+        h('td', {}, bityU8(b)),
+        h('td', { class: 'u8hex', text: b.map(hex2).join(' ') + (b.length > 1 ? `  (${b.length} B)` : '') }),
+        j1[i].brak ? h('td', { class: 'brak', text: 'brak znaku' }) : h('td', { class: 'u8hex', text: hex2(j1[i].b) })));
+    });
+    t.append(tb);
+    const notki = [];
+    if (pk.length > 60) notki.push(`Tabela pokazuje pierwsze 60 z ${pk.length} punktów kodowych.`);
+    if (g !== null && g !== pk.length) notki.push(`Na ekranie widać ${g} ${odm(g, 'znak', 'znaki', 'znaków')}, ale napis ma ${pk.length} ${odm(pk.length, 'punkt kodowy', 'punkty kodowe', 'punktów kodowych')}: niektóre punkty (znaki łączące, łącznik ZWJ) sklejają się z sąsiednimi w jeden symbol. Python: len() liczy punkty kodowe.`);
+    const nfc = [...str.normalize('NFC')].length;
+    if (str.normalize('NFC') !== str) notki.push(`Ten napis ma też krótszą postać złożoną (NFC): ${nfc} ${odm(nfc, 'punkt kodowy', 'punkty kodowe', 'punktów kodowych')}. W Pythonie: unicodedata.normalize("NFC", s).`);
+    const n = $('#txNote'); n.hidden = !notki.length; n.textContent = notki.join(' ');
+  }
+
+  /* ─── Zakoduj ręcznie ─── */
+  const PULA = ['ę', 'ż', 'ń', 'ś', 'ó', 'ą', 'ć', 'ź', 'Ż', 'Ś', 'é', 'ß', 'π', 'Ж', '€', '✓', '♥', '😀', '🙂', 'A', '#'];
+  let zn = null, ok = 0, ile = 0, proby = 0, zal = false;
+  function nowy() {
+    let c; do { c = PULA[Math.floor(Math.random() * PULA.length)]; } while (c === zn && PULA.length > 1);
+    zn = c; proby = 0; zal = false; ile++;
+    const cp = c.codePointAt(0);
+    const q = $('#u8Q'); q.innerHTML = '';
+    q.append('Zapisz w UTF-8 znak ', h('b', { text: c }), ' = ', h('span', { class: 'mono', text: uplus(cp) }), '. Podaj bajty szesnastkowo.');
+    $('#u8A').value = ''; $('#u8Fb').className = 'qfb'; $('#u8Fb').textContent = ''; $('#u8Kroki').hidden = true;
+    $('#u8Ile').textContent = ile;
+  }
+  function parsujBajty(s) {
+    const t = s.replace(/\\x|0x|[\s,;:_-]/gi, '').toUpperCase();
+    if (!t) return null;
+    if (!/^[0-9A-F]+$/.test(t)) return { err: 'Dozwolone są tylko cyfry szesnastkowe 0–9 i A–F.' };
+    if (t.length % 2) return { err: 'Każdy bajt to dokładnie dwie cyfry szesnastkowe. Liczba cyfr musi być parzysta.', t };
+    return { b: t.match(/../g).map((x) => parseInt(x, 16)), t };
+  }
+  function diagnoza(odp, dobre, cp, numer = false) {
+    const s = odp.map(hex2).join('');
+    if (numer || (cp >= 0x80 && s.replace(/^0+/, '') === cp.toString(16).toUpperCase())) return 'To jest numer znaku (punkt kodowy), a nie bajty UTF-8. Bity numeru trzeba jeszcze wstawić do wzorca.';
+    if (odp.length !== dobre.length) return `${uplus(cp)} leży w zakresie, który w UTF-8 zajmuje ${dobre.length} ${dobre.length === 1 ? 'bajt' : 'bajty'}. Sprawdź tabelę wzorców.`;
+    if (odp.join() === [...dobre].reverse().join()) return 'Bajty są dobre, ale w odwrotnej kolejności. W UTF-8 pierwszy bajt (ze znacznikiem 110, 1110 lub 11110) niesie najstarsze bity.';
+    const zly = odp.findIndex((b, i) => b !== dobre[i]);
+    if (zly >= 0) {
+      const pf = PREF[dobre.length][zly];
+      if (odp[zly].toString(2).padStart(8, '0').slice(0, pf.length) !== pf) return `Bajt nr ${zly + 1} musi zaczynać się od bitów ${pf}. Zapisz go dwójkowo i sprawdź.`;
+      return `Bajt nr ${zly + 1} ma dobry znacznik, ale złe bity numeru. Zapisz ${uplus(cp).slice(2)}₁₆ na ${PAYLOAD[dobre.length]} bitach i tnij od prawej.`;
+    }
+    return null;
+  }
+  function sprawdz() {
+    if (!zn || zal) return;
+    const r = parsujBajty($('#u8A').value); if (!r) return;
+    const fb = $('#u8Fb'); fb.innerHTML = '';
+    const cp0 = zn.codePointAt(0);
+    if (r.t !== undefined && r.t.replace(/^0+/, '') === cp0.toString(16).toUpperCase() && cp0 >= 0x80) {
+      proby++; fb.className = 'qfb bad'; fb.append('Jeszcze nie.', h('span', { class: 'hint', text: diagnoza([], [0, 0], cp0, true) })); return;
+    }
+    if (r.err) { fb.className = 'qfb bad'; fb.textContent = r.err; return; }
+    const dobre = utf8(zn); const cp = zn.codePointAt(0);
+    if (r.b.length === dobre.length && r.b.every((b, i) => b === dobre[i])) {
+      zal = true; ok++; $('#u8Ok').textContent = ok;
+      fb.className = 'qfb good'; fb.append(`Dobrze: ${zn} = ${uplus(cp)} → ${dobre.map(hex2).join(' ')}.`);
+      return;
+    }
+    proby++; fb.className = 'qfb bad';
+    fb.append('Jeszcze nie.', h('span', { class: 'hint', text: diagnoza(r.b, dobre, cp) || 'Porównaj z tabelą „Napis pod lupą” albo użyj „Krok po kroku”.' }));
+    if (proby >= 2) fb.append(h('span', { class: 'hint', text: 'Możesz przejść zamianę krok po kroku.' }));
+  }
+  function kroki() {
+    if (!zn) return;
+    const cp = zn.codePointAt(0); const n = ileU8(cp); const p = PAYLOAD[n];
+    const bin = cp.toString(2).padStart(p, '0');
+    const cz = []; let rest = bin;
+    // ostatnie bajty: po 6 bitów od prawej; pierwszy: reszta
+    for (let i = n - 1; i >= 1; i--) { cz.unshift(rest.slice(-6)); rest = rest.slice(0, -6); }
+    cz.unshift(rest);
+    const bajty = cz.map((c, i) => PREF[n][i] + c);
+    const t = $('#u8Kroki'); t.innerHTML = '';
+    const wiersz = (a, b) => t.append(h('tr', {}, h('td', { text: a }), h('td', { class: 'mono' }, b)));
+    wiersz('1. Zakres', `${uplus(cp)} → ${n} ${n === 1 ? 'bajt' : 'bajty'}, wzorzec ${PREF[n].map((x) => x + 'x'.repeat(8 - x.length)).join(' ')}`);
+    wiersz('2. Numer dwójkowo', `${cp.toString(16).toUpperCase()}₁₆ = ${cp}₁₀ → ${bin} (${p} bitów, zera z lewej)`);
+    wiersz('3. Tnij od prawej', n === 1 ? bin : `${cz.join(' | ')}  (pierwsza grupa ${cz[0].length} bitów, dalej po 6)`);
+    const w4 = h('span'); w4.append(bityU8(bajty.map((x) => parseInt(x, 2))));
+    wiersz('4. Wstaw do wzorca', w4);
+    wiersz('5. Szesnastkowo', bajty.map((x) => hex2(parseInt(x, 2))).join(' '));
+    t.hidden = false;
+  }
+
+  /* ─── Fabryka krzaczków ─── */
+  let kz = 'utf8', ko = 'w1250';
+  function seg(id, akt, ustaw) {
+    const s = $(id); s.innerHTML = '';
+    for (const [k, v] of Object.entries(ENC)) s.append(h('button', { type: 'button', 'aria-pressed': String(k === akt), text: v, onclick: () => { ustaw(k); fabryka(); } }));
+  }
+  function fabryka() {
+    seg('#krZ', kz, (k) => { kz = k; }); seg('#krO', ko, (k) => { ko = k; });
+    const str = $('#krIn').value;
+    const zap = zakoduj(str, kz); const bajty = zap.map((x) => x.b);
+    const bx = $('#krBajty'); bx.innerHTML = '';
+    for (const x of zap.slice(0, 120)) bx.append(h('span', { class: 'bt' + (x.brak ? ' zly' : x.b >= 0x80 ? ' wys' : ''), title: x.brak ? 'znaku nie ma w tym kodowaniu: zapisano „?”' : '', text: hex2(x.b) }));
+    if (zap.length > 120) bx.append(h('span', { class: 'small muted', text: `… razem ${zap.length} B` }));
+    const wyn = odkoduj(bajty, ko);
+    const w = $('#krWynik'); w.innerHTML = ''; w.append(pokazNapis(wyn));
+    const nBrak = zap.filter((x) => x.brak).length;
+    const op = [];
+    op.push(`${fmtInt(bajty.length)} B w ${ENC[kz]}; bajty ≥ 80₁₆ wyróżnione.`);
+    if (nBrak) op.push(`${nBrak} ${odm(nBrak, 'znaku', 'znaków', 'znaków')} nie ma w ${ENC[kz]}: przy zapisie zastąpiono je znakiem „?” (3F₁₆) i ta informacja przepadła.`);
+    if (kz === ko) op.push('Ta sama umowa przy zapisie i odczycie: tekst wraca bez zmian (poza znakami, których nie dało się zapisać).');
+    else if (wyn === str) op.push('Tu akurat nic się nie zepsuło: napis składa się tylko ze znaków ASCII, a te są wspólne dla wszystkich tych kodowań.');
+    if (ko === 'utf8' && wyn.includes('�')) op.push('Znak � oznacza bajty, które nie tworzą poprawnej sekwencji UTF-8.');
+    if (kz !== 'utf8' && ko !== 'utf8' && kz !== ko && wyn !== str) op.push('Ramki z kodem to bajty, którym odczytujące kodowanie przypisuje znak sterujący albo żadnego znaku.');
+    $('#krOpis').textContent = op.join(' ');
+  }
+
+  /* ─── Detektyw ─── */
+  const SLOWA = ['gęś', 'ćma', 'pięść', 'żółć', 'Gdańsk', 'Kraków', 'Poznań', 'jaźń', 'mięso', 'świat', 'źródło', 'zięć', 'część', 'ośka'];
+  const PARY = [];
+  for (const z of Object.keys(ENC)) for (const o of Object.keys(ENC)) if (z !== o) PARY.push([z, o]);
+  let dt = null, dok = 0, dile = 0;
+  const krzak = (s, z, o) => odkoduj(zakoduj(s, z).map((x) => x.b), o);
+  function dNowa() {
+    let s, p, wyn, opcje;
+    for (let proba = 0; proba < 200; proba++) {
+      s = SLOWA[Math.floor(Math.random() * SLOWA.length)];
+      p = PARY[Math.floor(Math.random() * PARY.length)];
+      wyn = krzak(s, p[0], p[1]);
+      if (wyn === s) continue;
+      // dystraktory dają inny wynik dla tego słowa
+      const inne = PARY.filter((q) => (q[0] !== p[0] || q[1] !== p[1]) && krzak(s, q[0], q[1]) !== wyn);
+      if (inne.length < 3) continue;
+      // preferuj dystraktory z tym samym kodowaniem zapisu albo odczytu (wiarygodne)
+      inne.sort(() => Math.random() - 0.5).sort((a, b) => ((b[0] === p[0] || b[1] === p[1]) - (a[0] === p[0] || a[1] === p[1])));
+      opcje = [p, ...inne.slice(0, 3)].sort(() => Math.random() - 0.5);
+      break;
+    }
+    dt = { s, p, wyn, opcje, proby: 0, kon: false }; dile++;
+    const q = $('#dtQ'); q.innerHTML = '';
+    q.append('Na ekranie widać: ', h('br'), h('span', { class: 'dtnapis' }, pokazNapis(wyn)), h('br'), 'Jakie słowo ktoś zapisał i jaka pomyłka do tego doprowadziła?');
+    const o = $('#dtOpcje'); o.innerHTML = '';
+    for (const op of opcje) o.append(h('button', { class: 'btn ghost', type: 'button', text: `zapis ${ENC[op[0]]} → odczyt ${ENC[op[1]]}`, onclick: (e) => dWybierz(op, e.currentTarget) }));
+    $('#dtFb').className = 'qfb'; $('#dtFb').textContent = '';
+    $('#dtIle').textContent = dile;
+  }
+  function dWybierz(op, btn) {
+    if (!dt || dt.kon) return;
+    const fb = $('#dtFb'); fb.innerHTML = '';
+    if (op === dt.p) {
+      dt.kon = true; if (dt.proby === 0) { dok++; $('#dtOk').textContent = dok; }
+      btn.classList.remove('ghost');
+      fb.className = 'qfb good';
+      fb.append(`Tak. Oryginał: „${dt.s}”. Bajty w ${ENC[dt.p[0]]}: ${zakoduj(dt.s, dt.p[0]).map((x) => hex2(x.b)).join(' ')}.`);
+      return;
+    }
+    dt.proby++; btn.disabled = true; fb.className = 'qfb bad';
+    const daje = krzak(dt.s, op[0], op[1]);
+    fb.append('Nie. ', h('span', { class: 'hint' }, `Gdyby „${dt.s}” zapisano w ${ENC[op[0]]} i odczytano jako ${ENC[op[1]]}, na ekranie byłoby: `, pokazNapis(daje), '. Wskazówka: z jednej litery UTF-8 powstają zwykle dwa obce znaki, a pomyłka między kodowaniami jednobajtowymi zamienia literę na jeden znak.'));
+  }
+
+  function init() {
+    const pr = $('#txPresety');
+    for (const [l, v] of PRESETY) pr.append(h('button', { class: 'btn ghost small', type: 'button', text: l, onclick: () => { $('#txIn').value = v; rysuj(); } }));
+    $('#txIn').addEventListener('input', rysuj);
+    for (const b of $$('#txJb button')) b.addEventListener('click', () => { jb = b.dataset.e; for (const x of $$('#txJb button')) x.setAttribute('aria-pressed', String(x === b)); rysuj(); });
+    rysuj();
+    $('#u8Check').addEventListener('click', sprawdz);
+    $('#u8A').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); zal ? nowy() : sprawdz(); } });
+    $('#u8New').addEventListener('click', nowy);
+    $('#u8Krok').addEventListener('click', kroki);
+    nowy(); ile = 1; $('#u8Ile').textContent = ile;
+    $('#krIn').addEventListener('input', fabryka);
+    fabryka();
+    $('#dtNew').addEventListener('click', dNowa);
+    dNowa(); dile = 1; $('#dtIle').textContent = dile;
+  }
+  return { init, _t: { zakoduj, odkoduj, krzak, utf8 } };
+})();
+
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'pozycyjny', 'grupy', 'u2', 'os', 'ieee'];
+const WIDOKI = ['start', 'pozycyjny', 'grupy', 'u2', 'os', 'ieee', 'tekst'];
 const MODULY = { u2: U2, os: Os };
 let biezacy = null;
 function nawiguj() {
@@ -1747,9 +2121,9 @@ function nawiguj() {
   if (MODULY[v] && MODULY[v].wejscie) MODULY[v].wejscie();
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 3 · ćwiczenia', pozycyjny: 'Jedna liczba, cztery zapisy · W3', grupy: 'Grupuj od prawej · W3', u2: 'Licznik U2 · W3', os: 'Mikroskop na oś liczb · W3', ieee: 'Rentgen IEEE 754 · W3' }[v];
+  document.title = { start: 'Wykład 3 · ćwiczenia', pozycyjny: 'Jedna liczba, cztery zapisy · W3', grupy: 'Grupuj od prawej · W3', u2: 'Licznik U2 · W3', os: 'Mikroskop na oś liczb · W3', ieee: 'Rentgen IEEE 754 · W3', tekst: 'Rentgen tekstu · W3' }[v];
 }
-Pozycyjny.init(); Grupy.init(); U2.init(); JednoSlowo.init(); Os.init(); IEEE.init();
+Pozycyjny.init(); Grupy.init(); U2.init(); JednoSlowo.init(); Os.init(); IEEE.init(); Tekst.init();
 let resizeT = null;
 window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(() => { if (biezacy === 'os') Os.wejscie(); }, 150); });
 window.addEventListener('hashchange', nawiguj);
