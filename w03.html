@@ -329,6 +329,15 @@ table.t th.n { text-align: right; }
 .dtnapis { font-size: 1.5rem; padding: 6px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--border); display: inline-block; margin: 6px 0; overflow-wrap: anywhere; }
 #v-tekst .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .85rem; color: var(--text-2); margin-top: 8px; }
 #v-tekst .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+/* ───────── Wspólne: sygnał przewijania w bok, ograniczenie ruchu ───────── */
+[data-przewin="p"] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
+[data-przewin="l"] { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); }
+[data-przewin="lp"] { -webkit-mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent); }
+[data-przewin]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+}
 </style>
 </head>
 <body>
@@ -2128,6 +2137,32 @@ let resizeT = null;
 window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(() => { if (biezacy === 'os') Os.wejscie(); }, 150); });
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
+</script>
+<script>
+/* Wspólne: zaznacz pudełka przewijane w bok, gdy mieszczą więcej, niż widać. */
+(function () {
+  var SEL = '.scroll-x, .tapebox, .iewzor';
+  function upd(e) {
+    var max = e.scrollWidth - e.clientWidth;
+    if (max <= 4) { e.removeAttribute('data-przewin'); if (e.dataset.przewinTab) { e.removeAttribute('tabindex'); delete e.dataset.przewinTab; } return; }
+    if (e.hasAttribute('data-srodek') && !e.dataset.wysrodkowane) { e.dataset.wysrodkowane = '1'; e.scrollLeft = max / 2; }
+    var l = e.scrollLeft > 4, p = e.scrollLeft < max - 4;
+    e.setAttribute('data-przewin', (l ? 'l' : '') + (p ? 'p' : ''));
+    if (!e.hasAttribute('tabindex')) { e.tabIndex = 0; e.dataset.przewinTab = '1'; }
+  }
+  function wszystkie() {
+    document.querySelectorAll(SEL).forEach(function (e) {
+      if (!e.dataset.przewinOk) { e.dataset.przewinOk = '1'; e.addEventListener('scroll', function () { upd(e); }, { passive: true }); }
+      upd(e);
+    });
+  }
+  var t; function zaplanuj() { clearTimeout(t); t = setTimeout(wszystkie, 120); }
+  window.addEventListener('resize', zaplanuj);
+  window.addEventListener('hashchange', zaplanuj);
+  document.addEventListener('toggle', zaplanuj, true);
+  new MutationObserver(zaplanuj).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  wszystkie();
+})();
 </script>
 </body>
 </html>

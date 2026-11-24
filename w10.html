@@ -257,6 +257,18 @@ svg.graf .strz { fill: var(--muted); }
 .zad.zle { background: var(--bad-soft); border-color: var(--bad); }
 .zad:disabled { cursor: default; }
 
+
+/* ───────── Wspólne: sygnał przewijania w bok, ograniczenie ruchu ───────── */
+[data-przewin="p"] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
+[data-przewin="l"] { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); }
+[data-przewin="lp"] { -webkit-mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent); }
+[data-przewin]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+}
+
+/* Telefon: grafy z wagami nie kurczą się poniżej czytelnej skali; przewijane w bok. */
+@media (max-width: 600px) { #djGraf, #msGraf, #msGrafA { min-width: 500px; } }
 </style>
 </head>
 <body>
@@ -351,7 +363,7 @@ svg.graf .strz { fill: var(--muted); }
       <div class="stat"><div class="k">długość znalezionej drogi</div><div class="v" id="lbDroga">—</div></div>
       <div class="stat"><div class="k">najkrótsza możliwa</div><div class="v" id="lbMin">—</div></div>
     </div>
-    <p class="small" id="lbOpis"></p>
+    <p class="small" id="lbOpis" aria-live="polite"></p>
   </div>
   <div class="think">
     <h3>Do przemyślenia</h3>
@@ -419,7 +431,7 @@ svg.graf .strz { fill: var(--muted); }
       <button type="button" class="btn ghost small" id="djReset">Od nowa</button>
     </div>
     <div class="dwie">
-      <svg class="graf" id="djGraf" viewBox="0 0 520 320" role="img" aria-label="Graf ważony"></svg>
+      <div class="scroll-x"><svg class="graf" id="djGraf" viewBox="0 0 520 320" role="img" aria-label="Graf ważony"></svg></div>
       <div>
         <div class="small muted">kopiec (wpisy: odległość, wierzchołek)</div>
         <div class="struktura kopiec-l" id="djKopiec"></div>
@@ -454,8 +466,8 @@ svg.graf .strz { fill: var(--muted); }
   </div>
   <div class="card" id="msGra" hidden>
     <div class="row" style="justify-content: space-between"><span class="pill" id="msNr"></span><span class="small muted" id="msLicz"></span></div>
-    <svg class="graf" id="msGraf" viewBox="0 0 540 330" role="img" aria-label="Plansza: osiedla i możliwe połączenia"></svg>
-    <div class="row"><button type="button" class="btn" id="msGotowe" disabled>Gotowe</button><span class="small" id="msInfo"></span></div>
+    <div class="scroll-x"><svg class="graf" id="msGraf" viewBox="0 0 540 330" role="img" aria-label="Plansza: osiedla i możliwe połączenia"></svg></div>
+    <div class="row"><button type="button" class="btn" id="msGotowe" disabled>Gotowe</button><span class="small" id="msInfo" aria-live="polite"></span></div>
   </div>
   <div class="card" id="msPorown" hidden>
     <h3 id="msPorTyt"></h3>
@@ -469,7 +481,7 @@ svg.graf .strz { fill: var(--muted); }
       <button type="button" class="btn" id="msKrok">Krok</button>
       <button type="button" class="btn ghost" id="msKoniec">Do końca</button>
     </div>
-    <svg class="graf" id="msGrafA" viewBox="0 0 540 330" role="img" aria-label="Algorytm na tej samej planszy"></svg>
+    <div class="scroll-x"><svg class="graf" id="msGrafA" viewBox="0 0 540 330" role="img" aria-label="Algorytm na tej samej planszy"></svg></div>
     <p class="statusl" id="msAStatus" aria-live="polite"></p>
     <button type="button" class="btn" id="msDalej">Następna plansza →</button>
   </div>
@@ -1297,6 +1309,32 @@ Ustawienia.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
 
+</script>
+<script>
+/* Wspólne: zaznacz pudełka przewijane w bok, gdy mieszczą więcej, niż widać. */
+(function () {
+  var SEL = '.scroll-x, .tapebox, .iewzor';
+  function upd(e) {
+    var max = e.scrollWidth - e.clientWidth;
+    if (max <= 4) { e.removeAttribute('data-przewin'); if (e.dataset.przewinTab) { e.removeAttribute('tabindex'); delete e.dataset.przewinTab; } return; }
+    if (e.hasAttribute('data-srodek') && !e.dataset.wysrodkowane) { e.dataset.wysrodkowane = '1'; e.scrollLeft = max / 2; }
+    var l = e.scrollLeft > 4, p = e.scrollLeft < max - 4;
+    e.setAttribute('data-przewin', (l ? 'l' : '') + (p ? 'p' : ''));
+    if (!e.hasAttribute('tabindex')) { e.tabIndex = 0; e.dataset.przewinTab = '1'; }
+  }
+  function wszystkie() {
+    document.querySelectorAll(SEL).forEach(function (e) {
+      if (!e.dataset.przewinOk) { e.dataset.przewinOk = '1'; e.addEventListener('scroll', function () { upd(e); }, { passive: true }); }
+      upd(e);
+    });
+  }
+  var t; function zaplanuj() { clearTimeout(t); t = setTimeout(wszystkie, 120); }
+  window.addEventListener('resize', zaplanuj);
+  window.addEventListener('hashchange', zaplanuj);
+  document.addEventListener('toggle', zaplanuj, true);
+  new MutationObserver(zaplanuj).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+  wszystkie();
+})();
 </script>
 </body>
 </html>
