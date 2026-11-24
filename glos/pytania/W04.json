@@ -39,7 +39,7 @@
   {
    "id": "strzalki",
    "typ": "liczba",
-   "slajd": "Notacja strzałkowa Knutha",
+   "slajd": "Co znaczy 2↑↑↑5? Notacja strzałkowa Knutha",
    "tresc": "3↑↑3 jest większe od 3↑3. O ile rzędów wielkości (w przybliżeniu)?",
    "poprawna": 11,
    "tolerancja": 1
