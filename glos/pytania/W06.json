@@ -37,6 +37,17 @@
    "poprawna": 11
   },
   {
+   "id": "lame",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: policz kroki",
+   "tresc": "Czy liczba obiegów mieści się w oszacowaniu Lamégo?",
+   "opcje": [
+    "Tak",
+    "Nie"
+   ],
+   "poprawna": 0
+  },
+  {
    "id": "sortowac",
    "typ": "liczba",
    "slajd": "Sortować czy nie sortować?",

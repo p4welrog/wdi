@@ -36,7 +36,7 @@ telefon studenta ── index.html ──┐                        ┌── pr
 
 Pola wspólne: `id` (unikalne w pliku), `tresc`, opcjonalnie `slajd` (podpowiedź dla prowadzącego).
 W pytaniach `wybor` pole `numeracja: "1"` oznacza opcje cyframi 1, 2, 3… zamiast liter (jak na slajdzie).
-Zestawy W01–W12 (81 pytań) powstały z ramek `#pytanie` w slajdach i odpowiedzi w notatkach; po zmianie
+Zestawy W01–W12 (96 pytań) powstały z ramek `#pytanie` w slajdach i odpowiedzi w notatkach; po zmianie
 pytania na slajdzie trzeba poprawić też odpowiedni plik JSON.
 W widoku prowadzącego jest też **szybkie pytanie** (A–D, tak/nie, liczba, słowa) na pytania
 wyświetlone na slajdzie, dla których nie ma pliku JSON.

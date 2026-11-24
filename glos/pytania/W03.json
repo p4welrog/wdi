@@ -24,11 +24,36 @@
    "poprawna": 1
   },
   {
+   "id": "css-r",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: szesnastkowy w praktyce",
+   "tresc": "Kolor CSS #FF5733: ile wynosi składowa R (FF₁₆) dziesiętnie?",
+   "poprawna": 255
+  },
+  {
    "id": "css-g",
    "typ": "liczba",
    "slajd": "Mini-zadanie: szesnastkowy w praktyce",
    "tresc": "Kolor CSS #FF5733: ile wynosi składowa G (57₁₆) dziesiętnie?",
    "poprawna": 87
+  },
+  {
+   "id": "css-b",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: szesnastkowy w praktyce",
+   "tresc": "Kolor CSS #FF5733: ile wynosi składowa B (33₁₆) dziesiętnie?",
+   "poprawna": 51
+  },
+  {
+   "id": "chmod",
+   "typ": "tekst",
+   "maks": 20,
+   "slajd": "Mini-zadanie: szesnastkowy w praktyce",
+   "tresc": "chmod 755: zapisz liczbę 755₈ dwójkowo.",
+   "poprawna": [
+    "111101101",
+    "111 101 101"
+   ]
   },
   {
    "id": "ipv6",
@@ -67,11 +92,56 @@
    "poprawna": 56
   },
   {
+   "id": "zabawkowy",
+   "typ": "tekst",
+   "maks": 20,
+   "slajd": "Mini-zadanie: zakoduj sam",
+   "tresc": "Zapisz −5,75 w formacie zabawkowym s eee mmmm (nadmiar 3).",
+   "poprawna": [
+    "11010111",
+    "1 101 0111"
+   ]
+  },
+  {
    "id": "float-hex",
    "typ": "liczba",
    "slajd": "Mini-zadanie: zakoduj sam",
    "tresc": "Jaką liczbę oznacza float o zapisie szesnastkowym 0x41200000?",
    "poprawna": 10
+  },
+  {
+   "id": "dokladnie-zabawkowy",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: zakoduj sam",
+   "tresc": "Czy 9,25 da się zapisać dokładnie w formacie zabawkowym?",
+   "opcje": [
+    "Tak",
+    "Nie"
+   ],
+   "poprawna": 1
+  },
+  {
+   "id": "dokladnie-float",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: zakoduj sam",
+   "tresc": "A w formacie float?",
+   "opcje": [
+    "Tak",
+    "Nie"
+   ],
+   "poprawna": 0
+  },
+  {
+   "id": "utf8-l",
+   "typ": "tekst",
+   "maks": 20,
+   "slajd": "Mini-zadanie: bajty i litery",
+   "tresc": "Zakoduj „ł” (U+0142) w UTF-8. Podaj bajty szesnastkowo.",
+   "poprawna": [
+    "C5 82",
+    "C582",
+    "0xC5 0x82"
+   ]
   },
   {
    "id": "utf8",
@@ -88,6 +158,14 @@
    "tresc": "A ile w ISO 8859-2?",
    "poprawna": 17,
    "jednostka": "B"
+  },
+  {
+   "id": "krzaczki",
+   "typ": "tekst",
+   "maks": 10,
+   "slajd": "Mini-zadanie: bajty i litery",
+   "tresc": "Na stronie widać „Ĺ‚”. Jaką literę miał na myśli autor?",
+   "poprawna": "ł"
   }
  ]
 }

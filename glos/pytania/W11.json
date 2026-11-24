@@ -41,6 +41,30 @@
    "jednostka": "ms"
   },
   {
+   "id": "najlepsza-c",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: zaplanuj procesor",
+   "tresc": "Która reguła jest najlepsza dla zadania C?",
+   "opcje": [
+    "FCFS",
+    "SJF",
+    "RR, q = 2"
+   ],
+   "poprawna": 1
+  },
+  {
+   "id": "najlepsza-a",
+   "typ": "wybor",
+   "slajd": "Mini-zadanie: zaplanuj procesor",
+   "tresc": "A która dla zadania A?",
+   "opcje": [
+    "FCFS",
+    "SJF",
+    "RR, q = 2"
+   ],
+   "poprawna": 0
+  },
+  {
    "id": "vm-1",
    "typ": "wybor",
    "slajd": "Maszyna wirtualna czy kontener?",

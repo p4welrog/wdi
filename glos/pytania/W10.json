@@ -36,6 +36,20 @@
    "slajd": "Mini-zadanie: policz odległości",
    "tresc": "Dijkstra: najkrótsza odległość od A do E?",
    "poprawna": 20
+  },
+  {
+   "id": "dijkstra-trasa",
+   "typ": "tekst",
+   "maks": 30,
+   "slajd": "Mini-zadanie: policz odległości",
+   "tresc": "Jaką trasą najkrócej z A do E? (np. A, B, E)",
+   "poprawna": [
+    "A, C, F, E",
+    "A,C,F,E",
+    "A C F E",
+    "ACFE",
+    "A → C → F → E"
+   ]
   }
  ]
 }

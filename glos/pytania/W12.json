@@ -28,6 +28,15 @@
    "poprawna": 1
   },
   {
+   "id": "propagacja",
+   "typ": "liczba",
+   "slajd": "Mini-zadanie: policz opóźnienie",
+   "tresc": "Warszawa → Sydney (15 600 km), v = 2·10⁸ m/s: ile wynosi opóźnienie propagacji (ms)?",
+   "poprawna": 78,
+   "tolerancja": 1,
+   "jednostka": "ms"
+  },
+  {
    "id": "rtt",
    "typ": "liczba",
    "slajd": "Mini-zadanie: policz opóźnienie",

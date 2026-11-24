@@ -23,6 +23,14 @@
    "poprawna": 8
   },
   {
+   "id": "wynik-111",
+   "typ": "tekst",
+   "maks": 20,
+   "slajd": "Mini-zadanie: uruchom maszynę",
+   "tresc": "Maszyna dodająca 1, wejście 111: jaki jest wynik na taśmie?",
+   "poprawna": "1000"
+  },
+  {
    "id": "bb3-kroki",
    "typ": "liczba",
    "slajd": "Kandydat dla n = 3",
