@@ -330,7 +330,7 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
   <p class="lead">Ćwiczenia do wykładu 11, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
   <div class="grid2">
     <a class="tile" href="#stany"><span class="num">1</span><h3>Stany procesu</h3><p>Diagram stanów procesu i dziesięć zdarzeń z życia programu: wczytanie pliku, koniec kwantu, naciśnięty klawisz. Wskaż przejście, które wykona system.</p><div class="meta">ok. 4 min · slajdy „Program a proces” i „Stany procesu”</div></a>
-    <a class="tile" href="#planista"><span class="num">2</span><h3>Planista procesora</h3><p>Zadania, cztery reguły planowania i wykresy Gantta. Średni czas oczekiwania, czas do pierwszego uruchomienia, koszt przełączania kontekstu i wybór kwantu. Na koniec ułóż kolejkę sam.</p><div class="meta">ok. 10 min · slajdy od „Przełączania kontekstu” do „Przykładu: cztery zadania, trzy reguły”</div></a>
+    <a class="tile" href="#planista"><span class="num">2</span><h3>Planista procesora</h3><p>Zadania, cztery reguły planowania i wykresy Gantta. Średni czas oczekiwania, czas do pierwszego uruchomienia, koszt przełączania kontekstu i wybór kwantu. Ułóż kolejkę sam i zobacz, jak starzenie chroni przed zagłodzeniem.</p><div class="meta">ok. 12 min · slajdy od „Przełączania kontekstu” do „Przykładu: cztery zadania, trzy reguły”</div></a>
     <a class="tile" href="#przelaczanie"><span class="num">3</span><h3>Przełączanie zadań u ludzi</h3><p>Krótki eksperyment: oceniaj cyfry raz według parzystości, raz według wielkości. Czy zmiana zadania kosztuje czas? Twój wynik i — w trybie grupowym — wynik sali.</p><div class="meta">ok. 5 min · slajd „Przełączanie się między zadaniami u ludzi”</div></a>
     <a class="tile" href="#pamiec"><span class="num">4</span><h3>Pamięć wirtualna</h3><p>Adres wirtualny rozłożony na stronę i przesunięcie, tablice stron dwóch procesów, adres fizyczny. Co się stanie przy zapisie do kodu, wykonaniu danych albo odwołaniu do strony na dysku?</p><div class="meta">ok. 7 min · slajdy „Pamięć wirtualna” i „Ochrona: izolacja, uprawnienia, bit NX”</div></a>
     <a class="tile" href="#architektury"><span class="num">5</span><h3>Gdzie to działa?</h3><p>Elementy systemu zapisów na zajęcia rozdziel między warstwy: prezentację, logikę i dane. Potem rozpoznaj klienta, serwer i sieć peer-to-peer.</p><div class="meta">ok. 5 min · slajdy od „Klient–serwer i peer-to-peer” do „Monolitu czy mikroserwisów?”</div></a>
@@ -405,13 +405,25 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
     <div class="row"><button type="button" class="btn ghost small" id="ukReset">Od nowa</button></div>
   </div>
 
+  <div class="card">
+    <h3>Zagłodzenie i starzenie</h3>
+    <p class="small muted">Długie zadanie D (6 ms, priorytet 5) czeka od chwili 0. Co jakiś czas przychodzi nowe pilne zadanie (2 ms, priorytet 1). Reguła priorytetowa bez wywłaszczania: procesor dostaje zadanie o najlepszym priorytecie, przy remisie — to, które czeka dłużej.</p>
+    <div class="row" style="gap: 18px">
+      <span class="row"><label for="agK">pilne zadanie co</label><input type="range" id="agK" min="2" max="6" value="2"><span class="mono" id="agKv">2</span><span class="small muted">ms</span></span>
+      <span class="row"><span class="small muted" id="agLab">starzenie:</span><span class="seg" id="agTryb" role="group" aria-labelledby="agLab"><button type="button" data-a="0" aria-pressed="true">wyłączone</button><button type="button" data-a="1" aria-pressed="false">włączone</button></span><span class="small muted">co 4 ms czekania priorytet o 1 lepszy</span></span>
+    </div>
+    <div id="agGantt"></div>
+    <div class="stats" id="agStaty"></div>
+    <p class="small muted" id="agOpis"></p>
+  </div>
+
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
       <li>W przykładzie ze slajdu SJF ma najmniejszy średni czas oczekiwania. Dlaczego w prawdziwym systemie trudno go stosować?</li>
       <li>Ustaw q = 1, a potem koszt przełączenia c = 1. Co się dzieje z liczbą przełączeń i z czasem, w którym procesor robi coś pożytecznego?</li>
       <li>Ustaw q większe od najdłuższego zadania. Z którą regułą zrównuje się wtedy reguła rotacyjna?</li>
-      <li>W regule priorytetowej daj długiemu zadaniu najniższy priorytet i dodawaj krótkie zadania o wyższym. Kiedy długie zadanie dostanie procesor? Jak temu zapobiega „starzenie” (aging)?</li>
+      <li>W karcie „Zagłodzenie i starzenie” ustaw pilne zadanie co 2 ms. Kiedy D dostaje procesor bez starzenia, a kiedy ze starzeniem? Co starzenie kosztuje pilne zadania? Starzenie to sprzężenie zwrotne: co jest tu skutkiem, a co przyczyną?</li>
     </ol>
   </div>
   <p class="src">A. Silberschatz, P. B. Galvin, G. Gagne, <em>Operating System Concepts</em>, 10th ed., Wiley 2018, rozdz. 5 (planowanie przydziału procesora). Przykład P1–P4 ze slajdu. Mini-zadania ze slajdu tu nie ma — zrób je na kartce.</p>
@@ -1056,6 +1068,43 @@ const Planista = (() => {
     }
   }
   function ustaw(p) { zad = p.z.map(([n, t, pr]) => ({ n, t, p: pr })); uk = []; rysujZad(); przelicz(); }
+  /** Zagłodzenie: D (6 ms, prio 5) od chwili 0, pilne (2 ms, prio 1) co k ms; bez wywłaszczania; starzenie: co 4 ms czekania priorytet o 1 lepszy. */
+  function glodzenie(k, starzenie, H = 40) {
+    const Z = [{ n: 'D', przy: 0, t: 6, p: 5 }];
+    for (let a = 0, i = 1; a < H; a += k, i++) Z.push({ n: 'p' + i, przy: a, t: 2, p: 1 });
+    const kon = {}, start = {}, seg = []; let t = 0;
+    const ef = (i) => (starzenie ? Math.max(1, Z[i].p - Math.floor((t - Z[i].przy) / 4)) : Z[i].p);
+    while (t < H) {
+      const got = Z.map((_, i) => i).filter((i) => Z[i].przy <= t && kon[i] === undefined);
+      if (!got.length) { const nast = Z.filter((z, i) => kon[i] === undefined).map((z) => z.przy); if (!nast.length) break; t = Math.min(...nast); continue; }
+      got.sort((a, b) => ef(a) - ef(b) || Z[a].przy - Z[b].przy || a - b);
+      const i = got[0]; start[i] = t; seg.push({ p: i, s: t, e: t + Z[i].t }); t += Z[i].t; kon[i] = t;
+    }
+    const pilne = Z.map((_, i) => i).filter((i) => i > 0 && start[i] !== undefined);
+    const maxCz = pilne.length ? Math.max(...pilne.map((i) => start[i] - Z[i].przy)) : 0;
+    return { Z, seg, startD: start[0], maxCz, koniec: Math.max(H, t) };
+  }
+  let agK = 2, agS = false;
+  function rysujAg() {
+    const r = glodzenie(agK, agS), T = r.koniec, host = $('#agGantt'); host.replaceChildren();
+    const pas = el('div', { class: 'pas' }); let ost = 0;
+    for (const s of r.seg) {
+      if (s.s > ost) pas.append(el('div', { class: 'sg sw', style: `width: ${(100 * (s.s - ost)) / T}%`, title: `procesor bezczynny ${ost}–${s.s}` }));
+      pas.append(el('div', { class: 'sg ' + (s.p === 0 ? 'c0' : 'c1'), style: `width: ${(100 * (s.e - s.s)) / T}%`, title: `${r.Z[s.p].n}: ${s.s}–${s.e}`, text: s.p === 0 ? 'D' : '' })); ost = s.e;
+    }
+    if (ost < T) pas.append(el('div', { class: 'sg sw', style: `width: ${(100 * (T - ost)) / T}%` }));
+    const os = el('div', { class: 'os' }); for (let x = 0; x <= T; x += 10) os.append(el('span', { style: `left: ${(100 * x) / T}%`, text: String(x) }));
+    host.append(el('div', { class: 'gantt' }, el('div', { class: 'gl' }, el('b', { text: agS ? 'ze starzeniem' : 'bez starzenia' }), el('span', { class: 'small muted', text: `pierwsze ${T} ms; pola bez napisu: pilne zadania, kreskowane: procesor bezczynny` })), pas, os));
+    const st = $('#agStaty'); st.replaceChildren();
+    const stat = (kk, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: kk }), el('div', { class: 'v', text: v })));
+    stat('D dostaje procesor', r.startD === undefined ? `nie w ${T} ms` : `w chwili ${r.startD}`);
+    stat('najdłuższe czekanie pilnego', `${r.maxCz} ms`);
+    let op;
+    if (r.startD === undefined) op = 'Pilne zadania przychodzą tak często, że zawsze któreś czeka, a ma lepszy priorytet niż D. D jest zagłodzone: czeka bez końca, choć nic nie jest „zepsute”.';
+    else if (agS) op = 'Im dłużej D czeka, tym lepszy ma priorytet, aż w końcu wyprzedza pilne zadania. To sprzężenie zwrotne równoważące. Cena: pilne zadania czekają dłużej.';
+    else op = 'Między pilnymi zadaniami zostają przerwy, więc D w końcu dostaje procesor. Zagłodzenie grozi wtedy, gdy zadania o lepszym priorytecie zajmują procesor bez przerwy.';
+    $('#agOpis').textContent = op;
+  }
   function init() {
     $('#plPrzyk').replaceChildren(el('span', { class: 'small muted', text: 'Zestawy:' }), ...PRZYK.map((p) => {
       const b = el('button', { type: 'button', class: 'btn ghost small', text: p.n }); b.addEventListener('click', () => ustaw(p)); return b;
@@ -1068,9 +1117,12 @@ const Planista = (() => {
     $('#plQ').addEventListener('input', () => { q = +$('#plQ').value; $('#plQv').textContent = q; przelicz(); });
     $('#plC').addEventListener('input', () => { c = +$('#plC').value; $('#plCv').textContent = c; przelicz(); });
     $('#ukReset').addEventListener('click', () => { uk = []; rysujUk(); });
+    $('#agK').addEventListener('input', () => { agK = +$('#agK').value; $('#agKv').textContent = agK; rysujAg(); });
+    for (const b of $$('#agTryb button')) b.addEventListener('click', () => { agS = b.dataset.a === '1'; for (const x of $$('#agTryb button')) x.setAttribute('aria-pressed', String(x === b)); rysujAg(); });
+    rysujAg();
     ustaw(PRZYK[0]);
   }
-  return { init, _t: { symuluj: (alg, Z, kw, koszt) => { const r = symuluj(alg, Z.map(([n, t, p]) => ({ n, t, p: p || 1 })), kw, koszt); return { ...r, w: czekanie(Z.map(([n, t]) => ({ n, t })), r), o: odp1(Z, r) }; } } };
+  return { init, _t: { glodzenie, symuluj: (alg, Z, kw, koszt) => { const r = symuluj(alg, Z.map(([n, t, p]) => ({ n, t, p: p || 1 })), kw, koszt); return { ...r, w: czekanie(Z.map(([n, t]) => ({ n, t })), r), o: odp1(Z, r) }; } } };
 })();
 
 /* ═════════════════════ Ćwiczenie 3: przełączanie zadań ═════════════════════ */
