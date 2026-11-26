@@ -95,6 +95,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
 .przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
 .przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
@@ -507,9 +510,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Ustaw jeden komunikat na prawie 0. Jego informacja własna jest ogromna, a entropia prawie się nie zmienia. Dlaczego?</li>
-      <li>Kiedy entropia osiąga maksimum log₂ n? Czy da się je przekroczyć, dodając „sensacyjne” rzadkie komunikaty?</li>
-      <li>Moneta, która w 90% przypadków daje orła, niesie ok. 0,47 bitu na rzut. Co to znaczy dla kogoś, kto chce zapisać milion takich rzutów?</li>
+      <li>Ustaw jeden komunikat na prawie 0. Jego informacja własna jest ogromna, a entropia prawie się nie zmienia. Dlaczego?
+        <details class="odp"><summary>Wskazówka</summary><div>Entropia to średnia: każdy komunikat wnosi p · I(p). Co się dzieje z tym iloczynem, gdy p jest bardzo małe?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Rzadki komunikat bardzo zaskakuje, ale prawie nigdy nie przychodzi, więc średnio wnosi mało. Przy p = 0,001 jego informacja własna to ok. 9,97 bitu, a wkład do entropii p · I(p) tylko ok. 0,01 bitu. Gdy p dąży do 0, wkład też dąży do 0.</div></details>
+      </li>
+      <li>Kiedy entropia osiąga maksimum log₂ n? Czy da się je przekroczyć, dodając „sensacyjne” rzadkie komunikaty?
+        <details class="odp"><summary>Wskazówka</summary><div>Ustaw wszystkie suwaki na równe wartości. Potem spróbuj dodać jeden bardzo rzadki komunikat.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Entropia osiąga maksimum log₂ n, gdy wszystkie n komunikatów są jednakowo prawdopodobne, bo wtedy niczego nie da się przewidzieć. Przy ustalonym n nie da się go przekroczyć. Dodanie rzadkiego komunikatu zwiększa n, a więc i maksimum, ale samą entropię podnosi tylko odrobinę (z powodu z pytania 1).</div></details>
+      </li>
+      <li>Moneta, która w 90% przypadków daje orła, niesie ok. 0,47 bitu na rzut. Co to znaczy dla kogoś, kto chce zapisać milion takich rzutów?
+        <details class="odp"><summary>Wskazówka</summary><div>Entropia mówi, ile bitów na rzut średnio wystarczy przy najlepszym kodowaniu.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Milion takich rzutów da się zapisać średnio w ok. 469 000 bitach (ok. 59 kB) zamiast w 1 000 000 bitów, po jednym na rzut. Wymaga to kodowania grup rzutów naraz, bo pojedynczemu rzutowi nie da się przypisać mniej niż 1 bitu.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">C. E. Shannon, <em>A Mathematical Theory of Communication</em>, Bell Syst. Tech. J. 27 (1948), §6.</p>
@@ -568,9 +580,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Na danych 0,35 / 0,17 / 0,17 / 0,16 / 0,15 Huffman wygrywa minimalnie. Spróbuj 0,4 / 0,3 / 0,2 / 0,1. Czy zawsze jest różnica?</li>
-      <li>W Shannonie–Fano wybierz celowo „złe” cięcie. O ile pogarsza się L? Czy kod nadal jest prefiksowy?</li>
-      <li>Przy remisie wag Huffman może połączyć różne pary. Czy zmienia to kody? A średnią długość L?</li>
+      <li>Na danych 0,35 / 0,17 / 0,17 / 0,16 / 0,15 Huffman wygrywa minimalnie. Spróbuj 0,4 / 0,3 / 0,2 / 0,1. Czy zawsze jest różnica?
+        <details class="odp"><summary>Wskazówka</summary><div>Zbuduj oba kody na danych 0,4 / 0,3 / 0,2 / 0,1 i porównaj L w tabeli.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie zawsze. Na danych 0,4 / 0,3 / 0,2 / 0,1 obie metody dają długości 1, 2, 3, 3 i L = 1,9 bitu. Huffman nigdy nie jest gorszy od Shannona–Fano, ale często daje ten sam wynik. Różnica pojawia się dopiero przy mniej „wygodnych” prawdopodobieństwach, jak w przykładzie A–E (2,30 wobec 2,31).</div></details>
+      </li>
+      <li>W Shannonie–Fano wybierz celowo „złe” cięcie. O ile pogarsza się L? Czy kod nadal jest prefiksowy?
+        <details class="odp"><summary>Wskazówka</summary><div>Słowa kodowe to ścieżki do liści drzewa. Czy liść może leżeć na ścieżce do innego liścia?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>L rośnie. Na danych A–E poprawne cięcia dają L = 2,31, a złe pierwsze cięcie {A, B, C, D} | {E} daje już 2,7 bitu. Kod nadal jest prefiksowy: każde słowo to liść drzewa, a żaden liść nie leży na drodze do innego. Złe cięcie psuje więc tylko długość kodu, a nie jego jednoznaczność.</div></details>
+      </li>
+      <li>Przy remisie wag Huffman może połączyć różne pary. Czy zmienia to kody? A średnią długość L?
+        <details class="odp"><summary>Wskazówka</summary><div>Przy remisie połącz najpierw jedną parę, a potem, po „Od nowa”, inną.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Kody mogą wyjść różne, a czasem nawet różne długości słów. Średnia długość L jest jednak zawsze taka sama, bo każdy kod Huffmana daje najmniejsze możliwe L dla tych prawdopodobieństw.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">D. A. Huffman, <em>A Method for the Construction of Minimum-Redundancy Codes</em>, Proc. IRE 40(9), 1952, s. 1098–1101; metoda Fano za: C. E. Shannon 1948, §9.</p>
@@ -623,9 +644,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Kod II ma sumę Krafta 9/8. Spróbuj zmienić w nim jedno słowo tak, żeby stał się prefiksowy, nie wydłużając pozostałych. Czy się da?</li>
-      <li>Kod {0, 01, 11} nie jest prefiksowy, a jednak jest jednoznaczny. Odczytaj <span class="mono">0111</span> i <span class="mono">01111</span>. Kiedy wiesz, jaki był pierwszy symbol?</li>
-      <li>Fragment alfabetu Morse’a bez pauz (E = 0, T = 1, I = 00, A = 01…) jest niejednoznaczny. Co w praktyce pełni rolę trzeciego symbolu?</li>
+      <li>Kod II ma sumę Krafta 9/8. Spróbuj zmienić w nim jedno słowo tak, żeby stał się prefiksowy, nie wydłużając pozostałych. Czy się da?
+        <details class="odp"><summary>Wskazówka</summary><div>Cztery słowa 00, 01, 10, 11 już same dają sumę Krafta 1. Ile miejsca zostaje dla 001?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Da się, ale trzeba zmienić jedno ze słów dwubitowych, a nie 001. Na przykład zamiana 00 na 000 daje kod {000, 01, 10, 11, 001}: jest prefiksowy, a suma Krafta wynosi dokładnie 1. Wydłuża się tylko zmieniane słowo. Zmiana samego 001 nie pomoże, bo cztery słowa dwubitowe zajmują już wszystkie możliwe początki.</div></details>
+      </li>
+      <li>Kod {0, 01, 11} nie jest prefiksowy, a jednak jest jednoznaczny. Odczytaj <span class="mono">0111</span> i <span class="mono">01111</span>. Kiedy wiesz, jaki był pierwszy symbol?
+        <details class="odp"><summary>Wskazówka</summary><div>Po zerze przychodzą same jedynki. Czy po pierwszych dwóch bitach wiesz, czy to „0” i „11”, czy „01”?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>0111 da się odczytać tylko jako 01 · 11, a 01111 tylko jako 0 · 11 · 11. Pierwszy symbol poznajesz dopiero po doczytaniu wszystkich jedynek: przy parzystej liczbie jedynek był to 0, przy nieparzystej 01. Kod jest jednoznaczny, ale odbiorca musi czekać na koniec ciągu, a kod prefiksowy pozwala odczytywać od razu.</div></details>
+      </li>
+      <li>Fragment alfabetu Morse’a bez pauz (E = 0, T = 1, I = 00, A = 01…) jest niejednoznaczny. Co w praktyce pełni rolę trzeciego symbolu?
+        <details class="odp"><summary>Wskazówka</summary><div>Jak telegrafista oddziela jedną literę Morse’a od następnej?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przerwa. Między kropkami i kreskami jednej litery jest krótka przerwa, między literami dłuższa, a między wyrazami jeszcze dłuższa. Bez przerw ciąg „0 1” mógłby oznaczać A albo ET, więc w praktyce Morse używa więcej niż dwóch symboli.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Test jednoznaczności: algorytm Sardinasa–Pattersona (1953), bez dowodu. Nierówność Krafta–McMillana: Kraft 1949, McMillan 1956; zob. też C. E. Shannon 1948, §9.</p>
@@ -663,9 +693,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przekłam dwa bity w tym samym bajcie w wariancie z bitem parzystości. Co widzi odbiorca?</li>
-      <li>Potrójne powtórzenie i kod Hamminga poprawiają pojedyncze błędy. Który robi to taniej i ile kosztuje każdy z nich?</li>
-      <li>Ustaw prawdopodobieństwo na 0. Redundancja jest wtedy czystym kosztem. Gdzie w praktyce się ją jednak płaci? (Sieci, dyski RAID, kody QR, kopie zapasowe.)</li>
+      <li>Przekłam dwa bity w tym samym bajcie w wariancie z bitem parzystości. Co widzi odbiorca?
+        <details class="odp"><summary>Wskazówka</summary><div>Bit parzystości mówi tylko, czy liczba jedynek w bajcie jest parzysta.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Odbiorca nie widzi błędu. Dwie zmiany w tym samym bajcie nie zmieniają parzystości liczby jedynek, więc bajt wygląda na poprawny. Bit parzystości wykrywa każdą nieparzystą liczbę przekłamań, ale żadnej parzystej.</div></details>
+      </li>
+      <li>Potrójne powtórzenie i kod Hamminga poprawiają pojedyncze błędy. Który robi to taniej i ile kosztuje każdy z nich?
+        <details class="odp"><summary>Wskazówka</summary><div>Policz, ile bitów trzeba wysłać na każde 4 bity danych w obu metodach.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Kod Hamminga (7,4) jest tańszy: wysyła 7 bitów na 4 bity danych, czyli 75% narzutu. Potrójne powtórzenie wysyła 12 bitów na te same 4 bity, czyli 200% narzutu. Oba poprawiają jedno przekłamanie: Hamming w bloku 7 bitów, powtórzenie w każdej trójce.</div></details>
+      </li>
+      <li>Ustaw prawdopodobieństwo na 0. Redundancja jest wtedy czystym kosztem. Gdzie w praktyce się ją jednak płaci? (Sieci, dyski RAID, kody QR, kopie zapasowe.)
+        <details class="odp"><summary>Wskazówka</summary><div>Pomyśl o miejscach, w których błąd byłby bardzo kosztowny, choć zdarza się rzadko.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Płacimy tam, gdzie pomyłka kosztuje więcej niż dodatkowe bity. Pakiety w sieci mają sumy kontrolne, więc uszkodzony pakiet da się wykryć i wysłać ponownie. RAID przetrwa awarię dysku, kod QR da się odczytać mimo zabrudzenia, a kopia zapasowa ratuje dane po awarii. Prawdopodobieństwo błędu nigdy nie jest naprawdę zerowe.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">R. W. Hamming, <em>Error Detecting and Error Correcting Codes</em>, Bell System Technical Journal 29(2), 1950, s. 147–160.</p>
@@ -705,9 +744,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Warunek „4 bodźce, nierówno” ma tyle samo bodźców co „4 bodźce”, ale mniejszą entropię. Jak wypadł Twój czas reakcji? O tym był eksperyment Hymana.</li>
-      <li>Hick najlepiej dopasował dane do log₂(n + 1), a nie log₂ n. Co oznacza „+1”? (Podpowiedź: czy przy jednym bodźcu nie ma żadnej niepewności?)</li>
-      <li>Co z tego wynika dla projektu menu w aplikacji: czy 8 opcji jest „8 razy wolniejsze” od jednej?</li>
+      <li>Warunek „4 bodźce, nierówno” ma tyle samo bodźców co „4 bodźce”, ale mniejszą entropię. Jak wypadł Twój czas reakcji? O tym był eksperyment Hymana.
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj medianę z warunkiem „2 bodźce” i „4 bodźce”. Gdzie wypada „4 bodźce, nierówno”?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Według Hymana czas reakcji zależy od entropii, a nie od samej liczby bodźców. „4 bodźce, nierówno” powinno więc wypaść szybciej niż „4 bodźce” i bliżej warunku o podobnej entropii. Jeśli u Ciebie tak nie wyszło, przyczyną może być mała liczba prób, efekt wprawy (stała kolejność warunków) albo opóźnienia ekranu.</div></details>
+      </li>
+      <li>Hick najlepiej dopasował dane do log₂(n + 1), a nie log₂ n. Co oznacza „+1”? (Podpowiedź: czy przy jednym bodźcu nie ma żadnej niepewności?)
+        <details class="odp"><summary>Wskazówka</summary><div>Czy przy jednym bodźcu wiesz z góry, kiedy się pojawi?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Hick tłumaczył „+1” tym, że nawet przy jednym bodźcu jest niepewność: czy i kiedy sygnał się pojawi. To jakby dodatkowa możliwość „jeszcze nic”. Stąd log₂(n + 1): dla n = 1 daje 1 bit, a nie 0.</div></details>
+      </li>
+      <li>Co z tego wynika dla projektu menu w aplikacji: czy 8 opcji jest „8 razy wolniejsze” od jednej?
+        <details class="odp"><summary>Wskazówka</summary><div>Czas rośnie z log₂ n. Ile bitów to 1 opcja, a ile 8?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie. Według prawa Hicka–Hymana czas rośnie o stałą wartość na każdy bit, a 8 równie częstych opcji to tylko 3 bity więcej niż jedna. Menu z 8 opcjami jest wolniejsze, ale nie 8 razy. Pomaga też stawianie najczęściej wybieranych opcji tak, żeby wybór był bardziej przewidywalny, bo to zmniejsza entropię.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">W. E. Hick, <em>On the Rate of Gain of Information</em>, Q. J. Exp. Psychol. 4(1), 1952, s. 11–26; R. Hyman, <em>Stimulus Information as a Determinant of Reaction Time</em>, J. Exp. Psychol. 45(3), 1953, s. 188–196.</p>
@@ -767,9 +815,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Gdzie trafiałeś od razu, a gdzie potrzebowałeś wielu prób? Porównaj początki i końce wyrazów.</li>
-      <li>Maszyna pamiętająca więcej znaków zgaduje lepiej, ale zwykle i tak przegrywa z człowiekiem. Czego ona nie wie, a Ty wiesz? Duże modele językowe robią to samo co ta maszyna, czyli przewidują następny fragment tekstu, tylko uczą się na ogromnych zbiorach tekstów i patrzą na bardzo długi kontekst.</li>
-      <li>Jeśli H wynosi ok. 1,5 bitu na znak, a log₂ 33 ≈ 5,04, to ok. 70% „pojemności” każdego znaku jest przewidywalne. Jak ta redundancja pomaga przeczytać tekst z literówkami albo dokończyć czyjeś zdanie?</li>
+      <li>Gdzie trafiałeś od razu, a gdzie potrzebowałeś wielu prób? Porównaj początki i końce wyrazów.
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj liczby prób na początku wyrazu, w środku i przy spacji.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zwykle najtrudniejsze są pierwsze litery wyrazu, bo wtedy możliwości jest najwięcej. Końcówki wyrazów i spacje często trafia się za pierwszym razem, bo gramatyka i słownictwo bardzo zawężają wybór. Właśnie te przewidywalne miejsca obniżają entropię tekstu.</div></details>
+      </li>
+      <li>Maszyna pamiętająca więcej znaków zgaduje lepiej, ale zwykle i tak przegrywa z człowiekiem. Czego ona nie wie, a Ty wiesz? Duże modele językowe robią to samo co ta maszyna, czyli przewidują następny fragment tekstu, tylko uczą się na ogromnych zbiorach tekstów i patrzą na bardzo długi kontekst.
+        <details class="odp"><summary>Wskazówka</summary><div>Maszyna zna tylko 3 poprzednie znaki i ok. 10 tys. znaków tekstów. Co wiesz Ty?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Znasz gramatykę, wiele słów, sens zdania i wiedzę o świecie, więc korzystasz z dużo dłuższego kontekstu niż 3 znaki. Maszyna widzi tylko statystykę krótkich ciągów liter. Duże modele językowe zmniejszają tę różnicę dzięki ogromnym danym i bardzo długiemu kontekstowi.</div></details>
+      </li>
+      <li>Jeśli H wynosi ok. 1,5 bitu na znak, a log₂ 33 ≈ 5,04, to ok. 70% „pojemności” każdego znaku jest przewidywalne. Jak ta redundancja pomaga przeczytać tekst z literówkami albo dokończyć czyjeś zdanie?
+        <details class="odp"><summary>Wskazówka</summary><div>Jeśli większość znaku da się przewidzieć, co się dzieje, gdy jedna litera jest zła albo jej brakuje?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Redundancja oznacza, że tekst zawiera więcej znaków, niż potrzeba do przekazania treści. Gdy litera jest zła albo jej brakuje, pozostałe litery i kontekst pozwalają ją odtworzyć, dlatego czytamy tekst z literówkami bez trudu. Z tego samego powodu potrafimy dokończyć czyjeś zdanie: dalszy ciąg jest w dużej mierze przewidywalny.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">C. E. Shannon, <em>Prediction and Entropy of Printed English</em>, Bell System Technical Journal 30(1), 1951, s. 50–64. Maszyna uczy się na ok. 10 tys. znaków tekstów napisanych na potrzeby tej strony. Teksty do zgadywania nie należą do tego zbioru.</p>
@@ -829,9 +886,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Usuń jedną literę na początku genu. Co się dzieje z białkiem? Usuń potem drugą i trzecią obok. Co się zmieniło? (Tak w 1961 r. Crick i współpracownicy pokazali, że kod jest trójkowy.)</li>
-      <li>Dlaczego zamiana 3. litery kodonu najczęściej nic nie zmienia, a zamiana 2. zawsze coś zmienia? Czy to jest kod korygujący błędy, jak kod Hamminga?</li>
-      <li>Kod nie ma separatorów, tak jak kod prefiksowy. Crick, Griffith i Orgel zaproponowali w 1957 r. „kod bez przecinków”, w którym żadne przesunięcie nie daje sensownego słowa. Dlaczego odkrycie, że TTT (w mRNA: UUU) koduje fenyloalaninę, obaliło tę hipotezę? (Podpowiedź: przeczytaj TTTTTT od drugiej litery.)</li>
+      <li>Usuń jedną literę na początku genu. Co się dzieje z białkiem? Usuń potem drugą i trzecią obok. Co się zmieniło? (Tak w 1961 r. Crick i współpracownicy pokazali, że kod jest trójkowy.)
+        <details class="odp"><summary>Wskazówka</summary><div>Kodony czytamy po trzy litery od początku. Co się dzieje z podziałem na trójki po usunięciu jednej litery?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Po usunięciu jednej litery przesuwa się ramka odczytu: wszystkie dalsze kodony są inne, białko od tego miejsca jest zupełnie zmienione i często szybko trafia na stop. Po usunięciu trzech sąsiednich liter ramka wraca na miejsce: białko traci jeden aminokwas (albo zmienia się jeden–dwa), a reszta jest poprawna. To pokazało, że kod czyta się trójkami.</div></details>
+      </li>
+      <li>Dlaczego zamiana 3. litery kodonu najczęściej nic nie zmienia, a zamiana 2. zawsze coś zmienia? Czy to jest kod korygujący błędy, jak kod Hamminga?
+        <details class="odp"><summary>Wskazówka</summary><div>Otwórz tabelę kodu i porównaj kodony tego samego aminokwasu. Na której pozycji się różnią?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Kodony tego samego aminokwasu (synonimy) różnią się najczęściej trzecią literą, więc jej zmiana zwykle niczego nie zmienia. W kodzie standardowym żadna zmiana drugiej litery nie daje synonimu. To nie jest kod korygujący jak Hamming: niczego nie wykrywa ani nie poprawia, tylko sprawia, że część pomyłek nie ma skutków.</div></details>
+      </li>
+      <li>Kod nie ma separatorów, tak jak kod prefiksowy. Crick, Griffith i Orgel zaproponowali w 1957 r. „kod bez przecinków”, w którym żadne przesunięcie nie daje sensownego słowa. Dlaczego odkrycie, że TTT (w mRNA: UUU) koduje fenyloalaninę, obaliło tę hipotezę? (Podpowiedź: przeczytaj TTTTTT od drugiej litery.)
+        <details class="odp"><summary>Wskazówka</summary><div>W kodzie bez przecinków żadne przesunięcie ramki nie może dać sensownego słowa. Co daje TTTTTT czytane od drugiej litery?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>TTTTTT czytane od drugiej litery to znowu TTT, czyli sensowny kodon (fenyloalanina). W kodzie bez przecinków przesunięta ramka nie może dawać sensownych słów, więc odkrycie, że TTT coś koduje, obaliło tę hipotezę. Komórka wie, gdzie zaczyna się ramka, z innego sygnału: od kodonu start (ATG).</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">F. H. C. Crick, J. S. Griffith, L. E. Orgel, <em>Codes Without Commas</em>, PNAS 43(5), 1957, s. 416–421; M. W. Nirenberg, J. H. Matthaei, PNAS 47(10), 1961, s. 1588–1602; F. H. C. Crick, L. Barnett, S. Brenner, R. J. Watts-Tobin, <em>General Nature of the Genetic Code for Proteins</em>, Nature 192, 1961, s. 1227–1232. Sekwencje przykładowe są wymyślone.</p>
