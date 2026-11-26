@@ -285,6 +285,49 @@ ol.wypr .tm { font-family: var(--mono); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
 }
+
+/* ───────── Mapa pojęć ───────── */
+.tile.mapa-tile { margin-bottom: 14px; border-color: var(--accent); background: var(--accent-soft); }
+.tile.mapa-tile .num { background: var(--accent); color: var(--accent-ink); }
+svg.mp { display: block; width: 100%; min-width: 760px; height: auto; margin: 4px 0; touch-action: manipulation; }
+svg.mp .kr { stroke: var(--muted); stroke-width: 1.6; fill: none; transition: opacity .15s; }
+svg.mp .kr.petla { stroke-dasharray: 6 4; }
+svg.mp .et { fill: var(--text-2); font: italic 12.5px var(--font); text-anchor: middle; dominant-baseline: central; paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; pointer-events: none; transition: opacity .15s; }
+svg.mp .grot { fill: var(--muted); }
+svg.mp .grot.a { fill: var(--accent); }
+svg.mp .w { cursor: pointer; outline: none; }
+svg.mp .w rect { fill: var(--surface); stroke: var(--accent); stroke-width: 1.6; transition: opacity .15s; }
+svg.mp .w text { fill: var(--text); font: 600 14px var(--font); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+svg.mp .w:hover rect { fill: var(--accent-soft); }
+svg.mp .w:focus-visible rect { stroke-width: 3.5; }
+svg.mp .w.wyb rect { fill: var(--accent); }
+svg.mp .w.wyb text { fill: var(--accent-ink); }
+svg.mp .w.puste rect { fill: var(--amber-soft); stroke: var(--amber); stroke-dasharray: 5 3; }
+svg.mp .w.puste text { fill: var(--amber); }
+svg.mp .w.dobrze rect { fill: var(--good-soft); stroke: var(--good); stroke-dasharray: none; }
+svg.mp .w.dobrze text { fill: var(--good); }
+svg.mp .w.zle rect { fill: var(--bad-soft); stroke: var(--bad); }
+svg.mp .w.zle text { fill: var(--bad); }
+svg.mp.fokus .kr:not(.akt), svg.mp.fokus .et:not(.akt), svg.mp.fokus .w:not(.akt) rect { opacity: .22; }
+svg.mp .kr.akt { stroke: var(--accent); stroke-width: 2.6; }
+svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
+.mpinfo { min-height: 120px; }
+.mpinfo h3 { margin-bottom: .35em; }
+.mpinfo ul { margin: .3em 0 .6em; padding-left: 1.2em; }
+.mpinfo li { margin: .15em 0; }
+.mplinki { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.mplinki a, .mplinki span { display: inline-block; font-size: .9rem; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border); text-decoration: none; }
+.mplinki a.mod { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.mplinki span { color: var(--muted); }
+.mppola { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 14px; margin: 8px 0; }
+.mppola .field { margin: 0; }
+.mppola .field > span { font-weight: 600; font-size: .92rem; }
+.mppola input { width: 100%; }
+.mppola input.dobrze { border-color: var(--good); background: var(--good-soft); }
+.mppola input.zle { border-color: var(--bad); background: var(--bad-soft); }
+.mppola .pod { font-size: .82rem; color: var(--muted); min-height: 1.2em; }
+.mpzdania { columns: 2 320px; column-gap: 28px; padding-left: 1.2em; margin: 6px 0 0; }
+.mpzdania li { break-inside: avoid; margin: .15em 0; }
 </style>
 </head>
 <body>
@@ -296,6 +339,7 @@ ol.wypr .tm { font-family: var(--mono); }
   </div>
   <nav class="wrap tabs" aria-label="Ćwiczenia">
     <a href="#start">Start</a>
+    <a href="#mapa">Mapa pojęć</a>
     <a href="#warsztat">1. Warsztat maszyny Turinga</a>
     <a href="#wyscig">2. Wyścig bobrów</a>
     <a href="#stop">3. Czy to się zatrzyma?</a>
@@ -311,6 +355,7 @@ ol.wypr .tm { font-family: var(--mono); }
 <section id="v-start">
   <h1>Maszyna Turinga i granice obliczalności: ćwiczenia</h1>
   <p class="lead">Ćwiczenia do wykładu 4, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają.</p>
+  <a class="tile mapa-tile" href="#mapa"><span class="num">★</span><h3>Mapa pojęć wykładu</h3><p>Wszystkie pojęcia wykładu na jednej mapie: co z czym się łączy, na którym slajdzie było i które ćwiczenie to trenuje. Na powtórkę: tryb „Uzupełnij” z pustymi polami.</p><div class="meta">ok. 5–10 min · cały wykład: na początek powtórki i na koniec</div></a>
   <div class="grid2">
     <a class="tile" href="#warsztat"><span class="num">1</span><h3>Warsztat maszyny Turinga</h3><p>Tablica sterująca, taśma i diagram postępu w zapisie z wykładu. Uruchom maszynę krok po kroku, popraw regułę, a potem zbuduj własną maszynę i sprawdź ją na testach.</p><div class="meta">ok. 15 min · slajdy od „Jeden krok maszyny” do „Diagramu postępu pracowitego bobra”</div></a>
     <a class="tile" href="#wyscig"><span class="num">2</span><h3>Wyścig bobrów</h3><p>Zbuduj maszynę z 2 lub 3 stanami, która zostawi najwięcej jedynek albo zrobi najwięcej kroków — i się zatrzyma. Osobne rankingi Σ i S, przeszukanie wszystkich 20 736 maszyn 2-stanowych i (na wykładzie) wspólny ranking sali.</p><div class="meta">ok. 15 min · slajdy od „Problemu pracowitego bobra” do „Dlaczego bóbr jest ważny”</div></a>
@@ -320,6 +365,48 @@ ol.wypr .tm { font-family: var(--mono); }
     <a class="tile" href="#jezyki"><span class="num">6</span><h3>Gramatyki i automaty</h3><p>Dla chętnych. Wyprowadzaj słowa z gramatyki i sprawdzaj, czy zdanie należy do języka. Porównaj pamięć automatu skończonego i licznika, a potem przyporządkuj dwanaście języków do klas hierarchii Chomsky'ego.</p><div class="meta">ok. 10 min · sekcja „Dla chętnych: języki formalne”</div></a>
   </div>
 </section>
+
+<!-- ═══════════════════ MAPA POJĘĆ ═══════════════════ -->
+<section id="v-mapa" hidden>
+  <h2>Mapa pojęć wykładu 4</h2>
+  <p class="lead">Najważniejsze pojęcia wykładu i to, jak się ze sobą łączą. Strzałkę czytaj jak zdanie: „Uniwersalna maszyna Turinga <em>symuluje każdą</em> maszynę Turinga”. Kliknij pojęcie, żeby zobaczyć, co znaczy, z czym się łączy, na którym slajdzie było i które ćwiczenie je trenuje.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <span class="seg" id="mpTryb" role="group" aria-label="Tryb mapy"><button type="button" data-w="poznaj" aria-pressed="true">Poznaj</button><button type="button" data-w="uzupelnij" aria-pressed="false">Uzupełnij</button></span>
+      <span class="small muted">Na telefonie przesuń mapę w bok.</span>
+    </div>
+    <div class="scroll-x" data-srodek><svg class="mp" id="mpSvg" viewBox="0 0 1000 605" role="group" aria-label="Mapa pojęć wykładu 4. Pojęcia są przyciskami; ta sama treść jest też poniżej jako lista zdań."></svg></div>
+    <div id="mpUzup" hidden>
+      <p class="small">W 6 pustych polach brakuje pojęć. Odczytaj je z podpisanych strzałek i wpisz poniżej. Pisownia i polskie znaki nie muszą być idealne.</p>
+      <div class="mppola" id="mpPola"></div>
+      <div class="row">
+        <button type="button" class="btn" id="mpSprawdz">Sprawdź</button>
+        <button type="button" class="btn ghost" id="mpPokaz">Pokaż odpowiedzi</button>
+        <button type="button" class="btn ghost" id="mpLosuj">Inne puste pola</button>
+      </div>
+      <p class="fbline" id="mpWynik" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="card mpinfo" id="mpInfo" aria-live="polite"></div>
+
+  <details class="card">
+    <summary><strong>Mapa jako lista zdań</strong> <span class="small muted">(np. do powtórki albo dla czytnika ekranu)</span></summary>
+    <ol class="mpzdania" id="mpZdania"></ol>
+  </details>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Pytanie Hilberta ma na mapie odpowiedź. Którą drogą strzałek do niej dojdziesz i co ta odpowiedź mówi o „metodzie na wszystko”?</li>
+      <li>Które pojęcie ma najwięcej połączeń? Co to mówi o jego roli w tym wykładzie?</li>
+      <li>Zrób własną mapę na kartce z pamięci, a dopiero potem porównaj ją z tą. Czego zabrakło, a co masz ponad nią?</li>
+    </ol>
+  </div>
+  <p class="src">Mapa pojęć (concept map) według J. D. Novaka: pojęcia połączone podpisanymi relacjami. Metaanaliza J. C. Nesbit, O. O. Adesope, <em>Learning With Concept and Knowledge Maps</em>, Review of Educational Research 76(3), 2006, s. 413–448: uczenie się z map pojęć, gotowych i budowanych samodzielnie, dawało średnio lepsze zapamiętywanie niż czytanie tekstu, list czy konspektów. Numery slajdów według pliku <a href="slajdy/W04.pdf">W04.pdf</a> (slajdy wykładu).</p>
+</section>
+
 
 <!-- ═══════════════════ 1. WARSZTAT ═══════════════════ -->
 <section id="v-warsztat" hidden>
@@ -2645,7 +2732,7 @@ const Ustawienia = (() => {
 })();
 
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'warsztat', 'wyscig', 'stop', 'przekora', 'wieze', 'jezyki', 'ustawienia'];
+const WIDOKI = ['start', 'mapa', 'warsztat', 'wyscig', 'stop', 'przekora', 'wieze', 'jezyki', 'ustawienia'];
 let biezacy = null;
 function nawiguj() {
   const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
@@ -2658,7 +2745,7 @@ function nawiguj() {
   for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 4 · ćwiczenia', warsztat: 'Warsztat maszyny Turinga · W4', wyscig: 'Wyścig bobrów · W4', stop: 'Czy to się zatrzyma? · W4', przekora: 'Przekora · W4', wieze: 'Wieże Knutha · W4', jezyki: 'Gramatyki i automaty · W4', ustawienia: 'Ustawienia prowadzącego · W4' }[v];
+  document.title = { mapa: 'Mapa pojęć · W4', start: 'Wykład 4 · ćwiczenia', warsztat: 'Warsztat maszyny Turinga · W4', wyscig: 'Wyścig bobrów · W4', stop: 'Czy to się zatrzyma? · W4', przekora: 'Przekora · W4', wieze: 'Wieże Knutha · W4', jezyki: 'Gramatyki i automaty · W4', ustawienia: 'Ustawienia prowadzącego · W4' }[v];
 }
 Grupa.init();
 Warsztat.init();
@@ -2696,6 +2783,215 @@ nawiguj();
   new MutationObserver(zaplanuj).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
   wszystkie();
 })();
+</script>
+<script>
+/* ═════════════════════ Mapa pojęć (wspólny silnik, dane wykładu na dole) ═════════════════════ */
+(function (D) {
+  'use strict';
+  const q = (s, r = document) => r.querySelector(s);
+  const qq = (s, r = document) => [...r.querySelectorAll(s)];
+  const mk = (tag, attrs = {}, ...kids) => {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else if (k === 'html') e.innerHTML = v; else e.setAttribute(k, v);
+    }
+    for (const k of kids) e.append(k);
+    return e;
+  };
+  const NS = 'http://www.w3.org/2000/svg';
+  const ms = (tag, attrs = {}, txt) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (txt !== undefined) e.textContent = txt; return e; };
+  const mieszaj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+  const norm = (s) => String(s).toLowerCase().replace(/ł/g, 'l').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  const W = D.W, K = D.K;
+  const nazwa = (id) => W[id].l.join(' ').replace(/\s*\(.*\)$/, '');
+  const pelna = (id) => W[id].l.join(' ');
+  let tryb = 'poznaj', wyb = null, puste = [...D.puste], sprawdzone = {};
+  const wezly = {}, kraw = [];
+
+  function zmierz(lines) {
+    const c = zmierz.c || (zmierz.c = document.createElement('canvas').getContext('2d'));
+    c.font = '600 14px ' + getComputedStyle(document.body).fontFamily;
+    return Math.max(...lines.map((t) => c.measureText(t).width));
+  }
+  function ramka(id) {
+    const n = W[id];
+    const w = Math.max(64, zmierz(n.l) + 26), h = n.l.length > 1 ? 46 : 32;
+    return { x0: n.x - w / 2, y0: n.y - h / 2, w, h };
+  }
+  const wew = (r, p, m = 3) => p.x > r.x0 - m && p.x < r.x0 + r.w + m && p.y > r.y0 - m && p.y < r.y0 + r.h + m;
+
+  function rysuj() {
+    const svg = q('#mpSvg');
+    svg.replaceChildren();
+    const defs = ms('defs');
+    for (const [id, kl] of [['mpGrot', 'grot'], ['mpGrotA', 'grot a']]) {
+      const m = ms('marker', { id, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' });
+      m.append(ms('path', { d: 'M0,0 L10,5 L0,10 z', class: kl }));
+      defs.append(m);
+    }
+    svg.append(defs);
+    const gK = ms('g'), gE = ms('g'), gW = ms('g');
+    svg.append(gK, gE, gW);
+    kraw.length = 0;
+    for (const [a, b, pod, o = {}] of K) {
+      const A = W[a], B = W[b], ra = ramka(a), rb = ramka(b);
+      const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2, dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy);
+      const k = o.k || 0, cx = mx - dy / d * k, cy = my + dx / d * k;
+      const pt = (t) => ({ x: (1 - t) ** 2 * A.x + 2 * (1 - t) * t * cx + t * t * B.x, y: (1 - t) ** 2 * A.y + 2 * (1 - t) * t * cy + t * t * B.y });
+      const pts = [];
+      for (let i = 0; i <= 80; i++) { const p = pt(i / 80); if (!wew(ra, p, 2) && !wew(rb, p, 4)) pts.push(p); }
+      const path = ms('path', { d: 'M' + pts.map((p) => p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' L'), class: 'kr' + (o.p ? ' petla' : ''), 'marker-end': 'url(#mpGrot)' });
+      const s = pt(o.t || 0.5), e = o.e || [0, 0];
+      const wiersze = pod.split('\n'), ex = s.x + e[0], ey = s.y + e[1] - (wiersze.length - 1) * 7.5;
+      const et = ms('text', { x: ex.toFixed(1), y: ey.toFixed(1), class: 'et' });
+      wiersze.forEach((t, i) => et.append(ms('tspan', { x: ex.toFixed(1), dy: i ? 15 : 0 }, t)));
+      gK.append(path); gE.append(et);
+      kraw.push({ a, b, pod: pod.replace(/\n/g, ' '), path, et });
+    }
+    for (const id of Object.keys(W)) {
+      const r = ramka(id), n = W[id];
+      const g = ms('g', { class: 'w', tabindex: '0', role: 'button', 'data-id': id });
+      g.append(ms('rect', { x: r.x0.toFixed(1), y: r.y0.toFixed(1), width: r.w.toFixed(1), height: r.h, rx: 9 }));
+      const lines = n.l.length > 1 ? [n.y - 9, n.y + 10] : [n.y];
+      const teksty = lines.map((y, i) => { const t = ms('text', { x: n.x, y }, n.l[i]); g.append(t); return t; });
+      g.addEventListener('click', () => klik(id));
+      g.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); klik(id); } });
+      gW.append(g);
+      wezly[id] = { g, teksty };
+    }
+    odswiez();
+  }
+
+  function slajdLink(nr) {
+    const t = `slajd ${nr}: „${D.slajdy[nr] || ''}”`;
+    return D.pdf ? mk('a', { href: `${D.pdf}#page=${nr}`, target: '_blank', rel: 'noopener', text: t }) : mk('span', { text: t });
+  }
+  const ukryte = (id) => tryb === 'uzupelnij' && puste.includes(id) && sprawdzone[id] !== 'dobrze' && sprawdzone[id] !== 'pokazane';
+  const opisW = (id) => ukryte(id) ? `pole ${puste.indexOf(id) + 1}` : nazwa(id);
+
+  function odswiez() {
+    const svg = q('#mpSvg');
+    const akt = new Set(wyb ? [wyb] : []);
+    for (const k of kraw) {
+      const on = wyb && (k.a === wyb || k.b === wyb);
+      if (on) { akt.add(k.a); akt.add(k.b); }
+      k.path.classList.toggle('akt', !!on); k.et.classList.toggle('akt', !!on);
+      k.path.setAttribute('marker-end', on ? 'url(#mpGrotA)' : 'url(#mpGrot)');
+    }
+    svg.classList.toggle('fokus', !!wyb);
+    for (const [id, { g, teksty }] of Object.entries(wezly)) {
+      const n = W[id], pust = tryb === 'uzupelnij' && puste.includes(id), st = sprawdzone[id];
+      g.classList.toggle('akt', akt.has(id));
+      g.classList.toggle('wyb', id === wyb && !pust);
+      g.classList.toggle('puste', pust);
+      g.classList.toggle('dobrze', pust && (st === 'dobrze' || st === 'pokazane'));
+      g.classList.toggle('zle', pust && st === 'zle');
+      if (ukryte(id)) teksty.forEach((t, i) => { t.textContent = i === 0 ? (teksty.length > 1 ? '?' : `? (${puste.indexOf(id) + 1})`) : `(${puste.indexOf(id) + 1})`; });
+      else teksty.forEach((t, i) => { t.textContent = n.l[i]; });
+      g.setAttribute('aria-label', ukryte(id) ? `Puste pole ${puste.indexOf(id) + 1}` : pelna(id));
+      g.setAttribute('aria-pressed', id === wyb ? 'true' : 'false');
+    }
+    info();
+    q('#mpZdania').replaceChildren(...kraw.map((k) => mk('li', { text: `${opisW(k.a)} → ${k.pod} → ${opisW(k.b)}` })));
+  }
+
+  function info() {
+    const host = q('#mpInfo');
+    if (!wyb) {
+      host.replaceChildren(mk('h3', { text: tryb === 'uzupelnij' ? 'Uzupełnij mapę' : 'Kliknij pojęcie na mapie' }),
+        mk('p', { class: 'small muted', text: tryb === 'uzupelnij'
+          ? 'Kliknij puste pole, żeby zobaczyć jego połączenia, a potem wpisz brakujące pojęcie. Przydatne wskazówki dają też ćwiczenia z tego wykładu.'
+          : 'Zobaczysz krótką definicję, połączenia z innymi pojęciami, slajd z wykładu i ćwiczenie na tej stronie. Na koniec spróbuj trybu „Uzupełnij”.' }));
+      return;
+    }
+    const n = W[wyb], ukr = ukryte(wyb);
+    const rel = kraw.filter((k) => k.a === wyb || k.b === wyb).map((k) => mk('li', { text: `${opisW(k.a)} → ${k.pod} → ${opisW(k.b)}` }));
+    const linki = mk('div', { class: 'mplinki' });
+    if (!ukr) {
+      for (const m of n.mod) linki.append(mk('a', { class: 'mod', href: m.includes('.html') ? m : '#' + m, text: `Ćwiczenie: ${D.mod[m]} →` }));
+      for (const s of n.slajdy) linki.append(slajdLink(s));
+    }
+    host.replaceChildren(
+      mk('h3', { text: ukr ? `Puste pole ${puste.indexOf(wyb) + 1}` : pelna(wyb) }),
+      ukr ? mk('p', { class: 'small muted', text: 'Co pasuje do wszystkich tych zdań naraz?' }) : mk('p', { text: n.def }),
+      mk('p', { class: 'small', style: 'margin: 0', html: '<strong>Połączenia:</strong>' }),
+      mk('ul', { class: 'small' }, ...rel),
+      linki);
+  }
+
+  function klik(id) {
+    wyb = wyb === id ? null : id;
+    odswiez();
+    if (wyb && tryb === 'uzupelnij' && ukryte(wyb)) q('#mpIn-' + wyb)?.focus({ preventScroll: true });
+  }
+  function pola() {
+    sprawdzone = {};
+    q('#mpWynik').textContent = '';
+    q('#mpPola').replaceChildren(...puste.map((id, i) => {
+      const inp = mk('input', { type: 'text', id: 'mpIn-' + id, autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false' });
+      inp.addEventListener('focus', () => { if (wyb !== id) { wyb = id; odswiez(); } });
+      inp.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') sprawdz(); });
+      return mk('label', { class: 'field', for: 'mpIn-' + id }, mk('span', { text: `Pole ${i + 1}` }), inp, mk('span', { class: 'pod', id: 'mpPod-' + id }));
+    }));
+  }
+  function trafione(id, txt) {
+    const t = norm(txt);
+    if (!t) return false;
+    return W[id].r.some((r) => r.length <= 3 ? t.split(' ').includes(r) : t.includes(r));
+  }
+  function sprawdz() {
+    let ok = 0;
+    for (const id of puste) {
+      const inp = q('#mpIn-' + id), pod = q('#mpPod-' + id);
+      if (sprawdzone[id] === 'pokazane') continue;
+      const dobrze = trafione(id, inp.value);
+      sprawdzone[id] = inp.value.trim() ? (dobrze ? 'dobrze' : 'zle') : undefined;
+      inp.classList.toggle('dobrze', dobrze); inp.classList.toggle('zle', !dobrze && !!inp.value.trim());
+      pod.textContent = dobrze ? `Dobrze: ${pelna(id)}.` : (inp.value.trim() ? `Jeszcze nie. Podpowiedź: ${W[id].slajdy.map((s) => 'slajd ' + s).join(', ')}.` : '');
+      if (dobrze) ok++;
+    }
+    const w = q('#mpWynik');
+    w.textContent = ok === puste.length ? `Wszystkie ${ok} pojęć na miejscu!` : `Dobrze: ${ok} z ${puste.length}.`;
+    w.className = 'fbline ' + (ok === puste.length ? 'dobrze' : '');
+    odswiez();
+  }
+  function pokaz() {
+    for (const id of puste) {
+      if (sprawdzone[id] === 'dobrze') continue;
+      sprawdzone[id] = 'pokazane';
+      q('#mpPod-' + id).textContent = `Odpowiedź: ${pelna(id)}.`;
+    }
+    q('#mpWynik').textContent = 'Odpowiedzi są na mapie. Spróbuj jeszcze raz z innymi pustymi polami.';
+    q('#mpWynik').className = 'fbline';
+    odswiez();
+  }
+  function losuj() {
+    puste = mieszaj(Object.keys(W).filter((id) => id !== D.korzen)).slice(0, D.puste.length);
+    wyb = null; pola(); odswiez();
+  }
+  function ustawTryb(t) {
+    tryb = t; wyb = null;
+    q('#mpUzup').hidden = t !== 'uzupelnij';
+    if (t === 'uzupelnij') pola(); else sprawdzone = {};
+    odswiez();
+  }
+  function init() {
+    if (!q('#mpSvg')) return;
+    rysuj();
+    pola();
+    for (const b of qq('button', q('#mpTryb'))) b.addEventListener('click', () => {
+      for (const c of qq('button', q('#mpTryb'))) c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+      ustawTryb(b.dataset.w);
+    });
+    q('#mpSprawdz').addEventListener('click', sprawdz);
+    q('#mpPokaz').addEventListener('click', pokaz);
+    q('#mpLosuj').addEventListener('click', losuj);
+    // Czcionka mogła się wczytać później: przelicz szerokości ramek przy wejściu na mapę.
+    window.addEventListener('hashchange', () => { if (location.hash === '#mapa') rysuj(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(rysuj);
+  }
+  init();
+})({"pdf": "slajdy/W04.pdf", "slajdy": {"5": "Pytanie Hilberta: czy jest metoda na wszystko?", "8": "Intuicja: rachmistrz z kartką", "9": "Jeden krok maszyny", "10": "Definicja formalna", "11": "Determinizm i niedeterminizm", "12": "Warianty — wszystkie równoważne", "13": "Trzy zapisy sterowania", "14": "Przykład: dodawanie 1 w systemie dwójkowym", "15": "Diagram postępu: 1011 + 1", "18": "Problem pracowitego bobra (busy beaver)", "19": "Kandydat dla n = 3", "20": "Diagram postępu pracowitego bobra", "21": "Czy to rekord? Znane wartości", "22": "Co znaczy 2 ↑↑↑ 5? Notacja strzałkowa Knutha", "23": "Dlaczego bóbr jest ważny", "25": "Uniwersalna maszyna Turinga", "26": "Teza Churcha–Turinga", "27": "Uwaga na skróty myślowe", "28": "Problem stopu", "29": "Nierozstrzygalny ≠ beznadziejny, nierozstrzygalny ≠ trudny", "30": "Inne problemy nierozstrzygalne", "31": "Czy umysł jest maszyną Turinga?"}, "mod": {"przekora": "Przekora", "stop": "Czy to się zatrzyma?", "warsztat": "Warsztat maszyny Turinga", "wieze": "Wieże Knutha", "wyscig": "Wyścig bobrów"}, "korzen": "mt", "puste": ["tasma", "umt", "teza", "stop", "bobr", "nierozstrz"], "W": {"mt": {"x": 500, "y": 45, "l": ["Maszyna Turinga"], "r": ["maszyna turinga", "turing"], "slajdy": [8, 9, 10], "mod": ["warsztat"], "def": "Matematyczny model algorytmu: skończone sterowanie, nieograniczona taśma i jednoznaczne reguły (stan, symbol) ↦ (zapis, nowy stan, ruch)."}, "tasma": {"x": 150, "y": 170, "l": ["Taśma", "(nieograniczona)"], "r": ["tasm"], "slajdy": [9, 10], "mod": ["warsztat"], "def": "Ciąg komórek z symbolami, nieograniczony w obie strony. Głowica czyta jedną komórkę, zapisuje symbol i przesuwa się o jedną pozycję."}, "reguly": {"x": 390, "y": 170, "l": ["Stany i reguły", "(funkcja przejścia)"], "r": ["regul", "stan", "przejsc", "sterowan"], "slajdy": [10, 13, 14, 15], "mod": ["warsztat"], "def": "Dla pary (stan, czytany symbol) reguła mówi: co zapisać, dokąd przejść i w którą stronę ruszyć. Zapis: tabela, lista reguł albo diagram stanów."}, "umt": {"x": 640, "y": 300, "l": ["Uniwersalna", "maszyna Turinga"], "r": ["uniwersaln"], "slajdy": [25], "mod": [], "def": "Czyta z taśmy opis innej maszyny i jej dane, a potem ją wykonuje: program jest danymi. Na tym opiera się komputer z programem w pamięci (W5)."}, "warianty": {"x": 880, "y": 45, "l": ["Warianty", "(wiele taśm, ND)"], "r": ["wariant", "niedeterminist", "wiele tasm"], "slajdy": [11, 12], "mod": [], "def": "Maszyny z wieloma taśmami, taśmą jednostronną czy niedeterministyczne obliczają to samo co zwykła maszyna; różnią się co najwyżej szybkością."}, "teza": {"x": 880, "y": 300, "l": ["Teza", "Churcha–Turinga"], "r": ["church", "teza"], "slajdy": [26, 27], "mod": [], "def": "Wszystko, co obliczalne algorytmem, jest obliczalne maszyną Turinga. To teza, a nie twierdzenie, bo „algorytm” jest pojęciem nieformalnym."}, "hilbert": {"x": 150, "y": 300, "l": ["Pytanie Hilberta", "(metoda na wszystko?)"], "r": ["hilbert", "entscheidung"], "slajdy": [5], "mod": [], "def": "Czy istnieje mechaniczna metoda, która rozstrzygnie każde zdanie matematyczne? Turing (1936) i Church pokazali, że nie."}, "stop": {"x": 500, "y": 430, "l": ["Problem stopu"], "r": ["stopu", "stop", "halting"], "slajdy": [28], "mod": ["stop", "przekora"], "def": "Nie istnieje program, który dla każdego programu i danych rozstrzygnie, czy ten się zatrzyma. Dowód: program-przekora robi odwrotnie, niż przewidział detektor."}, "nierozstrz": {"x": 500, "y": 555, "l": ["Nierozstrzygalność"], "r": ["nierozstrzyg"], "slajdy": [29, 30], "mod": ["stop"], "def": "Brak algorytmu działającego dla wszystkich przypadków. To nie to samo co „trudny” ani „jeszcze nieznany”: pojedyncze przypadki bywają rozstrzygnięte."}, "bobr": {"x": 150, "y": 430, "l": ["Pracowity bóbr", "S(n)"], "r": ["bobr", "busy beaver", "pracowit"], "slajdy": [18, 19, 20, 21, 23], "mod": ["wyscig"], "def": "Najwięcej kroków, jakie wykona zatrzymująca się maszyna o n stanach. S(5) = 47 176 870 udowodniono w 2024 r., ale funkcji S(n) nie da się ogólnie obliczyć."}, "knuth": {"x": 150, "y": 555, "l": ["Notacja strzałkowa", "Knutha"], "r": ["knuth", "strzalk"], "slajdy": [22], "mod": ["wieze"], "def": "Zapis gigantycznych liczb: 2↑↑3 = 2^(2^2), a każda kolejna strzałka to powtarzanie poprzedniej operacji. Rekordy bobrów są tak wielkie."}, "umysl": {"x": 880, "y": 430, "l": ["Czy umysł jest", "maszyną Turinga?"], "r": ["umysl", "mozg"], "slajdy": [31], "mod": ["stop"], "def": "Otwarte pytanie filozofii i kognitywistyki. Z tezy Churcha–Turinga nie wynika, że umysł jest maszyną Turinga ani że nie jest."}}, "K": [["mt", "tasma", "czyta i zapisuje", {"e": [-20, -6]}], ["mt", "reguly", "działa według"], ["umt", "mt", "symuluje\nkażdą", {"e": [-34, 0]}], ["warianty", "mt", "obliczają to samo co"], ["teza", "mt", "utożsamia\nalgorytm z", {"e": [36, 0]}], ["mt", "stop", "żadna nie rozwiąże", {"t": 0.62}], ["stop", "hilbert", "daje odpowiedź\n„nie” na", {"e": [0, 4]}], ["stop", "nierozstrz", "jest przykładem"], ["bobr", "stop", "znając S(n),\nrozwiązalibyśmy"], ["bobr", "knuth", "rekordy zapisuje się"], ["umysl", "teza", "pyta o zasięg"]]});
 </script>
 </body>
 </html>

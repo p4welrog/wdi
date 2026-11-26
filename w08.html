@@ -289,6 +289,49 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
 }
+
+/* ───────── Mapa pojęć ───────── */
+.tile.mapa-tile { margin-bottom: 14px; border-color: var(--accent); background: var(--accent-soft); }
+.tile.mapa-tile .num { background: var(--accent); color: var(--accent-ink); }
+svg.mp { display: block; width: 100%; min-width: 760px; height: auto; margin: 4px 0; touch-action: manipulation; }
+svg.mp .kr { stroke: var(--muted); stroke-width: 1.6; fill: none; transition: opacity .15s; }
+svg.mp .kr.petla { stroke-dasharray: 6 4; }
+svg.mp .et { fill: var(--text-2); font: italic 12.5px var(--font); text-anchor: middle; dominant-baseline: central; paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; pointer-events: none; transition: opacity .15s; }
+svg.mp .grot { fill: var(--muted); }
+svg.mp .grot.a { fill: var(--accent); }
+svg.mp .w { cursor: pointer; outline: none; }
+svg.mp .w rect { fill: var(--surface); stroke: var(--accent); stroke-width: 1.6; transition: opacity .15s; }
+svg.mp .w text { fill: var(--text); font: 600 14px var(--font); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+svg.mp .w:hover rect { fill: var(--accent-soft); }
+svg.mp .w:focus-visible rect { stroke-width: 3.5; }
+svg.mp .w.wyb rect { fill: var(--accent); }
+svg.mp .w.wyb text { fill: var(--accent-ink); }
+svg.mp .w.puste rect { fill: var(--amber-soft); stroke: var(--amber); stroke-dasharray: 5 3; }
+svg.mp .w.puste text { fill: var(--amber); }
+svg.mp .w.dobrze rect { fill: var(--good-soft); stroke: var(--good); stroke-dasharray: none; }
+svg.mp .w.dobrze text { fill: var(--good); }
+svg.mp .w.zle rect { fill: var(--bad-soft); stroke: var(--bad); }
+svg.mp .w.zle text { fill: var(--bad); }
+svg.mp.fokus .kr:not(.akt), svg.mp.fokus .et:not(.akt), svg.mp.fokus .w:not(.akt) rect { opacity: .22; }
+svg.mp .kr.akt { stroke: var(--accent); stroke-width: 2.6; }
+svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
+.mpinfo { min-height: 120px; }
+.mpinfo h3 { margin-bottom: .35em; }
+.mpinfo ul { margin: .3em 0 .6em; padding-left: 1.2em; }
+.mpinfo li { margin: .15em 0; }
+.mplinki { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.mplinki a, .mplinki span { display: inline-block; font-size: .9rem; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border); text-decoration: none; }
+.mplinki a.mod { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.mplinki span { color: var(--muted); }
+.mppola { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 14px; margin: 8px 0; }
+.mppola .field { margin: 0; }
+.mppola .field > span { font-weight: 600; font-size: .92rem; }
+.mppola input { width: 100%; }
+.mppola input.dobrze { border-color: var(--good); background: var(--good-soft); }
+.mppola input.zle { border-color: var(--bad); background: var(--bad-soft); }
+.mppola .pod { font-size: .82rem; color: var(--muted); min-height: 1.2em; }
+.mpzdania { columns: 2 320px; column-gap: 28px; padding-left: 1.2em; margin: 6px 0 0; }
+.mpzdania li { break-inside: avoid; margin: .15em 0; }
 </style>
 </head>
 <body>
@@ -300,6 +343,7 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
   </div>
   <nav class="wrap tabs" aria-label="Ćwiczenia">
     <a href="#start">Start</a>
+    <a href="#mapa">Mapa pojęć</a>
     <a href="#sortownia">1. Sortownia</a>
     <a href="#kopiec">2. Kopiec</a>
     <a href="#ranking">3. Ranking parami</a>
@@ -314,6 +358,7 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
 <section id="v-start">
   <h1>Sortowanie: ćwiczenia</h1>
   <p class="lead">Ćwiczenia do wykładu 8, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
+  <a class="tile mapa-tile" href="#mapa"><span class="num">★</span><h3>Mapa pojęć wykładu</h3><p>Wszystkie pojęcia wykładu na jednej mapie: co z czym się łączy, na którym slajdzie było i które ćwiczenie to trenuje. Na powtórkę: tryb „Uzupełnij” z pustymi polami.</p><div class="meta">ok. 5–10 min · cały wykład: na początek powtórki i na koniec</div></a>
   <div class="grid2">
     <a class="tile" href="#sortownia"><span class="num">1</span><h3>Sortownia</h3><p>Pięć algorytmów z wykładu na tych samych danych, krok po kroku: co porównują, co przestawiają i ile ich to kosztuje. Na końcu wszystkie naraz, także dla tysiąca liczb.</p><div class="meta">ok. 10 min · slajdy od „Sortowania przez wybór” do „Ile kosztuje quicksort?”</div></a>
     <a class="tile" href="#kopiec"><span class="num">2</span><h3>Kopiec na żywo</h3><p>Kopiec jako drzewo i jako tablica jednocześnie. Wstawiaj, wyjmuj maksimum i patrz, jak elementy przesiewają się w górę i w dół. Kolejne maksima układają się w heapsort.</p><div class="meta">ok. 6 min · slajdy od „Kolejki priorytetowej” do „Heapsort”</div></a>
@@ -322,6 +367,48 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
     <a class="tile" href="#radix"><span class="num">5</span><h3>Przegródki</h3><p>Sortowanie pozycyjne bez ani jednego porównania: rozkładaj liczby do dziesięciu przegródek cyfra po cyfrze. I zobacz, co się psuje, gdy zbieranie nie jest stabilne.</p><div class="meta">ok. 5 min · slajdy „Sortowanie pozycyjne” i „Częsty błąd: radix łamie granicę”</div></a>
   </div>
 </section>
+
+<!-- ═══════════════════ MAPA POJĘĆ ═══════════════════ -->
+<section id="v-mapa" hidden>
+  <h2>Mapa pojęć wykładu 8</h2>
+  <p class="lead">Najważniejsze pojęcia wykładu i to, jak się ze sobą łączą. Strzałkę czytaj jak zdanie: „Sortowanie pozycyjne <em>omija</em> granicę n log n”. Kliknij pojęcie, żeby zobaczyć, co znaczy, z czym się łączy, na którym slajdzie było i które ćwiczenie je trenuje.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <span class="seg" id="mpTryb" role="group" aria-label="Tryb mapy"><button type="button" data-w="poznaj" aria-pressed="true">Poznaj</button><button type="button" data-w="uzupelnij" aria-pressed="false">Uzupełnij</button></span>
+      <span class="small muted">Na telefonie przesuń mapę w bok.</span>
+    </div>
+    <div class="scroll-x" data-srodek><svg class="mp" id="mpSvg" viewBox="0 0 1000 480" role="group" aria-label="Mapa pojęć wykładu 8. Pojęcia są przyciskami; ta sama treść jest też poniżej jako lista zdań."></svg></div>
+    <div id="mpUzup" hidden>
+      <p class="small">W 6 pustych polach brakuje pojęć. Odczytaj je z podpisanych strzałek i wpisz poniżej. Pisownia i polskie znaki nie muszą być idealne.</p>
+      <div class="mppola" id="mpPola"></div>
+      <div class="row">
+        <button type="button" class="btn" id="mpSprawdz">Sprawdź</button>
+        <button type="button" class="btn ghost" id="mpPokaz">Pokaż odpowiedzi</button>
+        <button type="button" class="btn ghost" id="mpLosuj">Inne puste pola</button>
+      </div>
+      <p class="fbline" id="mpWynik" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="card mpinfo" id="mpInfo" aria-live="polite"></div>
+
+  <details class="card">
+    <summary><strong>Mapa jako lista zdań</strong> <span class="small muted">(np. do powtórki albo dla czytnika ekranu)</span></summary>
+    <ol class="mpzdania" id="mpZdania"></ol>
+  </details>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Dlaczego sortowanie pozycyjne „omija” granicę, a nie ją „łamie”? Wskaż na mapie, od czego ta granica zależy.</li>
+      <li>Które pojęcie ma najwięcej połączeń? Co to mówi o jego roli w tym wykładzie?</li>
+      <li>Zrób własną mapę na kartce z pamięci, a dopiero potem porównaj ją z tą. Czego zabrakło, a co masz ponad nią?</li>
+    </ol>
+  </div>
+  <p class="src">Mapa pojęć (concept map) według J. D. Novaka: pojęcia połączone podpisanymi relacjami. Metaanaliza J. C. Nesbit, O. O. Adesope, <em>Learning With Concept and Knowledge Maps</em>, Review of Educational Research 76(3), 2006, s. 413–448: uczenie się z map pojęć, gotowych i budowanych samodzielnie, dawało średnio lepsze zapamiętywanie niż czytanie tekstu, list czy konspektów. Numery slajdów według pliku <a href="slajdy/W08.pdf">W08.pdf</a> (slajdy wykładu).</p>
+</section>
+
 
 <!-- ═══════════════════ 1. SORTOWNIA ═══════════════════ -->
 <section id="v-sortownia" hidden>
@@ -711,7 +798,7 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
 
 <script>
 'use strict';
-const KONF = {"wyk": "W08", "key": "wdi-w08-grupa", "widoki": {"start": "Wykład 8 · ćwiczenia", "sortownia": "Sortownia · W8", "kopiec": "Kopiec na żywo · W8", "ranking": "Ranking parami · W8", "waga": "Waga szalkowa · W8", "radix": "Przegródki · W8", "ustawienia": "Ustawienia prowadzącego · W8"}, "linki": [{"id": "sLink0", "hash": "ranking", "label": "Ranking parami"}, {"id": "sLink1", "hash": "waga", "label": "Waga szalkowa"}]};
+const KONF = {"wyk": "W08", "key": "wdi-w08-grupa", "widoki": {"mapa": "Mapa pojęć · W8", "start": "Wykład 8 · ćwiczenia", "sortownia": "Sortownia · W8", "kopiec": "Kopiec na żywo · W8", "ranking": "Ranking parami · W8", "waga": "Waga szalkowa · W8", "radix": "Przegródki · W8", "ustawienia": "Ustawienia prowadzącego · W8"}, "linki": [{"id": "sLink0", "hash": "ranking", "label": "Ranking parami"}, {"id": "sLink1", "hash": "waga", "label": "Waga szalkowa"}]};
 /* ═════════════════════ Narzędzia ═════════════════════ */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1528,6 +1615,215 @@ nawiguj();
   new MutationObserver(zaplanuj).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
   wszystkie();
 })();
+</script>
+<script>
+/* ═════════════════════ Mapa pojęć (wspólny silnik, dane wykładu na dole) ═════════════════════ */
+(function (D) {
+  'use strict';
+  const q = (s, r = document) => r.querySelector(s);
+  const qq = (s, r = document) => [...r.querySelectorAll(s)];
+  const mk = (tag, attrs = {}, ...kids) => {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else if (k === 'html') e.innerHTML = v; else e.setAttribute(k, v);
+    }
+    for (const k of kids) e.append(k);
+    return e;
+  };
+  const NS = 'http://www.w3.org/2000/svg';
+  const ms = (tag, attrs = {}, txt) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (txt !== undefined) e.textContent = txt; return e; };
+  const mieszaj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+  const norm = (s) => String(s).toLowerCase().replace(/ł/g, 'l').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  const W = D.W, K = D.K;
+  const nazwa = (id) => W[id].l.join(' ').replace(/\s*\(.*\)$/, '');
+  const pelna = (id) => W[id].l.join(' ');
+  let tryb = 'poznaj', wyb = null, puste = [...D.puste], sprawdzone = {};
+  const wezly = {}, kraw = [];
+
+  function zmierz(lines) {
+    const c = zmierz.c || (zmierz.c = document.createElement('canvas').getContext('2d'));
+    c.font = '600 14px ' + getComputedStyle(document.body).fontFamily;
+    return Math.max(...lines.map((t) => c.measureText(t).width));
+  }
+  function ramka(id) {
+    const n = W[id];
+    const w = Math.max(64, zmierz(n.l) + 26), h = n.l.length > 1 ? 46 : 32;
+    return { x0: n.x - w / 2, y0: n.y - h / 2, w, h };
+  }
+  const wew = (r, p, m = 3) => p.x > r.x0 - m && p.x < r.x0 + r.w + m && p.y > r.y0 - m && p.y < r.y0 + r.h + m;
+
+  function rysuj() {
+    const svg = q('#mpSvg');
+    svg.replaceChildren();
+    const defs = ms('defs');
+    for (const [id, kl] of [['mpGrot', 'grot'], ['mpGrotA', 'grot a']]) {
+      const m = ms('marker', { id, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' });
+      m.append(ms('path', { d: 'M0,0 L10,5 L0,10 z', class: kl }));
+      defs.append(m);
+    }
+    svg.append(defs);
+    const gK = ms('g'), gE = ms('g'), gW = ms('g');
+    svg.append(gK, gE, gW);
+    kraw.length = 0;
+    for (const [a, b, pod, o = {}] of K) {
+      const A = W[a], B = W[b], ra = ramka(a), rb = ramka(b);
+      const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2, dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy);
+      const k = o.k || 0, cx = mx - dy / d * k, cy = my + dx / d * k;
+      const pt = (t) => ({ x: (1 - t) ** 2 * A.x + 2 * (1 - t) * t * cx + t * t * B.x, y: (1 - t) ** 2 * A.y + 2 * (1 - t) * t * cy + t * t * B.y });
+      const pts = [];
+      for (let i = 0; i <= 80; i++) { const p = pt(i / 80); if (!wew(ra, p, 2) && !wew(rb, p, 4)) pts.push(p); }
+      const path = ms('path', { d: 'M' + pts.map((p) => p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' L'), class: 'kr' + (o.p ? ' petla' : ''), 'marker-end': 'url(#mpGrot)' });
+      const s = pt(o.t || 0.5), e = o.e || [0, 0];
+      const wiersze = pod.split('\n'), ex = s.x + e[0], ey = s.y + e[1] - (wiersze.length - 1) * 7.5;
+      const et = ms('text', { x: ex.toFixed(1), y: ey.toFixed(1), class: 'et' });
+      wiersze.forEach((t, i) => et.append(ms('tspan', { x: ex.toFixed(1), dy: i ? 15 : 0 }, t)));
+      gK.append(path); gE.append(et);
+      kraw.push({ a, b, pod: pod.replace(/\n/g, ' '), path, et });
+    }
+    for (const id of Object.keys(W)) {
+      const r = ramka(id), n = W[id];
+      const g = ms('g', { class: 'w', tabindex: '0', role: 'button', 'data-id': id });
+      g.append(ms('rect', { x: r.x0.toFixed(1), y: r.y0.toFixed(1), width: r.w.toFixed(1), height: r.h, rx: 9 }));
+      const lines = n.l.length > 1 ? [n.y - 9, n.y + 10] : [n.y];
+      const teksty = lines.map((y, i) => { const t = ms('text', { x: n.x, y }, n.l[i]); g.append(t); return t; });
+      g.addEventListener('click', () => klik(id));
+      g.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); klik(id); } });
+      gW.append(g);
+      wezly[id] = { g, teksty };
+    }
+    odswiez();
+  }
+
+  function slajdLink(nr) {
+    const t = `slajd ${nr}: „${D.slajdy[nr] || ''}”`;
+    return D.pdf ? mk('a', { href: `${D.pdf}#page=${nr}`, target: '_blank', rel: 'noopener', text: t }) : mk('span', { text: t });
+  }
+  const ukryte = (id) => tryb === 'uzupelnij' && puste.includes(id) && sprawdzone[id] !== 'dobrze' && sprawdzone[id] !== 'pokazane';
+  const opisW = (id) => ukryte(id) ? `pole ${puste.indexOf(id) + 1}` : nazwa(id);
+
+  function odswiez() {
+    const svg = q('#mpSvg');
+    const akt = new Set(wyb ? [wyb] : []);
+    for (const k of kraw) {
+      const on = wyb && (k.a === wyb || k.b === wyb);
+      if (on) { akt.add(k.a); akt.add(k.b); }
+      k.path.classList.toggle('akt', !!on); k.et.classList.toggle('akt', !!on);
+      k.path.setAttribute('marker-end', on ? 'url(#mpGrotA)' : 'url(#mpGrot)');
+    }
+    svg.classList.toggle('fokus', !!wyb);
+    for (const [id, { g, teksty }] of Object.entries(wezly)) {
+      const n = W[id], pust = tryb === 'uzupelnij' && puste.includes(id), st = sprawdzone[id];
+      g.classList.toggle('akt', akt.has(id));
+      g.classList.toggle('wyb', id === wyb && !pust);
+      g.classList.toggle('puste', pust);
+      g.classList.toggle('dobrze', pust && (st === 'dobrze' || st === 'pokazane'));
+      g.classList.toggle('zle', pust && st === 'zle');
+      if (ukryte(id)) teksty.forEach((t, i) => { t.textContent = i === 0 ? (teksty.length > 1 ? '?' : `? (${puste.indexOf(id) + 1})`) : `(${puste.indexOf(id) + 1})`; });
+      else teksty.forEach((t, i) => { t.textContent = n.l[i]; });
+      g.setAttribute('aria-label', ukryte(id) ? `Puste pole ${puste.indexOf(id) + 1}` : pelna(id));
+      g.setAttribute('aria-pressed', id === wyb ? 'true' : 'false');
+    }
+    info();
+    q('#mpZdania').replaceChildren(...kraw.map((k) => mk('li', { text: `${opisW(k.a)} → ${k.pod} → ${opisW(k.b)}` })));
+  }
+
+  function info() {
+    const host = q('#mpInfo');
+    if (!wyb) {
+      host.replaceChildren(mk('h3', { text: tryb === 'uzupelnij' ? 'Uzupełnij mapę' : 'Kliknij pojęcie na mapie' }),
+        mk('p', { class: 'small muted', text: tryb === 'uzupelnij'
+          ? 'Kliknij puste pole, żeby zobaczyć jego połączenia, a potem wpisz brakujące pojęcie. Przydatne wskazówki dają też ćwiczenia z tego wykładu.'
+          : 'Zobaczysz krótką definicję, połączenia z innymi pojęciami, slajd z wykładu i ćwiczenie na tej stronie. Na koniec spróbuj trybu „Uzupełnij”.' }));
+      return;
+    }
+    const n = W[wyb], ukr = ukryte(wyb);
+    const rel = kraw.filter((k) => k.a === wyb || k.b === wyb).map((k) => mk('li', { text: `${opisW(k.a)} → ${k.pod} → ${opisW(k.b)}` }));
+    const linki = mk('div', { class: 'mplinki' });
+    if (!ukr) {
+      for (const m of n.mod) linki.append(mk('a', { class: 'mod', href: m.includes('.html') ? m : '#' + m, text: `Ćwiczenie: ${D.mod[m]} →` }));
+      for (const s of n.slajdy) linki.append(slajdLink(s));
+    }
+    host.replaceChildren(
+      mk('h3', { text: ukr ? `Puste pole ${puste.indexOf(wyb) + 1}` : pelna(wyb) }),
+      ukr ? mk('p', { class: 'small muted', text: 'Co pasuje do wszystkich tych zdań naraz?' }) : mk('p', { text: n.def }),
+      mk('p', { class: 'small', style: 'margin: 0', html: '<strong>Połączenia:</strong>' }),
+      mk('ul', { class: 'small' }, ...rel),
+      linki);
+  }
+
+  function klik(id) {
+    wyb = wyb === id ? null : id;
+    odswiez();
+    if (wyb && tryb === 'uzupelnij' && ukryte(wyb)) q('#mpIn-' + wyb)?.focus({ preventScroll: true });
+  }
+  function pola() {
+    sprawdzone = {};
+    q('#mpWynik').textContent = '';
+    q('#mpPola').replaceChildren(...puste.map((id, i) => {
+      const inp = mk('input', { type: 'text', id: 'mpIn-' + id, autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false' });
+      inp.addEventListener('focus', () => { if (wyb !== id) { wyb = id; odswiez(); } });
+      inp.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') sprawdz(); });
+      return mk('label', { class: 'field', for: 'mpIn-' + id }, mk('span', { text: `Pole ${i + 1}` }), inp, mk('span', { class: 'pod', id: 'mpPod-' + id }));
+    }));
+  }
+  function trafione(id, txt) {
+    const t = norm(txt);
+    if (!t) return false;
+    return W[id].r.some((r) => r.length <= 3 ? t.split(' ').includes(r) : t.includes(r));
+  }
+  function sprawdz() {
+    let ok = 0;
+    for (const id of puste) {
+      const inp = q('#mpIn-' + id), pod = q('#mpPod-' + id);
+      if (sprawdzone[id] === 'pokazane') continue;
+      const dobrze = trafione(id, inp.value);
+      sprawdzone[id] = inp.value.trim() ? (dobrze ? 'dobrze' : 'zle') : undefined;
+      inp.classList.toggle('dobrze', dobrze); inp.classList.toggle('zle', !dobrze && !!inp.value.trim());
+      pod.textContent = dobrze ? `Dobrze: ${pelna(id)}.` : (inp.value.trim() ? `Jeszcze nie. Podpowiedź: ${W[id].slajdy.map((s) => 'slajd ' + s).join(', ')}.` : '');
+      if (dobrze) ok++;
+    }
+    const w = q('#mpWynik');
+    w.textContent = ok === puste.length ? `Wszystkie ${ok} pojęć na miejscu!` : `Dobrze: ${ok} z ${puste.length}.`;
+    w.className = 'fbline ' + (ok === puste.length ? 'dobrze' : '');
+    odswiez();
+  }
+  function pokaz() {
+    for (const id of puste) {
+      if (sprawdzone[id] === 'dobrze') continue;
+      sprawdzone[id] = 'pokazane';
+      q('#mpPod-' + id).textContent = `Odpowiedź: ${pelna(id)}.`;
+    }
+    q('#mpWynik').textContent = 'Odpowiedzi są na mapie. Spróbuj jeszcze raz z innymi pustymi polami.';
+    q('#mpWynik').className = 'fbline';
+    odswiez();
+  }
+  function losuj() {
+    puste = mieszaj(Object.keys(W).filter((id) => id !== D.korzen)).slice(0, D.puste.length);
+    wyb = null; pola(); odswiez();
+  }
+  function ustawTryb(t) {
+    tryb = t; wyb = null;
+    q('#mpUzup').hidden = t !== 'uzupelnij';
+    if (t === 'uzupelnij') pola(); else sprawdzone = {};
+    odswiez();
+  }
+  function init() {
+    if (!q('#mpSvg')) return;
+    rysuj();
+    pola();
+    for (const b of qq('button', q('#mpTryb'))) b.addEventListener('click', () => {
+      for (const c of qq('button', q('#mpTryb'))) c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+      ustawTryb(b.dataset.w);
+    });
+    q('#mpSprawdz').addEventListener('click', sprawdz);
+    q('#mpPokaz').addEventListener('click', pokaz);
+    q('#mpLosuj').addEventListener('click', losuj);
+    // Czcionka mogła się wczytać później: przelicz szerokości ramek przy wejściu na mapę.
+    window.addEventListener('hashchange', () => { if (location.hash === '#mapa') rysuj(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(rysuj);
+  }
+  init();
+})({"pdf": "slajdy/W08.pdf", "slajdy": {"5": "Problem sortowania", "7": "Sortowanie przez wybór (selection sort)", "8": "Sortowanie przez wstawianie (insertion sort)", "9": "Śledzenie: wstawianie na [5, 2, 4, 6, 1, 3", "10": "Ile kosztuje wstawianie?", "12": "Sortowanie przez scalanie (merge sort)", "13": "Dlaczego n log n?", "14": "Mini-zadanie: scal dwie listy", "15": "Sortowanie szybkie (quicksort)", "16": "Ile kosztuje quicksort?", "18": "Kolejka priorytetowa", "19": "Kopiec binarny", "20": "Operacje na kopcu", "21": "Heapsort", "22": "Ranking jak sortowanie", "24": "Czy da się szybciej niż n log n?", "25": "Sortowanie pozycyjne (radix sort)", "26": "Częsty błąd: „radix łamie granicę n log n”"}, "mod": {"kopiec": "Kopiec na żywo", "radix": "Przegródki", "ranking": "Ranking parami", "sortownia": "Sortownia", "waga": "Waga szalkowa"}, "korzen": "sortowanie", "puste": ["wstawianie", "scalanie", "kopiec", "granica", "radix", "prawie"], "W": {"sortowanie": {"x": 500, "y": 45, "l": ["Sortowanie"], "r": ["sortowan"], "slajdy": [5], "mod": ["sortownia"], "def": "Ułożenie elementów w kolejności według klucza. Algorytmy różnią się czasem, pamięcią, stabilnością i zachowaniem na danych prawie posortowanych."}, "ranking": {"x": 110, "y": 45, "l": ["Ranking", "(porównania parami)"], "r": ["ranking", "parami", "thurstone"], "slajdy": [22], "mod": ["ranking"], "def": "Metoda porównań parami (Thurstone 1927). Algorytm sortujący wystarczy, o ile preferencje są przechodnie; ludzkie bywają nieprzechodnie (Tversky 1969)."}, "wybor": {"x": 110, "y": 170, "l": ["Przez wybór", "O(n²)"], "r": ["wybor", "selection"], "slajdy": [7], "mod": ["sortownia"], "def": "Szukaj najmniejszego elementu w nieposortowanej części i przestaw go na początek. Zawsze ok. n²/2 porównań."}, "wstawianie": {"x": 300, "y": 170, "l": ["Przez wstawianie", "O(n²)"], "r": ["wstawian", "insertion"], "slajdy": [8, 9, 10], "mod": ["sortownia"], "def": "Wstawiaj kolejne elementy na właściwe miejsce w posortowanej części, jak karty w ręce. Najgorzej O(n²), dla danych prawie posortowanych prawie O(n)."}, "scalanie": {"x": 500, "y": 170, "l": ["Przez scalanie", "O(n log n)"], "r": ["scalan", "merge"], "slajdy": [12, 13, 14], "mod": ["sortownia"], "def": "Podziel listę na pół, posortuj połowy rekurencyjnie i scal. Zawsze O(n log n), ale potrzebuje dodatkowej pamięci."}, "quicksort": {"x": 700, "y": 170, "l": ["Quicksort", "średnio O(n log n)"], "r": ["quick", "szybki", "szybkie"], "slajdy": [15, 16], "mod": ["sortownia"], "def": "Wybierz element osiowy, rozdziel na mniejsze i większe, posortuj części. Średnio bardzo szybki, w najgorszym przypadku O(n²)."}, "radix": {"x": 900, "y": 170, "l": ["Sortowanie pozycyjne", "(radix)"], "r": ["pozycyjn", "radix", "przegrod"], "slajdy": [25, 26], "mod": ["radix"], "def": "Rozkłada klucze do przegródek cyfra po cyfrze, bez porównywania elementów. Czas zależy od liczby cyfr i rozmiaru alfabetu."}, "prawie": {"x": 300, "y": 300, "l": ["Dane prawie", "posortowane"], "r": ["prawie posort", "prawie"], "slajdy": [10], "mod": ["sortownia"], "def": "Tylko kilka elementów nie na miejscu. Wstawianie robi wtedy mało przesunięć, więc działa niemal liniowo."}, "dziel": {"x": 600, "y": 300, "l": ["Dziel i zwyciężaj", "(W7)"], "r": ["dziel", "zwyciez"], "slajdy": [12, 15], "mod": ["sortownia"], "def": "Strategia z W7: podział na mniejsze podproblemy rozwiązywane rekurencyjnie. Scalanie dzieli „łatwo”, a scala z wysiłkiem; quicksort odwrotnie."}, "granica": {"x": 890, "y": 300, "l": ["Granica", "≈ n log₂ n porównań"], "r": ["granic", "n log n", "dolna"], "slajdy": [24, 26], "mod": ["waga"], "def": "Sortowanie wyłącznie przez porównania potrzebuje w najgorszym przypadku co najmniej ⌈log₂ n!⌉ ≈ n log₂ n porównań: tyle pytań tak/nie wskazuje jedną z n! kolejności."}, "kolejka": {"x": 110, "y": 300, "l": ["Kolejka", "priorytetowa"], "r": ["kolejka priorytet", "priorytet"], "slajdy": [18], "mod": ["kopiec"], "def": "Wstaw element; wyjmij element o najwyższym priorytecie. Przyda się w W10 (Dijkstra) i W11 (planista procesora)."}, "kopiec": {"x": 110, "y": 430, "l": ["Kopiec binarny"], "r": ["kopiec", "kopc", "heap"], "slajdy": [19, 20], "mod": ["kopiec"], "def": "Drzewo zapisane w tablicy: rodzic nie mniejszy niż dzieci. Wstawianie i wyjmowanie maksimum w czasie O(log n)."}, "heapsort": {"x": 330, "y": 430, "l": ["Heapsort", "O(n log n)"], "r": ["heapsort", "przez kopcowanie", "kopcow"], "slajdy": [21], "mod": ["kopiec"], "def": "Zbuduj kopiec z tablicy i wyjmuj maksimum n razy. O(n log n) i w miejscu, bez dodatkowej pamięci."}}, "K": [["sortowanie", "wybor", "proste:", {"e": [-20, -6]}], ["sortowanie", "wstawianie", "proste:", {"e": [-8, 0]}], ["sortowanie", "scalanie", "szybkie:"], ["sortowanie", "quicksort", "szybkie:", {"e": [8, 0]}], ["sortowanie", "radix", "bez porównań:", {"e": [24, -6]}], ["ranking", "wybor", "pełny plan\npar jak"], ["wstawianie", "prawie", "szybkie dla"], ["scalanie", "dziel", "stosuje", {"e": [-26, 0]}], ["quicksort", "dziel", "też stosuje", {"e": [34, 0]}], ["kopiec", "kolejka", "realizuje"], ["kopiec", "heapsort", "napędza"], ["heapsort", "granica", "osiąga", {"t": 0.62, "e": [0, 12]}], ["radix", "granica", "omija"]]});
 </script>
 </body>
 </html>
