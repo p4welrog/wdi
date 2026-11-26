@@ -97,6 +97,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
 .przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
 .przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
@@ -362,10 +365,22 @@ table.otw td { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>W wersji z odejmowaniem wpisz b = 0. Co się dzieje i który warunek początkowy został złamany?</li>
-      <li>Dla (252, 105) policz obiegi pętli w wersji z odejmowaniem i z resztą. Skąd różnica?</li>
-      <li>W wersji z błędem: po ilu obiegach pętla się kończy, niezależnie od danych? Dlaczego wynik to zawsze pierwotne b?</li>
-      <li>Która postać — schemat czy kod — szybciej pokazuje, gdzie jest pętla? A gdzie łatwiej zauważyć błąd w przypisaniu?</li>
+      <li>W wersji z odejmowaniem wpisz b = 0. Co się dzieje i który warunek początkowy został złamany?
+        <details class="odp"><summary>Wskazówka</summary><div>Co robi krok a ← a − b, gdy b = 0?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Odejmowanie zera niczego nie zmienia, więc a ≠ b zostaje prawdą na zawsze i pętla nigdy się nie kończy. Złamany jest warunek początkowy a, b ≥ 1. Algorytm jest poprawny tylko dla danych, które go spełniają.</div></details>
+      </li>
+      <li>Dla (252, 105) policz obiegi pętli w wersji z odejmowaniem i z resztą. Skąd różnica?
+        <details class="odp"><summary>Wskazówka</summary><div>Uruchom obie wersje i porównaj licznik obiegów.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wersja z odejmowaniem robi 5 obiegów (252 → 147 → 42, potem 105 → 63 → 21, a na końcu 42 → 21), a wersja z resztą tylko 3 (252 mod 105 = 42, 105 mod 42 = 21, 42 mod 21 = 0). Reszta z dzielenia wykonuje w jednym kroku wszystkie odejmowania tej samej liczby naraz.</div></details>
+      </li>
+      <li>W wersji z błędem: po ilu obiegach pętla się kończy, niezależnie od danych? Dlaczego wynik to zawsze pierwotne b?
+        <details class="odp"><summary>Wskazówka</summary><div>Prześledź oba przypisania po kolei: jaka jest wartość a, gdy liczymy a % b?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Po pierwszym obiegu. Pierwsza linia ustawia a na wartość b, więc druga liczy b % b = 0. Warunek pętli b ≠ 0 jest wtedy fałszywy i funkcja zwraca a, czyli pierwotne b. Poprawny zapis to jedno równoczesne przypisanie a, b = b, a % b.</div></details>
+      </li>
+      <li>Która postać — schemat czy kod — szybciej pokazuje, gdzie jest pętla? A gdzie łatwiej zauważyć błąd w przypisaniu?
+        <details class="odp"><summary>Wskazówka</summary><div>Gdzie w schemacie widać powrót do wcześniejszego kroku, a gdzie w kodzie kolejność linii?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Pętlę zwykle szybciej widać na schemacie, bo to strzałka wracająca w górę. Błąd w przypisaniu łatwiej zauważyć w kodzie, bo widać kolejność linii i to, która wartość jest już nadpisana. Każdy zapis ułatwia co innego, dlatego warto znać oba.</div></details>
+      </li>
     </ol>
   </div>
 </section>
@@ -383,10 +398,22 @@ table.otw td { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Które błędy znalazłeś pierwszym albo drugim testem, a które wymagały wielu prób? Co odróżnia te przypadki?</li>
-      <li>W <span class="mono">czy_pierwsza</span> błędna jest tylko jedna odpowiedź spośród nieskończenie wielu. Ile losowych testów z zakresu 0–1000 trzeba średnio, żeby na nią trafić?</li>
-      <li>Dla każdej funkcji: jak brzmiałby krótki argument (niezmiennik), że poprawiona wersja działa dla <em>wszystkich</em> danych?</li>
-      <li>Kiedy test „nie spełnia warunku początkowego”, to wina funkcji czy danych? Kto odpowiada za sprawdzenie warunku?</li>
+      <li>Które błędy znalazłeś pierwszym albo drugim testem, a które wymagały wielu prób? Co odróżnia te przypadki?
+        <details class="odp"><summary>Wskazówka</summary><div>Przy których funkcjach błąd tkwił w przypadku brzegowym (pusta lista, same ujemne), a przy których w jednej konkretnej liczbie?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Szybko wychodzą błędy w przypadkach brzegowych, o które warto zapytać od razu: pusta lista, same liczby ujemne, lista z jednym elementem. Długo szuka się błędu, który dotyczy jednej, niczym niewyróżnionej wartości, jak n = 4 w czy_pierwsza. Dobre testy celują najpierw w granice.</div></details>
+      </li>
+      <li>W <span class="mono">czy_pierwsza</span> błędna jest tylko jedna odpowiedź spośród nieskończenie wielu. Ile losowych testów z zakresu 0–1000 trzeba średnio, żeby na nią trafić?
+        <details class="odp"><summary>Wskazówka</summary><div>Jakie jest prawdopodobieństwo trafienia jednej liczby z 1001 w jednym losowaniu?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Z zakresu 0–1000 (1001 liczb) jedna losowa liczba trafia w 4 z prawdopodobieństwem 1/1001. Średnio potrzeba więc ok. 1001 testów. Losowe testowanie słabo znajduje błędy dotyczące pojedynczych wartości.</div></details>
+      </li>
+      <li>Dla każdej funkcji: jak brzmiałby krótki argument (niezmiennik), że poprawiona wersja działa dla <em>wszystkich</em> danych?
+        <details class="odp"><summary>Wskazówka</summary><div>Niezmiennik to zdanie, które jest prawdziwe przed pętlą i po każdym jej obiegu.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Na przykład: dla maksimum „m to największy z dotąd obejrzanych elementów”, jeśli zaczynamy od pierwszego elementu, a nie od 0. Dla czy_pierwsza: „żadna z dotąd sprawdzonych liczb od 2 nie dzieli n”, sprawdzając aż do √n. Dla średniej wystarczy najpierw obsłużyć pustą listę, a potem podzielić sumę przez długość. Dla binarnego: „jeśli x jest na liście, to leży w A[lewy..prawy]”.</div></details>
+      </li>
+      <li>Kiedy test „nie spełnia warunku początkowego”, to wina funkcji czy danych? Kto odpowiada za sprawdzenie warunku?
+        <details class="odp"><summary>Wskazówka</summary><div>Specyfikacja to umowa. Kto obiecuje spełnić warunek początkowy, a kto końcowy?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To wina danych: funkcja obiecuje spełnić warunek końcowy tylko wtedy, gdy dostanie dane spełniające warunek początkowy. Za warunek początkowy odpowiada ten, kto wywołuje funkcję. Funkcja może dodatkowo go sprawdzać i zgłaszać błąd, ale specyfikacja tego nie wymaga.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">E. W. Dijkstra, <em>Notes on Structured Programming</em> (EWD249), 1970 (tłum. własne).</p>
@@ -437,10 +464,22 @@ table.otw td { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przy jakim n algorytm 2ⁿ przestaje mieścić się w sekundzie? A w roku? O ile trzeba zwiększyć n, żeby czas wzrósł 1000 razy?</li>
-      <li>Porównaj 2ⁿ i n² dla n = 1, …, 6. Od którego n algorytm wykładniczy jest już zawsze wolniejszy? Co z tego wynika dla bardzo małych danych?</li>
-      <li>Dopisuj zera do a przy b = 1. Jak rośnie liczba odejmowań, a jak liczba obiegów Euklidesa? Dlaczego mówimy, że odejmowanie jest wykładnicze względem liczby cyfr?</li>
-      <li>Przesuwaj k dla liczb Fibonacciego. Ile obiegów wykonuje Euklides i jak blisko jest oszacowanie Lamégo?</li>
+      <li>Przy jakim n algorytm 2ⁿ przestaje mieścić się w sekundzie? A w roku? O ile trzeba zwiększyć n, żeby czas wzrósł 1000 razy?
+        <details class="odp"><summary>Wskazówka</summary><div>Sekunda to 10⁹ operacji, a rok ok. 3,2 · 10¹⁶. Ile to potęg dwójki?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>2³⁰ ≈ 1,07 · 10⁹, więc od n = 30 algorytm 2ⁿ potrzebuje ponad sekundy. Rok to ok. 3,2 · 10¹⁶ operacji, a tyle przekracza 2ⁿ od n = 55. Żeby czas wzrósł 1000 razy, wystarczy zwiększyć n o 10, bo 2¹⁰ = 1024.</div></details>
+      </li>
+      <li>Porównaj 2ⁿ i n² dla n = 1, …, 6. Od którego n algorytm wykładniczy jest już zawsze wolniejszy? Co z tego wynika dla bardzo małych danych?
+        <details class="odp"><summary>Wskazówka</summary><div>Wypisz 2ⁿ i n² obok siebie dla n = 1, …, 6.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla n = 1, …, 6: 2ⁿ to 2, 4, 8, 16, 32, 64, a n² to 1, 4, 9, 16, 25, 36. Przy n = 3 wygrywa algorytm wykładniczy, przy n = 2 i 4 jest remis, a od n = 5 algorytm wykładniczy jest już zawsze wolniejszy. Dla bardzo małych danych złożoność niewiele mówi, a liczą się konkretne liczby kroków.</div></details>
+      </li>
+      <li>Dopisuj zera do a przy b = 1. Jak rośnie liczba odejmowań, a jak liczba obiegów Euklidesa? Dlaczego mówimy, że odejmowanie jest wykładnicze względem liczby cyfr?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj wyniki dla a = 10, 100, 1000 przy b = 1.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy b = 1 wersja z odejmowaniem robi a − 1 odejmowań: 9, 99, 999. Każda dopisana cyfra mnoży pracę przez 10. Euklides z resztą kończy w jednym obiegu. Rozmiar danych to liczba cyfr, a liczba odejmowań rośnie jak 10 do potęgi liczby cyfr, czyli wykładniczo.</div></details>
+      </li>
+      <li>Przesuwaj k dla liczb Fibonacciego. Ile obiegów wykonuje Euklides i jak blisko jest oszacowanie Lamégo?
+        <details class="odp"><summary>Wskazówka</summary><div>Liczby Fibonacciego to najgorszy przypadek dla Euklidesa: każda reszta to poprzednia liczba ciągu.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla pary (F(k + 1), F(k)) Euklides wykonuje k − 1 obiegów, bo reszty schodzą po kolejnych liczbach Fibonacciego. Oszacowanie Lamégo jest blisko: np. dla k = 30 mniejsza liczba F(30) = 832 040 ma 6 cyfr, więc granica to 30 obiegów, a wykonanych jest 29.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">G. Lamé, <em>Note sur la limite du nombre des divisions dans la recherche du plus grand commun diviseur entre deux nombres entiers</em>, C. R. Acad. Sci. Paris 19 (1844), s. 867–870; D. E. Knuth, <em>The Art of Computer Programming</em>, t. 2, §4.5.3.</p>
@@ -495,11 +534,26 @@ table.otw td { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Wersja „lewy &lt; prawy”: uruchom ją na danych ze slajdu (x = 52). Co się dzieje w obiegu, w którym lewy = prawy?</li>
-      <li>Wersja „lewy = srodek”: znajdź najkrótszą listę, na której pętla nigdy się nie kończy. Dlaczego przedział przestaje się kurczyć?</li>
-      <li>Wpisz listę <em>nieposortowaną</em> i szukaj elementu, który na niej jest. Czy algorytm zgłasza błąd? Kto odpowiada za warunek początkowy?</li>
-      <li>Dla listy 31 elementów: jaka jest gwarancja liczby obiegów? Spróbuj znaleźć x, które ją osiąga.</li>
-      <li>Niezmiennik i warunek wyjścia razem dowodzą, że −1 jest poprawne. W wersji „lewy &lt; prawy” niezmiennik dalej jest prawdziwy. Dlaczego ten dowód się nie domyka? A w wersji „lewy = srodek”: czego brakuje do dowodu, że pętla się zatrzyma?</li>
+      <li>Wersja „lewy &lt; prawy”: uruchom ją na danych ze slajdu (x = 52). Co się dzieje w obiegu, w którym lewy = prawy?
+        <details class="odp"><summary>Wskazówka</summary><div>Patrz na wiersz tabeli śledzenia, w którym lewy = prawy.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Gdy przedział skurczy się do jednego elementu, lewy = prawy i warunek lewy &lt; prawy jest fałszywy. Pętla kończy się, zanim ten ostatni kandydat zostanie porównany z x, więc funkcja zwraca −1, choć 52 może być na liście. Poprawka: lewy &lt;= prawy.</div></details>
+      </li>
+      <li>Wersja „lewy = srodek”: znajdź najkrótszą listę, na której pętla nigdy się nie kończy. Dlaczego przedział przestaje się kurczyć?
+        <details class="odp"><summary>Wskazówka</summary><div>Zacznij od listy jednoelementowej i x większego od jej elementu.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wystarczy jeden element: A = [5], x = 7. Środek to 0, A[0] &lt; x, więc lewy = srodek = 0, czyli bez zmian. Przedział stoi w miejscu i pętla kręci się w nieskończoność. Bez „+ 1” przedział nie musi się zmniejszać, gdy srodek = lewy.</div></details>
+      </li>
+      <li>Wpisz listę <em>nieposortowaną</em> i szukaj elementu, który na niej jest. Czy algorytm zgłasza błąd? Kto odpowiada za warunek początkowy?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy funkcja gdziekolwiek sprawdza, czy lista jest posortowana?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie zgłasza błędu, tylko może zwrócić −1 dla elementu, który na liście jest, bo odrzuca połowę, w której on leży. Sprawdzanie posortowania kosztowałoby n kroków, czyli więcej niż samo szukanie. Odpowiada za to wywołujący, który ma spełnić warunek początkowy.</div></details>
+      </li>
+      <li>Dla listy 31 elementów: jaka jest gwarancja liczby obiegów? Spróbuj znaleźć x, które ją osiąga.
+        <details class="odp"><summary>Wskazówka</summary><div>Użyj wzoru ⌊log₂ n⌋ + 1. Który element leży „najgłębiej”?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>⌊log₂ 31⌋ + 1 = 4 + 1 = 5 obiegów. Osiąga ją np. najmniejszy element listy albo dowolne x, którego na liście nie ma: za każdym razem trzeba zejść aż do przedziału jednoelementowego.</div></details>
+      </li>
+      <li>Niezmiennik i warunek wyjścia razem dowodzą, że −1 jest poprawne. W wersji „lewy &lt; prawy” niezmiennik dalej jest prawdziwy. Dlaczego ten dowód się nie domyka? A w wersji „lewy = srodek”: czego brakuje do dowodu, że pętla się zatrzyma?
+        <details class="odp"><summary>Wskazówka</summary><div>Dowód poprawności ma dwie części: co wynika z niezmiennika przy wyjściu z pętli i dlaczego pętla w ogóle się kończy.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>W wersji lewy &lt; prawy pętla kończy się przy lewy = prawy, czyli przy przedziale z jednym elementem. Niezmiennik mówi tylko, że x, jeśli jest, leży w tym jednym elemencie, a nie, że go nie ma, więc wniosek „−1” nie wynika. W wersji lewy = srodek brakuje dowodu stopu: trzeba pokazać, że każdy obieg zmniejsza przedział, a tu bywa, że nie.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Slajd z niezmiennikiem pętli w algorytmie Euklidesa i slajd „Śledzenie: szukamy 52”. D. E. Knuth, <em>The Art of Computer Programming</em>, t. 3, §6.2.1; J. Bentley, <em>Programming Pearls</em>, 2nd ed., rozdz. 4; A. Bhargava, <em>Algorytmy. Ilustrowany przewodnik</em>, rozdz. 1.</p>
@@ -558,9 +612,18 @@ table.otw td { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>W których rundach byłeś lepszy od wyszukiwania binarnego, a w których gorszy? Po czym poznałeś, że półka jest „nierówna”?</li>
-      <li>Wyszukiwanie binarne gwarantuje 10 otwarć. Czy Twoja strategia daje jakąkolwiek gwarancję?</li>
-      <li>Kiedy w prawdziwym programie opłaca się interpolacja, a kiedy bezpieczniejsze jest wyszukiwanie binarne?</li>
+      <li>W których rundach byłeś lepszy od wyszukiwania binarnego, a w których gorszy? Po czym poznałeś, że półka jest „nierówna”?
+        <details class="odp"><summary>Wskazówka</summary><div>Przypomnij sobie, kiedy znaleziona liczba była daleko od oczekiwanego miejsca.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zwykle na półkach wypełnionych równomiernie da się wygrać z wyszukiwaniem binarnym: otwierasz tam, gdzie liczba „powinna” być. Na półkach nierównych intuicja prowadzi w złe miejsce i trzeba wielu prób. Nierówność widać po tym, że pierwszy otwarty tom ma liczbę daleką od oczekiwanej.</div></details>
+      </li>
+      <li>Wyszukiwanie binarne gwarantuje 10 otwarć. Czy Twoja strategia daje jakąkolwiek gwarancję?
+        <details class="odp"><summary>Wskazówka</summary><div>Pomyśl o najgorszej półce, jaką ktoś mógłby dla Ciebie ułożyć.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zwykle nie: na złośliwie ułożonej półce strategia „otwieram tam, gdzie liczba powinna być” może potrzebować bardzo wielu prób, w skrajnym przypadku prawie tylu, ile jest tomów. Wyszukiwanie binarne gwarantuje 10 otwarć niezależnie od rozkładu.</div></details>
+      </li>
+      <li>Kiedy w prawdziwym programie opłaca się interpolacja, a kiedy bezpieczniejsze jest wyszukiwanie binarne?
+        <details class="odp"><summary>Wskazówka</summary><div>Kiedy wiesz coś o rozkładzie danych, a kiedy liczy się najgorszy przypadek?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Interpolacja opłaca się, gdy dane są rozłożone mniej więcej równomiernie i to się nie zmienia, np. kolejne numery identyfikatorów. Wtedy średnio wystarczy bardzo mało prób. Wyszukiwanie binarne jest bezpieczniejsze, gdy rozkład jest nieznany albo nierówny, albo gdy liczy się gwarancja czasu.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Y. Perl, A. Itai, H. Avni, <em>Interpolation Search — A Log Log N Search</em>, Comm. ACM 21(7), 1978, s. 550–553; G. Gigerenzer, W. Gaissmaier, <em>Heuristic Decision Making</em>, Annu. Rev. Psychol. 62 (2011), s. 451–482.</p>
