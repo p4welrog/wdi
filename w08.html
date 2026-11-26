@@ -97,6 +97,10 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
+.przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
+.przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
+.przyp li { margin: 3px 0; }
 .note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
 .src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
 
@@ -491,6 +495,14 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
 <section id="v-waga" hidden>
   <h2>4. Waga szalkowa</h2>
   <p class="lead">Odważniki mają różne, ukryte masy. Waga mówi tylko, który z dwóch jest cięższy. Ułóż je od najlżejszego do najcięższego, ważąc jak najmniej razy.</p>
+  <details class="przyp">
+    <summary>Przypomnienie: silnia i zaokrąglenie w górę</summary>
+    <ul>
+      <li>n! (silnia) = 1 · 2 · … · n to liczba możliwych kolejności n różnych odważników: 3! = 6, 5! = 120.</li>
+      <li>Ważenie ma dwa wyniki, więc daje najwyżej 1 bit. Żeby wskazać jedną ze 120 kolejności, potrzeba log₂ 120 ≈ 6,91 bitu.</li>
+      <li>⌈x⌉ (sufit) to x zaokrąglone w górę: ⌈6,91⌉ = 7. Dla 5 odważników trzeba więc w najgorszym przypadku co najmniej 7 ważeń.</li>
+    </ul>
+  </details>
 
   <div class="card">
     <div class="row">

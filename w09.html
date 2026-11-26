@@ -97,6 +97,10 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
+.przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
+.przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
+.przyp li { margin: 3px 0; }
 .note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
 .src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
 
@@ -348,6 +352,14 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
 <section id="v-kolejnosc" hidden>
   <h2>2. Kolejność ma znaczenie</h2>
   <p class="lead">Wstawiamy klucze 1, 2, …, n do pustego BST w losowej kolejności i mierzymy wysokość drzewa. Powtarzamy wiele razy.</p>
+  <details class="przyp">
+    <summary>Przypomnienie: ile węzłów mieści się na poziomach</summary>
+    <ul>
+      <li>Pełne drzewo binarne ma na kolejnych poziomach 1, 2, 4, 8, … węzłów, więc h poziomów mieści 2ʰ − 1 węzłów.</li>
+      <li>1000 kluczy zmieści się w 10 poziomach (2¹⁰ − 1 = 1023), a milion w 20. Wysokość liczymy tu w krawędziach (poziomy minus 1), więc najmniejsza możliwa wysokość to ok. log₂ n: dla 1000 kluczy 9.</li>
+      <li>Najgorszy przypadek to klucze wstawiane rosnąco: drzewo staje się listą o wysokości n − 1.</li>
+    </ul>
+  </details>
 
   <div class="card">
     <div class="row">
@@ -431,6 +443,15 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
 <section id="v-urodziny" hidden>
   <h2>4. Paradoks urodzin</h2>
   <p class="lead">Wrzucamy losowe klucze do tablicy o m miejscach, aż dwa trafią w to samo miejsce. Ile kluczy to zwykle trwa?</p>
+  <details class="przyp">
+    <summary>Przypomnienie: „choć jedna”, mnożenie i liczba par</summary>
+    <ul>
+      <li>Łatwiej policzyć zdarzenie przeciwne: że wszystkie klucze trafią w różne miejsca. Drugi klucz omija pierwszy z prawdopodobieństwem (m − 1)/m, trzeci omija dwa zajęte z prawdopodobieństwem (m − 2)/m i tak dalej. Prawdopodobieństwa kolejnych niezależnych losowań mnożymy.</li>
+      <li>P(choć jedna kolizja) = 1 − P(żadnej kolizji).</li>
+      <li>n kluczy tworzy n(n − 1)/2 par: każdy z n − 1 pozostałymi, a każdą parę liczymy dwa razy. Dla 23 osób to 253 pary.</li>
+      <li>√m to pierwiastek: √365 ≈ 19,1, √1 000 000 = 1000.</li>
+    </ul>
+  </details>
   <div class="card">
     <div class="row">
       <span class="small muted" id="urMLab">Liczba miejsc m</span>
@@ -473,6 +494,13 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
 <section id="v-hasz" hidden>
   <h2>5. Tablica z haszowaniem</h2>
   <p class="lead">h(k) = k mod m. Klucz trafia do komórki h(k); gdy jest zajęta — dopisujemy go do listy w tej komórce (łańcuchowo) albo próbujemy kolejnych komórek (adresowanie otwarte, próbkowanie liniowe).</p>
+  <details class="przyp">
+    <summary>Przypomnienie: reszta z dzielenia</summary>
+    <ul>
+      <li>k mod m to reszta z dzielenia k przez m: 17 mod 5 = 2, bo 17 = 3 · 5 + 2.</li>
+      <li>Wynik jest zawsze liczbą od 0 do m − 1, więc nadaje się na numer komórki tablicy o m miejscach. W Pythonie: <span class="mono">k % m</span>.</li>
+    </ul>
+  </details>
 
   <div class="card">
     <div class="row">

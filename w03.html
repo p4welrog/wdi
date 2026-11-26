@@ -95,6 +95,10 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
+.przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
+.przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
+.przyp li { margin: 3px 0; }
 .todo { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .todo h3 { color: var(--accent); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4em; }
 .todo ol { margin: 0; padding-left: 1.2em; }
@@ -382,6 +386,14 @@ table.t th.n { text-align: right; }
 <section id="v-pozycyjny" hidden>
   <h2>1. Jedna liczba, cztery zapisy</h2>
   <p class="lead">Ta sama liczba w czterech zapisach. Wpisz ją w dowolne pole albo klikaj bity: każdy bit to pytanie „czy ta waga wchodzi do sumy?”. Zmienia się tylko <em>zapis</em>, liczba jest cały czas ta sama.</p>
+  <details class="przyp">
+    <summary>Przypomnienie: potęgi</summary>
+    <ul>
+      <li>p⁰ = 1 dla każdej podstawy p, p¹ = p, p² = p · p, p³ = p · p · p.</li>
+      <li>Potęgi dwójki warto znać na pamięć: 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024.</li>
+      <li>2ᵏ zapisane dwójkowo to jedynka i k zer (8 = 1000₂), a 2ᵏ − 1 to k jedynek (7 = 111₂, 255 = 11111111₂).</li>
+    </ul>
+  </details>
 
   <div class="card">
     <div class="row" style="justify-content: space-between">

@@ -95,6 +95,10 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
+.przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
+.przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
+.przyp li { margin: 3px 0; }
 .todo { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .todo h3 { color: var(--accent); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4em; }
 .todo ol { margin: 0; padding-left: 1.2em; }
@@ -455,6 +459,16 @@ footer a { color: var(--muted); }
 <section id="v-entropia" hidden>
   <h2>1. Piaskownica entropii</h2>
   <p class="lead">Źródło nadaje komunikaty A, B, C… z różnymi prawdopodobieństwami. Przesuwaj suwaki (strona sama dba, żeby prawdopodobieństwa sumowały się do 1) i obserwuj informację własną <span class="mono">I(p) = log₂ 1/p</span> każdego komunikatu oraz entropię <span class="mono">H = Σ p·I(p)</span>.</p>
+  <details class="przyp">
+    <summary>Przypomnienie: logarytm i znak Σ</summary>
+    <ul>
+      <li>log₂ x to wykładnik, do którego trzeba podnieść 2, żeby otrzymać x: log₂ 8 = 3, bo 2³ = 8. Dalej: log₂ 1 = 0, log₂ 2 = 1, log₂ 1024 = 10.</li>
+      <li>Intuicja: log₂ n to liczba pytań tak/nie, które wystarczą, by wskazać jedną z n jednakowo prawdopodobnych możliwości (gdy n jest potęgą dwójki; jak w „Zgadnij liczbę” z W01). Dla 100 liczb log₂ 100 ≈ 6,64, czyli w praktyce 7 pytań.</li>
+      <li>Dlatego I(p) = log₂ 1/p: komunikat o prawdopodobieństwie 1/8 niesie log₂ 8 = 3 bity. Im rzadszy komunikat, tym więcej bitów.</li>
+      <li>Σ (sigma) oznacza sumę. H = Σ p·I(p) znaczy: dla każdego komunikatu pomnóż p przez I(p) i dodaj wyniki. Moneta symetryczna: ½ · 1 + ½ · 1 = 1 bit.</li>
+      <li>Na kalkulatorze: log₂ x = ln x / ln 2. W Pythonie: <span class="mono">math.log2(x)</span>.</li>
+    </ul>
+  </details>
 
   <div class="card">
     <div class="row" style="justify-content: space-between">
@@ -566,6 +580,15 @@ footer a { color: var(--muted); }
 <section id="v-pracownia" hidden>
   <h2>3. Pracownia kodów</h2>
   <p class="lead">Wpisz słowa kodowe (z zer i jedynek) dla każdego symbolu. Strona na bieżąco sprawdza, czy kod jest prefiksowy (warunek Fano) i czy da się go jednoznacznie odczytać, liczy sumę Krafta, średnią długość L i redundancję R.</p>
+  <details class="przyp">
+    <summary>Przypomnienie: suma Krafta, średnia długość, redundancja</summary>
+    <ul>
+      <li>2<sup>−l</sup> = 1 / 2<sup>l</sup>. Słowo kodowe długości 1 „zajmuje” połowę wszystkich ciągów bitów (te, które się od niego zaczynają), długości 2 ćwiartkę, a długości 3 jedną ósmą.</li>
+      <li>Suma Krafta Σ 2<sup>−lᵢ</sup> dodaje te części dla wszystkich słów. Kod {0, 10, 11}: ½ + ¼ + ¼ = 1. Gdy suma przekracza 1, słowa nie mieszczą się bez nakładania i żaden jednoznaczny kod nie ma takich długości.</li>
+      <li>Średnia długość L = Σ pᵢ · lᵢ: długość każdego słowa ważona tym, jak często występuje jego symbol.</li>
+      <li>Redundancja R = L − H: ile bitów na symbol kod zużywa ponad minimum, którym jest entropia H.</li>
+    </ul>
+  </details>
 
   <div class="card">
     <h3>Twój kod</h3>

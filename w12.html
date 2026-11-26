@@ -97,6 +97,10 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
+.przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
+.przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
+.przyp li { margin: 3px 0; }
 .todo { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .todo h3 { color: var(--accent); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4em; }
 .todo ol { margin: 0; padding-left: 1.2em; }
@@ -605,6 +609,15 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
 <section id="v-opoznienie" hidden>
   <h2>6. Kalkulator opóźnień</h2>
   <p class="lead">Transmisja d<sub>trans</sub> = L / R zależy od rozmiaru danych i przepustowości, a nie od odległości. Propagacja d<sub>prop</sub> = s / v zależy od odległości, a nie od rozmiaru. Pomijamy kolejki i przetwarzanie.</p>
+  <details class="przyp">
+    <summary>Przypomnienie: jednostki</summary>
+    <ul>
+      <li>1 bajt (B) = 8 bitów (b). Przepustowość podaje się w bitach na sekundę: 1 Mb/s = 10⁶ b/s, 1 Gb/s = 10⁹ b/s.</li>
+      <li>Przykład transmisji: pakiet 1500 B = 12 000 b. Łączem 10 Mb/s: 12 000 / 10⁷ s = 0,0012 s = 1,2 ms.</li>
+      <li>Przykład propagacji: 2 · 10⁸ m/s to 200 000 km/s, więc 1000 km światłowodu sygnał pokonuje w 5 ms.</li>
+      <li>1 ms = 0,001 s. RTT to czas tam i z powrotem, czyli 2 · d<sub>prop</sub>, gdy pomijamy transmisję i kolejki.</li>
+    </ul>
+  </details>
 
   <div class="card">
     <div class="row" id="opMiasta"></div>
@@ -751,6 +764,13 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
     </ol>
     <p><b>Na co zwrócić uwagę:</b> przy łączu prawie pełnym mały wzrost obciążenia bardzo wydłuża czekanie. TCP dzieli łącze mniej więcej po równo, choć nikt nie mówi nadawcom, ile im wolno.</p>
   </div>
+  <details class="przyp">
+    <summary>Przypomnienie: co znaczy ρ i 1 / (1 − ρ)</summary>
+    <ul>
+      <li>ρ = La / R: L to rozmiar pakietu w bitach, a to liczba pakietów przychodzących na sekundę, R to przepustowość łącza w b/s. La to bity napływające w sekundzie, więc ρ mówi, jaką część możliwości łącza zużywa napływ.</li>
+      <li>1 / (1 − ρ) rośnie coraz szybciej, gdy ρ zbliża się do 1: dla ρ = 0,5 daje 2, dla 0,9 daje 10, dla 0,99 daje 100.</li>
+    </ul>
+  </details>
 
   <div class="card">
     <h3>Część A: kolejka w routerze</h3>
