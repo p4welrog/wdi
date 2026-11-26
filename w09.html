@@ -97,6 +97,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
 .przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
 .przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
@@ -340,9 +343,18 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Mini-zadanie ze slajdu: zbuduj drzewo z 8, 3, 10, 1, 6, 14, 4, 7, 13 na kartce, potem sprawdź. Ile porównań kosztuje znajdź(7), a ile znajdź(5)?</li>
-      <li>Usuń 50 z drzewa ze slajdu. Kto zajmuje jego miejsce i dlaczego właśnie on?</li>
-      <li>Dlaczego przejście w porządku daje klucze rosnąco? Spójrz na rysunek: co znaczy pozycja węzła w poziomie?</li>
+      <li>Mini-zadanie ze slajdu: zbuduj drzewo z 8, 3, 10, 1, 6, 14, 4, 7, 13 na kartce, potem sprawdź. Ile porównań kosztuje znajdź(7), a ile znajdź(5)?
+        <details class="odp"><summary>Wskazówka</summary><div>Przy szukaniu porównujesz klucz z każdym węzłem na drodze od korzenia. Gdzie kończy się droga do 5?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Drzewo: korzeń 8, jego dzieci 3 i 10, pod 3 są 1 i 6, pod 6 są 4 i 7, a pod 10 jest 14 z lewym dzieckiem 13. znajdź(7) kosztuje 4 porównania: 8, 3, 6, 7. znajdź(5) też 4: 8, 3, 6, 4. Po 4 trzeba iść w prawo, a tam nic nie ma, więc 5 nie występuje. Nieudane szukanie kosztuje tyle, ile długość drogi do pustego miejsca.</div></details>
+      </li>
+      <li>Usuń 50 z drzewa ze slajdu. Kto zajmuje jego miejsce i dlaczego właśnie on?
+        <details class="odp"><summary>Wskazówka</summary><div>Szukamy klucza, który może stanąć w miejscu 50 tak, by lewe poddrzewo było mniejsze, a prawe większe.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Miejsce 50 zajmuje 60, czyli następnik: najmniejszy klucz w prawym poddrzewie (od 70 idziemy w lewo, dopóki się da). Jest większy od wszystkich kluczy po lewej i mniejszy od pozostałych po prawej, więc porządek BST zostaje zachowany. Następnik ma najwyżej jedno dziecko (prawe), więc łatwo go wyjąć z jego starego miejsca.</div></details>
+      </li>
+      <li>Dlaczego przejście w porządku daje klucze rosnąco? Spójrz na rysunek: co znaczy pozycja węzła w poziomie?
+        <details class="odp"><summary>Wskazówka</summary><div>Węzły na rysunku stoją w poziomie w kolejności kluczy. Co robi przejście: lewe poddrzewo, węzeł, prawe poddrzewo?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Pozycja w poziomie to miejsce klucza w posortowanej kolejności. Przejście w porządku najpierw wypisuje całe lewe poddrzewo (same mniejsze klucze), potem węzeł, a potem prawe poddrzewo (same większe). Robi to tak samo w każdym poddrzewie, więc czyta rysunek od lewej do prawej.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 12 (drzewa poszukiwań binarnych; usuwanie przez następnika).</p>
@@ -384,9 +396,18 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Średnia wysokość dla 1000 kluczy to ok. 21, a dla 10 000 — ok. 30. O ile rośnie wysokość, gdy n rośnie dziesięciokrotnie? Jak rośnie log₂ n?</li>
-      <li>Jaka jest szansa, że losowa kolejność da drzewo-listę? Ile jest takich kolejności dla n kluczy?</li>
-      <li>Dane z życia rzadko są losowe: numery albumów nadawane rosnąco, daty. Co wtedy?</li>
+      <li>Średnia wysokość dla 1000 kluczy to ok. 21, a dla 10 000 — ok. 30. O ile rośnie wysokość, gdy n rośnie dziesięciokrotnie? Jak rośnie log₂ n?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj przyrost wysokości z przyrostem log₂ n przy dziesięciokrotnie większym n.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wysokość rośnie o ok. 9, gdy n rośnie dziesięciokrotnie. log₂ n rośnie wtedy o log₂ 10 ≈ 3,3. Losowe drzewo jest więc ok. 2–3 razy wyższe od najniższego możliwego, ale rośnie w tym samym tempie, logarytmicznie. To nadal bardzo dobrze w porównaniu z drzewem-listą.</div></details>
+      </li>
+      <li>Jaka jest szansa, że losowa kolejność da drzewo-listę? Ile jest takich kolejności dla n kluczy?
+        <details class="odp"><summary>Wskazówka</summary><div>Drzewo jest listą, gdy każdy kolejny klucz jest najmniejszy albo największy spośród pozostałych. Ile to wyborów?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Drzewo-lista powstaje, gdy każdy klucz jest najmniejszym albo największym z pozostałych. Przy każdym kluczu oprócz ostatniego są 2 możliwości, więc takich kolejności jest 2ⁿ⁻¹ na n! wszystkich. Dla n = 15 to 16 384 na ok. 1,3 · 10¹² kolejności, czyli szansa ok. 1 na 80 milionów.</div></details>
+      </li>
+      <li>Dane z życia rzadko są losowe: numery albumów nadawane rosnąco, daty. Co wtedy?
+        <details class="odp"><summary>Wskazówka</summary><div>Jakie drzewo powstaje, gdy klucze przychodzą posortowane?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dane posortowane albo prawie posortowane dają drzewo bardzo wysokie, bliskie listy, i szukanie staje się liniowe. Dlatego w praktyce używa się drzew samorównoważących (np. AVL, czerwono-czarnych), które po każdym wstawieniu przebudowują się tak, by wysokość została rzędu log₂ n.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Średnia wysokość losowego BST rośnie jak ok. 4,31 ln n (B. Reed, J. ACM 50(3), 2003); dla małych n liczby z symulacji są mniejsze niż ten wzór. Drzewa samorównoważące: Cormen i in., rozdz. 13.</p>
@@ -430,9 +451,18 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Czy Twoje czasy rosły z poziomem cechy (poziom 0, 1, 2)? Jeśli nie, co mogło zakłócić tak krótki pomiar?</li>
-      <li>Zdanie „Kanarek ma skórę” sprawdzamy zwykle wolniej niż „Kanarek ma pióra”. Jak to wyjaśnia model Collinsa i Quilliana, a jak wyjaśnienie Conrada?</li>
-      <li>Pingwin jest ptakiem, ale nie lata. Gdzie w sieci zapisać ten wyjątek, żeby nie zmieniać cechy „ptak lata”? Jak długo według modelu trwałaby weryfikacja zdania „Pingwin lata”?</li>
+      <li>Czy Twoje czasy rosły z poziomem cechy (poziom 0, 1, 2)? Jeśli nie, co mogło zakłócić tak krótki pomiar?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile było zdań na każdy poziom i jak duże są różnice, których szukasz?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Twojego wyniku. Efekt jest mały (kilkadziesiąt milisekund na poziom), a zdań na poziom jest niewiele, więc łatwo go zagłuszyć. Wystarczą chwila nieuwagi, pomyłka palca, zdanie wyjątkowo znajome albo nietypowe. Dlatego w badaniach używa się wielu zdań i wielu osób.</div></details>
+      </li>
+      <li>Zdanie „Kanarek ma skórę” sprawdzamy zwykle wolniej niż „Kanarek ma pióra”. Jak to wyjaśnia model Collinsa i Quilliana, a jak wyjaśnienie Conrada?
+        <details class="odp"><summary>Wskazówka</summary><div>Gdzie w sieci zapisana jest „skóra”, a gdzie „pióra”? Jak często myślisz o skórze kanarka?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Według Collinsa i Quilliana cecha „ma skórę” jest zapisana przy pojęciu „zwierzę”, dwa poziomy wyżej, a „ma pióra” przy „ptak”, jeden poziom wyżej. Dłuższa droga daje dłuższy czas. Według Conrada liczy się siła skojarzenia: pióra często kojarzą się z kanarkiem, a skóra prawie nigdy, więc szybciej przychodzi to, co jest częściej kojarzone.</div></details>
+      </li>
+      <li>Pingwin jest ptakiem, ale nie lata. Gdzie w sieci zapisać ten wyjątek, żeby nie zmieniać cechy „ptak lata”? Jak długo według modelu trwałaby weryfikacja zdania „Pingwin lata”?
+        <details class="odp"><summary>Wskazówka</summary><div>W modelu szukanie idzie od pojęcia w górę i kończy się przy pierwszej znalezionej informacji.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wyjątek zapisuje się przy samym pojęciu „pingwin”: „nie lata”. Cecha „ptak lata” zostaje bez zmian, a informacja bliższa pojęciu ma pierwszeństwo. Weryfikacja zdania „Pingwin lata” byłaby szybka: odpowiedź „fałsz” znajduje się już na poziomie 0, bez wchodzenia wyżej.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. M. Collins, M. R. Quillian, <em>Retrieval Time from Semantic Memory</em>, J. Verb. Learn. Verb. Behav. 8, 1969, s. 240–247; C. Conrad, <em>Cognitive Economy in Semantic Memory</em>, J. Exp. Psychol. 92(2), 1972, s. 149–154; L. J. Rips, E. J. Shoben, E. E. Smith, J. Verb. Learn. Verb. Behav. 12, 1973, s. 1–20.</p>
@@ -481,9 +511,18 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Dlaczego intuicja podpowiada liczbę bliską 183? Z iloma osobami porównujesz swoje urodziny, a ile jest wszystkich par?</li>
-      <li>Tablica na milion miejsc i tylko 1200 kluczy (0,12% zapełnienia). Czy kolizja jest prawdopodobna?</li>
-      <li>Wzór podaje 50% kolizji od ok. 1,18 √m kluczy. Ile to dla m = 1 000 000? Czy da się uniknąć kolizji w tablicy z haszowaniem (ćwiczenie 5), wybierając po prostu bardzo dużą tablicę?</li>
+      <li>Dlaczego intuicja podpowiada liczbę bliską 183? Z iloma osobami porównujesz swoje urodziny, a ile jest wszystkich par?
+        <details class="odp"><summary>Wskazówka</summary><div>Policz osobno: Twoje pary (Ty z każdym innym) i wszystkie pary w grupie 23 osób.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Intuicja myśli o własnych urodzinach: żeby ktoś miał ten sam dzień, potrzeba wielu osób, bo każde porównanie to tylko 1/365 szansy. W grupie 23 osób każdy porównuje się tylko z 22 innymi, ale wszystkich par jest 253 i każda może dać kolizję. Liczba par rośnie jak n², dlatego kolizje pojawiają się tak wcześnie.</div></details>
+      </li>
+      <li>Tablica na milion miejsc i tylko 1200 kluczy (0,12% zapełnienia). Czy kolizja jest prawdopodobna?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj 1200 z wartością 1,18 √m dla m = 1 000 000.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Tak, nawet bardziej niż w połowie przypadków. 1,18 · √1 000 000 = 1180, a 1200 kluczy daje szansę na choć jedną kolizję ok. 51%. Niskie zapełnienie nie chroni przed kolizjami, bo liczy się liczba par, a nie odsetek zajętych miejsc.</div></details>
+      </li>
+      <li>Wzór podaje 50% kolizji od ok. 1,18 √m kluczy. Ile to dla m = 1 000 000? Czy da się uniknąć kolizji w tablicy z haszowaniem (ćwiczenie 5), wybierając po prostu bardzo dużą tablicę?
+        <details class="odp"><summary>Wskazówka</summary><div>Jak duża musiałaby być tablica, żeby kolizja przy n kluczach była mało prawdopodobna?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla m = 1 000 000 to ok. 1180 kluczy. Uniknąć kolizji się nie da: żeby była mało prawdopodobna, tablica musiałaby mieć dużo więcej niż n² miejsc, czyli zajmowałaby ogromnie dużo pamięci prawie na nic. Dlatego tablica z haszowaniem zawsze musi umieć obsłużyć kolizje, łańcuchowo albo adresowaniem otwartym.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">P(choć jedna kolizja) = 1 − (m/m)·((m − 1)/m)·…·((m − n + 1)/m), przy założeniu, że wszystkie miejsca są jednakowo prawdopodobne (realne urodziny nie są). T. H. Cormen i in., rozdz. 5.4.1.</p>
@@ -537,9 +576,18 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Mini-zadanie: m = 11, wstaw 22, 1, 13, 11, 24, 33 przy adresowaniu otwartym. Ile prób kosztuje 33? Policz najpierw sam.</li>
-      <li>„Złośliwe klucze” to wielokrotności m. Co się dzieje z czasem szukania? Na tym polega atak <em>hash flooding</em>.</li>
-      <li>Wypełnij tablicę z adresowaniem otwartym prawie do końca. Jak zmienia się liczba prób?</li>
+      <li>Mini-zadanie: m = 11, wstaw 22, 1, 13, 11, 24, 33 przy adresowaniu otwartym. Ile prób kosztuje 33? Policz najpierw na kartce.
+        <details class="odp"><summary>Wskazówka</summary><div>Policz h(k) = k mod 11 dla każdego klucza i zaznacz zajęte komórki po kolei.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>22, 1 i 13 trafiają do komórek 0, 1 i 2. 11 ma h = 0 (zajęte), potem 1 i 2 (zajęte), więc ląduje w 3. 24 ma h = 2 (zajęte), potem 3 (zajęte), więc ląduje w 4. 33 ma h = 0 i sprawdza kolejno komórki 0, 1, 2, 3, 4 (zajęte) oraz 5 (wolna): 6 prób. Klucze zbijają się w jeden ciąg zajętych komórek.</div></details>
+      </li>
+      <li>„Złośliwe klucze” to wielokrotności m. Co się dzieje z czasem szukania? Na tym polega atak <em>hash flooding</em>.
+        <details class="odp"><summary>Wskazówka</summary><div>Ile wynosi k mod m dla wielokrotności m?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wszystkie wielokrotności m mają k mod m = 0, więc trafiają do jednej komórki. Powstaje jedna długa lista (albo jeden długi ciąg prób), a szukanie przestaje być szybkie i trwa tyle, ile jest kluczy. Atakujący, który zna funkcję haszującą, może tak dobrać dane, żeby spowolnić serwer. Dlatego np. Python przy każdym uruchomieniu losuje sposób haszowania napisów.</div></details>
+      </li>
+      <li>Wypełnij tablicę z adresowaniem otwartym prawie do końca. Jak zmienia się liczba prób?
+        <details class="odp"><summary>Wskazówka</summary><div>Obserwuj licznik „średnio prób” po każdych kilku wstawieniach, gdy α zbliża się do 1.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy małym zapełnieniu prawie każde szukanie kończy się po 1–2 próbach. Gdy tablica jest prawie pełna, liczba prób rośnie bardzo szybko, bo zajęte komórki łączą się w długie ciągi, a nowy klucz musi przejść cały ciąg. Dlatego tablicę powiększa się, zanim się zapełni, zwykle przy α ok. 2/3.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Przykłady jak na slajdach W9. T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 11; A. Bhargava, <em>Algorytmy</em>, rozdz. 5.</p>
