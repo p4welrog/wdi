@@ -423,7 +423,7 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
 <!-- ═══════════════════ START ═══════════════════ -->
 <section id="v-start">
   <h1>Sieci komputerowe: ćwiczenia</h1>
-  <p class="lead">Ćwiczenia do wykładu 12, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
+  <p class="lead">Ćwiczenia do wykładu 12, w kolejności slajdów. Treść wykładu z komentarzem jest w <a href="skrypt/w12.html">skrypcie do wykładu 12</a>. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
   <a class="tile mapa-tile" href="#mapa"><span class="num">★</span><h3>Mapa pojęć wykładu</h3><p>Wszystkie pojęcia wykładu na jednej mapie: co z czym się łączy, na którym slajdzie było i które ćwiczenie to trenuje. Na powtórkę: tryb „Uzupełnij” z pustymi polami.</p><div class="meta">ok. 5–10 min · cały wykład: na początek powtórki i na koniec</div></a>
   <div class="grid2">
     <a class="tile" href="#pakiety"><span class="num">1</span><h3>Obwody czy pakiety?</h3><p>Ilu użytkowników obsłuży łącze, jeśli każdemu zarezerwujemy kanał, a ilu, jeśli będą się nim dzielić? Rozkład dwumianowy pokaże, jak rzadko wszyscy nadają naraz.</p><div class="meta">ok. 5 min · slajd „Przełączanie obwodów a przełączanie pakietów”</div></a>
@@ -2358,7 +2358,13 @@ const Mapa = (() => {
   }
   // Czcionka mogła się wczytać później: przelicz szerokości ramek przy wejściu.
   function wejscie() { rysuj(); }
-  return { init, wejscie };
+  // Odsyłacz do pojęcia z zewnątrz (np. ze skryptu): w12.html#mapa:dns
+  function wybierz(id) {
+    if (!W[id]) return;
+    wyb = id; odswiez();
+    setTimeout(() => $('#mpInfo').scrollIntoView({ block: 'nearest' }), 50);
+  }
+  return { init, wejscie, wybierz };
 })();
 
 const MODULY = { mapa: Mapa, pakiety: Pakiety, warstwy: Warstwy, adres: Adres, trasowanie: Trasowanie, dns: Dns, opoznienie: Opoznienie, otwarcie: Otwarcie, czekanie: Czekanie, korek: Korek, diagnoza: Diagnoza };
@@ -2449,7 +2455,8 @@ const Ustawienia = (() => {
 let biezacy = null;
 function nawiguj() {
   const ids = Object.keys(KONF.widoki);
-  const v = ids.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
+  const [h0, arg] = location.hash.slice(1).split(':');
+  const v = ids.includes(h0) ? h0 : 'start';
   if (biezacy && biezacy !== v) MODULY[biezacy]?.wyjscie?.();
   if (biezacy !== v) MODULY[v]?.wejscie?.();
   for (const w of ids) $('#v-' + w).hidden = w !== v;
@@ -2457,6 +2464,7 @@ function nawiguj() {
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
   document.title = KONF.widoki[v];
+  if (arg) MODULY[v]?.wybierz?.(arg);
 }
 Grupa.init();
 for (const m of Object.values(MODULY)) m.init?.();
