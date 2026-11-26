@@ -96,6 +96,11 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.todo { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.todo h3 { color: var(--accent); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4em; }
+.todo ol { margin: 0; padding-left: 1.2em; }
+.todo li { margin: 3px 0; }
+.todo p { margin: .6em 0 0; color: var(--text-2); }
 .note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
 .src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
 
@@ -317,6 +322,16 @@ ol.wypr .tm { font-family: var(--mono); }
 <section id="v-warsztat" hidden>
   <h2>1. Warsztat maszyny Turinga</h2>
   <p class="lead">Maszyna w każdym kroku patrzy na parę <em>(stan, odczytany symbol)</em>, znajduje regułę w tablicy, zapisuje symbol, przesuwa głowicę i zmienia stan. Nic więcej. Sprawdź, ile da się z tego zbudować.</p>
+  <div class="todo">
+    <h3>Co zrobić</h3>
+    <ol>
+      <li>W „Gotowej maszynie” zostaw „Dodawanie 1” i klikaj „Krok →”. Patrz na podświetloną komórkę tablicy i na nowy wiersz diagramu postępu.</li>
+      <li>Zmień słowo wejściowe (np. na 111), kliknij „⟲ Od początku” i „▶ Uruchom”. Odczytaj wynik z taśmy.</li>
+      <li>Zepsuj jedną regułę w tablicy (jak w pytaniu 2 niżej) i zobacz, co się zmienia.</li>
+      <li>Przewiń do „Zbuduj własną maszynę”, przy zadaniu „Negacja bitów” kliknij „Zacznij”, wypełnij tablicę i kliknij „Sprawdź na testach”. Gdy utkniesz, otwórz „Wskazówkę”.</li>
+    </ol>
+    <p><b>Na co zwrócić uwagę:</b> maszyna nie widzi całej taśmy. W każdym kroku zna tylko swój stan i jeden symbol pod głowicą, a mimo to da się z tego zbudować dowolny algorytm.</p>
+  </div>
 
   <div class="card">
     <div class="row" style="justify-content: space-between">
@@ -411,6 +426,16 @@ ol.wypr .tm { font-family: var(--mono); }
 <section id="v-wyscig" hidden>
   <h2>2. Wyścig bobrów</h2>
   <p class="lead">Zbuduj maszynę z 2 albo 3 stanami, która na pustej taśmie zostawi jak najwięcej jedynek albo zrobi jak najwięcej kroków — i <em>zatrzyma się</em>. Maszyna, która pracuje w nieskończoność, nie wygrywa niczego.</p>
+  <div class="todo">
+    <h3>Co zrobić</h3>
+    <ol>
+      <li>Zostaw „2 stany” i kilka razy kliknij „🎲 Losuj maszynę”. W „Wyniku” sprawdź, czy maszyna się zatrzymała, ile zostawiła jedynek (Σ) i ile zrobiła kroków (S).</li>
+      <li>Ustawiaj komórki tablicy ręcznie i spróbuj dojść do rekordu dla 2 stanów: 4 jedynki i 6 kroków. Każda maszyna, która się zatrzyma, trafia na listę „Twoje maszyny”.</li>
+      <li>Kliknij „Uruchom wszystkie”: komputer sprawdzi wszystkie 20 736 maszyn 2-stanowych.</li>
+      <li>Dla chętnych: przełącz na „3 stany” i szukaj maszyny, która robi więcej niż 13 kroków.</li>
+    </ol>
+    <p><b>Na co zwrócić uwagę:</b> liczy się tylko maszyna, która się zatrzymuje. Z tego, że maszyna nie zatrzymała się w limicie kroków, nie wynika jeszcze, że nie zatrzyma się nigdy.</p>
+  </div>
 
   <div class="card">
     <div class="row" style="justify-content: space-between">

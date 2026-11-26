@@ -416,6 +416,14 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
       <li>Późniejsze badania: część efektu wyjaśnia to, jak często cecha kojarzy się z pojęciem (Conrad 1972), a <strong>typowość</strong> zmienia czas przy tym samym poziomie (Rips, Shoben, Smith 1973). To model, nie opis budowy mózgu, i nie jest to BST: hierarchia nie ma porządku kluczy.</li>
     </ul>
   </div>
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Czy Twoje czasy rosły z poziomem cechy (poziom 0, 1, 2)? Jeśli nie, co mogło zakłócić tak krótki pomiar?</li>
+      <li>Zdanie „Kanarek ma skórę” sprawdzamy zwykle wolniej niż „Kanarek ma pióra”. Jak to wyjaśnia model Collinsa i Quilliana, a jak wyjaśnienie Conrada?</li>
+      <li>Pingwin jest ptakiem, ale nie lata. Gdzie w sieci zapisać ten wyjątek, żeby nie zmieniać cechy „ptak lata”? Jak długo według modelu trwałaby weryfikacja zdania „Pingwin lata”?</li>
+    </ol>
+  </div>
   <p class="src">A. M. Collins, M. R. Quillian, <em>Retrieval Time from Semantic Memory</em>, J. Verb. Learn. Verb. Behav. 8, 1969, s. 240–247; C. Conrad, <em>Cognitive Economy in Semantic Memory</em>, J. Exp. Psychol. 92(2), 1972, s. 149–154; L. J. Rips, E. J. Shoben, E. E. Smith, J. Verb. Learn. Verb. Behav. 12, 1973, s. 1–20.</p>
 </section>
 
@@ -455,6 +463,7 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
     <ol>
       <li>Dlaczego intuicja podpowiada liczbę bliską 183? Z iloma osobami porównujesz swoje urodziny, a ile jest wszystkich par?</li>
       <li>Tablica na milion miejsc i tylko 1200 kluczy (0,12% zapełnienia). Czy kolizja jest prawdopodobna?</li>
+      <li>Wzór podaje 50% kolizji od ok. 1,18 √m kluczy. Ile to dla m = 1 000 000? Czy da się uniknąć kolizji w tablicy z haszowaniem (ćwiczenie 5), wybierając po prostu bardzo dużą tablicę?</li>
     </ol>
   </div>
   <p class="src">P(choć jedna kolizja) = 1 − (m/m)·((m − 1)/m)·…·((m − n + 1)/m), przy założeniu, że wszystkie miejsca są jednakowo prawdopodobne (realne urodziny nie są). T. H. Cormen i in., rozdz. 5.4.1.</p>

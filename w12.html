@@ -97,6 +97,11 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.todo { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.todo h3 { color: var(--accent); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4em; }
+.todo ol { margin: 0; padding-left: 1.2em; }
+.todo li { margin: 3px 0; }
+.todo p { margin: .6em 0 0; color: var(--text-2); }
 .note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
 .src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
 
@@ -736,6 +741,16 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
 <section id="v-korek" hidden>
   <h2>9. Korek w sieci</h2>
   <p class="lead">Router wysyła pakiety po kolei. Gdy przychodzą szybciej, niż łącze je wypycha, czekają w kolejce, a gdy bufor jest pełny — giną. Obciążenie łącza ρ = La / R mówi, jaką część czasu łącze jest zajęte.</p>
+  <div class="todo">
+    <h3>Co zrobić</h3>
+    <ol>
+      <li>W części A przesuwaj obciążenie ρ od 0,5 do 0,95 i patrz, jak rośnie czas w routerze: krzywa modelu 1 / (1 − ρ) i wynik symulacji.</li>
+      <li>Przełącz bufor na „10 pakietów”. Czekanie przestaje rosnąć bez końca, ale pojawiają się utracone pakiety.</li>
+      <li>W części B ustaw bardzo różne tempa startowe obu nadawców i obserwuj wykres tempa.</li>
+      <li>Przełącz nadawcę 2 na „nie reaguje (stałe tempo)” i zobacz, kto na tym traci.</li>
+    </ol>
+    <p><b>Na co zwrócić uwagę:</b> przy łączu prawie pełnym mały wzrost obciążenia bardzo wydłuża czekanie. TCP dzieli łącze mniej więcej po równo, choć nikt nie mówi nadawcom, ile im wolno.</p>
+  </div>
 
   <div class="card">
     <h3>Część A: kolejka w routerze</h3>

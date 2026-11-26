@@ -95,6 +95,11 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.todo { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.todo h3 { color: var(--accent); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4em; }
+.todo ol { margin: 0; padding-left: 1.2em; }
+.todo li { margin: 3px 0; }
+.todo p { margin: .6em 0 0; color: var(--text-2); }
 .note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
 .src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
 
@@ -701,6 +706,16 @@ table.t th.n { text-align: right; }
 <section id="v-ieee" hidden>
   <h2>5. Rentgen IEEE 754</h2>
   <p class="lead">Tak naprawdę zapisany jest <span class="mono">float</span> i <span class="mono">double</span> (w Pythonie <span class="mono">float</span> to <span class="mono">double</span>). Klikaj bity albo wpisz liczbę i zobacz, co komputer przechowuje <em>dokładnie</em>.</p>
+  <div class="todo">
+    <h3>Co zrobić</h3>
+    <ol>
+      <li>Zacznij od wpisanej liczby 0,1. Znajdź trzy pola bitów: znak, cechę i mantysę, i przeczytaj wiersz „wartość dokładnie”.</li>
+      <li>Kliknij przykład „−5,75” i sprawdź, jak wzór pod bitami składa tę liczbę ze znaku, cechy i mantysy.</li>
+      <li>Wpisz 1 i kliknij „następna →”, a potem to samo dla 16 777 216. Porównaj odstępy.</li>
+      <li>Obejrzyj tabelę „Dlaczego 0.1 + 0.2 ≠ 0.3” najpierw dla float, potem dla double.</li>
+    </ol>
+    <p><b>Na co zwrócić uwagę:</b> większość ułamków dziesiętnych nie ma dokładnego zapisu dwójkowego. Komputer przechowuje najbliższą liczbę formatu, a odstępy między takimi liczbami rosną razem z liczbą.</p>
+  </div>
 
   <div class="card">
     <div class="row" style="justify-content: space-between">
@@ -744,6 +759,16 @@ table.t th.n { text-align: right; }
 <section id="v-tekst" hidden>
   <h2>6. Rentgen tekstu</h2>
   <p class="lead">Komputer nie przechowuje liter, tylko ich <em>numery</em>. Unicode nadaje każdemu znakowi numer (punkt kodowy), a kodowanie, np. UTF-8, mówi, jakimi bajtami ten numer zapisać. Wpisz dowolny napis i zobacz, z czego się składa.</p>
+  <div class="todo">
+    <h3>Co zrobić</h3>
+    <ol>
+      <li>W „Napisie pod lupą” klikaj przykłady (np. „gęś”, „€ 5”, „rodzina”) i porównaj trzy liczby: punkty kodowe, znaki widoczne i bajty w UTF-8.</li>
+      <li>W „Zakoduj ręcznie w UTF-8” zakoduj kilka znaków. Gdy nie wiesz jak, kliknij „Krok po kroku”.</li>
+      <li>W „Fabryce krzaczków” zapisz polski napis w UTF-8 i odczytaj go jako Windows-1250 albo ISO 8859-2.</li>
+      <li>Rozwiąż kilka zagadek w „Detektywie kodowań”.</li>
+    </ol>
+    <p><b>Na co zwrócić uwagę:</b> znak, jego numer (punkt kodowy) i bajty w pliku to trzy różne rzeczy. Polska litera zajmuje w UTF-8 dwa bajty, a „krzaczki” powstają, gdy te bajty odczyta się według innej umowy.</p>
+  </div>
 
   <div class="card">
     <h3>Napis pod lupą</h3>

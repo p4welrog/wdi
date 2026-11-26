@@ -97,6 +97,11 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.todo { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
+.todo h3 { color: var(--accent); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4em; }
+.todo ol { margin: 0; padding-left: 1.2em; }
+.todo li { margin: 3px 0; }
+.todo p { margin: .6em 0 0; color: var(--text-2); }
 .note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
 .src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
 
@@ -368,6 +373,16 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
 <section id="v-planista" hidden>
   <h2>2. Planista procesora</h2>
   <p class="lead">Wszystkie zadania są gotowe w chwili 0, a procesor ma jeden rdzeń. Zmieniaj czasy pracy, kwant i koszt przełączenia i patrz, jak zmienia się kolejność i średni czas oczekiwania.</p>
+  <div class="todo">
+    <h3>Co zrobić</h3>
+    <ol>
+      <li>Zostaw zestaw „Slajd: P1–P4” i porównaj cztery wykresy Gantta z tabelą pod nimi. Która reguła ma najmniejszy średni czas oczekiwania?</li>
+      <li>W „Ułóż kolejkę sam” klikaj zadania w swojej kolejności i spróbuj wypaść lepiej niż SJF.</li>
+      <li>Zmieniaj kwant q i koszt przełączenia c, a potem obejrzyj tabelę „Jaki kwant wybrać?”.</li>
+      <li>Wybierz zestaw „Konwój: długie na początku” i zobacz, jak wypada FCFS. Na koniec w karcie „Zagłodzenie i starzenie” włącz i wyłącz starzenie.</li>
+    </ol>
+    <p><b>Na co zwrócić uwagę:</b> czas oczekiwania to chwila zakończenia minus czas pracy. Reguła najlepsza w jednej mierze (średnie czekanie) bywa słaba w innej (czas do pierwszego uruchomienia, los długich zadań).</p>
+  </div>
 
   <div class="card">
     <h3>Zadania</h3>
