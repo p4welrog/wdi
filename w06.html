@@ -97,6 +97,10 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
+.przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
+.przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
+.przyp li { margin: 3px 0; }
 .note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
 .src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
 
@@ -392,6 +396,15 @@ table.otw td { font-family: var(--mono); }
 <section id="v-wzrost" hidden>
   <h2>3. Wyścig wzrostu</h2>
   <p class="lead">Notacja O mówi, jak koszt rośnie z rozmiarem danych. Zobacz, co to znaczy w operacjach i sekundach, przy założeniu 10<sup>9</sup> operacji na sekundę.</p>
+  <details class="przyp">
+    <summary>Przypomnienie: notacja O i jednostki czasu</summary>
+    <ul>
+      <li>O(…) mówi, jak rośnie liczba kroków, gdy rośnie rozmiar danych n. Pomija stałe: 3n i 100n to oba O(n).</li>
+      <li>Co się dzieje, gdy danych jest 2 razy więcej? O(log n): przybywa ok. jednego kroku. O(n): kroków jest 2 razy więcej. O(n log n): trochę ponad 2 razy. O(n²): 4 razy. O(2ⁿ): już jeden element więcej podwaja liczbę kroków.</li>
+      <li>log₂ n to liczba dzieleń n na pół, zanim zostanie 1: log₂ 1000 ≈ 10.</li>
+      <li>10⁹ to miliard. 1 ms = 0,001 s, 1 µs = 0,000 001 s, 1 ns = 0,000 000 001 s.</li>
+    </ul>
+  </details>
 
   <div class="card">
     <h3>Ile operacji dla rozmiaru n?</h3>
