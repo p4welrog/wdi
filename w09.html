@@ -269,6 +269,49 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
 
 /* Telefon: drzewo nie kurczy się poniżej czytelnej skali; przewijane w bok. */
 @media (max-width: 600px) { #bsDrzewo { min-width: 640px; } }
+
+/* ───────── Mapa pojęć ───────── */
+.tile.mapa-tile { margin-bottom: 14px; border-color: var(--accent); background: var(--accent-soft); }
+.tile.mapa-tile .num { background: var(--accent); color: var(--accent-ink); }
+svg.mp { display: block; width: 100%; min-width: 760px; height: auto; margin: 4px 0; touch-action: manipulation; }
+svg.mp .kr { stroke: var(--muted); stroke-width: 1.6; fill: none; transition: opacity .15s; }
+svg.mp .kr.petla { stroke-dasharray: 6 4; }
+svg.mp .et { fill: var(--text-2); font: italic 12.5px var(--font); text-anchor: middle; dominant-baseline: central; paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; pointer-events: none; transition: opacity .15s; }
+svg.mp .grot { fill: var(--muted); }
+svg.mp .grot.a { fill: var(--accent); }
+svg.mp .w { cursor: pointer; outline: none; }
+svg.mp .w rect { fill: var(--surface); stroke: var(--accent); stroke-width: 1.6; transition: opacity .15s; }
+svg.mp .w text { fill: var(--text); font: 600 14px var(--font); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+svg.mp .w:hover rect { fill: var(--accent-soft); }
+svg.mp .w:focus-visible rect { stroke-width: 3.5; }
+svg.mp .w.wyb rect { fill: var(--accent); }
+svg.mp .w.wyb text { fill: var(--accent-ink); }
+svg.mp .w.puste rect { fill: var(--amber-soft); stroke: var(--amber); stroke-dasharray: 5 3; }
+svg.mp .w.puste text { fill: var(--amber); }
+svg.mp .w.dobrze rect { fill: var(--good-soft); stroke: var(--good); stroke-dasharray: none; }
+svg.mp .w.dobrze text { fill: var(--good); }
+svg.mp .w.zle rect { fill: var(--bad-soft); stroke: var(--bad); }
+svg.mp .w.zle text { fill: var(--bad); }
+svg.mp.fokus .kr:not(.akt), svg.mp.fokus .et:not(.akt), svg.mp.fokus .w:not(.akt) rect { opacity: .22; }
+svg.mp .kr.akt { stroke: var(--accent); stroke-width: 2.6; }
+svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
+.mpinfo { min-height: 120px; }
+.mpinfo h3 { margin-bottom: .35em; }
+.mpinfo ul { margin: .3em 0 .6em; padding-left: 1.2em; }
+.mpinfo li { margin: .15em 0; }
+.mplinki { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.mplinki a, .mplinki span { display: inline-block; font-size: .9rem; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border); text-decoration: none; }
+.mplinki a.mod { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.mplinki span { color: var(--muted); }
+.mppola { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 14px; margin: 8px 0; }
+.mppola .field { margin: 0; }
+.mppola .field > span { font-weight: 600; font-size: .92rem; }
+.mppola input { width: 100%; }
+.mppola input.dobrze { border-color: var(--good); background: var(--good-soft); }
+.mppola input.zle { border-color: var(--bad); background: var(--bad-soft); }
+.mppola .pod { font-size: .82rem; color: var(--muted); min-height: 1.2em; }
+.mpzdania { columns: 2 320px; column-gap: 28px; padding-left: 1.2em; margin: 6px 0 0; }
+.mpzdania li { break-inside: avoid; margin: .15em 0; }
 </style>
 </head>
 <body>
@@ -280,6 +323,7 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
   </div>
   <nav class="wrap tabs" aria-label="Ćwiczenia">
     <a href="#start">Start</a>
+    <a href="#mapa">Mapa pojęć</a>
     <a href="#bst">1. Ogród BST</a>
     <a href="#kolejnosc">2. Kolejność</a>
     <a href="#siec">3. Kanarek ma skórę?</a>
@@ -294,6 +338,7 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
 <section id="v-start">
   <h1>Słowniki: drzewa BST i haszowanie — ćwiczenia</h1>
   <p class="lead">Ćwiczenia do wykładu 9, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
+  <a class="tile mapa-tile" href="#mapa"><span class="num">★</span><h3>Mapa pojęć wykładu</h3><p>Wszystkie pojęcia wykładu na jednej mapie: co z czym się łączy, na którym slajdzie było i które ćwiczenie to trenuje. Na powtórkę: tryb „Uzupełnij” z pustymi polami.</p><div class="meta">ok. 5–10 min · cały wykład: na początek powtórki i na koniec</div></a>
   <div class="grid2">
     <a class="tile" href="#bst"><span class="num">1</span><h3>Ogród BST</h3><p>Wstawiaj, szukaj i usuwaj klucze w drzewie poszukiwań binarnych, krok po kroku. Węzły stoją w kolejności kluczy, więc przejście w porządku widać gołym okiem.</p><div class="meta">ok. 8 min · slajdy od „Drzewa BST” do „Mini-zadania: zbuduj drzewo”</div></a>
     <a class="tile" href="#kolejnosc"><span class="num">2</span><h3>Kolejność ma znaczenie</h3><p>Te same klucze, różne kolejności wstawiania. Setki losowych drzew w sekundę: jak wysokie są zwykle, a jak wysokie mogą być?</p><div class="meta">ok. 4 min · slajd „Kolejność wstawiania ma znaczenie”</div></a>
@@ -302,6 +347,48 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
     <a class="tile" href="#hasz"><span class="num">5</span><h3>Tablica z haszowaniem</h3><p>Wstawiaj i szukaj kluczy łańcuchowo albo z próbkowaniem liniowym. Licznik prób, współczynnik zapełnienia i bloki, które same się sklejają.</p><div class="meta">ok. 8 min · slajdy od „Dwóch sposobów na kolizje” do „Mini-zadania: wstaw do tablicy”</div></a>
   </div>
 </section>
+
+<!-- ═══════════════════ MAPA POJĘĆ ═══════════════════ -->
+<section id="v-mapa" hidden>
+  <h2>Mapa pojęć wykładu 9</h2>
+  <p class="lead">Najważniejsze pojęcia wykładu i to, jak się ze sobą łączą. Strzałkę czytaj jak zdanie: „Kolejność wstawiania <em>decyduje o</em> wysokości drzewa”. Kliknij pojęcie, żeby zobaczyć, co znaczy, z czym się łączy, na którym slajdzie było i które ćwiczenie je trenuje.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <span class="seg" id="mpTryb" role="group" aria-label="Tryb mapy"><button type="button" data-w="poznaj" aria-pressed="true">Poznaj</button><button type="button" data-w="uzupelnij" aria-pressed="false">Uzupełnij</button></span>
+      <span class="small muted">Na telefonie przesuń mapę w bok.</span>
+    </div>
+    <div class="scroll-x" data-srodek><svg class="mp" id="mpSvg" viewBox="0 0 1000 480" role="group" aria-label="Mapa pojęć wykładu 9. Pojęcia są przyciskami; ta sama treść jest też poniżej jako lista zdań."></svg></div>
+    <div id="mpUzup" hidden>
+      <p class="small">W 6 pustych polach brakuje pojęć. Odczytaj je z podpisanych strzałek i wpisz poniżej. Pisownia i polskie znaki nie muszą być idealne.</p>
+      <div class="mppola" id="mpPola"></div>
+      <div class="row">
+        <button type="button" class="btn" id="mpSprawdz">Sprawdź</button>
+        <button type="button" class="btn ghost" id="mpPokaz">Pokaż odpowiedzi</button>
+        <button type="button" class="btn ghost" id="mpLosuj">Inne puste pola</button>
+      </div>
+      <p class="fbline" id="mpWynik" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="card mpinfo" id="mpInfo" aria-live="polite"></div>
+
+  <details class="card">
+    <summary><strong>Mapa jako lista zdań</strong> <span class="small muted">(np. do powtórki albo dla czytnika ekranu)</span></summary>
+    <ol class="mpzdania" id="mpZdania"></ol>
+  </details>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Po której stronie mapy jest porządek kluczy, a po której średnio O(1)? Kiedy wybrałbyś BST, a kiedy haszowanie?</li>
+      <li>Które pojęcie ma najwięcej połączeń? Co to mówi o jego roli w tym wykładzie?</li>
+      <li>Zrób własną mapę na kartce z pamięci, a dopiero potem porównaj ją z tą. Czego zabrakło, a co masz ponad nią?</li>
+    </ol>
+  </div>
+  <p class="src">Mapa pojęć (concept map) według J. D. Novaka: pojęcia połączone podpisanymi relacjami. Metaanaliza J. C. Nesbit, O. O. Adesope, <em>Learning With Concept and Knowledge Maps</em>, Review of Educational Research 76(3), 2006, s. 413–448: uczenie się z map pojęć, gotowych i budowanych samodzielnie, dawało średnio lepsze zapamiętywanie niż czytanie tekstu, list czy konspektów. Numery slajdów według pliku <a href="slajdy/W09.pdf">W09.pdf</a> (slajdy wykładu).</p>
+</section>
+
 
 <!-- ═══════════════════ 1. BST ═══════════════════ -->
 <section id="v-bst" hidden>
@@ -659,7 +746,7 @@ svg.drz line.os { stroke: var(--grid); stroke-dasharray: 2 3; }
 
 <script>
 'use strict';
-const KONF = {"wyk": "W09", "key": "wdi-w09-grupa", "widoki": {"start": "Wykład 9 · ćwiczenia", "bst": "Ogród BST · W9", "kolejnosc": "Kolejność ma znaczenie · W9", "siec": "Kanarek ma skórę? · W9", "urodziny": "Paradoks urodzin · W9", "hasz": "Tablica z haszowaniem · W9", "ustawienia": "Ustawienia prowadzącego · W9"}, "linki": [{"id": "sLink0", "hash": "siec", "label": "Kanarek ma skórę?"}]};
+const KONF = {"wyk": "W09", "key": "wdi-w09-grupa", "widoki": {"mapa": "Mapa pojęć · W9", "start": "Wykład 9 · ćwiczenia", "bst": "Ogród BST · W9", "kolejnosc": "Kolejność ma znaczenie · W9", "siec": "Kanarek ma skórę? · W9", "urodziny": "Paradoks urodzin · W9", "hasz": "Tablica z haszowaniem · W9", "ustawienia": "Ustawienia prowadzącego · W9"}, "linki": [{"id": "sLink0", "hash": "siec", "label": "Kanarek ma skórę?"}]};
 /* ═════════════════════ Narzędzia ═════════════════════ */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1369,6 +1456,215 @@ nawiguj();
   new MutationObserver(zaplanuj).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
   wszystkie();
 })();
+</script>
+<script>
+/* ═════════════════════ Mapa pojęć (wspólny silnik, dane wykładu na dole) ═════════════════════ */
+(function (D) {
+  'use strict';
+  const q = (s, r = document) => r.querySelector(s);
+  const qq = (s, r = document) => [...r.querySelectorAll(s)];
+  const mk = (tag, attrs = {}, ...kids) => {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else if (k === 'html') e.innerHTML = v; else e.setAttribute(k, v);
+    }
+    for (const k of kids) e.append(k);
+    return e;
+  };
+  const NS = 'http://www.w3.org/2000/svg';
+  const ms = (tag, attrs = {}, txt) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (txt !== undefined) e.textContent = txt; return e; };
+  const mieszaj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+  const norm = (s) => String(s).toLowerCase().replace(/ł/g, 'l').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  const W = D.W, K = D.K;
+  const nazwa = (id) => W[id].l.join(' ').replace(/\s*\(.*\)$/, '');
+  const pelna = (id) => W[id].l.join(' ');
+  let tryb = 'poznaj', wyb = null, puste = [...D.puste], sprawdzone = {};
+  const wezly = {}, kraw = [];
+
+  function zmierz(lines) {
+    const c = zmierz.c || (zmierz.c = document.createElement('canvas').getContext('2d'));
+    c.font = '600 14px ' + getComputedStyle(document.body).fontFamily;
+    return Math.max(...lines.map((t) => c.measureText(t).width));
+  }
+  function ramka(id) {
+    const n = W[id];
+    const w = Math.max(64, zmierz(n.l) + 26), h = n.l.length > 1 ? 46 : 32;
+    return { x0: n.x - w / 2, y0: n.y - h / 2, w, h };
+  }
+  const wew = (r, p, m = 3) => p.x > r.x0 - m && p.x < r.x0 + r.w + m && p.y > r.y0 - m && p.y < r.y0 + r.h + m;
+
+  function rysuj() {
+    const svg = q('#mpSvg');
+    svg.replaceChildren();
+    const defs = ms('defs');
+    for (const [id, kl] of [['mpGrot', 'grot'], ['mpGrotA', 'grot a']]) {
+      const m = ms('marker', { id, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' });
+      m.append(ms('path', { d: 'M0,0 L10,5 L0,10 z', class: kl }));
+      defs.append(m);
+    }
+    svg.append(defs);
+    const gK = ms('g'), gE = ms('g'), gW = ms('g');
+    svg.append(gK, gE, gW);
+    kraw.length = 0;
+    for (const [a, b, pod, o = {}] of K) {
+      const A = W[a], B = W[b], ra = ramka(a), rb = ramka(b);
+      const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2, dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy);
+      const k = o.k || 0, cx = mx - dy / d * k, cy = my + dx / d * k;
+      const pt = (t) => ({ x: (1 - t) ** 2 * A.x + 2 * (1 - t) * t * cx + t * t * B.x, y: (1 - t) ** 2 * A.y + 2 * (1 - t) * t * cy + t * t * B.y });
+      const pts = [];
+      for (let i = 0; i <= 80; i++) { const p = pt(i / 80); if (!wew(ra, p, 2) && !wew(rb, p, 4)) pts.push(p); }
+      const path = ms('path', { d: 'M' + pts.map((p) => p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' L'), class: 'kr' + (o.p ? ' petla' : ''), 'marker-end': 'url(#mpGrot)' });
+      const s = pt(o.t || 0.5), e = o.e || [0, 0];
+      const wiersze = pod.split('\n'), ex = s.x + e[0], ey = s.y + e[1] - (wiersze.length - 1) * 7.5;
+      const et = ms('text', { x: ex.toFixed(1), y: ey.toFixed(1), class: 'et' });
+      wiersze.forEach((t, i) => et.append(ms('tspan', { x: ex.toFixed(1), dy: i ? 15 : 0 }, t)));
+      gK.append(path); gE.append(et);
+      kraw.push({ a, b, pod: pod.replace(/\n/g, ' '), path, et });
+    }
+    for (const id of Object.keys(W)) {
+      const r = ramka(id), n = W[id];
+      const g = ms('g', { class: 'w', tabindex: '0', role: 'button', 'data-id': id });
+      g.append(ms('rect', { x: r.x0.toFixed(1), y: r.y0.toFixed(1), width: r.w.toFixed(1), height: r.h, rx: 9 }));
+      const lines = n.l.length > 1 ? [n.y - 9, n.y + 10] : [n.y];
+      const teksty = lines.map((y, i) => { const t = ms('text', { x: n.x, y }, n.l[i]); g.append(t); return t; });
+      g.addEventListener('click', () => klik(id));
+      g.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); klik(id); } });
+      gW.append(g);
+      wezly[id] = { g, teksty };
+    }
+    odswiez();
+  }
+
+  function slajdLink(nr) {
+    const t = `slajd ${nr}: „${D.slajdy[nr] || ''}”`;
+    return D.pdf ? mk('a', { href: `${D.pdf}#page=${nr}`, target: '_blank', rel: 'noopener', text: t }) : mk('span', { text: t });
+  }
+  const ukryte = (id) => tryb === 'uzupelnij' && puste.includes(id) && sprawdzone[id] !== 'dobrze' && sprawdzone[id] !== 'pokazane';
+  const opisW = (id) => ukryte(id) ? `pole ${puste.indexOf(id) + 1}` : nazwa(id);
+
+  function odswiez() {
+    const svg = q('#mpSvg');
+    const akt = new Set(wyb ? [wyb] : []);
+    for (const k of kraw) {
+      const on = wyb && (k.a === wyb || k.b === wyb);
+      if (on) { akt.add(k.a); akt.add(k.b); }
+      k.path.classList.toggle('akt', !!on); k.et.classList.toggle('akt', !!on);
+      k.path.setAttribute('marker-end', on ? 'url(#mpGrotA)' : 'url(#mpGrot)');
+    }
+    svg.classList.toggle('fokus', !!wyb);
+    for (const [id, { g, teksty }] of Object.entries(wezly)) {
+      const n = W[id], pust = tryb === 'uzupelnij' && puste.includes(id), st = sprawdzone[id];
+      g.classList.toggle('akt', akt.has(id));
+      g.classList.toggle('wyb', id === wyb && !pust);
+      g.classList.toggle('puste', pust);
+      g.classList.toggle('dobrze', pust && (st === 'dobrze' || st === 'pokazane'));
+      g.classList.toggle('zle', pust && st === 'zle');
+      if (ukryte(id)) teksty.forEach((t, i) => { t.textContent = i === 0 ? (teksty.length > 1 ? '?' : `? (${puste.indexOf(id) + 1})`) : `(${puste.indexOf(id) + 1})`; });
+      else teksty.forEach((t, i) => { t.textContent = n.l[i]; });
+      g.setAttribute('aria-label', ukryte(id) ? `Puste pole ${puste.indexOf(id) + 1}` : pelna(id));
+      g.setAttribute('aria-pressed', id === wyb ? 'true' : 'false');
+    }
+    info();
+    q('#mpZdania').replaceChildren(...kraw.map((k) => mk('li', { text: `${opisW(k.a)} → ${k.pod} → ${opisW(k.b)}` })));
+  }
+
+  function info() {
+    const host = q('#mpInfo');
+    if (!wyb) {
+      host.replaceChildren(mk('h3', { text: tryb === 'uzupelnij' ? 'Uzupełnij mapę' : 'Kliknij pojęcie na mapie' }),
+        mk('p', { class: 'small muted', text: tryb === 'uzupelnij'
+          ? 'Kliknij puste pole, żeby zobaczyć jego połączenia, a potem wpisz brakujące pojęcie. Przydatne wskazówki dają też ćwiczenia z tego wykładu.'
+          : 'Zobaczysz krótką definicję, połączenia z innymi pojęciami, slajd z wykładu i ćwiczenie na tej stronie. Na koniec spróbuj trybu „Uzupełnij”.' }));
+      return;
+    }
+    const n = W[wyb], ukr = ukryte(wyb);
+    const rel = kraw.filter((k) => k.a === wyb || k.b === wyb).map((k) => mk('li', { text: `${opisW(k.a)} → ${k.pod} → ${opisW(k.b)}` }));
+    const linki = mk('div', { class: 'mplinki' });
+    if (!ukr) {
+      for (const m of n.mod) linki.append(mk('a', { class: 'mod', href: m.includes('.html') ? m : '#' + m, text: `Ćwiczenie: ${D.mod[m]} →` }));
+      for (const s of n.slajdy) linki.append(slajdLink(s));
+    }
+    host.replaceChildren(
+      mk('h3', { text: ukr ? `Puste pole ${puste.indexOf(wyb) + 1}` : pelna(wyb) }),
+      ukr ? mk('p', { class: 'small muted', text: 'Co pasuje do wszystkich tych zdań naraz?' }) : mk('p', { text: n.def }),
+      mk('p', { class: 'small', style: 'margin: 0', html: '<strong>Połączenia:</strong>' }),
+      mk('ul', { class: 'small' }, ...rel),
+      linki);
+  }
+
+  function klik(id) {
+    wyb = wyb === id ? null : id;
+    odswiez();
+    if (wyb && tryb === 'uzupelnij' && ukryte(wyb)) q('#mpIn-' + wyb)?.focus({ preventScroll: true });
+  }
+  function pola() {
+    sprawdzone = {};
+    q('#mpWynik').textContent = '';
+    q('#mpPola').replaceChildren(...puste.map((id, i) => {
+      const inp = mk('input', { type: 'text', id: 'mpIn-' + id, autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false' });
+      inp.addEventListener('focus', () => { if (wyb !== id) { wyb = id; odswiez(); } });
+      inp.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') sprawdz(); });
+      return mk('label', { class: 'field', for: 'mpIn-' + id }, mk('span', { text: `Pole ${i + 1}` }), inp, mk('span', { class: 'pod', id: 'mpPod-' + id }));
+    }));
+  }
+  function trafione(id, txt) {
+    const t = norm(txt);
+    if (!t) return false;
+    return W[id].r.some((r) => r.length <= 3 ? t.split(' ').includes(r) : t.includes(r));
+  }
+  function sprawdz() {
+    let ok = 0;
+    for (const id of puste) {
+      const inp = q('#mpIn-' + id), pod = q('#mpPod-' + id);
+      if (sprawdzone[id] === 'pokazane') continue;
+      const dobrze = trafione(id, inp.value);
+      sprawdzone[id] = inp.value.trim() ? (dobrze ? 'dobrze' : 'zle') : undefined;
+      inp.classList.toggle('dobrze', dobrze); inp.classList.toggle('zle', !dobrze && !!inp.value.trim());
+      pod.textContent = dobrze ? `Dobrze: ${pelna(id)}.` : (inp.value.trim() ? `Jeszcze nie. Podpowiedź: ${W[id].slajdy.map((s) => 'slajd ' + s).join(', ')}.` : '');
+      if (dobrze) ok++;
+    }
+    const w = q('#mpWynik');
+    w.textContent = ok === puste.length ? `Wszystkie ${ok} pojęć na miejscu!` : `Dobrze: ${ok} z ${puste.length}.`;
+    w.className = 'fbline ' + (ok === puste.length ? 'dobrze' : '');
+    odswiez();
+  }
+  function pokaz() {
+    for (const id of puste) {
+      if (sprawdzone[id] === 'dobrze') continue;
+      sprawdzone[id] = 'pokazane';
+      q('#mpPod-' + id).textContent = `Odpowiedź: ${pelna(id)}.`;
+    }
+    q('#mpWynik').textContent = 'Odpowiedzi są na mapie. Spróbuj jeszcze raz z innymi pustymi polami.';
+    q('#mpWynik').className = 'fbline';
+    odswiez();
+  }
+  function losuj() {
+    puste = mieszaj(Object.keys(W).filter((id) => id !== D.korzen)).slice(0, D.puste.length);
+    wyb = null; pola(); odswiez();
+  }
+  function ustawTryb(t) {
+    tryb = t; wyb = null;
+    q('#mpUzup').hidden = t !== 'uzupelnij';
+    if (t === 'uzupelnij') pola(); else sprawdzone = {};
+    odswiez();
+  }
+  function init() {
+    if (!q('#mpSvg')) return;
+    rysuj();
+    pola();
+    for (const b of qq('button', q('#mpTryb'))) b.addEventListener('click', () => {
+      for (const c of qq('button', q('#mpTryb'))) c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+      ustawTryb(b.dataset.w);
+    });
+    q('#mpSprawdz').addEventListener('click', sprawdz);
+    q('#mpPokaz').addEventListener('click', pokaz);
+    q('#mpLosuj').addEventListener('click', losuj);
+    // Czcionka mogła się wczytać później: przelicz szerokości ramek przy wejściu na mapę.
+    window.addEventListener('hashchange', () => { if (location.hash === '#mapa') rysuj(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(rysuj);
+  }
+  init();
+})({"pdf": "slajdy/W09.pdf", "slajdy": {"5": "Słownik", "6": "Implementacje, które już znamy", "8": "Drzewo BST", "9": "Szukanie i wstawianie", "10": "Przejście w porządku (inorder)", "11": "Kolejność wstawiania ma znaczenie", "13": "Mini-zadanie: zbuduj drzewo", "14": "Pamięć jako drzewo?", "16": "Adres obliczony z klucza", "17": "Kolizje są nieuniknione", "18": "Dwa sposoby na kolizje", "19": "Ile kosztuje szukanie?", "22": "BST czy haszowanie?"}, "mod": {"bst": "Ogród BST", "hasz": "Tablica z haszowaniem", "kolejnosc": "Kolejność ma znaczenie", "siec": "Kanarek ma skórę?", "urodziny": "Paradoks urodzin"}, "korzen": "slownik", "puste": ["bst", "hasz", "wysokosc", "kolizje", "porzadek", "rozw"], "W": {"slownik": {"x": 500, "y": 45, "l": ["Słownik", "(klucz → wartość)"], "r": ["slownik", "dict", "klucz"], "slajdy": [5, 6], "mod": ["hasz"], "def": "Przechowuje pary (klucz, wartość): wstaw, szukaj, usuń. Lista i posortowana tablica już to umieją, ale wolno."}, "siec": {"x": 110, "y": 45, "l": ["Sieć semantyczna", "(Collins, Quillian)"], "r": ["siec semantyczn", "collins", "quillian", "kanarek"], "slajdy": [14], "mod": ["siec"], "def": "Pojęcia w hierarchii: kanarek → ptak → zwierzę. Weryfikacja trwa dłużej, im więcej poziomów. To model, nie BST: nie ma porządku kluczy."}, "bst": {"x": 250, "y": 170, "l": ["Drzewo BST"], "r": ["bst", "drzewo poszukiwan"], "slajdy": [8, 9], "mod": ["bst"], "def": "Drzewo poszukiwań binarnych: w lewym poddrzewie klucze mniejsze, w prawym większe. Szukanie idzie jedną ścieżką od korzenia."}, "hasz": {"x": 750, "y": 170, "l": ["Haszowanie"], "r": ["hasz", "hash", "mieszan"], "slajdy": [16, 19], "mod": ["hasz"], "def": "Funkcja haszująca oblicza z klucza numer komórki tablicy. Szybkie, ale nie daje porządku kluczy."}, "o1": {"x": 920, "y": 170, "l": ["Średnio O(1)"], "r": ["o 1", "staly"], "slajdy": [19, 22], "mod": ["hasz"], "def": "Przy rozsądnym zapełnieniu tablicy szukanie kosztuje średnio O(1). Gdy tablica się zapełnia, rośnie liczba kolizji i trzeba ją powiększyć."}, "porzadek": {"x": 100, "y": 300, "l": ["Przejście w porządku", "→ klucze posortowane"], "r": ["porzadk", "inorder", "posortowan"], "slajdy": [10], "mod": ["bst"], "def": "Lewe poddrzewo, korzeń, prawe poddrzewo. W BST daje klucze rosnąco, czego haszowanie nie potrafi."}, "wysokosc": {"x": 360, "y": 300, "l": ["Wysokość h", "(od log₂ n do n − 1)"], "r": ["wysokosc", "wysokos", "glebok"], "slajdy": [9, 11], "mod": ["kolejnosc"], "def": "Operacje w BST kosztują O(h). Drzewo zrównoważone ma h ≈ log₂ n, a wstawianie posortowanych kluczy daje „listę” o h = n − 1."}, "kolejnosc": {"x": 360, "y": 430, "l": ["Kolejność", "wstawiania"], "r": ["kolejnosc"], "slajdy": [11, 13], "mod": ["kolejnosc"], "def": "Te same klucze w innej kolejności dają inne drzewo. Klucze rosnące tworzą najgorsze, zdegenerowane drzewo."}, "rownowazace": {"x": 110, "y": 430, "l": ["Drzewa", "samorównoważące"], "r": ["rownowaz", "avl", "czerwono"], "slajdy": [11], "mod": ["kolejnosc"], "def": "Np. AVL lub czerwono-czarne: po wstawieniu przebudowują się tak, żeby h pozostało O(log n)."}, "kolizje": {"x": 650, "y": 300, "l": ["Kolizje"], "r": ["kolizj"], "slajdy": [17], "mod": ["urodziny", "hasz"], "def": "Dwa różne klucze trafiają do tej samej komórki. Gdy kluczy jest więcej niż komórek, kolizja jest pewna; w praktyce pojawia się dużo wcześniej."}, "urodziny": {"x": 880, "y": 300, "l": ["Paradoks urodzin"], "r": ["urodzin"], "slajdy": [17], "mod": ["urodziny"], "def": "Wystarczą 23 osoby, by z prawdopodobieństwem ponad 1/2 dwie miały urodziny tego samego dnia. Tak samo szybko pojawiają się kolizje."}, "rozw": {"x": 650, "y": 430, "l": ["Łańcuchy albo", "adresowanie otwarte"], "r": ["lancuch", "list", "adresowanie otwarte", "otwart"], "slajdy": [18], "mod": ["hasz"], "def": "Dwa sposoby: w komórce trzymamy listę elementów albo szukamy następnej wolnej komórki według ustalonej reguły."}}, "K": [["slownik", "bst", "jako", {"e": [-14, -6]}], ["slownik", "hasz", "jako", {"e": [14, -6]}], ["siec", "bst", "hierarchią\nprzypomina", {"e": [-44, 0]}], ["hasz", "o1", "daje"], ["bst", "porzadek", "daje przez", {"e": [-34, 0]}], ["bst", "wysokosc", "kosztuje O(h);\nh to", {"e": [44, 0]}], ["kolejnosc", "wysokosc", "decyduje o"], ["rownowazace", "wysokosc", "trzymają\nh ≈ log n", {"e": [-6, 14]}], ["hasz", "kolizje", "musi obsłużyć", {"e": [-44, 0]}], ["urodziny", "kolizje", "tłumaczy\nczęstość", {"e": [0, -6]}], ["kolizje", "rozw", "rozwiązujemy\nprzez"]]});
 </script>
 </body>
 </html>

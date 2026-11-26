@@ -310,6 +310,49 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
 }
+
+/* ───────── Mapa pojęć ───────── */
+.tile.mapa-tile { margin-bottom: 14px; border-color: var(--accent); background: var(--accent-soft); }
+.tile.mapa-tile .num { background: var(--accent); color: var(--accent-ink); }
+svg.mp { display: block; width: 100%; min-width: 760px; height: auto; margin: 4px 0; touch-action: manipulation; }
+svg.mp .kr { stroke: var(--muted); stroke-width: 1.6; fill: none; transition: opacity .15s; }
+svg.mp .kr.petla { stroke-dasharray: 6 4; }
+svg.mp .et { fill: var(--text-2); font: italic 12.5px var(--font); text-anchor: middle; dominant-baseline: central; paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; pointer-events: none; transition: opacity .15s; }
+svg.mp .grot { fill: var(--muted); }
+svg.mp .grot.a { fill: var(--accent); }
+svg.mp .w { cursor: pointer; outline: none; }
+svg.mp .w rect { fill: var(--surface); stroke: var(--accent); stroke-width: 1.6; transition: opacity .15s; }
+svg.mp .w text { fill: var(--text); font: 600 14px var(--font); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+svg.mp .w:hover rect { fill: var(--accent-soft); }
+svg.mp .w:focus-visible rect { stroke-width: 3.5; }
+svg.mp .w.wyb rect { fill: var(--accent); }
+svg.mp .w.wyb text { fill: var(--accent-ink); }
+svg.mp .w.puste rect { fill: var(--amber-soft); stroke: var(--amber); stroke-dasharray: 5 3; }
+svg.mp .w.puste text { fill: var(--amber); }
+svg.mp .w.dobrze rect { fill: var(--good-soft); stroke: var(--good); stroke-dasharray: none; }
+svg.mp .w.dobrze text { fill: var(--good); }
+svg.mp .w.zle rect { fill: var(--bad-soft); stroke: var(--bad); }
+svg.mp .w.zle text { fill: var(--bad); }
+svg.mp.fokus .kr:not(.akt), svg.mp.fokus .et:not(.akt), svg.mp.fokus .w:not(.akt) rect { opacity: .22; }
+svg.mp .kr.akt { stroke: var(--accent); stroke-width: 2.6; }
+svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
+.mpinfo { min-height: 120px; }
+.mpinfo h3 { margin-bottom: .35em; }
+.mpinfo ul { margin: .3em 0 .6em; padding-left: 1.2em; }
+.mpinfo li { margin: .15em 0; }
+.mplinki { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.mplinki a, .mplinki span { display: inline-block; font-size: .9rem; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border); text-decoration: none; }
+.mplinki a.mod { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.mplinki span { color: var(--muted); }
+.mppola { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 14px; margin: 8px 0; }
+.mppola .field { margin: 0; }
+.mppola .field > span { font-weight: 600; font-size: .92rem; }
+.mppola input { width: 100%; }
+.mppola input.dobrze { border-color: var(--good); background: var(--good-soft); }
+.mppola input.zle { border-color: var(--bad); background: var(--bad-soft); }
+.mppola .pod { font-size: .82rem; color: var(--muted); min-height: 1.2em; }
+.mpzdania { columns: 2 320px; column-gap: 28px; padding-left: 1.2em; margin: 6px 0 0; }
+.mpzdania li { break-inside: avoid; margin: .15em 0; }
 </style>
 </head>
 <body>
@@ -321,6 +364,7 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
   </div>
   <nav class="wrap tabs" aria-label="Ćwiczenia">
     <a href="#start">Start</a>
+    <a href="#mapa">Mapa pojęć</a>
     <a href="#stany">1. Stany procesu</a>
     <a href="#planista">2. Planista</a>
     <a href="#przelaczanie">3. Przełączanie zadań</a>
@@ -336,6 +380,7 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
 <section id="v-start">
   <h1>Systemy operacyjne, architektury i wirtualizacja: ćwiczenia</h1>
   <p class="lead">Ćwiczenia do wykładu 11, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
+  <a class="tile mapa-tile" href="#mapa"><span class="num">★</span><h3>Mapa pojęć wykładu</h3><p>Wszystkie pojęcia wykładu na jednej mapie: co z czym się łączy, na którym slajdzie było i które ćwiczenie to trenuje. Na powtórkę: tryb „Uzupełnij” z pustymi polami.</p><div class="meta">ok. 5–10 min · cały wykład: na początek powtórki i na koniec</div></a>
   <div class="grid2">
     <a class="tile" href="#stany"><span class="num">1</span><h3>Stany procesu</h3><p>Diagram stanów procesu i dziesięć zdarzeń z życia programu: wczytanie pliku, koniec kwantu, naciśnięty klawisz. Wskaż przejście, które wykona system.</p><div class="meta">ok. 4 min · slajdy „Program a proces” i „Stany procesu”</div></a>
     <a class="tile" href="#planista"><span class="num">2</span><h3>Planista procesora</h3><p>Zadania, cztery reguły planowania i wykresy Gantta. Średni czas oczekiwania, czas do pierwszego uruchomienia, koszt przełączania kontekstu i wybór kwantu. Ułóż kolejkę samodzielnie i zobacz, jak starzenie chroni przed zagłodzeniem.</p><div class="meta">ok. 12 min · slajdy od „Przełączania kontekstu” do „Przykładu: cztery zadania, trzy reguły”</div></a>
@@ -345,6 +390,48 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
     <a class="tile" href="#wirtualizacja"><span class="num">6</span><h3>Maszyna wirtualna, kontener, chmura</h3><p>Warstwy maszyn wirtualnych i kontenerów obok siebie. Tabela „kto czym zarządza” w IaaS, PaaS i SaaS do uzupełnienia oraz scenariusze do rozstrzygnięcia.</p><div class="meta">ok. 8 min · slajdy od „Maszyny wirtualnej” do „Częstych błędów o chmurze”</div></a>
   </div>
 </section>
+
+<!-- ═══════════════════ MAPA POJĘĆ ═══════════════════ -->
+<section id="v-mapa" hidden>
+  <h2>Mapa pojęć wykładu 11</h2>
+  <p class="lead">Najważniejsze pojęcia wykładu i to, jak się ze sobą łączą. Strzałkę czytaj jak zdanie: „Planista <em>wybiera według</em> reguł”. Kliknij pojęcie, żeby zobaczyć, co znaczy, z czym się łączy, na którym slajdzie było i które ćwiczenie je trenuje.</p>
+
+  <div class="card">
+    <div class="row" style="justify-content: space-between">
+      <span class="seg" id="mpTryb" role="group" aria-label="Tryb mapy"><button type="button" data-w="poznaj" aria-pressed="true">Poznaj</button><button type="button" data-w="uzupelnij" aria-pressed="false">Uzupełnij</button></span>
+      <span class="small muted">Na telefonie przesuń mapę w bok.</span>
+    </div>
+    <div class="scroll-x" data-srodek><svg class="mp" id="mpSvg" viewBox="0 0 1000 480" role="group" aria-label="Mapa pojęć wykładu 11. Pojęcia są przyciskami; ta sama treść jest też poniżej jako lista zdań."></svg></div>
+    <div id="mpUzup" hidden>
+      <p class="small">W 6 pustych polach brakuje pojęć. Odczytaj je z podpisanych strzałek i wpisz poniżej. Pisownia i polskie znaki nie muszą być idealne.</p>
+      <div class="mppola" id="mpPola"></div>
+      <div class="row">
+        <button type="button" class="btn" id="mpSprawdz">Sprawdź</button>
+        <button type="button" class="btn ghost" id="mpPokaz">Pokaż odpowiedzi</button>
+        <button type="button" class="btn ghost" id="mpLosuj">Inne puste pola</button>
+      </div>
+      <p class="fbline" id="mpWynik" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="card mpinfo" id="mpInfo" aria-live="polite"></div>
+
+  <details class="card">
+    <summary><strong>Mapa jako lista zdań</strong> <span class="small muted">(np. do powtórki albo dla czytnika ekranu)</span></summary>
+    <ol class="mpzdania" id="mpZdania"></ol>
+  </details>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Skąd planista wie, kto następny? Które pojęcie z W7–W8 (kolejka, kolejka priorytetowa) ukrywa się pod strzałką „wybiera według”?</li>
+      <li>Które pojęcie ma najwięcej połączeń? Co to mówi o jego roli w tym wykładzie?</li>
+      <li>Zrób własną mapę na kartce z pamięci, a dopiero potem porównaj ją z tą. Czego zabrakło, a co masz ponad nią?</li>
+    </ol>
+  </div>
+  <p class="src">Mapa pojęć (concept map) według J. D. Novaka: pojęcia połączone podpisanymi relacjami. Metaanaliza J. C. Nesbit, O. O. Adesope, <em>Learning With Concept and Knowledge Maps</em>, Review of Educational Research 76(3), 2006, s. 413–448: uczenie się z map pojęć, gotowych i budowanych samodzielnie, dawało średnio lepsze zapamiętywanie niż czytanie tekstu, list czy konspektów. Numery slajdów według pliku <a href="slajdy/W11.pdf">W11.pdf</a> (slajdy wykładu).</p>
+</section>
+
 
 <!-- ═══════════════════ 1. STANY PROCESU ═══════════════════ -->
 <section id="v-stany" hidden>
@@ -765,7 +852,7 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
 
 <script>
 'use strict';
-const KONF = {"wyk": "W11", "key": "wdi-w11-grupa", "widoki": {"start": "Wykład 11 · ćwiczenia", "stany": "Stany procesu · W11", "planista": "Planista procesora · W11", "przelaczanie": "Przełączanie zadań u ludzi · W11", "pamiec": "Pamięć wirtualna · W11", "architektury": "Gdzie to działa? · W11", "wirtualizacja": "Maszyna wirtualna, kontener, chmura · W11", "ustawienia": "Ustawienia prowadzącego · W11"}, "linki": [{"id": "sLink0", "hash": "przelaczanie", "label": "Przełączanie zadań u ludzi"}]};
+const KONF = {"wyk": "W11", "key": "wdi-w11-grupa", "widoki": {"mapa": "Mapa pojęć · W11", "start": "Wykład 11 · ćwiczenia", "stany": "Stany procesu · W11", "planista": "Planista procesora · W11", "przelaczanie": "Przełączanie zadań u ludzi · W11", "pamiec": "Pamięć wirtualna · W11", "architektury": "Gdzie to działa? · W11", "wirtualizacja": "Maszyna wirtualna, kontener, chmura · W11", "ustawienia": "Ustawienia prowadzącego · W11"}, "linki": [{"id": "sLink0", "hash": "przelaczanie", "label": "Przełączanie zadań u ludzi"}]};
 /* ═════════════════════ Narzędzia ═════════════════════ */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1654,6 +1741,215 @@ nawiguj();
   new MutationObserver(zaplanuj).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
   wszystkie();
 })();
+</script>
+<script>
+/* ═════════════════════ Mapa pojęć (wspólny silnik, dane wykładu na dole) ═════════════════════ */
+(function (D) {
+  'use strict';
+  const q = (s, r = document) => r.querySelector(s);
+  const qq = (s, r = document) => [...r.querySelectorAll(s)];
+  const mk = (tag, attrs = {}, ...kids) => {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else if (k === 'html') e.innerHTML = v; else e.setAttribute(k, v);
+    }
+    for (const k of kids) e.append(k);
+    return e;
+  };
+  const NS = 'http://www.w3.org/2000/svg';
+  const ms = (tag, attrs = {}, txt) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (txt !== undefined) e.textContent = txt; return e; };
+  const mieszaj = (t) => { for (let i = t.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [t[i], t[j]] = [t[j], t[i]]; } return t; };
+  const norm = (s) => String(s).toLowerCase().replace(/ł/g, 'l').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  const W = D.W, K = D.K;
+  const nazwa = (id) => W[id].l.join(' ').replace(/\s*\(.*\)$/, '');
+  const pelna = (id) => W[id].l.join(' ');
+  let tryb = 'poznaj', wyb = null, puste = [...D.puste], sprawdzone = {};
+  const wezly = {}, kraw = [];
+
+  function zmierz(lines) {
+    const c = zmierz.c || (zmierz.c = document.createElement('canvas').getContext('2d'));
+    c.font = '600 14px ' + getComputedStyle(document.body).fontFamily;
+    return Math.max(...lines.map((t) => c.measureText(t).width));
+  }
+  function ramka(id) {
+    const n = W[id];
+    const w = Math.max(64, zmierz(n.l) + 26), h = n.l.length > 1 ? 46 : 32;
+    return { x0: n.x - w / 2, y0: n.y - h / 2, w, h };
+  }
+  const wew = (r, p, m = 3) => p.x > r.x0 - m && p.x < r.x0 + r.w + m && p.y > r.y0 - m && p.y < r.y0 + r.h + m;
+
+  function rysuj() {
+    const svg = q('#mpSvg');
+    svg.replaceChildren();
+    const defs = ms('defs');
+    for (const [id, kl] of [['mpGrot', 'grot'], ['mpGrotA', 'grot a']]) {
+      const m = ms('marker', { id, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' });
+      m.append(ms('path', { d: 'M0,0 L10,5 L0,10 z', class: kl }));
+      defs.append(m);
+    }
+    svg.append(defs);
+    const gK = ms('g'), gE = ms('g'), gW = ms('g');
+    svg.append(gK, gE, gW);
+    kraw.length = 0;
+    for (const [a, b, pod, o = {}] of K) {
+      const A = W[a], B = W[b], ra = ramka(a), rb = ramka(b);
+      const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2, dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy);
+      const k = o.k || 0, cx = mx - dy / d * k, cy = my + dx / d * k;
+      const pt = (t) => ({ x: (1 - t) ** 2 * A.x + 2 * (1 - t) * t * cx + t * t * B.x, y: (1 - t) ** 2 * A.y + 2 * (1 - t) * t * cy + t * t * B.y });
+      const pts = [];
+      for (let i = 0; i <= 80; i++) { const p = pt(i / 80); if (!wew(ra, p, 2) && !wew(rb, p, 4)) pts.push(p); }
+      const path = ms('path', { d: 'M' + pts.map((p) => p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' L'), class: 'kr' + (o.p ? ' petla' : ''), 'marker-end': 'url(#mpGrot)' });
+      const s = pt(o.t || 0.5), e = o.e || [0, 0];
+      const wiersze = pod.split('\n'), ex = s.x + e[0], ey = s.y + e[1] - (wiersze.length - 1) * 7.5;
+      const et = ms('text', { x: ex.toFixed(1), y: ey.toFixed(1), class: 'et' });
+      wiersze.forEach((t, i) => et.append(ms('tspan', { x: ex.toFixed(1), dy: i ? 15 : 0 }, t)));
+      gK.append(path); gE.append(et);
+      kraw.push({ a, b, pod: pod.replace(/\n/g, ' '), path, et });
+    }
+    for (const id of Object.keys(W)) {
+      const r = ramka(id), n = W[id];
+      const g = ms('g', { class: 'w', tabindex: '0', role: 'button', 'data-id': id });
+      g.append(ms('rect', { x: r.x0.toFixed(1), y: r.y0.toFixed(1), width: r.w.toFixed(1), height: r.h, rx: 9 }));
+      const lines = n.l.length > 1 ? [n.y - 9, n.y + 10] : [n.y];
+      const teksty = lines.map((y, i) => { const t = ms('text', { x: n.x, y }, n.l[i]); g.append(t); return t; });
+      g.addEventListener('click', () => klik(id));
+      g.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); klik(id); } });
+      gW.append(g);
+      wezly[id] = { g, teksty };
+    }
+    odswiez();
+  }
+
+  function slajdLink(nr) {
+    const t = `slajd ${nr}: „${D.slajdy[nr] || ''}”`;
+    return D.pdf ? mk('a', { href: `${D.pdf}#page=${nr}`, target: '_blank', rel: 'noopener', text: t }) : mk('span', { text: t });
+  }
+  const ukryte = (id) => tryb === 'uzupelnij' && puste.includes(id) && sprawdzone[id] !== 'dobrze' && sprawdzone[id] !== 'pokazane';
+  const opisW = (id) => ukryte(id) ? `pole ${puste.indexOf(id) + 1}` : nazwa(id);
+
+  function odswiez() {
+    const svg = q('#mpSvg');
+    const akt = new Set(wyb ? [wyb] : []);
+    for (const k of kraw) {
+      const on = wyb && (k.a === wyb || k.b === wyb);
+      if (on) { akt.add(k.a); akt.add(k.b); }
+      k.path.classList.toggle('akt', !!on); k.et.classList.toggle('akt', !!on);
+      k.path.setAttribute('marker-end', on ? 'url(#mpGrotA)' : 'url(#mpGrot)');
+    }
+    svg.classList.toggle('fokus', !!wyb);
+    for (const [id, { g, teksty }] of Object.entries(wezly)) {
+      const n = W[id], pust = tryb === 'uzupelnij' && puste.includes(id), st = sprawdzone[id];
+      g.classList.toggle('akt', akt.has(id));
+      g.classList.toggle('wyb', id === wyb && !pust);
+      g.classList.toggle('puste', pust);
+      g.classList.toggle('dobrze', pust && (st === 'dobrze' || st === 'pokazane'));
+      g.classList.toggle('zle', pust && st === 'zle');
+      if (ukryte(id)) teksty.forEach((t, i) => { t.textContent = i === 0 ? (teksty.length > 1 ? '?' : `? (${puste.indexOf(id) + 1})`) : `(${puste.indexOf(id) + 1})`; });
+      else teksty.forEach((t, i) => { t.textContent = n.l[i]; });
+      g.setAttribute('aria-label', ukryte(id) ? `Puste pole ${puste.indexOf(id) + 1}` : pelna(id));
+      g.setAttribute('aria-pressed', id === wyb ? 'true' : 'false');
+    }
+    info();
+    q('#mpZdania').replaceChildren(...kraw.map((k) => mk('li', { text: `${opisW(k.a)} → ${k.pod} → ${opisW(k.b)}` })));
+  }
+
+  function info() {
+    const host = q('#mpInfo');
+    if (!wyb) {
+      host.replaceChildren(mk('h3', { text: tryb === 'uzupelnij' ? 'Uzupełnij mapę' : 'Kliknij pojęcie na mapie' }),
+        mk('p', { class: 'small muted', text: tryb === 'uzupelnij'
+          ? 'Kliknij puste pole, żeby zobaczyć jego połączenia, a potem wpisz brakujące pojęcie. Przydatne wskazówki dają też ćwiczenia z tego wykładu.'
+          : 'Zobaczysz krótką definicję, połączenia z innymi pojęciami, slajd z wykładu i ćwiczenie na tej stronie. Na koniec spróbuj trybu „Uzupełnij”.' }));
+      return;
+    }
+    const n = W[wyb], ukr = ukryte(wyb);
+    const rel = kraw.filter((k) => k.a === wyb || k.b === wyb).map((k) => mk('li', { text: `${opisW(k.a)} → ${k.pod} → ${opisW(k.b)}` }));
+    const linki = mk('div', { class: 'mplinki' });
+    if (!ukr) {
+      for (const m of n.mod) linki.append(mk('a', { class: 'mod', href: m.includes('.html') ? m : '#' + m, text: `Ćwiczenie: ${D.mod[m]} →` }));
+      for (const s of n.slajdy) linki.append(slajdLink(s));
+    }
+    host.replaceChildren(
+      mk('h3', { text: ukr ? `Puste pole ${puste.indexOf(wyb) + 1}` : pelna(wyb) }),
+      ukr ? mk('p', { class: 'small muted', text: 'Co pasuje do wszystkich tych zdań naraz?' }) : mk('p', { text: n.def }),
+      mk('p', { class: 'small', style: 'margin: 0', html: '<strong>Połączenia:</strong>' }),
+      mk('ul', { class: 'small' }, ...rel),
+      linki);
+  }
+
+  function klik(id) {
+    wyb = wyb === id ? null : id;
+    odswiez();
+    if (wyb && tryb === 'uzupelnij' && ukryte(wyb)) q('#mpIn-' + wyb)?.focus({ preventScroll: true });
+  }
+  function pola() {
+    sprawdzone = {};
+    q('#mpWynik').textContent = '';
+    q('#mpPola').replaceChildren(...puste.map((id, i) => {
+      const inp = mk('input', { type: 'text', id: 'mpIn-' + id, autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false' });
+      inp.addEventListener('focus', () => { if (wyb !== id) { wyb = id; odswiez(); } });
+      inp.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') sprawdz(); });
+      return mk('label', { class: 'field', for: 'mpIn-' + id }, mk('span', { text: `Pole ${i + 1}` }), inp, mk('span', { class: 'pod', id: 'mpPod-' + id }));
+    }));
+  }
+  function trafione(id, txt) {
+    const t = norm(txt);
+    if (!t) return false;
+    return W[id].r.some((r) => r.length <= 3 ? t.split(' ').includes(r) : t.includes(r));
+  }
+  function sprawdz() {
+    let ok = 0;
+    for (const id of puste) {
+      const inp = q('#mpIn-' + id), pod = q('#mpPod-' + id);
+      if (sprawdzone[id] === 'pokazane') continue;
+      const dobrze = trafione(id, inp.value);
+      sprawdzone[id] = inp.value.trim() ? (dobrze ? 'dobrze' : 'zle') : undefined;
+      inp.classList.toggle('dobrze', dobrze); inp.classList.toggle('zle', !dobrze && !!inp.value.trim());
+      pod.textContent = dobrze ? `Dobrze: ${pelna(id)}.` : (inp.value.trim() ? `Jeszcze nie. Podpowiedź: ${W[id].slajdy.map((s) => 'slajd ' + s).join(', ')}.` : '');
+      if (dobrze) ok++;
+    }
+    const w = q('#mpWynik');
+    w.textContent = ok === puste.length ? `Wszystkie ${ok} pojęć na miejscu!` : `Dobrze: ${ok} z ${puste.length}.`;
+    w.className = 'fbline ' + (ok === puste.length ? 'dobrze' : '');
+    odswiez();
+  }
+  function pokaz() {
+    for (const id of puste) {
+      if (sprawdzone[id] === 'dobrze') continue;
+      sprawdzone[id] = 'pokazane';
+      q('#mpPod-' + id).textContent = `Odpowiedź: ${pelna(id)}.`;
+    }
+    q('#mpWynik').textContent = 'Odpowiedzi są na mapie. Spróbuj jeszcze raz z innymi pustymi polami.';
+    q('#mpWynik').className = 'fbline';
+    odswiez();
+  }
+  function losuj() {
+    puste = mieszaj(Object.keys(W).filter((id) => id !== D.korzen)).slice(0, D.puste.length);
+    wyb = null; pola(); odswiez();
+  }
+  function ustawTryb(t) {
+    tryb = t; wyb = null;
+    q('#mpUzup').hidden = t !== 'uzupelnij';
+    if (t === 'uzupelnij') pola(); else sprawdzone = {};
+    odswiez();
+  }
+  function init() {
+    if (!q('#mpSvg')) return;
+    rysuj();
+    pola();
+    for (const b of qq('button', q('#mpTryb'))) b.addEventListener('click', () => {
+      for (const c of qq('button', q('#mpTryb'))) c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
+      ustawTryb(b.dataset.w);
+    });
+    q('#mpSprawdz').addEventListener('click', sprawdz);
+    q('#mpPokaz').addEventListener('click', pokaz);
+    q('#mpLosuj').addEventListener('click', losuj);
+    // Czcionka mogła się wczytać później: przelicz szerokości ramek przy wejściu na mapę.
+    window.addEventListener('hashchange', () => { if (location.hash === '#mapa') rysuj(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(rysuj);
+  }
+  init();
+})({"pdf": "slajdy/W11.pdf", "slajdy": {"5": "System operacyjny: pośrednik", "6": "Wywołanie systemowe: program prosi jądro", "7": "Systemy według przeznaczenia", "10": "Program a proces", "11": "Stany procesu", "12": "Przełączanie kontekstu: iluzja równoczesności", "13": "Planista: kto następny?", "14": "Przykład: cztery zadania, trzy reguły", "15": "Przełączanie się między zadaniami u ludzi", "18": "Pamięć wirtualna", "19": "Ochrona: izolacja, uprawnienia, bit NX", "21": "Klient–serwer i peer-to-peer", "22": "Architektura trójwarstwowa", "23": "Monolit czy mikroserwisy?", "25": "Maszyna wirtualna: komputer w komputerze", "26": "Kontener: osobne „mieszkanie” w tym samym bloku", "27": "Maszyna wirtualna a kontener", "28": "Maszyna wirtualna czy kontener?", "29": "Chmura obliczeniowa", "30": "Częste błędy o chmurze"}, "mod": {"architektury": "Gdzie to działa?", "pamiec": "Pamięć wirtualna", "planista": "Planista procesora", "przelaczanie": "Przełączanie zadań u ludzi", "stany": "Stany procesu", "wirtualizacja": "Maszyna wirtualna, kontener, chmura"}, "korzen": "so", "puste": ["proces", "planista", "pw", "przelaczanie", "kontener", "chmura"], "W": {"so": {"x": 300, "y": 45, "l": ["System operacyjny"], "r": ["system operacyjn", "jadro", "os"], "slajdy": [5, 7], "mod": ["stany"], "def": "Pośrednik między programami a sprzętem: zarządza procesorem, pamięcią, plikami i urządzeniami. Jego rdzeń to jądro."}, "wywolania": {"x": 90, "y": 45, "l": ["Wywołanie", "systemowe"], "r": ["wywolanie systemow", "syscall", "wywolan"], "slajdy": [6], "mod": [], "def": "Program prosi jądro o usługę, np. odczyt pliku. Procesor przechodzi wtedy w tryb jądra, a potem wraca do programu."}, "proces": {"x": 110, "y": 170, "l": ["Proces", "(program w ruchu)"], "r": ["proces"], "slajdy": [10], "mod": ["stany"], "def": "Wykonujący się program z własną pamięcią, rejestrami i stanem. Jeden program może działać jako wiele procesów."}, "planista": {"x": 300, "y": 170, "l": ["Planista", "procesora"], "r": ["planist", "scheduler"], "slajdy": [13, 14], "mod": ["planista"], "def": "Decyduje, który gotowy proces dostanie procesor i na jak długo."}, "pw": {"x": 480, "y": 170, "l": ["Pamięć wirtualna"], "r": ["wirtualn", "pamiec"], "slajdy": [18, 19], "mod": ["pamiec"], "def": "Każdy proces widzi własną przestrzeń adresów, a system tłumaczy je na adresy fizyczne. Dzięki temu procesy są od siebie odizolowane."}, "vm": {"x": 670, "y": 170, "l": ["Maszyna wirtualna", "(cały komputer)"], "r": ["maszyna wirtualn", "vm"], "slajdy": [25, 27, 28], "mod": ["wirtualizacja"], "def": "Program udający cały komputer, na którym działa osobny system operacyjny. Mocna izolacja, ale duży narzut."}, "kontener": {"x": 915, "y": 170, "l": ["Kontener"], "r": ["kontener", "docker"], "slajdy": [26, 27, 28], "mod": ["wirtualizacja"], "def": "Odizolowana grupa procesów, która współdzieli jądro systemu gospodarza. Lżejszy i szybciej startuje niż maszyna wirtualna."}, "stany": {"x": 100, "y": 300, "l": ["Stany procesu"], "r": ["stan"], "slajdy": [11], "mod": ["stany"], "def": "Nowy, gotowy, wykonywany, oczekujący, zakończony. Na jednym rdzeniu tylko jeden proces naraz jest wykonywany."}, "przelaczanie": {"x": 300, "y": 300, "l": ["Przełączanie", "kontekstu"], "r": ["przelaczan", "kontekst"], "slajdy": [12], "mod": ["stany", "planista"], "def": "Zapis rejestrów jednego procesu i wczytanie drugiego. Tysiące razy na sekundę dają iluzję równoczesności, ale każde przełączenie kosztuje."}, "reguly": {"x": 500, "y": 300, "l": ["Reguły: FCFS, SJF,", "rotacyjna, priorytety"], "r": ["fcfs", "sjf", "rotacyjn", "priorytet", "regul"], "slajdy": [13, 14], "mod": ["planista"], "def": "Każda reguła to inny kompromis: średni czas oczekiwania, sprawiedliwość, szybkość reakcji. Starzenie priorytetów chroni przed zagłodzeniem."}, "ludzie": {"x": 300, "y": 430, "l": ["Przełączanie zadań", "u ludzi"], "r": ["ludz", "czlowiek", "zadan"], "slajdy": [15], "mod": ["przelaczanie"], "def": "Po zmianie zadania reagujemy wolniej i mniej trafnie niż po jego powtórzeniu. To tylko analogia: wspólna lekcja to, że przełączanie nie jest darmowe."}, "chmura": {"x": 790, "y": 300, "l": ["Chmura", "(IaaS, PaaS, SaaS)"], "r": ["chmur", "iaas", "paas", "saas", "cloud"], "slajdy": [29, 30], "mod": ["wirtualizacja"], "def": "Zasoby obliczeniowe udostępniane na żądanie przez sieć: sama infrastruktura, platforma albo gotowa aplikacja."}, "arch": {"x": 790, "y": 430, "l": ["Architektury: klient–serwer,", "P2P, warstwy, mikroserwisy"], "r": ["architektur", "klient", "serwer", "p2p", "mikroserwis", "warstw"], "slajdy": [21, 22, 23], "mod": ["architektury"], "def": "Sposoby podziału systemu na części, które komunikują się przez sieć. Każda architektura to inny kompromis."}}, "K": [["proces", "wywolania", "prosi jądro\nprzez", {"e": [-44, 0]}], ["so", "proces", "zarządza", {"e": [-20, -6]}], ["so", "planista", "dzieli czas\nprzez", {"e": [40, 0]}], ["so", "pw", "izoluje\nprzez", {"e": [28, -6]}], ["proces", "stany", "przechodzi\nprzez"], ["planista", "przelaczanie", "zmienia\nproces przez", {"e": [-44, 0]}], ["planista", "reguly", "wybiera\nwedług", {"e": [34, -4]}], ["ludzie", "przelaczanie", "analogia:\nteż kosztuje"], ["vm", "so", "uruchamia\nwłasny", {"t": 0.3, "e": [14, -10]}], ["kontener", "vm", "lżejszy niż", {"e": [0, -14]}], ["chmura", "vm", "udostępnia", {"e": [-34, 0]}], ["chmura", "kontener", "i", {"e": [12, 0]}], ["arch", "chmura", "często działa w"]]});
 </script>
 </body>
 </html>
