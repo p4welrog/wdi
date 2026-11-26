@@ -97,6 +97,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
 .przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
 .przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
@@ -380,9 +383,18 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Dla danych rosnących sortowanie przez wstawianie robi n − 1 porównań, a przez wybór n(n − 1)/2. Dlaczego? Sprawdź oba.</li>
-      <li>Szybkie sortowanie z osią A[0] na danych rosnących: ile porównań? Porównaj z danymi losowymi tej samej długości.</li>
-      <li>Który algorytm robi najmniej zapisów? Kiedy to ważne?</li>
+      <li>Dla danych rosnących sortowanie przez wstawianie robi n − 1 porównań, a przez wybór n(n − 1)/2. Dlaczego? Sprawdź oba.
+        <details class="odp"><summary>Wskazówka</summary><div>Na danych rosnących: kiedy sortowanie przez wstawianie przestaje porównywać nowy element? A przez wybór?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przez wstawianie porównuje nowy element z poprzednim i od razu widzi, że jest na miejscu: jedno porównanie na element, razem n − 1. Przez wybór nie korzysta z tego, że dane są uporządkowane. Za każdym razem przegląda całą resztę w poszukiwaniu minimum: (n − 1) + (n − 2) + … + 1 = n(n − 1)/2.</div></details>
+      </li>
+      <li>Szybkie sortowanie z osią A[0] na danych rosnących: ile porównań? Porównaj z danymi losowymi tej samej długości.
+        <details class="odp"><summary>Wskazówka</summary><div>Oś A[0] w danych rosnących jest najmniejsza. Na ile części dzieli resztę?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla n = 12 to 11 + 10 + … + 1 = 66 porównań, czyli n(n − 1)/2, tyle co sortowanie przez wybór. Oś jest zawsze najmniejsza, więc podział odcina tylko ją, a reszta trafia w całości do jednej części. Na danych losowych oś dzieli zwykle mniej więcej po równo i dla n = 12 wychodzi średnio ok. 33 porównań.</div></details>
+      </li>
+      <li>Który algorytm robi najmniej zapisów? Kiedy to ważne?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj kolumnę „zapisy do tablicy” w tabeli „Wszystkie naraz”.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Najmniej zapisów robi sortowanie przez wybór: najwyżej n − 1 zamian, czyli 2(n − 1) zapisów (dla n = 1000 poniżej 2000, a pozostałe algorytmy robią ich ok. 10 000 lub więcej). To ważne, gdy zapis jest dużo droższy od porównania, np. w pamięci flash, która zużywa się od zapisów, albo gdy przestawia się duże, ciężkie rekordy.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Kod jak na slajdach W8. Sortowanie szybkie: podział w miejscu z osią A[lo] (wariant Lomuto); porównań tyle samo co w wersji z listami ze slajdu. T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 2, 6, 7; A. Bhargava, <em>Algorytmy</em>, rozdz. 2 i 4.</p>
@@ -421,9 +433,18 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Ile zamian najwyżej wykona wstawienie do kopca o 15 elementach? A o 1000?</li>
-      <li>Wyjmij z przykładu z wykładu wszystkie elementy. W jakiej kolejności wychodzą? Tak działa heapsort.</li>
-      <li>Czy tablica [16, 14, 10, 8, 7, 9, 3, 2, 4, 1] jest posortowana? Czy musi być, żeby była kopcem?</li>
+      <li>Ile zamian najwyżej wykona wstawienie do kopca o 15 elementach? A o 1000?
+        <details class="odp"><summary>Wskazówka</summary><div>Nowy element trafia na koniec tablicy i wędruje w górę. Na jakiej głębokości leży jego miejsce?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Każda zamiana podnosi element o jeden poziom, więc zamian jest najwyżej tyle, ile poziomów nad nowym miejscem. W kopcu z 15 elementami nowy dostaje indeks 15, na głębokości ⌊log₂ 16⌋ = 4: najwyżej 4 zamiany. Przy 1000 elementach: ⌊log₂ 1001⌋ = 9 zamian.</div></details>
+      </li>
+      <li>Wyjmij z przykładu z wykładu wszystkie elementy. W jakiej kolejności wychodzą? Tak działa heapsort.
+        <details class="odp"><summary>Wskazówka</summary><div>Po każdym „Wyjmij maksimum” zapisz, co pojawiło się w „wyjęte maksima”.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Elementy wychodzą od największego do najmniejszego: 16, 14, 10, 9, 8, 7, 4, 3, 2, 1. Heapsort robi to samo w miejscu: wyjęte maksimum wstawia na koniec tablicy, a kopiec się kurczy, więc na końcu tablica jest posortowana rosnąco.</div></details>
+      </li>
+      <li>Czy tablica [16, 14, 10, 8, 7, 9, 3, 2, 4, 1] jest posortowana? Czy musi być, żeby była kopcem?
+        <details class="odp"><summary>Wskazówka</summary><div>Kopiec wymaga tylko, żeby rodzic był ≥ dzieci. Czy coś mówi o rodzeństwie albo kuzynach?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie jest posortowana, np. 7 stoi przed 9, a 2 przed 4. Kopcem być nie musi: warunek dotyczy tylko par rodzic–dziecko (16 ≥ 14, 10; 14 ≥ 8, 7; 10 ≥ 9, 3 itd.). Dlatego kopiec da się zbudować i poprawiać tanio: utrzymuje mniej porządku niż posortowana tablica, ale wystarczająco, żeby maksimum zawsze było na początku.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Przykład: T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 6. W Pythonie moduł <code>heapq</code> daje kopiec typu min.</p>
@@ -483,9 +504,18 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Czy w Twoich wyborach pojawił się cykl? Przy którym zestawie (smaki lodów, wolny wieczór, wakacje) łatwiej o cykl i dlaczego?</li>
-      <li>Gdy wybory są przechodnie, algorytmy nie pytają o wszystkie 15 par. Które pary mogą pominąć i skąd wiedzą, jak by brzmiała odpowiedź?</li>
-      <li>Jeśli algorytmy dały różne rankingi, który z nich jest „prawdziwy”? Co to znaczy dla ankiety, w której badani mają uporządkować wiele rzeczy naraz?</li>
+      <li>Czy w Twoich wyborach pojawił się cykl? Przy którym zestawie (smaki lodów, wolny wieczór, wakacje) łatwiej o cykl i dlaczego?
+        <details class="odp"><summary>Wskazówka</summary><div>Cykl łatwiej się pojawia, gdy opcje są podobnie atrakcyjne, ale różnią się w kilku cechach naraz.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Twoich wyborów. Cykle zdarzają się częściej, gdy opcje są podobnie atrakcyjne i różnią się w kilku cechach naraz, np. wakacje (cena, pogoda, odległość). W każdej parze decyduje wtedy inna cecha. Przy jednej wyraźnej cesze, jak smak, preferencje są zwykle przechodnie.</div></details>
+      </li>
+      <li>Gdy wybory są przechodnie, algorytmy nie pytają o wszystkie 15 par. Które pary mogą pominąć i skąd wiedzą, jak by brzmiała odpowiedź?
+        <details class="odp"><summary>Wskazówka</summary><div>Jeśli A > B i B > C, czy trzeba jeszcze pytać o A i C?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Algorytm pomija pary, których wynik wynika z wcześniejszych odpowiedzi przez przechodniość: gdy A > B i B > C, to bez pytania A > C. Każde porównanie daje informację także o innych parach, dlatego sortowanie potrzebuje mniej pytań niż wszystkie 15.</div></details>
+      </li>
+      <li>Jeśli algorytmy dały różne rankingi, który z nich jest „prawdziwy”? Co to znaczy dla ankiety, w której badani mają uporządkować wiele rzeczy naraz?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy przy cyklu A > B > C > A istnieje kolejność zgodna ze wszystkimi Twoimi wyborami?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Żaden nie jest „prawdziwy”. Przy cyklu nie istnieje kolejność zgodna ze wszystkimi wyborami, więc każdy algorytm łamie któreś z nich, a który, zależy od tego, o co i w jakiej kolejności pyta. W ankiecie z porządkowaniem wielu rzeczy naraz badany musi podać jakiś ranking, więc niespójność jego preferencji staje się niewidoczna. Porównania parami pozwalają ją wykryć.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">L. L. Thurstone, <em>A Law of Comparative Judgment</em>, Psychol. Rev. 34(4), 1927, s. 273–286; A. Tversky, <em>Intransitivity of Preferences</em>, Psychol. Rev. 76(1), 1969, s. 31–48; liczba cykli: M. G. Kendall, B. Babington Smith, Biometrika 31, 1940, s. 324–345.</p>
@@ -535,9 +565,18 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Które ważenie najbardziej zmniejsza liczbę możliwych kolejności? Szukaj takiego, które dzieli je mniej więcej na pół.</li>
-      <li>Dla 5 odważników granica to 7 ważeń, a sortowanie przez wybór robi 10. Ile robi przez scalanie w najgorszym razie? Patrz tabela niżej.</li>
-      <li>Jak to się łączy z grą „Zgadnij liczbę” z W1 i W6?</li>
+      <li>Które ważenie najbardziej zmniejsza liczbę możliwych kolejności? Szukaj takiego, które dzieli je mniej więcej na pół.
+        <details class="odp"><summary>Wskazówka</summary><div>Patrz na licznik „możliwe kolejności” przed ważeniem i po nim.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Najlepsze jest ważenie, którego oba wyniki są mniej więcej tak samo prawdopodobne. Wtedy liczba możliwych kolejności spada o połowę, a ważenie daje pełny bit informacji. Ważenie, którego wynik już znasz (np. A z C, gdy wiadomo, że A < B < C), niczego nie zmienia.</div></details>
+      </li>
+      <li>Dla 5 odważników granica to 7 ważeń, a sortowanie przez wybór robi 10. Ile robi przez scalanie w najgorszym razie? Patrz tabela niżej.
+        <details class="odp"><summary>Wskazówka</summary><div>Odczytaj wiersz n = 5 w tabeli „Ile ważeń w najgorszym przypadku?”.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Sortowanie przez scalanie robi dla 5 odważników w najgorszym razie 8 ważeń, czyli o jedno więcej niż granica 7. Granicę osiąga algorytm Forda–Johnsona.</div></details>
+      </li>
+      <li>Jak to się łączy z grą „Zgadnij liczbę” z W1 i W6?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile było możliwości w „Zgadnij liczbę” i ile pytań wystarczało?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To ta sama zasada. W „Zgadnij liczbę” odpowiedź „więcej/mniej” dzieli możliwe liczby, a tu ważenie dzieli możliwe kolejności. W obu przypadkach każde pytanie o dwóch wynikach daje najwyżej 1 bit, więc w najgorszym razie potrzeba co najmniej ⌈log₂ liczby możliwości⌉ pytań. Wyszukiwanie binarne z W6 osiąga tę granicę, bo dzieli zawsze na pół.</div></details>
+      </li>
     </ol>
   </div>
   <div class="card">
@@ -588,9 +627,18 @@ svg.drz line.sc { stroke: var(--accent); stroke-width: 3; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przełącz zbieranie na „jak stos” i posortuj przykład. Na której cyfrze kolejność się psuje i dlaczego?</li>
-      <li>Ile przeniesień potrzeba dla n liczb o d cyfrach? Kiedy to mniej niż n log₂ n porównań, a kiedy więcej?</li>
-      <li>Dlaczego radix nie przeczy granicy ⌈log₂ n!⌉? Czego ta granica dotyczy?</li>
+      <li>Przełącz zbieranie na „jak stos” i posortuj przykład. Na której cyfrze kolejność się psuje i dlaczego?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj zawartość przegródki 0 przy ostatniej cyfrze w obu trybach zbierania.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy zbieraniu jak stos liczby z tej samej przegródki wychodzą w odwrotnej kolejności. Najwyraźniej widać to przy cyfrze setek: wszystkie liczby dwucyfrowe trafiają do przegródki 0 i wychodzą jako 90, 75, 66, 45, 24, 2. Kolejność wewnątrz przegródki niesie wynik sortowania po wcześniejszych cyfrach, więc zbieranie musi być stabilne.</div></details>
+      </li>
+      <li>Ile przeniesień potrzeba dla n liczb o d cyfrach? Kiedy to mniej niż n log₂ n porównań, a kiedy więcej?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile razy każda liczba jest przenoszona w jednym przejściu (do przegródki i z powrotem)?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>W każdym z d przejść każda z n liczb trafia do przegródki i z niej wraca: 2nd przeniesień (dla przykładu 2 · 8 · 3 = 48). To mniej niż n log₂ n, gdy liczb jest dużo, a cyfr mało, np. 1000 liczb trzycyfrowych to 6000 przeniesień wobec ok. 10 000. Gdy liczb jest mało, a są długie, radix robi więcej pracy.</div></details>
+      </li>
+      <li>Dlaczego radix nie przeczy granicy ⌈log₂ n!⌉? Czego ta granica dotyczy?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile wyników ma porównanie dwóch liczb, a ile może dać odczyt jednej cyfry?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Granica ⌈log₂ n!⌉ dotyczy tylko algorytmów, które o kolejności dowiadują się wyłącznie z porównań dwóch elementów (każde daje najwyżej 1 bit). Radix nie porównuje liczb, tylko czyta ich cyfry, a odczyt cyfry od razu wskazuje jedną z 10 przegródek. Działa jednak tylko dla kluczy, które da się rozłożyć na cyfry.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Przykład: T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 8.3.</p>
