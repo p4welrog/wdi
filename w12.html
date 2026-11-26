@@ -362,7 +362,7 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
     <a class="tile" href="#pakiety"><span class="num">1</span><h3>Obwody czy pakiety?</h3><p>Ilu użytkowników obsłuży łącze, jeśli każdemu zarezerwujemy kanał, a ilu, jeśli będą się nim dzielić? Rozkład dwumianowy pokaże, jak rzadko wszyscy nadają naraz.</p><div class="meta">ok. 5 min · slajd „Przełączanie obwodów a przełączanie pakietów”</div></a>
     <a class="tile" href="#warstwy"><span class="num">2</span><h3>Koperta w kopercie</h3><p>Wiadomość schodzi przez warstwy, dostaje nagłówki, przechodzi przez router i jest rozpakowywana u odbiorcy. Ile bajtów zajmują same koperty? Na koniec: która warstwa?</p><div class="meta">ok. 7 min · slajdy od „Po co warstwy?” do „Modelu OSI a TCP/IP”</div></a>
     <a class="tile" href="#adres"><span class="num">3</span><h3>Adres IP i port</h3><p>Adres IPv4 jako 4 bajty i 32 bity do klikania. Ile adresów daje n bitów: port, IPv4, IPv6. Na koniec: adres czy port, i który numer portu?</p><div class="meta">ok. 6 min · slajd „Adres IP i port”</div></a>
-    <a class="tile" href="#trasowanie"><span class="num">4</span><h3>Trasowanie</h3><p>Sieć ze slajdu: zmieniaj koszty łączy, psuj je i patrz, jak router A przelicza tablicę przekazywania algorytmem Dijkstry. Najtańsza trasa a najmniej przeskoków.</p><div class="meta">ok. 5 min · slajd „Trasowanie: Dijkstra w każdym routerze”</div></a>
+    <a class="tile" href="#trasowanie"><span class="num">4</span><h3>Trasowanie</h3><p>Sieć ze slajdu: zmieniaj koszty łączy, psuj je i patrz, jak router A przelicza tablicę przekazywania algorytmem Dijkstry. Najtańsza trasa a najmniej przeskoków. Na koniec: dokąd przenosi się ruch po awarii łącza.</p><div class="meta">ok. 5 min · slajd „Trasowanie: Dijkstra w każdym routerze”</div></a>
     <a class="tile" href="#dns"><span class="num">5</span><h3>DNS i transport</h3><p>Zapytaj o nazwę i prześledź drogę przez drzewo serwerów DNS. Drugie zapytanie obsłuży pamięć podręczna — dopóki nie minie TTL. Potem TCP czy UDP i kody HTTP.</p><div class="meta">ok. 7 min · slajdy o DNS, TCP i UDP oraz „HTTP i HTTPS”</div></a>
     <a class="tile" href="#opoznienie"><span class="num">6</span><h3>Kalkulator opóźnień</h3><p>Odległość, rozmiar danych i przepustowość. Który składnik dominuje: transmisja czy propagacja? Zadania: co bardziej pomoże — szybsze łącze czy bliższy serwer?</p><div class="meta">ok. 7 min · slajdy „Cztery składniki opóźnienia” i „Przykład: Warszawa – Nowy Jork”</div></a>
     <a class="tile" href="#otwarcie"><span class="num">7</span><h3>Otwarcie strony</h3><p>Ułóż kroki od wpisania adresu do odpowiedzi 200 OK. Potem oś czasu: ile RTT kosztuje otwarcie strony z Frankfurtu, a ile z Nowego Jorku, i co zmienia pamięć DNS lub HTTP/3?</p><div class="meta">ok. 6 min · slajdy „Ułóż kroki w kolejności” i „Przykład: Warszawa – Nowy Jork”</div></a>
@@ -522,12 +522,20 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
     <p class="fbline" id="trFb" role="status"></p>
   </div>
 
+  <div class="card">
+    <h3>Obciążenie łączy</h3>
+    <p class="small muted">Każda z 15 par routerów wysyła ruch najtańszą trasą. Ile tras przechodzi przez każde łącze? W nawiasie: zmiana względem sieci ze slajdu. Zepsuj łącze i zobacz, dokąd przeniesie się ruch.</p>
+    <div class="hbars" id="trObc"></div>
+    <p class="small muted" id="trObcOpis"></p>
+  </div>
+
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
       <li>Najtańsza trasa A → F ma koszt 11 i pięć przeskoków. Dlaczego router nie wybiera trasy A–B–D–F z trzema przeskokami?</li>
       <li>Zepsuj łącze D–E. Które wpisy w tablicy routera A się zmieniły? A które zostały, choć zmienił się ich koszt?</li>
       <li>Zepsuj tyle łączy, żeby F stał się nieosiągalny. Co wtedy zrobi router z pakietem do F?</li>
+      <li>Zepsuj łącze B–C. Które łącze przejmuje najwięcej tras? Co się z nim stanie, jeśli już wcześniej było prawie pełne (moduł „Korek w sieci”)? Żaden router o tym nie zdecydował — to skutek wielu niezależnych obliczeń.</li>
     </ol>
   </div>
   <p class="src">Kurose, Ross, rozdz. 4.1, 5.2.1 i 5.3 (przekazywanie, trasowanie stanu łączy, OSPF); E. W. Dijkstra, Numer. Math. 1, 1959. Sieć i koszty ze slajdu W12.</p>
@@ -1225,11 +1233,35 @@ const Trasowanie = (() => {
     });
     $('#trTab').replaceChildren(el('thead', {}, el('tr', {}, ...['cel', 'następny skok', 'koszt', 'trasa'].map((x) => el('th', { text: x })))), el('tbody', {}, ...tb));
     const fb = $('#trFb'); fb.className = 'fbline';
+    rysujObc();
     if (!pD) { fb.className = 'fbline zle'; fb.textContent = `${cel} jest nieosiągalny z A: router odrzuci pakiet (i zwykle powiadomi nadawcę komunikatem ICMP).`; return; }
     const kosztB = pB.e.reduce((a, i) => a + kr[i][2], 0);
     fb.textContent = pD.e.length === pB.e.length && pD.e.every((i, j) => i === pB.e[j])
       ? `Trasa A → ${cel}: ${pD.w.join('–')}, koszt ${D.d[cel]} — tu najtańsza trasa ma też najmniej przeskoków.`
       : kosztB === D.d[cel] ? `Dwie trasy A → ${cel} o tym samym koszcie ${D.d[cel]}: ${pD.w.join('–')} (${pD.e.length} przeskoki) i ${pB.w.join('–')} (${pB.e.length}). Remis — router wybiera jedną z nich według swoich reguł (OSPF może też dzielić ruch między obie).` : `Najtańsza trasa A → ${cel}: ${pD.w.join('–')}, koszt ${D.d[cel]}, przeskoków ${pD.e.length}. Najmniej przeskoków: ${pB.w.join('–')} (${pB.e.length}), ale koszt ${kosztB}.`;
+  }
+  /** Ile najtańszych tras (spośród wszystkich par routerów) przechodzi przez każde łącze. */
+  function obciazenie() {
+    const n = kr.map(() => 0); let nieos = 0;
+    WEZ.forEach((s, a) => {
+      const D = dijkstra(s);
+      for (const t of WEZ.slice(a + 1)) { const p = D.d[t] !== undefined ? droga(D.prev, s, t) : null; if (!p) { nieos++; continue; } for (const i of p.e) n[i]++; }
+    });
+    return { n, nieos };
+  }
+  const tras = (k) => (k === 1 ? 'trasa' : [2, 3, 4].includes(k % 10) && ![12, 13, 14].includes(k % 100) ? 'trasy' : 'tras');
+  function rysujObc() {
+    const teraz = obciazenie();
+    const zap = [kr, awaria]; kr = KR0.map((x) => [...x]); awaria = new Set(); const baza = obciazenie(); [kr, awaria] = zap;
+    const mx = Math.max(...teraz.n, ...baza.n, 1);
+    slupki($('#trObc'), kr.map(([u, v], i) => {
+      const r = teraz.n[i] - baza.n[i];
+      return { lab: `${u}–${v}`, pc: (100 * teraz.n[i]) / mx, tekst: awaria.has(i) ? 'uszkodzone' : `${teraz.n[i]} ${tras(teraz.n[i])}${r ? ` (${r > 0 ? '+' : '−'}${Math.abs(r)})` : ''}` };
+    }));
+    const m = Math.max(...teraz.n), naj = kr.filter((_, i) => teraz.n[i] === m).map(([u, v]) => `${u}–${v}`);
+    let op = `Najwięcej tras (${m}) przechodzi przez ${naj.length > 1 ? 'łącza ' + naj.join(', ') : 'łącze ' + naj[0]}: to potencjalne wąskie gardła sieci.`.replace('potencjalne wąskie gardła sieci', naj.length > 1 ? 'potencjalne wąskie gardła sieci' : 'potencjalne wąskie gardło sieci');
+    if (teraz.nieos) op += ` Par routerów bez żadnej trasy: ${teraz.nieos}.`;
+    $('#trObcOpis').textContent = op;
   }
   function klik(i) {
     if (tryb === 'awaria') { if (awaria.has(i)) awaria.delete(i); else awaria.add(i); }
@@ -1245,7 +1277,7 @@ const Trasowanie = (() => {
     $('#trReset').addEventListener('click', reset);
     reset();
   }
-  return { init, _t: { dijkstra: () => { kr = KR0.map((x) => [...x]); awaria = new Set(); return dijkstra('A').d; } } };
+  return { init, _t: { dijkstra: () => { kr = KR0.map((x) => [...x]); awaria = new Set(); return dijkstra('A').d; }, obciazenie } };
 })();
 
 /* ═════════════════════ Ćwiczenie 4: DNS i transport ═════════════════════ */
