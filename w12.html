@@ -277,6 +277,40 @@ ol.kroki-dns .ser { font-family: var(--mono); font-weight: 700; }
 table.t tr.naj td { font-weight: 700; }
 
 
+/* ───────── W12: adres IP i port ───────── */
+.ipbajty { display: flex; flex-wrap: wrap; gap: 10px 14px; margin: 10px 0 4px; }
+.ipbajt { border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px 8px; background: var(--surface-2); }
+.ipbajt .dz { font-family: var(--mono); font-weight: 700; font-size: 1.15rem; text-align: center; margin-bottom: 4px; }
+.ipbajt .dz small { font-weight: 400; color: var(--muted); font-size: .78rem; }
+.ipbity { display: flex; gap: 3px; }
+.ipbit { font: 700 1rem var(--mono); width: 30px; height: 40px; border: 1.5px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--muted); cursor: pointer; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; }
+.ipbit small { font: 400 .75rem var(--font); color: var(--muted); }
+.ipbit[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.ipbit:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.duza { font-family: var(--mono); font-size: 1.05rem; overflow-wrap: anywhere; word-break: break-all; }
+@media (max-width: 400px) { .ipbit { width: 27px; } }
+
+/* ───────── W12: otwarcie strony ───────── */
+ol.otkol { list-style: none; padding: 0; margin: 10px 0; display: grid; gap: 6px; counter-reset: ot; }
+ol.otkol li { counter-increment: ot; border: 1px dashed var(--border); border-radius: 8px; padding: 6px 10px; min-height: 2.2em; display: flex; gap: 10px; align-items: center; }
+ol.otkol li::before { content: counter(ot) "."; font-weight: 700; color: var(--muted); min-width: 1.4em; }
+ol.otkol li.pelny { border-style: solid; background: var(--surface-2); }
+ol.otkol li.dobry { border-color: var(--good); background: var(--good-soft); }
+ol.otkol li.zly { border-color: var(--bad); background: var(--bad-soft); }
+.otos { position: relative; margin: 14px 0 34px; }
+.otos .tor { display: flex; height: 30px; border-radius: 6px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--border); }
+.otos .sg { height: 100%; min-width: 0; border-right: 2px solid var(--surface); }
+.otos .sg:last-child { border-right: 0; }
+.otos .prog { position: absolute; top: -6px; bottom: -6px; width: 0; border-left: 2px dashed var(--bad); }
+.otos .prog span { position: absolute; top: 100%; left: 0; transform: translateX(-50%); font-size: .8rem; color: var(--bad); white-space: nowrap; margin-top: 4px; font-weight: 600; }
+.otos .zero { position: absolute; top: 100%; left: 0; font-size: .8rem; color: var(--muted); margin-top: 10px; }
+ol.otleg { list-style: none; padding: 0; margin: 4px 0 8px; display: grid; gap: 4px; font-size: .95rem; }
+ol.otleg li { display: flex; gap: 8px; align-items: baseline; }
+ol.otleg i { flex: none; width: 14px; height: 14px; border-radius: 3px; display: inline-block; transform: translateY(2px); }
+ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); font-variant-numeric: tabular-nums; padding-left: 10px; }
+.otopcje label { display: flex; gap: 8px; align-items: center; font-weight: 400; min-height: 36px; }
+.otopcje input { width: 20px; height: 20px; accent-color: var(--accent); }
+
 /* ───────── Wspólne: sygnał przewijania w bok, ograniczenie ruchu ───────── */
 [data-przewin="p"] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
 [data-przewin="l"] { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); }
@@ -301,10 +335,12 @@ table.t tr.naj td { font-weight: 700; }
     <a href="#start">Start</a>
     <a href="#pakiety">1. Obwody czy pakiety?</a>
     <a href="#warstwy">2. Koperta w kopercie</a>
-    <a href="#trasowanie">3. Trasowanie</a>
-    <a href="#dns">4. DNS i transport</a>
-    <a href="#opoznienie">5. Opóźnienia</a>
-    <a href="#czekanie">6. Ile czekania?</a>
+    <a href="#adres">3. Adres IP i port</a>
+    <a href="#trasowanie">4. Trasowanie</a>
+    <a href="#dns">5. DNS i transport</a>
+    <a href="#opoznienie">6. Opóźnienia</a>
+    <a href="#otwarcie">7. Otwarcie strony</a>
+    <a href="#czekanie">8. Ile czekania?</a>
   </nav>
 </header>
 
@@ -317,10 +353,12 @@ table.t tr.naj td { font-weight: 700; }
   <div class="grid2">
     <a class="tile" href="#pakiety"><span class="num">1</span><h3>Obwody czy pakiety?</h3><p>Ilu użytkowników obsłuży łącze, jeśli każdemu zarezerwujemy kanał, a ilu, jeśli będą się nim dzielić? Rozkład dwumianowy pokaże, jak rzadko wszyscy nadają naraz.</p><div class="meta">ok. 5 min · slajd „Przełączanie obwodów a przełączanie pakietów”</div></a>
     <a class="tile" href="#warstwy"><span class="num">2</span><h3>Koperta w kopercie</h3><p>Wiadomość schodzi przez warstwy, dostaje nagłówki, przechodzi przez router i jest rozpakowywana u odbiorcy. Ile bajtów zajmują same koperty? Na koniec: która warstwa?</p><div class="meta">ok. 7 min · slajdy od „Po co warstwy?” do „Modelu OSI a TCP/IP”</div></a>
-    <a class="tile" href="#trasowanie"><span class="num">3</span><h3>Trasowanie</h3><p>Sieć ze slajdu: zmieniaj koszty łączy, psuj je i patrz, jak router A przelicza tablicę przekazywania algorytmem Dijkstry. Najtańsza trasa a najmniej przeskoków.</p><div class="meta">ok. 5 min · slajd „Trasowanie: Dijkstra w każdym routerze”</div></a>
-    <a class="tile" href="#dns"><span class="num">4</span><h3>DNS i transport</h3><p>Zapytaj o nazwę i prześledź drogę przez drzewo serwerów DNS. Drugie zapytanie obsłuży pamięć podręczna — dopóki nie minie TTL. Potem TCP czy UDP i kody HTTP.</p><div class="meta">ok. 7 min · slajdy od „Adresu IP i portu” do „HTTP i HTTPS”</div></a>
-    <a class="tile" href="#opoznienie"><span class="num">5</span><h3>Kalkulator opóźnień</h3><p>Odległość, rozmiar danych i przepustowość. Który składnik dominuje: transmisja czy propagacja? Zadania: co bardziej pomoże — szybsze łącze czy bliższy serwer?</p><div class="meta">ok. 7 min · slajdy „Cztery składniki opóźnienia” i „Przykład: Warszawa – Nowy Jork”</div></a>
-    <a class="tile" href="#czekanie"><span class="num">6</span><h3>Ile czekania zniesiesz?</h3><p>Klikasz, a odpowiedź przychodzi po krótszej lub dłuższej chwili. Oceń, jak to odbierasz. Gdzie leżą Twoje progi — i progi sali?</p><div class="meta">ok. 4 min · slajd „Ile czekania zniesie człowiek?”</div></a>
+    <a class="tile" href="#adres"><span class="num">3</span><h3>Adres IP i port</h3><p>Adres IPv4 jako 4 bajty i 32 bity do klikania. Ile adresów daje n bitów: port, IPv4, IPv6. Na koniec: adres czy port, i który numer portu?</p><div class="meta">ok. 6 min · slajd „Adres IP i port”</div></a>
+    <a class="tile" href="#trasowanie"><span class="num">4</span><h3>Trasowanie</h3><p>Sieć ze slajdu: zmieniaj koszty łączy, psuj je i patrz, jak router A przelicza tablicę przekazywania algorytmem Dijkstry. Najtańsza trasa a najmniej przeskoków.</p><div class="meta">ok. 5 min · slajd „Trasowanie: Dijkstra w każdym routerze”</div></a>
+    <a class="tile" href="#dns"><span class="num">5</span><h3>DNS i transport</h3><p>Zapytaj o nazwę i prześledź drogę przez drzewo serwerów DNS. Drugie zapytanie obsłuży pamięć podręczna — dopóki nie minie TTL. Potem TCP czy UDP i kody HTTP.</p><div class="meta">ok. 7 min · slajdy o DNS, TCP i UDP oraz „HTTP i HTTPS”</div></a>
+    <a class="tile" href="#opoznienie"><span class="num">6</span><h3>Kalkulator opóźnień</h3><p>Odległość, rozmiar danych i przepustowość. Który składnik dominuje: transmisja czy propagacja? Zadania: co bardziej pomoże — szybsze łącze czy bliższy serwer?</p><div class="meta">ok. 7 min · slajdy „Cztery składniki opóźnienia” i „Przykład: Warszawa – Nowy Jork”</div></a>
+    <a class="tile" href="#otwarcie"><span class="num">7</span><h3>Otwarcie strony</h3><p>Ułóż kroki od wpisania adresu do odpowiedzi 200 OK. Potem oś czasu: ile RTT kosztuje otwarcie strony z Frankfurtu, a ile z Nowego Jorku, i co zmienia pamięć DNS lub HTTP/3?</p><div class="meta">ok. 6 min · slajdy „Ułóż kroki w kolejności” i „Przykład: Warszawa – Nowy Jork”</div></a>
+    <a class="tile" href="#czekanie"><span class="num">8</span><h3>Ile czekania zniesiesz?</h3><p>Klikasz, a odpowiedź przychodzi po krótszej lub dłuższej chwili. Oceń, jak to odbierasz. Gdzie leżą Twoje progi — i progi sali?</p><div class="meta">ok. 4 min · slajd „Ile czekania zniesie człowiek?”</div></a>
   </div>
 </section>
 
@@ -403,8 +441,55 @@ table.t tr.naj td { font-weight: 700; }
 </section>
 
 <!-- ═══════════════════ 3. TRASOWANIE ═══════════════════ -->
+<!-- ═══════════════════ 3. ADRES IP I PORT ═══════════════════ -->
+<section id="v-adres" hidden>
+  <h2>3. Adres IP i port</h2>
+  <p class="lead">Adres IP to adres budynku: wskazuje komputer w sieci. Port to numer mieszkania: wskazuje program w tym komputerze. Adres IPv4 ma 32 bity, zapisywane jako 4 liczby 0–255, po jednej na każdy bajt. Port to liczba 16-bitowa.</p>
+
+  <div class="card">
+    <h3>Część A: adres IPv4 to 4 bajty, czyli 32 bity</h3>
+    <div class="row">
+      <div class="field"><label for="apIp">adres IPv4</label><input id="apIp" type="text" inputmode="decimal" value="192.0.2.10" autocomplete="off" spellcheck="false" style="width: 11em; font-family: var(--mono)"></div>
+      <div class="field"><span class="small muted">przykłady</span><div class="row" id="apPrzyk"></div></div>
+    </div>
+    <p class="err" id="apErr" role="alert"></p>
+    <div class="ipbajty" id="apBajty"></div>
+    <div class="stats" id="apStaty"></div>
+    <p class="small muted">Kliknij bit, żeby go zmienić: zmieni się bajt i adres u góry. Adresy 192.0.2.x, 198.51.100.x i 203.0.113.x są zarezerwowane do dokumentacji (RFC 5737) i nie należą do nikogo.</p>
+  </div>
+
+  <div class="card">
+    <h3>Część B: ile różnych numerów daje n bitów?</h3>
+    <div class="row"><label for="apN">liczba bitów n</label><input id="apN" type="range" min="1" max="128" value="32" style="flex: 1; min-width: 160px"><b class="mono" id="apNv">32</b></div>
+    <div class="row" id="apNprzyk" style="margin-top: 6px"></div>
+    <div class="stats" id="apNstaty"></div>
+    <p class="duza" id="apNdok"></p>
+    <p class="small muted" id="apNopis" aria-live="polite"></p>
+  </div>
+
+  <div class="card">
+    <h3>Część C: adres czy port?</h3>
+    <div class="row" style="justify-content: space-between"><span class="pill" id="aqNr"></span><span class="small muted" id="aqWynik"></span></div>
+    <p class="zad" id="aqQ"></p>
+    <div class="row odp" id="aqOdp"></div>
+    <p class="fbline" id="aqFb" role="status"></p>
+    <p id="aqWyj"></p>
+    <div class="row"><button type="button" class="btn" id="aqDalej" hidden>Dalej →</button></div>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Ustaw w części A wszystkie bity na 1. Jaki to adres i jaka liczba? Dlaczego w żadnym bajcie nie da się zapisać 256?</li>
+      <li>Ile urządzeń z adresem IP masz przy sobie i w domu? Czy wystarczyłoby dla wszystkich ludzi 2<sup>32</sup> adresów?</li>
+      <li>Każde dołożenie jednego bitu podwaja liczbę adresów. O ile bitów trzeba wydłużyć adres, żeby było ich 1000 razy więcej? (Przypomnij sobie 2<sup>10</sup> z W3).</li>
+    </ol>
+  </div>
+  <p class="src">Slajd „Adres IP i port” (W12). Kurose, Ross, rozdz. 3 (porty) i 4 (IPv4, NAT, IPv6); RFC 791 (IPv4), RFC 8200 (IPv6), RFC 5737 (adresy do dokumentacji). Maski i podsieci: ćwiczenia.</p>
+</section>
+
 <section id="v-trasowanie" hidden>
-  <h2>3. Trasowanie: Dijkstra w routerze</h2>
+  <h2>4. Trasowanie: Dijkstra w routerze</h2>
   <p class="lead">W protokole OSPF każdy router zna mapę sieci (koszty łączy) i sam liczy najkrótsze ścieżki algorytmem Dijkstry z W10. Z wyniku buduje tablicę przekazywania: dla każdego celu — przez którego sąsiada wysłać pakiet.</p>
 
   <div class="card">
@@ -441,7 +526,7 @@ table.t tr.naj td { font-weight: 700; }
 
 <!-- ═══════════════════ 4. DNS ═══════════════════ -->
 <section id="v-dns" hidden>
-  <h2>4. DNS i transport</h2>
+  <h2>5. DNS i transport</h2>
   <p class="lead">Twój komputer pyta lokalny serwer DNS. Ten, jeśli nie zna odpowiedzi, schodzi po drzewie nazw: serwer główny → serwery domeny najwyższego poziomu → … → serwer domeny. Odpowiedzi zapamiętuje na czas TTL.</p>
 
   <div class="card">
@@ -485,7 +570,7 @@ table.t tr.naj td { font-weight: 700; }
 
 <!-- ═══════════════════ 5. OPÓŹNIENIE ═══════════════════ -->
 <section id="v-opoznienie" hidden>
-  <h2>5. Kalkulator opóźnień</h2>
+  <h2>6. Kalkulator opóźnień</h2>
   <p class="lead">Transmisja d<sub>trans</sub> = L / R zależy od rozmiaru danych i przepustowości, a nie od odległości. Propagacja d<sub>prop</sub> = s / v zależy od odległości, a nie od rozmiaru. Pomijamy kolejki i przetwarzanie.</p>
 
   <div class="card">
@@ -526,9 +611,49 @@ table.t tr.naj td { font-weight: 700; }
   <p class="src">Kurose, Ross, rozdz. 1.4 (opóźnienia, analogia z karawaną). Odległości: po kole wielkim (wzór haversine) między centrami miast, zaokrąglone do km.</p>
 </section>
 
+<!-- ═══════════════════ 7. OTWARCIE STRONY ═══════════════════ -->
+<section id="v-otwarcie" hidden>
+  <h2>7. Otwarcie strony krok po kroku</h2>
+  <p class="lead">Wpisujesz <span class="mono">https://www.swps.edu.pl</span>, a przeglądarka nic nie pamięta. Zanim zobaczysz stronę, kilka razy wymienia z siecią wiadomości tam i z powrotem. Każda taka wymiana trwa co najmniej jeden RTT, a RTT zależy od odległości (kalkulator opóźnień).</p>
+
+  <div class="card">
+    <h3>Część A: ułóż kroki w kolejności</h3>
+    <p class="small muted">Klikaj kroki w kolejności, w jakiej się dzieją. To zadanie ze slajdu „Ułóż kroki w kolejności”.</p>
+    <div class="row odp" id="otKarty"></div>
+    <ol class="otkol" id="otKol" aria-label="Twoja kolejność"></ol>
+    <div class="row"><button type="button" class="btn ghost small" id="otCofnij">Cofnij</button><button type="button" class="btn ghost small" id="otOdNowa">Od nowa</button></div>
+    <p class="fbline" id="otFb" role="status"></p>
+    <ol id="otWyj" hidden></ol>
+  </div>
+
+  <div class="card">
+    <h3>Część B: oś czasu</h3>
+    <div class="row" id="otMiasta"></div>
+    <div class="otopcje" style="margin-top: 8px">
+      <label><input type="checkbox" id="otDns"> przeglądarka pamięta adres IP (DNS z pamięci podręcznej)</label>
+      <label><input type="checkbox" id="otQuic"> HTTP/3 (QUIC): TCP i TLS w jednym uzgodnieniu</label>
+    </div>
+    <div class="stats" id="otStaty"></div>
+    <div class="otos" id="otOs"></div>
+    <ol class="otleg" id="otLeg"></ol>
+    <p id="otOpis" aria-live="polite"></p>
+    <p class="small muted">Uproszczenie jak na slajdzie: każdy krok to 1 RTT do serwera w wybranym mieście (światłowód, 2·10⁸ m/s, po kole wielkim). Pomijamy transmisję, kolejki i przetwarzanie, więc prawdziwy czas jest dłuższy. Lokalny serwer DNS jest zwykle bliżej niż serwer strony, ale bywa, że sam musi pytać dalej.</p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Dla Nowego Jorku szybsze łącze nie skróci żadnego z tych kroków. Dlaczego? Co by pomogło?</li>
+      <li>Duże serwisy trzymają kopie stron w wielu miastach (CDN). Wybierz Frankfurt zamiast Nowego Jorku: ile razy krócej czekasz?</li>
+      <li>Które dwa ustawienia razem zbijają otwarcie strony z Nowego Jorku najbliżej progu 0,1 s? Czy udaje się zejść poniżej?</li>
+    </ol>
+  </div>
+  <p class="src">Slajdy „Ułóż kroki w kolejności”, „Przykład: Warszawa – Nowy Jork” i „Ile czekania zniesie człowiek?” (W12). Kurose, Ross, rozdz. 2.2 (HTTP i RTT), 2.6.3 (CDN), 3 (TCP); RFC 8446 (TLS 1.3), RFC 9000 (QUIC).</p>
+</section>
+
 <!-- ═══════════════════ 6. CZEKANIE ═══════════════════ -->
 <section id="v-czekanie" hidden>
-  <h2>6. Ile czekania zniesiesz?</h2>
+  <h2>8. Ile czekania zniesiesz?</h2>
   <p class="lead">Klikasz przycisk, a „serwer” odpowiada po chwili — od kilkudziesięciu milisekund do kilku sekund. Po każdej odpowiedzi oceń, jak odebrałeś czekanie. Na końcu zobaczysz swoje progi.</p>
 
   <div class="card" id="czIntro">
@@ -643,7 +768,7 @@ table.t tr.naj td { font-weight: 700; }
 
 <script>
 'use strict';
-const KONF = {"wyk": "W12", "key": "wdi-w12-grupa", "widoki": {"start": "Wykład 12 · ćwiczenia", "pakiety": "Obwody czy pakiety? · W12", "warstwy": "Koperta w kopercie · W12", "trasowanie": "Trasowanie · W12", "dns": "DNS i transport · W12", "opoznienie": "Kalkulator opóźnień · W12", "czekanie": "Ile czekania zniesiesz? · W12", "ustawienia": "Ustawienia prowadzącego · W12"}, "linki": [{"id": "sLink0", "hash": "czekanie", "label": "Ile czekania zniesiesz?"}]};
+const KONF = {"wyk": "W12", "key": "wdi-w12-grupa", "widoki": {"start": "Wykład 12 · ćwiczenia", "pakiety": "Obwody czy pakiety? · W12", "warstwy": "Koperta w kopercie · W12", "adres": "Adres IP i port · W12", "trasowanie": "Trasowanie · W12", "dns": "DNS i transport · W12", "opoznienie": "Kalkulator opóźnień · W12", "otwarcie": "Otwarcie strony · W12", "czekanie": "Ile czekania zniesiesz? · W12", "ustawienia": "Ustawienia prowadzącego · W12"}, "linki": [{"id": "sLink0", "hash": "czekanie", "label": "Ile czekania zniesiesz?"}]};
 /* ═════════════════════ Narzędzia ═════════════════════ */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1281,7 +1406,184 @@ const Czekanie = (() => {
   return { init, wejscie: () => panel?.start(), wyjscie: () => { clearTimeout(tm); panel?.stop(); if (!$('#czTest').hidden) { faza = 'nic'; $('#czTest').hidden = true; $('#czIntro').hidden = false; } }, _t: { prog } };
 })();
 
-const MODULY = { pakiety: Pakiety, warstwy: Warstwy, trasowanie: Trasowanie, dns: Dns, opoznienie: Opoznienie, czekanie: Czekanie };
+/* ═════════════════════ Ćwiczenie 3: adres IP i port ═════════════════════ */
+const Adres = (() => {
+  let bajty = [192, 0, 2, 10];
+  const parsujIp = (t) => {
+    const cz = String(t).trim().split('.');
+    if (cz.length !== 4 || !cz.every((c) => /^\d{1,3}$/.test(c))) return null;
+    const b = cz.map(Number);
+    return b.every((x) => x <= 255) ? b : null;
+  };
+  const jakoLiczba = (b) => b.reduce((s, x) => s * 256 + x, 0);
+  const hex = (b) => b.map((x) => x.toString(16).toUpperCase().padStart(2, '0')).join('');
+  const potega = (n) => 2n ** BigInt(n);
+  const naukowo = (big) => {
+    const s = big.toString();
+    if (s.length <= 6) return liczba(s);
+    const m = Number(s.slice(0, 3)) / 100;
+    return `≈ ${ulamek(m, 1)}·10^${s.length - 1}`.replace(/\^(\d+)/, (_, d) => [...d].map((c) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[c]).join(''));
+  };
+  function rysujIp(zPola) {
+    if (!zPola) $('#apIp').value = bajty.join('.');
+    $('#apErr').textContent = '';
+    $('#apBajty').replaceChildren(...bajty.map((b, i) => el('div', { class: 'ipbajt', role: 'group', 'aria-label': `bajt ${i + 1}: ${b}` },
+      el('div', { class: 'dz' }, String(b), el('small', { text: ` (bajt ${i + 1})` })),
+      el('div', { class: 'ipbity' }, ...Array.from({ length: 8 }, (_, k) => {
+        const w = 7 - k, on = (b >> w) & 1;
+        const btn = el('button', { type: 'button', class: 'ipbit', 'aria-pressed': String(!!on), 'aria-label': `bajt ${i + 1}, bit o wadze ${1 << w}: ${on}` },
+          String(on), el('small', { text: String(1 << w) }));
+        btn.addEventListener('click', () => { bajty[i] ^= 1 << w; rysujIp(false); $$('#apBajty .ipbajt')[i].querySelectorAll('.ipbit')[k].focus(); });
+        return btn;
+      })))));
+    const st = $('#apStaty'); st.replaceChildren();
+    const stat = (k, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v mono', text: v })));
+    stat('jako jedna liczba 32-bitowa', liczba(jakoLiczba(bajty)));
+    stat('szesnastkowo (W3)', '0x' + hex(bajty));
+    stat('bitów', '4 × 8 = 32');
+  }
+  const OPISY = {
+    8: 'Jeden bajt: 256 wartości, od 0 do 255. Dlatego każda z czterech liczb w adresie IPv4 mieści się w 0–255.',
+    16: 'Tyle jest portów: 65 536 numerów, od 0 do 65 535. Dobrze znane: 53 (DNS), 80 (HTTP), 443 (HTTPS).',
+    32: 'IPv4: ok. 4,3 mld adresów — mniej niż jeden na osobę, a urządzeń jest więcej niż ludzi. Brak obchodzi się translacją adresów (NAT): cały dom pod jednym adresem publicznym.',
+    128: 'IPv6: ok. 3,4·10³⁸ adresów. To więcej niż 10²⁸ na każdego człowieka — adresów nie trzeba oszczędzać.',
+  };
+  const LUDZIE = 8.2e9;
+  function rysujN() {
+    const n = Number($('#apN').value); $('#apNv').textContent = String(n);
+    const p = potega(n);
+    for (const b of $$('#apNprzyk button')) b.setAttribute('aria-pressed', String(Number(b.dataset.n) === n));
+    const st = $('#apNstaty'); st.replaceChildren();
+    const stat = (k, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v', text: v })));
+    stat(`2ⁿ dla n = ${n}`, naukowo(p));
+    const nl = Number(p) / LUDZIE;
+    stat('na osobę (ok. 8,2 mld ludzi)', nl >= 1e6 ? naukowo(BigInt(Math.round(nl / 1e6)) * 10n ** 6n) : nl >= 1 ? ulamek(nl, 1) : `1 na ok. ${1 / nl < 10 ? ulamek(1 / nl, 1) : liczba(Math.round(1 / nl))} os.`);
+    $('#apNdok').textContent = n > 20 ? `dokładnie: ${liczba(p.toString())}` : '';
+    $('#apNopis').textContent = OPISY[n] || (n < 32 ? 'Każdy dodatkowy bit podwaja liczbę możliwych numerów.' : 'Każdy dodatkowy bit podwaja liczbę możliwych numerów; 10 bitów to ok. 1000 razy więcej.');
+  }
+  const POZ = [
+    { q: 'W zapisie 192.0.2.10:443 co wskazuje liczba 443?', ok: 'program (usługę) w komputerze', opcje: ['komputer w sieci', 'program (usługę) w komputerze', 'sieć lokalną'], wyj: 'Adres IP wskazuje budynek (komputer), port — mieszkanie (program). 443 to port HTTPS.' },
+    { q: 'Przeglądarka otwiera https://www.swps.edu.pl. Z którym portem serwera się łączy?', ok: '443', opcje: ['53', '80', '443'], wyj: 'HTTPS domyślnie korzysta z portu 443, zwykłe HTTP — z portu 80.' },
+    { q: 'Przeglądarka otwiera http://example.com (bez „s”). Z którym portem serwera się łączy?', ok: '80', opcje: ['53', '80', '443'], wyj: 'Zwykłe, nieszyfrowane HTTP domyślnie korzysta z portu 80.' },
+    { q: 'Komputer wysyła zapytanie DNS o adres serwera. Na który port?', ok: '53', opcje: ['53', '80', '443'], wyj: 'DNS działa na porcie 53, zwykle przez UDP: krótkie pytanie i krótka odpowiedź.' },
+    { q: 'Port to liczba 16-bitowa. Ile jest różnych numerów portów?', ok: '65 536', opcje: ['256', '65 536', '4 294 967 296'], wyj: '2¹⁶ = 65 536, czyli numery od 0 do 65 535. 256 to jeden bajt, a 4 294 967 296 to liczba adresów IPv4.' },
+    { q: 'Który zapis jest poprawnym adresem IPv4?', ok: '198.51.100.7', opcje: ['198.51.100.7', '198.51.300.7', '198.51.100'], wyj: 'Potrzeba dokładnie 4 liczb, każda z zakresu 0–255, bo każda zajmuje jeden bajt. 300 się nie mieści.' },
+    { q: 'Ile bitów ma adres IPv6?', ok: '128', opcje: ['32', '64', '128'], wyj: 'IPv6 ma 128 bitów i zapisuje się szesnastkowo; IPv4 ma 32 bity.' },
+    { q: 'Na jednym serwerze, pod tym samym adresem IP, działa strona WWW i serwer poczty. Skąd system wie, któremu programowi oddać dane?', ok: 'z numeru portu', opcje: ['z numeru portu', 'z adresu IP', 'z nazwy domeny'], wyj: 'Adres IP jest ten sam, więc rozróżnia port: warstwa transportowa oddaje dane programowi, który nasłuchuje na danym porcie.' },
+    { q: 'Laptop, telefon i telewizor w domu wychodzą do internetu pod jednym publicznym adresem IPv4. Co to umożliwia?', ok: 'translacja adresów (NAT) w routerze', opcje: ['translacja adresów (NAT) w routerze', 'serwer DNS', 'port 443'], wyj: 'Router zamienia prywatne adresy domowych urządzeń na swój jeden adres publiczny. Tak obchodzi się brak adresów IPv4.' },
+  ];
+  function init() {
+    const przyk = [['192.0.2.10', 'adres z dokumentacji'], ['127.0.0.1', 'ten komputer (localhost)'], ['255.255.255.255', 'same jedynki'], ['0.0.0.0', 'same zera']];
+    $('#apPrzyk').replaceChildren(...przyk.map(([a, t]) => {
+      const b = el('button', { type: 'button', class: 'btn ghost small mono', text: a, title: t, 'aria-label': `${a}: ${t}` });
+      b.addEventListener('click', () => { bajty = parsujIp(a); rysujIp(false); }); return b;
+    }));
+    $('#apIp').addEventListener('input', () => {
+      const b = parsujIp($('#apIp').value);
+      if (b) { bajty = b; rysujIp(true); } else $('#apErr').textContent = 'Adres IPv4 to 4 liczby od 0 do 255 oddzielone kropkami, np. 192.0.2.10.';
+    });
+    rysujIp(false);
+    const seg1 = el('div', { class: 'seg', role: 'group', 'aria-label': 'gotowe wartości n' }, ...[[8, '8 (bajt)'], [16, '16 (port)'], [32, '32 (IPv4)'], [128, '128 (IPv6)']].map(([n, t]) => {
+      const b = el('button', { type: 'button', 'data-n': String(n), 'aria-pressed': 'false', text: t });
+      b.addEventListener('click', () => { $('#apN').value = n; rysujN(); }); return b;
+    }));
+    $('#apNprzyk').replaceChildren(seg1);
+    $('#apN').addEventListener('input', rysujN);
+    rysujN();
+    quizWyboru('aq', POZ, null, 6);
+  }
+  return { init, _t: { parsujIp, jakoLiczba, hex, potega, naukowo } };
+})();
+
+/* ═════════════════════ Ćwiczenie 7: otwarcie strony ═════════════════════ */
+const Otwarcie = (() => {
+  const KROKI = {
+    A: ['żądanie GET /', 'Żądanie GET / wysyłane jest dopiero teraz, już w zaszyfrowanym kanale.'],
+    B: ['zapytanie DNS o adres IP', 'Najpierw zapytanie DNS: bez adresu IP nie wiadomo, dokąd wysyłać pakiety.'],
+    C: ['nawiązanie połączenia TCP', 'Potem połączenie TCP z serwerem pod tym adresem (port 443) — uzgodnienie przed wysłaniem danych.'],
+    D: ['uzgodnienie szyfrowania TLS', 'Na gotowym połączeniu TCP: uzgodnienie TLS, czyli klucze szyfrowania i sprawdzenie certyfikatu.'],
+    E: ['odpowiedź 200 OK z kodem HTML', 'Na końcu odpowiedź 200 OK z kodem HTML — wraca w drugiej połowie ostatniego RTT.'],
+  };
+  const DOBRA = ['B', 'C', 'D', 'A', 'E'];
+  let tasowane = [], wybrane = [], sprawdzone = false;
+  function rysujA() {
+    $('#otKarty').replaceChildren(...tasowane.map((k) => {
+      const b = el('button', { type: 'button', class: 'btn ghost', text: `(${k}) ${KROKI[k][0]}` });
+      b.disabled = wybrane.includes(k) || sprawdzone;
+      b.addEventListener('click', () => { wybrane.push(k); if (wybrane.length === 5) sprawdz(); rysujA(); const nast = $$('#otKarty button').find((x) => !x.disabled); (nast || $('#otOdNowa')).focus(); });
+      return b;
+    }));
+    $('#otKol').replaceChildren(...Array.from({ length: 5 }, (_, i) => {
+      const k = wybrane[i];
+      const cl = !k ? '' : !sprawdzone ? 'pelny' : (k === DOBRA[i] ? 'dobry' : 'zly');
+      return el('li', { class: cl, text: k ? `(${k}) ${KROKI[k][0]}` : '…' });
+    }));
+    $('#otCofnij').disabled = !wybrane.length || sprawdzone;
+  }
+  function sprawdz() {
+    sprawdzone = true;
+    const ile = wybrane.filter((k, i) => k === DOBRA[i]).length, fb = $('#otFb');
+    if (ile === 5) { fb.className = 'fbline dobrze'; fb.textContent = 'Dobrze: B, C, D, A, E.'; }
+    else { fb.className = 'fbline zle'; fb.textContent = `Na swoim miejscu ${ile} z 5. Poprawnie: B, C, D, A, E.`; }
+    const w = $('#otWyj'); w.hidden = false;
+    w.replaceChildren(...DOBRA.map((k) => el('li', { text: KROKI[k][1] })),
+      el('li', { text: 'Kroki B, C i D wymagają co najmniej jednej wymiany tam i z powrotem, a para A–E jeszcze jednej. Razem co najmniej 4 RTT — zobacz oś czasu poniżej.' }));
+  }
+  function odNowa() {
+    do tasowane = tasuj([...DOBRA]); while (tasowane.join('') === DOBRA.join(''));
+    wybrane = []; sprawdzone = false;
+    $('#otFb').textContent = ''; $('#otFb').className = 'fbline'; $('#otWyj').hidden = true;
+    rysujA();
+  }
+
+  /* Część B */
+  const KOLOR = { dns: 'var(--s1)', tcp: 'var(--s2)', tls: 'var(--good)', quic: 'var(--amber)', http: 'var(--accent)' };
+  let miasta = [], km = 6854;
+  const rtt = (sKm) => (2 * sKm * 1000) / 2e8;
+  function etapy(sKm, dnsCache, quic) {
+    const r = rtt(sKm), e = [];
+    if (!dnsCache) e.push({ k: 'dns', lab: 'DNS: adres IP serwera', n: 1 });
+    if (quic) e.push({ k: 'quic', lab: 'QUIC: połączenie i szyfrowanie naraz', n: 1 });
+    else e.push({ k: 'tcp', lab: 'TCP: nawiązanie połączenia', n: 1 }, { k: 'tls', lab: 'TLS: uzgodnienie szyfrowania', n: 1 });
+    e.push({ k: 'http', lab: 'HTTP: GET / → 200 OK', n: 1 });
+    return e.map((x) => ({ ...x, t: x.n * r }));
+  }
+  function rysujB() {
+    const dc = $('#otDns').checked, q = $('#otQuic').checked;
+    for (const b of $$('#otMiasta button')) b.setAttribute('aria-pressed', String(Number(b.dataset.km) === km));
+    const e = etapy(km, dc, q), r = rtt(km), suma = e.reduce((s, x) => s + x.t, 0);
+    const nazwa = (miasta.find(([, d]) => d === km) || ['?'])[0];
+    const st = $('#otStaty'); st.replaceChildren();
+    const stat = (k, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v', text: v })));
+    stat('RTT do serwera', czas(r)); stat('liczba RTT', String(e.length)); stat('strona po co najmniej', czas(suma));
+    const skala = Math.max(suma, 0.1) * 1.12;
+    const tor = el('div', { class: 'tor' }, ...e.map((x) => el('div', { class: 'sg', title: `${x.lab}: ${czas(x.t)}`, style: `width: ${(100 * x.t) / skala}%; background: ${KOLOR[x.k]}` })));
+    const prog = el('div', { class: 'prog', style: `left: ${(100 * 0.1) / skala}%` }, el('span', { text: 'próg 0,1 s' }));
+    $('#otOs').replaceChildren(tor, prog, el('span', { class: 'zero', text: '0' }));
+    $('#otOs').setAttribute('role', 'img');
+    $('#otOs').setAttribute('aria-label', `Oś czasu: ${e.map((x) => `${x.lab} ${czas(x.t)}`).join(', ')}; razem ${czas(suma)}, próg 0,1 s.`);
+    let t0 = 0;
+    $('#otLeg').replaceChildren(...e.map((x) => { const li = el('li', {}, el('i', { style: `background: ${KOLOR[x.k]}` }), el('span', { text: x.lab }), el('span', { class: 't', text: `${t0 ? czas(t0) : '0'} → ${czas(t0 + x.t)}` })); t0 += x.t; return li; }));
+    $('#otOpis').textContent = `${nazwa}: ${e.length} × ${czas(r)} = ${czas(suma)}. ` + (suma > 0.1
+      ? `To ponad próg 0,1 s, przy którym reakcja przestaje wydawać się natychmiastowa — i to bez transmisji i kolejek. Szybsze łącze nic tu nie da: liczy się odległość i liczba wymian.`
+      : `To poniżej progu 0,1 s: reakcja wydaje się natychmiastowa. Z bliskim serwerem nawet kilka wymian mieści się w progu.`);
+  }
+  function init() {
+    miasta = Opoznienie._t.odl;
+    $('#otMiasta').replaceChildren(el('span', { class: 'small muted', text: 'serwer w:' }), el('div', { class: 'seg', role: 'group', 'aria-label': 'miasto serwera' }, ...miasta.map(([n, d]) => {
+      const b = el('button', { type: 'button', 'data-km': String(d), 'aria-pressed': 'false', text: n });
+      b.addEventListener('click', () => { km = d; rysujB(); }); return b;
+    })));
+    km = (miasta.find(([n]) => n === 'Nowy Jork') || miasta[0])[1];
+    for (const id of ['#otDns', '#otQuic']) $(id).addEventListener('change', rysujB);
+    $('#otCofnij').addEventListener('click', () => { wybrane.pop(); rysujA(); });
+    $('#otOdNowa').addEventListener('click', odNowa);
+    odNowa(); rysujB();
+  }
+  return { init, _t: { etapy, rtt } };
+})();
+
+const MODULY = { pakiety: Pakiety, warstwy: Warstwy, adres: Adres, trasowanie: Trasowanie, dns: Dns, opoznienie: Opoznienie, otwarcie: Otwarcie, czekanie: Czekanie };
 
 /* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
 const Ustawienia = (() => {

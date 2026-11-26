@@ -251,6 +251,11 @@ sup { font-size: .7em; }
 .cell.traf { background: var(--good-soft); border-color: var(--good); }
 @media (max-width: 560px) { .cell { min-width: 34px; } .cell .cv { font-size: .92rem; } }
 
+.niez { border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; padding: 8px 12px; margin: 8px 0; font-size: .95rem; background: var(--surface-2); }
+.niez p { margin: 2px 0; }
+.niez .tak { color: var(--good); font-weight: 700; }
+.niez .nie { color: var(--bad); font-weight: 700; }
+
 /* ───────── W06: słownik w głowie ───────── */
 .polka { position: relative; height: 54px; border: 1px solid var(--border); border-radius: 8px; background: repeating-linear-gradient(90deg, var(--surface-2) 0 2px, var(--surface) 2px 6px); cursor: crosshair; margin: 10px 0 4px; touch-action: manipulation; }
 .polka .zakres { position: absolute; top: 0; bottom: 0; background: var(--accent-soft); border-left: 2px solid var(--accent); border-right: 2px solid var(--accent); pointer-events: none; }
@@ -300,7 +305,7 @@ table.otw td { font-family: var(--mono); }
     <a class="tile" href="#schemat"><span class="num">1</span><h3>Schemat i kod</h3><p>Algorytm NWD wykonywany krok po kroku: podświetlony blok schematu, linia kodu w Pythonie i wartości zmiennych. Trzy wersje: z odejmowaniem, z resztą i z błędnym przypisaniem.</p><div class="meta">ok. 8 min · slajdy od „Trzech zapisów” do „Częstych błędów przy przypisaniu”</div></a>
     <a class="tile" href="#testy"><span class="num">2</span><h3>Łowca błędów</h3><p>Cztery krótkie funkcje, każda z ukrytym błędem. Wpisuj dane testowe, aż test wykaże błąd. Ile testów potrzebujesz i które przypadki brzegowe trafiają?</p><div class="meta">ok. 10 min · slajdy „Specyfikacja”, „Znajdź błąd”, „Testowanie a dowód”</div></a>
     <a class="tile" href="#wzrost"><span class="num">3</span><h3>Wyścig wzrostu</h3><p>Ile operacji i ile czasu dla log n, n, n log n, n² i 2ⁿ? Do tego licznik kroków obu wersji NWD dla dowolnych liczb i najgorszy przypadek: liczby Fibonacciego.</p><div class="meta">ok. 7 min · slajdy od „Odejmowania czy reszty?” do „Mini-zadania: policz kroki”</div></a>
-    <a class="tile" href="#binarne"><span class="num">4</span><h3>Binarne krok po kroku</h3><p>Wyszukiwanie binarne na tablicy: lewy, prawy, środek i tabela śledzenia jak na slajdzie. Przełącz na wersje z błędem „o jeden” i znajdź dane, na których zawodzą.</p><div class="meta">ok. 8 min · slajdy od „Wyszukiwania binarnego: idei” do „Częstych błędów”</div></a>
+    <a class="tile" href="#binarne"><span class="num">4</span><h3>Binarne krok po kroku</h3><p>Wyszukiwanie binarne na tablicy: lewy, prawy, środek i tabela śledzenia jak na slajdzie. Niezmiennik pętli sprawdzany po każdym obiegu. Przełącz na wersje z błędem „o jeden” i znajdź dane, na których zawodzą.</p><div class="meta">ok. 8 min · slajdy od „Wyszukiwania binarnego: idei” do „Częstych błędów”</div></a>
     <a class="tile" href="#slownik"><span class="num">5</span><h3>Słownik w głowie</h3><p>Znajdź liczbę na półce z tysiącem posortowanych tomów, otwierając jak najmniej. Porównaj się z wyszukiwaniem binarnym i interpolacyjnym — i zobacz, kiedy ludzka intuicja zawodzi.</p><div class="meta">ok. 8 min · slajdy „Ile obiegów pętli?” i „Sortować czy nie sortować?”</div></a>
   </div>
 </section>
@@ -431,7 +436,7 @@ table.otw td { font-family: var(--mono); }
 <!-- ═══════════════════ 4. BINARNE KROK PO KROKU ═══════════════════ -->
 <section id="v-binarne" hidden>
   <h2>4. Binarne krok po kroku</h2>
-  <p class="lead">Kandydaci to przedział A[lewy..prawy]. Każdy obieg porównuje x ze środkiem i odrzuca połowę. Wersja poprawna i dwie wersje z typowym błędem „o jeden”.</p>
+  <p class="lead">Kandydaci to przedział A[lewy..prawy]. Każdy obieg porównuje x ze środkiem i odrzuca połowę. Poprawności pilnuje <em>niezmiennik pętli</em>: jeśli x jest na liście, to leży w A[lewy..prawy]. Obok wersji poprawnej są dwie z typowym błędem „o jeden”.</p>
 
   <div class="card">
     <div class="row"><span class="small muted" id="bsWarLab">Wersja</span>
@@ -467,6 +472,7 @@ table.otw td { font-family: var(--mono); }
           <button type="button" class="btn ghost small" id="bsReset">Od nowa</button>
         </div>
         <div id="bsStatus" class="alert" hidden role="status"></div>
+        <div class="niez" id="bsNiez" aria-live="polite"></div>
       </div>
       <div><pre class="kod" id="bsKod"></pre></div>
     </div>
@@ -480,9 +486,10 @@ table.otw td { font-family: var(--mono); }
       <li>Wersja „lewy = srodek”: znajdź najkrótszą listę, na której pętla nigdy się nie kończy. Dlaczego przedział przestaje się kurczyć?</li>
       <li>Wpisz listę <em>nieposortowaną</em> i szukaj elementu, który na niej jest. Czy algorytm zgłasza błąd? Kto odpowiada za warunek początkowy?</li>
       <li>Dla listy 31 elementów: jaka jest gwarancja liczby obiegów? Spróbuj znaleźć x, które ją osiąga.</li>
+      <li>Niezmiennik i warunek wyjścia razem dowodzą, że −1 jest poprawne. W wersji „lewy &lt; prawy” niezmiennik dalej jest prawdziwy. Dlaczego ten dowód się nie domyka? A w wersji „lewy = srodek”: czego brakuje do dowodu, że pętla się zatrzyma?</li>
     </ol>
   </div>
-  <p class="src">D. E. Knuth, <em>The Art of Computer Programming</em>, t. 3, §6.2.1; J. Bentley, <em>Programming Pearls</em>, 2nd ed., rozdz. 4; A. Bhargava, <em>Algorytmy. Ilustrowany przewodnik</em>, rozdz. 1.</p>
+  <p class="src">Slajd z niezmiennikiem pętli w algorytmie Euklidesa i slajd „Śledzenie: szukamy 52”. D. E. Knuth, <em>The Art of Computer Programming</em>, t. 3, §6.2.1; J. Bentley, <em>Programming Pearls</em>, 2nd ed., rozdz. 4; A. Bhargava, <em>Algorytmy. Ilustrowany przewodnik</em>, rozdz. 1.</p>
 </section>
 
 <!-- ═══════════════════ 5. SŁOWNIK W GŁOWIE ═══════════════════ -->
@@ -1114,7 +1121,7 @@ const Binarne = (() => {
     return true;
   }
   function reset() {
-    if (!wczytaj()) { S = null; $('#bsCells').replaceChildren(); return; }
+    if (!wczytaj()) { S = null; $('#bsCells').replaceChildren(); $('#bsNiez').replaceChildren(); return; }
     S = { lewy: 0, prawy: A.length - 1, srodek: null, obiegi: 0, koniec: false, wynik: null, petla: false, slad: [] };
     $('#bsGw').textContent = String(Math.floor(Math.log2(A.length)) + 1);
     const j = A.indexOf(x);
@@ -1129,16 +1136,39 @@ const Binarne = (() => {
     const m = Math.floor((S.lewy + S.prawy) / 2), v = A[m];
     S.srodek = m;
     const przed = [S.lewy, S.prawy];
+    S.kandPrzed = S.prawy - S.lewy + 1;
     let dec;
     if (v === x) { S.wynik = m; S.koniec = true; dec = `${v} = ${x} → zwróć ${m}`; }
     else if (v < x) { S.lewy = war === 'mid' ? m : m + 1; dec = `${v} < ${x} → lewy = ${S.lewy}`; }
     else { S.prawy = m - 1; dec = `${v} > ${x} → prawy = ${S.prawy}`; }
-    S.slad.push([S.obiegi, przed[0], przed[1], m, v, dec]);
+    S.slad.push([S.obiegi, przed[0], przed[1], m, v, dec, S.koniec && S.wynik >= 0 ? '—' : String(Math.max(0, S.prawy - S.lewy + 1)), niezm(S.lewy, S.prawy).ok ? '✓' : '✗']);
     if (!S.koniec && S.lewy === przed[0] && S.prawy === przed[1]) { S.koniec = true; S.petla = true; }
     rysuj();
   }
+  /* niezmiennik: jeśli x jest na liście, to leży w A[l..p] */
+  function niezm(l, p) {
+    const poz = A.map((v, i) => v === x ? i : -1).filter((i) => i >= 0);
+    return { jest: poz.length > 0, ok: !poz.length || poz.some((i) => i >= l && i <= p), poz };
+  }
+  function rysujNiez() {
+    const h = $('#bsNiez'), n = niezm(S.lewy, S.prawy), k = Math.max(0, S.prawy - S.lewy + 1);
+    const zd = el('p', {}, el('b', { text: 'Niezmiennik: ' }), 'jeśli x jest na liście, to leży w A[lewy..prawy] = A[' + S.lewy + '..' + S.prawy + ']. ',
+      n.ok ? el('span', { class: 'tak', text: n.jest ? '✓ spełniony' : '✓ spełniony (x nie ma na liście, więc zdanie jest prawdziwe automatycznie)' })
+           : el('span', { class: 'nie', text: `✗ naruszony: x jest na pozycji ${n.poz.join(', ')}, poza przedziałem` }));
+    const miara = el('p', {}, el('b', { text: 'Miara postępu: ' }), `kandydatów zostało prawy − lewy + 1 = ${k}${S.obiegi ? ` (było ${S.kandPrzed})` : ''}.`);
+    let wn = '';
+    if (!S.obiegi && !S.koniec) wn = 'Przed pierwszym obiegiem przedział to cała lista, więc niezmiennik jest spełniony od razu. Każdy obieg ma go zachować i zmniejszyć liczbę kandydatów.';
+    else if (S.koniec && S.petla) wn = 'Niezmiennik dalej jest prawdziwy, ale liczba kandydatów przestała maleć. Brakuje drugiej połowy dowodu: że pętla się kiedyś zatrzyma.';
+    else if (S.koniec && S.wynik >= 0) wn = 'Zwrócono srodek, bo A[srodek] = x: ten wynik jest poprawny wprost.';
+    else if (S.koniec && S.lewy <= S.prawy) wn = `Pętla skończyła się przy lewy = prawy = ${S.lewy}: został jeden kandydat, A[${S.lewy}] = ${A[S.lewy]}, którego nikt nie sprawdził. Niezmiennik jest prawdziwy, ale przedział nie jest pusty, więc wniosek „x nie ma na liście” z niego nie wynika.`;
+    else if (S.koniec && n.ok) wn = 'Pętla skończyła się, bo lewy > prawy, więc przedział jest pusty. Niezmiennik mówi, że jeśli x jest na liście, to leży w pustym przedziale. Zatem x na liście nie ma, a −1 jest poprawnym wynikiem.';
+    else if (S.koniec) wn = 'Niezmiennik został naruszony, bo lista nie jest posortowana (warunek początkowy). Z pustego przedziału nic już nie wynika.';
+    else if (!n.ok) wn = 'Odrzucona połowa zawierała x. Na liście posortowanej to niemożliwe; tu zawiódł warunek początkowy.';
+    h.replaceChildren(zd, miara, ...(wn ? [el('p', { class: 'small', text: wn })] : []));
+  }
   function rysuj() {
     if (!S) return;
+    rysujNiez();
     $('#bsCells').replaceChildren(...A.map((v, i) => {
       const poza = i < S.lewy || i > S.prawy;
       const zn = [i === S.lewy ? 'L' : '', i === S.prawy ? 'P' : ''].filter(Boolean).join(' ');
@@ -1155,7 +1185,7 @@ const Binarne = (() => {
       else if (j >= 0) { st.className = 'alert bad'; st.textContent = `Funkcja zwraca −1, a x = ${x} JEST na liście (pozycja ${j}). ${posort ? 'To błąd algorytmu.' : 'Lista nie była posortowana — wynik nic nie znaczy.'}`; }
       else { st.className = 'alert ok'; st.textContent = `Brak x = ${x} na liście: zwraca −1 po ${S.obiegi} ${S.obiegi === 1 ? 'obiegu' : 'obiegach'}. Liniowo: ${A.length} porównań.`; }
     } else st.hidden = true;
-    $('#bsSlad').replaceChildren(el('thead', {}, el('tr', {}, ...['obieg', 'lewy', 'prawy', 'srodek', 'A[srodek]', 'decyzja'].map((h) => el('th', { text: h })))),
+    $('#bsSlad').replaceChildren(el('thead', {}, el('tr', {}, ...['obieg', 'lewy', 'prawy', 'srodek', 'A[srodek]', 'decyzja', 'kandydaci po', 'niezmiennik'].map((h) => el('th', { text: h })))),
       el('tbody', {}, ...S.slad.map((r) => el('tr', {}, ...r.map((c, i) => el('td', { class: i === 5 ? 'm' : 'n', text: String(c) }))))));
     $('#bsKrok').disabled = S.koniec; $('#bsKoniec').disabled = S.koniec;
   }
