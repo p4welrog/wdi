@@ -96,6 +96,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .todo { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .todo h3 { color: var(--accent); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4em; }
 .todo ol { margin: 0; padding-left: 1.2em; }
@@ -413,10 +416,22 @@ ol.wypr .tm { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Uruchom „Dodawanie 1” na <span class="mono">1</span>, <span class="mono">11</span>, <span class="mono">111</span>. Ile kroków potrzeba dla słowa z <em>n</em> samych jedynek? A dla <span class="mono">1000</span>?</li>
-      <li>W „Dodawaniu 1” ustaw w komórce (B, _) „—”. Na jakich wejściach maszyna nadal działa dobrze? Jak się zatrzymuje na pozostałych?</li>
-      <li>Pracowity bóbr zostawia 6 jedynek po 13 krokach, a rekord kroków dla 3 stanów to 21. Dlaczego rekordy jedynek i kroków to dwie różne rzeczy?</li>
-      <li>Ustaw limit 50 i zbuduj maszynę, która nigdy się nie zatrzymuje. Czy po samym napisie „limit wyczerpany” odróżnisz ją od maszyny, która zatrzymałaby się w kroku 51? Co to ma wspólnego z problemem stopu?</li>
+      <li>Uruchom „Dodawanie 1” na <span class="mono">1</span>, <span class="mono">11</span>, <span class="mono">111</span>. Ile kroków potrzeba dla słowa z <em>n</em> samych jedynek? A dla <span class="mono">1000</span>?
+        <details class="odp"><summary>Wskazówka</summary><div>Policz osobno kroki stanu A (droga w prawo) i kroki stanu B (droga w lewo z przeniesieniem).</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla słowa z n jedynek stan A idzie n kroków w prawo i jeden krok na symbol pusty, a stan B zamienia n jedynek na zera i jednym krokiem zapisuje 1: razem 2n + 2 kroki (4, 6, 8 dla 1, 11, 111). Dla 1000 wystarczy 6 kroków, bo ostatnia cyfra to 0 i nie ma przeniesienia. Liczba kroków zależy od tego, ile jedynek jest na końcu słowa.</div></details>
+      </li>
+      <li>W „Dodawaniu 1” ustaw w komórce (B, _) „—”. Na jakich wejściach maszyna nadal działa dobrze? Jak się zatrzymuje na pozostałych?
+        <details class="odp"><summary>Wskazówka</summary><div>Kiedy stan B w ogóle dochodzi do symbolu pustego na lewym końcu?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Maszyna nadal działa dobrze na każdym słowie, które zawiera choć jedno 0, bo stan B zatrzymuje się na tym zerze. Na słowach z samych jedynek (1, 11, 111) B przechodzi przez wszystkie jedynki na pusty symbol i nie znajduje reguły. Maszyna zatrzymuje się wtedy poza stanem końcowym, z samymi zerami na taśmie.</div></details>
+      </li>
+      <li>Pracowity bóbr zostawia 6 jedynek po 13 krokach, a rekord kroków dla 3 stanów to 21. Dlaczego rekordy jedynek i kroków to dwie różne rzeczy?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy maszyna, która długo pracuje, musi przez cały czas dopisywać jedynki?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To dwie różne miary: Σ liczy jedynki na końcu, a S liczy kroki. Maszyna może pracować długo, wielokrotnie przechodząc po taśmie, kasując i dopisując jedynki, a na końcu zostawić ich mniej. Rekordziści tych dwóch konkursów nie muszą być tą samą maszyną.</div></details>
+      </li>
+      <li>Ustaw limit 50 i zbuduj maszynę, która nigdy się nie zatrzymuje. Czy po samym napisie „limit wyczerpany” odróżnisz ją od maszyny, która zatrzymałaby się w kroku 51? Co to ma wspólnego z problemem stopu?
+        <details class="odp"><summary>Wskazówka</summary><div>Co dokładnie wiesz po 50 krokach bez zatrzymania?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie odróżnisz. Napis „limit wyczerpany” mówi tylko, że maszyna jeszcze się nie zatrzymała, a nie, że nie zatrzyma się nigdy. Każdy skończony limit przekroczy jakaś maszyna, która zatrzymuje się później. Problem stopu mówi, że nie ma ogólnej metody rozstrzygania tego dla każdej maszyny.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. M. Turing, <em>On Computable Numbers, with an Application to the Entscheidungsproblem</em>, Proc. London Math. Soc. s2-42 (1936); R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 5; T. Radó, Bell System Tech. J. 41(3), 1962 (pracowity bóbr).</p>
@@ -497,10 +512,22 @@ ol.wypr .tm { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Dla 2 stanów jedna maszyna może mieć oba rekordy (4 jedynki, 6 kroków). Dla 3 stanów maszyna ze slajdu zostawia rekordowe 6 jedynek w 13 krokach, a rekord kroków to 21. Znajdź maszynę 3-stanową, która robi więcej niż 13 kroków. Ile zostawia jedynek?</li>
-      <li>Wylosuj kilkanaście maszyn. Jaka ich część się zatrzymuje? Zgadza się to z wynikiem przeszukania wszystkich 2-stanowych?</li>
-      <li>Przeszukanie oznacza część maszyn jako „nie zatrzymały się w limicie”. Skąd wiemy, że żadna z nich nie zatrzyma się nigdy? (Wskazówka: S(2) = 6.) Dlaczego ten sam argument nie działa dla dowolnego n?</li>
-      <li>Maszyn 3-stanowych jest 16⁶ ≈ 16,8 mln, a 5-stanowych 24¹⁰ ≈ 6,3 · 10¹³ (przed pominięciem symetrii). Ustalenie S(5) zajęło ponad 60 lat. Co było trudniejsze: liczba maszyn czy pojedyncze maszyny, o których nie wiadomo, czy kiedyś się zatrzymają?</li>
+      <li>Dla 2 stanów jedna maszyna może mieć oba rekordy (4 jedynki, 6 kroków). Dla 3 stanów maszyna ze slajdu zostawia rekordowe 6 jedynek w 13 krokach, a rekord kroków to 21. Znajdź maszynę 3-stanową, która robi więcej niż 13 kroków. Ile zostawia jedynek?
+        <details class="odp"><summary>Wskazówka</summary><div>Wczytaj kod 1RB1RZ_0RC1RB_1LC1LA i zobacz wynik.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Na przykład maszyna 1RB1RZ_0RC1RB_1LC1LA robi 14 kroków i zostawia 6 jedynek. Rekord kroków to 21, a więcej niż 6 jedynek nie zostawi żadna maszyna 3-stanowa, więc dłuższa praca nie daje więcej jedynek. Najwięcej kroków i najwięcej jedynek to dwa osobne rekordy.</div></details>
+      </li>
+      <li>Wylosuj kilkanaście maszyn. Jaka ich część się zatrzymuje? Zgadza się to z wynikiem przeszukania wszystkich 2-stanowych?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj swoją próbkę z wynikiem „Uruchom wszystkie”.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Ze wszystkich 20 736 maszyn 2-stanowych zatrzymuje się 9 784, czyli ok. 47%. Losując kilkanaście maszyn, dostaniesz podobny odsetek, ale z dużym rozrzutem, bo próbka jest mała.</div></details>
+      </li>
+      <li>Przeszukanie oznacza część maszyn jako „nie zatrzymały się w limicie”. Skąd wiemy, że żadna z nich nie zatrzyma się nigdy? (Wskazówka: S(2) = 6.) Dlaczego ten sam argument nie działa dla dowolnego n?
+        <details class="odp"><summary>Wskazówka</summary><div>S(2) = 6 to największa liczba kroków, jaką robi zatrzymująca się maszyna 2-stanowa.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Każda maszyna 2-stanowa, która się zatrzymuje, robi najwyżej S(2) = 6 kroków. Jeśli po 6 krokach nadal działa, nie zatrzyma się nigdy. Dla dowolnego n ten argument zawodzi, bo funkcja S(n) jest nieobliczalna: nie ma programu, który poda tę granicę dla każdego n.</div></details>
+      </li>
+      <li>Maszyn 3-stanowych jest 16⁶ ≈ 16,8 mln, a 5-stanowych 24¹⁰ ≈ 6,3 · 10¹³ (przed pominięciem symetrii). Ustalenie S(5) zajęło ponad 60 lat. Co było trudniejsze: liczba maszyn czy pojedyncze maszyny, o których nie wiadomo, czy kiedyś się zatrzymają?
+        <details class="odp"><summary>Wskazówka</summary><div>Komputer przeliczy miliardy maszyn. Co zrobić z maszyną, która po miliardzie kroków dalej pracuje?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Trudniejsze były pojedyncze maszyny. Liczbę maszyn zmniejsza symetria i automatyczne metody, które dla większości maszyn dowodzą, że się nie zatrzymają. Zostały jednak maszyny działające tak nieregularnie, że dla każdej trzeba było osobnego dowodu. Przypominały otwarte problemy matematyczne.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">T. Radó, <em>On Non-Computable Functions</em>, Bell System Tech. J. 41(3), 1962; S. Lin, T. Radó, J. ACM 12(2), 1965 (n = 3); The bbchallenge Collaboration, <em>Determination of the fifth Busy Beaver value</em>, arXiv:2509.12337, 2025 (zapis kodów maszyn).</p>
@@ -549,10 +576,22 @@ ol.wypr .tm { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przy których programach odpowiadałeś najszybciej, a przy których się myliłeś? Czy szybka odpowiedź była też częściej trafna?</li>
-      <li>Program z <span class="mono">0.1</span> wygląda niewinnie. Jaka „heurystyka” podsuwa odpowiedź „zatrzyma się” i dlaczego zawodzi? (Wróć do wykładu 3.)</li>
-      <li>Odliczanie od 2⁶⁴ na pewno się zatrzyma, a w praktyce nikt się tego nie doczeka. Czym różni się „nie zatrzymał się w 10 sekund” od „nigdy się nie zatrzyma”?</li>
-      <li>Dwa ostatnie programy zatrzymają się wtedy i tylko wtedy, gdy znane hipotezy matematyczne są <em>fałszywe</em>. Co to mówi o programie, który miałby rozstrzygać stop <em>każdego</em> programu?</li>
+      <li>Przy których programach odpowiadałeś najszybciej, a przy których się myliłeś? Czy szybka odpowiedź była też częściej trafna?
+        <details class="odp"><summary>Wskazówka</summary><div>Przejrzyj swoje wyniki: przy których programach czas był krótki, a przy których odpowiedź była zła?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Twojego wyniku. Zwykle przy prostych pętlach odpowiedź przychodzi szybko i jest trafna, a błędy zdarzają się tam, gdzie program wygląda znajomo, ale ma haczyk (ułamki, ogromne liczby). Szybka odpowiedź oznacza wtedy, że zadziałała heurystyka, a nie że odpowiedź jest pewna.</div></details>
+      </li>
+      <li>Program z <span class="mono">0.1</span> wygląda niewinnie. Jaka „heurystyka” podsuwa odpowiedź „zatrzyma się” i dlaczego zawodzi? (Wróć do wykładu 3.)
+        <details class="odp"><summary>Wskazówka</summary><div>Czy 0.1 da się zapisać dokładnie w systemie dwójkowym? (Rentgen IEEE 754, W3)</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Podpowiada „dodajemy 0.1 dziesięć razy, więc dojdziemy do 1.0”. Jednak 0.1 nie ma dokładnego zapisu dwójkowego, więc suma wychodzi minimalnie różna od 1.0 i przeskakuje ją. Warunek x != 1.0 jest zawsze prawdziwy, więc program nigdy się nie zatrzyma. Bezpieczniej byłoby porównać x &lt; 1.0.</div></details>
+      </li>
+      <li>Odliczanie od 2⁶⁴ na pewno się zatrzyma, a w praktyce nikt się tego nie doczeka. Czym różni się „nie zatrzymał się w 10 sekund” od „nigdy się nie zatrzyma”?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile lat trwa 2⁶⁴ kroków przy miliardzie kroków na sekundę?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>2⁶⁴ ≈ 1,8 · 10¹⁹ kroków przy 10⁹ krokach na sekundę to ok. 585 lat. Program na pewno się zatrzyma, tylko bardzo późno. „Nie zatrzymał się w 10 sekund” to obserwacja, a „nigdy się nie zatrzyma” wymaga dowodu.</div></details>
+      </li>
+      <li>Dwa ostatnie programy zatrzymają się wtedy i tylko wtedy, gdy znane hipotezy matematyczne są <em>fałszywe</em>. Co to mówi o programie, który miałby rozstrzygać stop <em>każdego</em> programu?
+        <details class="odp"><summary>Wskazówka</summary><div>Co by się stało z hipotezą Goldbacha, gdyby istniał taki program?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Taki program rozstrzygałby otwarte problemy matematyczne: wystarczyłoby zapytać go o te dwa programy. To pokazuje, jak potężny byłby uniwersalny detektor stopu. Twierdzenie Turinga mówi, że on nie istnieje, a otwarte problemy to tylko ilustracja, nie dowód.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. M. Turing, Proc. London Math. Soc. s2-42 (1936) — nierozstrzygalność problemu stopu; T. Oliveira e Silva, S. Herzog, S. Pardi, <em>Empirical verification of the even Goldbach conjecture and computation of prime gaps up to 4·10¹⁸</em>, Math. Comp. 83 (2014), s. 2033–2060; P. Ochem, M. Rao, <em>Odd perfect numbers are greater than 10¹⁵⁰⁰</em>, Math. Comp. 81 (2012), s. 1869–1877.</p>
@@ -605,10 +644,22 @@ ol.wypr .tm { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Każdy z czterech detektorów myli się już na zwykłych programach. Czy da się zbudować taki, który na wszystkich dziesięciu odpowie dobrze? (Tak — jak?) Dlaczego to nie przeczy twierdzeniu Turinga?</li>
-      <li>Ustaw duży limit T. Dlaczego detektor z limitem i tak myli się na swojej przekorze? Co musi zrobić, żeby zasymulować <span class="mono">przekora(przekora)</span>?</li>
-      <li>Po kilku łatkach detektor zna już kilka przekor. Dlaczego żadna skończona liczba łatek nie wystarczy?</li>
-      <li>Rozumowanie z kroku 3 nie korzystało z tego, <em>jak</em> działa detektor — tylko z tego, że zawsze kończy pracę i odpowiada „tak” albo „nie”. Dlaczego to wystarcza, by udowodnić, że poprawny detektor nie istnieje?</li>
+      <li>Każdy z czterech detektorów myli się już na zwykłych programach. Czy da się zbudować taki, który na wszystkich dziesięciu odpowie dobrze? (Tak — jak?) Dlaczego to nie przeczy twierdzeniu Turinga?
+        <details class="odp"><summary>Wskazówka</summary><div>Detektor nie musi niczego analizować, może po prostu „znać” odpowiedzi.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Tak: detektor, który ma wpisane prawidłowe odpowiedzi dla tych dziesięciu programów, odpowie dobrze na wszystkie. To nie przeczy Turingowi, bo twierdzenie mówi o detektorze poprawnym dla każdego programu, a skończony zbiór da się zawsze obsłużyć tabelką.</div></details>
+      </li>
+      <li>Ustaw duży limit T. Dlaczego detektor z limitem i tak myli się na swojej przekorze? Co musi zrobić, żeby zasymulować <span class="mono">przekora(przekora)</span>?
+        <details class="odp"><summary>Wskazówka</summary><div>Żeby przewidzieć przekora(przekora), detektor musi zasymulować program, który sam uruchamia ten detektor.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przekora uruchamia detektor, a detektor symuluje przekorę, która znowu uruchamia detektor. Pełna symulacja trwa więc dłużej niż własny limit detektora, niezależnie od T. Detektor przerywa ją i odpowiada „nie zatrzyma się”, a wtedy przekora z założenia się zatrzymuje. Żeby trafić, musiałby zasymulować dłuższy przebieg niż sam pozwala.</div></details>
+      </li>
+      <li>Po kilku łatkach detektor zna już kilka przekor. Dlaczego żadna skończona liczba łatek nie wystarczy?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy detektor z łatką to ten sam program co bez łatki?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Każda łatka tworzy nowy program, a dla każdego programu-detektora da się zbudować jego własną przekorę. Po k łatkach detektor zna k starych przekor, ale nie zna swojej nowej. Łańcuch nigdy się nie kończy, więc żadna skończona liczba łatek nie wystarczy.</div></details>
+      </li>
+      <li>Rozumowanie z kroku 3 nie korzystało z tego, <em>jak</em> działa detektor — tylko z tego, że zawsze kończy pracę i odpowiada „tak” albo „nie”. Dlaczego to wystarcza, by udowodnić, że poprawny detektor nie istnieje?
+        <details class="odp"><summary>Wskazówka</summary><div>Rozumowanie działa dla dowolnego D. Co z tego wynika dla detektora, który miałby być poprawny?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Rozumowanie zakłada tylko, że D zawsze kończy pracę i odpowiada „tak” albo „nie”. Dla każdego takiego D przekora pokazuje program, na którym D się myli. Skoro dotyczy to każdego D, poprawny detektor nie istnieje. To dowód nie wprost: nie trzeba wiedzieć, jak D działa w środku.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. M. Turing, <em>On Computable Numbers, with an Application to the Entscheidungsproblem</em>, Proc. London Math. Soc. s2-42 (1936), §8; wersja z programami: M. Sipser, <em>Introduction to the Theory of Computation</em>, 3rd ed., rozdz. 4.2. Na wykładzie: slajd „Problem stopu”.</p>
@@ -657,10 +708,22 @@ ol.wypr .tm { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Policz 2↑2, 2↑↑2, 2↑↑↑2 i 2↑↑↑↑2. Dlaczego dla a = b = 2 wynik jest zawsze ten sam?</li>
-      <li>W Pythonie <span class="mono">2 ** 3 ** 2</span> daje 512, a nie 64. Dlaczego taka kolejność jest wygodna dla wież potęg?</li>
-      <li>2↑↑5 Python liczy w ułamku sekundy, a 2↑↑6 nie zmieści się w pamięci żadnego komputera. Ile razy większy jest wykładnik w 2↑↑6 niż w 2↑↑5?</li>
-      <li>Wiadomo, że pracowity bóbr z 6 stanami robi więcej niż 2↑↑↑5 kroków. Co to mówi o próbie ustalenia S(6) przez zwykłe uruchomienie maszyn?</li>
+      <li>Policz 2↑2, 2↑↑2, 2↑↑↑2 i 2↑↑↑↑2. Dlaczego dla a = b = 2 wynik jest zawsze ten sam?
+        <details class="odp"><summary>Wskazówka</summary><div>Zapisz a↑↑2 i a↑↑↑2 według definicji: dwa egzemplarze a połączone działaniem o poziom niżej.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wszystkie cztery wyniki to 4. Każda wersja z b = 2 to dwa egzemplarze a połączone działaniem o poziom niżej: 2↑↑2 = 2↑2, 2↑↑↑2 = 2↑↑2 i tak dalej. Na dole zawsze zostaje 2↑2 = 2 · 2 = 4.</div></details>
+      </li>
+      <li>W Pythonie <span class="mono">2 ** 3 ** 2</span> daje 512, a nie 64. Dlaczego taka kolejność jest wygodna dla wież potęg?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj (2³)² i 2^(3²).</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Python liczy potęgi od prawej: 2 ** 3 ** 2 = 2 ** 9 = 512. Liczenie od lewej dałoby (2³)² = 2⁶ = 64, a to można zapisać prościej jako 2^(3 · 2). Wieża liczona od prawej rośnie znacznie szybciej i właśnie taką kolejność stosuje notacja Knutha.</div></details>
+      </li>
+      <li>2↑↑5 Python liczy w ułamku sekundy, a 2↑↑6 nie zmieści się w pamięci żadnego komputera. Ile razy większy jest wykładnik w 2↑↑6 niż w 2↑↑5?
+        <details class="odp"><summary>Wskazówka</summary><div>2↑↑5 = 2^(2↑↑4) i 2↑↑6 = 2^(2↑↑5). Jakie są wykładniki?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wykładnik w 2↑↑5 to 2↑↑4 = 65 536, a w 2↑↑6 to 2↑↑5 = 2⁶⁵⁵³⁶. Ten drugi jest 2⁶⁵⁵³⁶ / 65 536 = 2⁶⁵⁵²⁰ razy większy. 2↑↑6 ma tyle cyfr, że ich zapis nie zmieściłby się w żadnym komputerze.</div></details>
+      </li>
+      <li>Wiadomo, że pracowity bóbr z 6 stanami robi więcej niż 2↑↑↑5 kroków. Co to mówi o próbie ustalenia S(6) przez zwykłe uruchomienie maszyn?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy maszynę robiącą 2↑↑↑5 kroków da się uruchomić do końca?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie da się. Liczba kroków jest tak wielka, że żaden komputer jej nie przejdzie, a jedna maszyna może pracować jeszcze dłużej. S(6) można ustalić tylko dowodami o zachowaniu maszyn, a nie ich uruchamianiem. Być może nigdy go nie poznamy.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">D. E. Knuth, <em>Mathematics and Computer Science: Coping with Finiteness</em>, Science 194 (1976), s. 1235–1242; S(6) &gt; 2↑↑↑5: rekord z czerwca 2025 r., wiki.bbchallenge.org/wiki/BB(6) (dostęp 24.10.2026).</p>
@@ -748,10 +811,22 @@ ol.wypr .tm { font-family: var(--mono); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>W części A wybierz gramatykę zdań i sprawdź „Psa Onufry karmi .”. Dlaczego odpowiedź „nie należy” nie znaczy, że zdanie jest niepoprawne po polsku?</li>
-      <li>Gramatyka aⁿbⁿ ma tylko dwie produkcje, a język jest nieskończony. Która produkcja za to odpowiada? Co by się stało bez produkcji S → a b?</li>
-      <li>W części B automat dla a⁺b⁺c⁺ ma kilka stanów niezależnie od długości słowa. Licznik dla aⁿbⁿ rośnie. Co by się stało, gdyby licznik mógł liczyć tylko do 100?</li>
-      <li>Język {aⁿbⁿ : n ≤ 1000} jest regularny, a {aⁿbⁿ : n ≥ 1} nie. Jak to możliwe, skoro pierwszy jest „prawie taki sam”?</li>
+      <li>W części A wybierz gramatykę zdań i sprawdź „Psa Onufry karmi .”. Dlaczego odpowiedź „nie należy” nie znaczy, że zdanie jest niepoprawne po polsku?
+        <details class="odp"><summary>Wskazówka</summary><div>Gramatyka ze slajdu ma tylko kilka produkcji. Czy opisuje cały język polski?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Gramatyka generuje tylko zdania w kolejności podmiot–orzeczenie–dopełnienie z kilku słów. „Psa Onufry karmi.” jest po polsku poprawne (szyk w polskim jest swobodny), ale ta gramatyka go nie wytwarza. „Nie należy do L(G)” znaczy tylko „nie należy do języka tej gramatyki”, która jest małym modelem fragmentu polszczyzny.</div></details>
+      </li>
+      <li>Gramatyka aⁿbⁿ ma tylko dwie produkcje, a język jest nieskończony. Która produkcja za to odpowiada? Co by się stało bez produkcji S → a b?
+        <details class="odp"><summary>Wskazówka</summary><div>Która produkcja może być użyta dowolnie wiele razy, a która kończy wyprowadzenie?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Za nieskończoność odpowiada produkcja rekurencyjna S → a S b: można jej użyć dowolnie wiele razy, za każdym razem dokładając a z lewej i b z prawej. Bez S → a b wyprowadzenie nigdy by się nie skończyło i język byłby pusty.</div></details>
+      </li>
+      <li>W części B automat dla a⁺b⁺c⁺ ma kilka stanów niezależnie od długości słowa. Licznik dla aⁿbⁿ rośnie. Co by się stało, gdyby licznik mógł liczyć tylko do 100?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile różnych stanów ma licznik, który liczy tylko do 100?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Licznik ograniczony do 100 ma skończenie wiele stanów, więc jest po prostu automatem skończonym. Rozpozna aⁿbⁿ tylko dla n ≤ 100, a dla dłuższych słów się pomyli. Nieograniczony licznik to właśnie ta pamięć, której automat skończony nie ma.</div></details>
+      </li>
+      <li>Język {aⁿbⁿ : n ≤ 1000} jest regularny, a {aⁿbⁿ : n ≥ 1} nie. Jak to możliwe, skoro pierwszy jest „prawie taki sam”?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile słów ma pierwszy język? Czy automat może mieć osobny stan dla każdego n ≤ 1000?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Pierwszy język jest skończony (1000 słów), a każdy język skończony jest regularny: automat może mieć osobne stany dla każdej liczby a od 0 do 1000. Drugi jest nieskończony i wymaga nieograniczonego liczenia, więc nie da się go rozpoznać skończoną liczbą stanów. „Prawie taki sam” to tu ogromna różnica.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">N. Chomsky, <em>Three Models for the Description of Language</em>, IRE Trans. Inf. Theory 2(3), 1956; M. Sipser, <em>Introduction to the Theory of Computation</em>, rozdz. 1–2 (automaty skończone, gramatyki bezkontekstowe, lemat o pompowaniu).</p>
