@@ -281,6 +281,25 @@ table.prlist td.a { color: var(--muted); font-family: var(--mono); font-size: .8
 .card.most { border-left: 4px solid var(--good); }
 .card.most h3 { color: var(--good); }
 
+/* ───────── W05: piętra abstrakcji ───────── */
+.brgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 16px; align-items: start; }
+@media (max-width: 700px) { .brgrid { grid-template-columns: minmax(0, 1fr); } }
+.b1 { color: var(--good); font-weight: 700; }
+.b0 { color: var(--muted); }
+table.brtp { max-width: 320px; }
+table.t tr.biez td { background: var(--hl); color: var(--hl-ink); font-weight: 700; }
+table.t tr.petla td:first-child { color: var(--accent); }
+svg.brsch { display: block; width: 100%; max-width: 290px; height: auto; margin: 0 auto; }
+svg.brsch .dr { stroke: var(--muted); stroke-width: 2.5; fill: none; }
+svg.brsch .noz { stroke: var(--text); stroke-width: 3; stroke-linecap: round; }
+svg.brsch .plyn { stroke: var(--accent); }
+svg.brsch .rez { fill: var(--surface-2); stroke: var(--muted); stroke-width: 2; }
+svg.brsch .wezel { fill: var(--text); }
+svg.brsch .lab { fill: var(--text); font: 600 14px var(--font); text-anchor: middle; }
+svg.brsch .lab.st { text-anchor: start; }
+svg.brsch .lab.en { text-anchor: end; font-family: var(--mono); }
+svg.brsch .lab.sm { font-weight: 400; font-size: 12px; fill: var(--muted); }
+
 /* ───────── Wspólne: sygnał przewijania w bok, ograniczenie ruchu ───────── */
 [data-przewin="p"] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
 [data-przewin="l"] { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); }
@@ -304,6 +323,7 @@ table.prlist td.a { color: var(--muted); font-family: var(--mono); font-size: .8
     <a href="#rentgen">2. Rentgen słowa</a>
     <a href="#operand">3. Skąd operand?</a>
     <a href="#procesor">4. Bądź procesorem</a>
+    <a href="#bramki">5. Piętra abstrakcji</a>
   </nav>
 </header>
 
@@ -318,7 +338,8 @@ table.prlist td.a { color: var(--muted); font-family: var(--mono); font-size: .8
     <a class="tile" href="#rentgen"><span class="num">2</span><h3>Rentgen słowa</h3><p>Szesnaście bitów i pięć odczytów naraz: liczba bez znaku, liczba w U2, znak, wartość logiczna i rozkaz PMC. Klikaj bity, wpisuj liczby albo rozkazy i rozwiąż zagadki.</p><div class="meta">ok. 10 min · slajdy „Liczba czy rozkaz?”, „Słowo jako dane” i „Słowo jako rozkaz”</div></a>
     <a class="tile" href="#operand"><span class="num">3</span><h3>Skąd operand?</h3><p>Seria 10 pytań z losowym stanem pamięci: co trafi do OR w trybie $, @, &amp; i +, dokąd zapisze STORE, dokąd skoczy JUMP. Po każdej odpowiedzi — droga przez pamięć i nazwa popełnionej pomyłki.</p><div class="meta">ok. 10 min · slajdy „Tryby adresowania” i „Śledzenie wykonania”</div></a>
     <a class="tile" href="#procesor"><span class="num">4</span><h3>Bądź procesorem</h3><p>Osiem krótkich programów PMC do wykonania w głowie, bez kartki — z coraz większą liczbą wartości do śledzenia. Czas, trafność i (na wykładzie) wyniki całej sali: pamięć robocza kontra rejestry.</p><div class="meta">ok. 15 min · slajdy „Cykl pracy PMC”, „Mini-zadanie: pętla w PMC” i „Trzy poziomy opisu”</div></a>
-    <a class="tile" href="https://nandgame.com/" target="_blank" rel="noopener"><span class="num">5</span><h3>Wszystko z NAND ↗</h3><p>Zewnętrzna gra (po angielsku): zbuduj komputer od zera, zaczynając od samej bramki NAND — przez NOT, AND, OR, sumator i przerzutnik aż do procesora. Najpierw kilka pierwszych poziomów, resztę w domu.</p><div class="meta">nandgame.com · slajdy „Piętra abstrakcji”, „Tranzystor i bramka NAND”, „Pamięć jednego bitu i rejestr”</div></a>
+    <a class="tile" href="#bramki"><span class="num">5</span><h3>Piętra abstrakcji</h3><p>Od tranzystora-przełącznika do 4-bitowego rejestru: bramka NAND, z niej NOT, AND, OR i XOR, przerzutnik pamiętający jeden bit i rejestr zapisywany taktem zegara. Na końcu tabela: ile tranzystorów na każdym piętrze.</p><div class="meta">ok. 10 min · slajdy „Piętra abstrakcji”, „Tranzystor i bramka NAND”, „Pamięć jednego bitu i rejestr”</div></a>
+    <a class="tile" href="https://nandgame.com/" target="_blank" rel="noopener"><span class="num">6</span><h3>Wszystko z NAND ↗</h3><p>Zewnętrzna gra (po angielsku): zbuduj komputer od zera, zaczynając od samej bramki NAND — przez NOT, AND, OR, sumator i przerzutnik aż do procesora. Najpierw kilka pierwszych poziomów, resztę w domu.</p><div class="meta">nandgame.com · slajdy „Piętra abstrakcji”, „Tranzystor i bramka NAND”, „Pamięć jednego bitu i rejestr”</div></a>
   </div>
 </section>
 
@@ -598,6 +619,108 @@ table.prlist td.a { color: var(--muted); font-family: var(--mono); font-size: .8
     </ol>
   </div>
   <p class="src">A. D. Baddeley, G. Hitch, <em>Working memory</em>, w: G. H. Bower (red.), Psychology of Learning and Motivation 8 (1974), s. 47–89; N. Cowan, <em>The magical number 4 in short-term memory</em>, Behav. Brain Sci. 24 (2001), s. 87–114; G. A. Miller, Psychol. Rev. 63 (1956), s. 81–97; R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (PMC).</p>
+</section>
+
+<!-- ═══════════════════ 5. PIĘTRA ABSTRAKCJI ═══════════════════ -->
+<section id="v-bramki" hidden>
+  <h2>5. Piętra abstrakcji: od przełącznika do rejestru</h2>
+  <p class="lead">Rejestr procesora PMC przechowuje słowo. Z czego jest zbudowany? Zejdź piętro po piętrze: tranzystor to przełącznik, z dwóch przełączników powstaje bramka NAND, z bramek NAND — wszystkie inne bramki, przerzutnik pamiętający jeden bit i wreszcie rejestr. Na każdym piętrze można zapomnieć o szczegółach niższego.</p>
+
+  <div class="card">
+    <h3>Piętro 1: tranzystor jako przełącznik → bramka NAND</h3>
+    <p class="small">Tranzystor działa jak przełącznik sterowany napięciem: na wejściu 1 przewodzi (zamknięty), na 0 — nie (otwarty). Dwa przełączniki połączone szeregowo zwierają wyjście do masy (0) tylko wtedy, gdy <em>oba</em> są zamknięte. W każdym innym przypadku wyjście ma napięcie zasilania (1). To właśnie NAND: „nie (A i B)”.</p>
+    <div class="brgrid">
+      <div>
+        <div class="bits" id="brTrWej" role="group" aria-label="Wejścia bramki NAND"></div>
+        <div class="stats"><div class="stat"><div class="k">wyjście NAND</div><div class="v mono" id="brTrWyj" aria-live="polite">1</div></div></div>
+        <p class="small muted" id="brTrOpis"></p>
+      </div>
+      <svg class="brsch" id="brTrSvg" viewBox="0 0 250 250" role="img" aria-label="Schemat: zasilanie, wyjście i dwa przełączniki A, B połączone szeregowo z masą"></svg>
+    </div>
+    <p class="small muted">Uproszczenie: w technologii CMOS bramka NAND ma 4 tranzystory (dwa szeregowo do masy, jak tu, i dwa równolegle do zasilania zamiast rezystora).</p>
+  </div>
+
+  <div class="card">
+    <h3>Piętro 2: każda bramka z samych NAND</h3>
+    <div class="seg" id="brBramka" role="group" aria-label="Bramka do zbudowania">
+      <button type="button" data-g="NOT" aria-pressed="true">NOT</button>
+      <button type="button" data-g="AND" aria-pressed="false">AND</button>
+      <button type="button" data-g="OR" aria-pressed="false">OR</button>
+      <button type="button" data-g="XOR" aria-pressed="false">XOR</button>
+    </div>
+    <p class="small" id="brBrWzor" style="margin-top: 10px"></p>
+    <div class="brgrid">
+      <div>
+        <div class="bits" id="brBrWej" role="group" aria-label="Wejścia bramki"></div>
+        <div class="stats">
+          <div class="stat"><div class="k">wyjście</div><div class="v mono" id="brBrWyj" aria-live="polite"></div></div>
+          <div class="stat"><div class="k">bramek NAND</div><div class="v" id="brBrIle"></div></div>
+          <div class="stat"><div class="k">tranzystorów (CMOS)</div><div class="v" id="brBrTr"></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="small muted">Połączenia (każdy wiersz to jedna bramka NAND)</div>
+        <div class="scroll-x"><table class="t" id="brBrSiec"></table></div>
+      </div>
+    </div>
+    <div class="small muted" style="margin-top: 10px">Tablica prawdy (bieżący wiersz wyróżniony)</div>
+    <div class="scroll-x"><table class="t brtp" id="brBrTp"></table></div>
+  </div>
+
+  <div class="card">
+    <h3>Piętro 3: przerzutnik — pamięć jednego bitu</h3>
+    <p class="small">Zatrzask D z pięciu bramek NAND. Dwie ostatnie bramki są połączone <em>w pętlę</em>: wyjście każdej wchodzi do drugiej. To sprzężenie zwrotne pozwala układowi trzymać stan. Gdy zegar Z = 1, wyjście Q kopiuje wejście D. Gdy Z = 0, Q pamięta ostatnią wartość, choćby D się zmieniało.</p>
+    <div class="brgrid">
+      <div>
+        <div class="bits" id="brPrWej" role="group" aria-label="Wejścia przerzutnika"></div>
+        <div class="stats">
+          <div class="stat"><div class="k">Q (zapamiętany bit)</div><div class="v mono" id="brPrQ">0</div></div>
+          <div class="stat"><div class="k">Q̄</div><div class="v mono" id="brPrNQ">1</div></div>
+        </div>
+        <p class="small" id="brPrOpis" aria-live="polite"></p>
+        <button type="button" class="btn small ghost" id="brPrReset">Od nowa</button>
+      </div>
+      <div>
+        <div class="small muted">Połączenia</div>
+        <div class="scroll-x"><table class="t" id="brPrSiec"></table></div>
+      </div>
+    </div>
+    <div class="small muted" style="margin-top: 10px">Historia zmian</div>
+    <div class="scroll-x"><table class="t" id="brPrHist"></table></div>
+  </div>
+
+  <div class="card">
+    <h3>Piętro 4: rejestr — n przerzutników ze wspólnym zegarem</h3>
+    <p class="small">Rejestr 4-bitowy to cztery przerzutniki. Każdy ma własne wejście D, ale zegar jest wspólny: jeden impuls zapisuje wszystkie bity naraz. Ustaw bity na wejściu, kliknij „Impuls zegara” i zmieniaj wejścia dalej. Zawartość rejestru zmieni się dopiero przy następnym impulsie.</p>
+    <div class="small muted">wejścia D₃ D₂ D₁ D₀</div>
+    <div class="bits" id="brRgWej" role="group" aria-label="Wejścia rejestru, od bitu 3 do 0"></div>
+    <button type="button" class="btn" id="brRgZegar">Impuls zegara (zapisz)</button>
+    <div class="small muted" style="margin-top: 12px">zawartość rejestru Q₃ Q₂ Q₁ Q₀</div>
+    <div class="bits" id="brRgWyj" aria-hidden="true"></div>
+    <p class="small" id="brRgOpis" aria-live="polite"></p>
+  </div>
+
+  <div class="card">
+    <h3>Ile tego jest? Piętra dla rejestru n-bitowego</h3>
+    <div class="seg" id="brN" role="group" aria-label="Szerokość rejestru">
+      <button type="button" data-n="4" aria-pressed="false">4 bity</button>
+      <button type="button" data-n="16" aria-pressed="true">16 bitów (PMC)</button>
+      <button type="button" data-n="64" aria-pressed="false">64 bity</button>
+    </div>
+    <div class="scroll-x" style="margin-top: 10px"><table class="t" id="brPietra"></table></div>
+    <p class="small muted">Liczby dla najprostszej konstrukcji z tego ćwiczenia (zatrzask D z 5 bramek NAND, NAND z 4 tranzystorów). Prawdziwe przerzutniki w procesorach są wyzwalane zboczem zegara i mają więcej tranzystorów.</p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Dlaczego wystarcza jeden rodzaj bramki? Zbuduj NOR (nie lub) z samych NAND. Ile bramek potrzeba?</li>
+      <li>W przerzutniku ustaw Z = 0 i zmieniaj D. Gdzie „siedzi” zapamiętany bit, skoro żadna bramka nie ma pamięci?</li>
+      <li>Programista PMC pisze <span class="mono">LOAD @ 6</span> i nie myśli o tranzystorach. Co zyskuje, a co traci, nie wiedząc, co dzieje się piętro niżej?</li>
+      <li>Rejestr 16-bitowy z tego ćwiczenia ma 320 tranzystorów. Współczesny procesor ma ich miliardy. Na co idzie reszta?</li>
+    </ol>
+  </div>
+  <p class="src">Slajd „Piętra abstrakcji” (W5). N. Nisan, S. Schocken, <em>The Elements of Computing Systems</em>, wyd. 2, MIT Press 2021, rozdz. 1 (bramki z NAND) i 3 (pamięć). Tę samą drogę, aż do całego komputera, przechodzi gra <a href="https://nandgame.com/" target="_blank" rel="noopener">nandgame.com</a> (po angielsku).</p>
 </section>
 
 <!-- ═══════════════════ USTAWIENIA PROWADZĄCEGO ═══════════════════ -->
@@ -1814,8 +1937,187 @@ const Ustawienia = (() => {
 })();
 
 
+/* ═════════════════════ 5. Piętra abstrakcji ═════════════════════ */
+const Bramki = (() => {
+  const nand = (a, b) => (a && b) ? 0 : 1;
+  // Bramki z NAND: lista [nazwa, wejście1, wejście2]; ostatnia bramka to wyjście.
+  const BRAMKI = {
+    NOT: { we: ['A'], wzor: 'NOT A = NAND(A, A): wystarczy podać to samo na oba wejścia.',
+           siec: [['wy', 'A', 'A']] },
+    AND: { we: ['A', 'B'], wzor: 'A AND B = NOT (A NAND B): NAND, a za nim NOT.',
+           siec: [['n1', 'A', 'B'], ['wy', 'n1', 'n1']] },
+    OR:  { we: ['A', 'B'], wzor: 'A OR B = (NOT A) NAND (NOT B): prawo de Morgana.',
+           siec: [['n1', 'A', 'A'], ['n2', 'B', 'B'], ['wy', 'n1', 'n2']] },
+    XOR: { we: ['A', 'B'], wzor: 'A XOR B (albo–albo): klasyczna konstrukcja z czterech NAND.',
+           siec: [['n1', 'A', 'B'], ['n2', 'A', 'n1'], ['n3', 'B', 'n1'], ['wy', 'n2', 'n3']] },
+  };
+  const licz = (g, wart) => {
+    const v = { ...wart };
+    for (const [n, a, b] of BRAMKI[g].siec) v[n] = nand(v[a], v[b]);
+    return v;
+  };
+  const wartosc = (x) => el('span', { class: x ? 'b1' : 'b0', text: String(x) });
+
+  function przycisk(nazwa, on, onclick, opis) {
+    const b = el('button', { type: 'button', class: 'bit' + (on ? ' on' : ''), 'aria-pressed': String(!!on), 'aria-label': `${opis || nazwa} = ${on ? 1 : 0}` },
+      el('span', { class: 'bv', text: on ? '1' : '0' }), el('span', { class: 'bi', text: nazwa }));
+    b.addEventListener('click', onclick);
+    return b;
+  }
+
+  /* Piętro 1: dwa przełączniki szeregowo */
+  const tr = { A: 0, B: 0 };
+  function rysujTr() {
+    const box = $('#brTrWej'); box.replaceChildren(
+      przycisk('A', tr.A, () => { tr.A ^= 1; rysujTr(); }, 'wejście A'),
+      przycisk('B', tr.B, () => { tr.B ^= 1; rysujTr(); }, 'wejście B'));
+    const wy = nand(tr.A, tr.B);
+    $('#brTrWyj').textContent = String(wy);
+    $('#brTrOpis').textContent = wy
+      ? `Przełącznik${tr.A && tr.B ? '' : (!tr.A && !tr.B ? 'i A i B otwarte' : (tr.A ? ' B otwarty' : ' A otwarty'))}: droga do masy przerwana, wyjście ma napięcie zasilania (1).`
+      : 'Oba przełączniki zamknięte: wyjście zwarte do masy (0).';
+    const S = 'http://www.w3.org/2000/svg';
+    const s = (tag, a, t) => { const e = document.createElementNS(S, tag); for (const k in a) e.setAttribute(k, a[k]); if (t) e.textContent = t; return e; };
+    const svg = $('#brTrSvg'); svg.replaceChildren();
+    const plynie = tr.A && tr.B;
+    svg.append(s('text', { x: 110, y: 16, class: 'lab' }, 'zasilanie (1)'));
+    svg.append(s('line', { x1: 110, y1: 24, x2: 110, y2: 44, class: 'dr' }));
+    svg.append(s('rect', { x: 100, y: 44, width: 20, height: 36, rx: 3, class: 'rez' }));
+    svg.append(s('line', { x1: 110, y1: 80, x2: 110, y2: 100, class: 'dr' }));
+    svg.append(s('circle', { cx: 110, cy: 100, r: 4, class: 'wezel' }));
+    svg.append(s('line', { x1: 110, y1: 100, x2: 160, y2: 100, class: 'dr' }));
+    svg.append(s('text', { x: 166, y: 104, class: 'lab st' }, `wyjście ${nand(tr.A, tr.B)}`));
+    const przel = (y, on, nazwa) => {
+      svg.append(s('line', { x1: 110, y1: y, x2: 110, y2: y + 14, class: 'dr' + (plynie ? ' plyn' : '') }));
+      svg.append(s('circle', { cx: 110, cy: y + 14, r: 3, class: 'wezel' }));
+      svg.append(s('line', { x1: 110, y1: y + 14, x2: on ? 110 : 132, y2: y + 40, class: 'noz' + (on ? ' zam' : '') + (plynie ? ' plyn' : '') }));
+      svg.append(s('circle', { cx: 110, cy: y + 42, r: 3, class: 'wezel' }));
+      svg.append(s('text', { x: 92, y: y + 32, class: 'lab en' }, `${nazwa} = ${on ? 1 : 0}`));
+      svg.append(s('text', { x: 140, y: y + 32, class: 'lab st sm' }, on ? 'zamknięty' : 'otwarty'));
+    };
+    przel(100, tr.A, 'A');
+    przel(142, tr.B, 'B');
+    svg.append(s('line', { x1: 110, y1: 184, x2: 110, y2: 214, class: 'dr' + (plynie ? ' plyn' : '') }));
+    svg.append(s('line', { x1: 94, y1: 214, x2: 126, y2: 214, class: 'dr' }));
+    svg.append(s('line', { x1: 100, y1: 220, x2: 120, y2: 220, class: 'dr' }));
+    svg.append(s('text', { x: 110, y: 240, class: 'lab' }, 'masa (0)'));
+  }
+
+  /* Piętro 2: bramki z NAND */
+  let g = 'NOT'; const we = { A: 0, B: 0 };
+  function rysujBr() {
+    const B = BRAMKI[g];
+    for (const b of $$('#brBramka button')) b.setAttribute('aria-pressed', String(b.dataset.g === g));
+    $('#brBrWzor').textContent = B.wzor;
+    $('#brBrWej').replaceChildren(...B.we.map((n) => przycisk(n, we[n], () => { we[n] ^= 1; rysujBr(); }, 'wejście ' + n)));
+    const v = licz(g, we);
+    $('#brBrWyj').textContent = String(v.wy);
+    $('#brBrIle').textContent = String(B.siec.length);
+    $('#brBrTr').textContent = String(4 * B.siec.length);
+    const siec = $('#brBrSiec');
+    siec.replaceChildren(el('tr', {}, el('th', { text: 'bramka' }), el('th', { text: 'wejścia' }), el('th', { text: 'wyjście' })));
+    B.siec.forEach(([n, a, b], i) => siec.append(el('tr', {},
+      el('td', { class: 'mono', text: n === 'wy' ? `NAND ${i + 1} → wyjście` : `NAND ${i + 1} → ${n}` }),
+      el('td', { class: 'mono' }, `${a} = `, wartosc(v[a]), `, ${b} = `, wartosc(v[b])),
+      el('td', { class: 'mono' }, wartosc(v[n])))));
+    const tp = $('#brBrTp');
+    tp.replaceChildren(el('tr', {}, ...B.we.map((n) => el('th', { text: n })), el('th', { text: `${g === 'NOT' ? 'NOT A' : 'A ' + g + ' B'}` })));
+    const wiersze = B.we.length === 1 ? [[0], [1]] : [[0, 0], [0, 1], [1, 0], [1, 1]];
+    for (const w of wiersze) {
+      const wart = Object.fromEntries(B.we.map((n, i) => [n, w[i]]));
+      const biez = B.we.every((n) => wart[n] === we[n]);
+      tp.append(el('tr', biez ? { class: 'biez', 'aria-current': 'true' } : {}, ...w.map((x) => el('td', { class: 'mono', text: String(x) })), el('td', { class: 'mono', text: String(licz(g, wart).wy) })));
+    }
+  }
+
+  /* Piętro 3: zatrzask D z 5 NAND */
+  const zatrzask = (st, D, Z) => {
+    let { q, nq } = st; let n0, n1, n2;
+    for (let i = 0; i < 10; i++) {
+      n0 = nand(D, D); n1 = nand(D, Z); n2 = nand(n0, Z);
+      const q2 = nand(n1, nq), nq2 = nand(n2, q2);
+      if (q2 === q && nq2 === nq) break;
+      q = q2; nq = nq2;
+    }
+    return { q, nq, n0, n1, n2 };
+  };
+  let pr, hist;
+  function resetPr() { pr = { D: 0, Z: 0, q: 0, nq: 1 }; hist = []; krokPr(null); }
+  function krokPr(co) {
+    const r = zatrzask(pr, pr.D, pr.Z); const bylo = pr.q;
+    pr.q = r.q; pr.nq = r.nq;
+    const opis = co === null ? 'Start: Q = 0. Ustaw D, potem daj Z = 1, żeby zapisać.'
+      : pr.Z ? (pr.q !== bylo ? `Z = 1: Q kopiuje D i zmienia się na ${pr.q}.` : `Z = 1: Q kopiuje D (= ${pr.D}).`)
+      : (co === 'D' ? `Z = 0: D zmieniło się na ${pr.D}, ale Q pamięta ${pr.q}.` : `Z = 0: zapis zamknięty, Q pamięta ${pr.q}.`);
+    if (co !== null) { hist.unshift([pr.D, pr.Z, pr.q, opis]); hist = hist.slice(0, 8); }
+    $('#brPrWej').replaceChildren(
+      przycisk('D', pr.D, () => { pr.D ^= 1; krokPr('D'); }, 'wejście danych D'),
+      przycisk('Z', pr.Z, () => { pr.Z ^= 1; krokPr('Z'); }, 'zegar Z'));
+    $('#brPrQ').textContent = String(pr.q); $('#brPrNQ').textContent = String(pr.nq);
+    $('#brPrOpis').textContent = opis;
+    const v = { D: pr.D, Z: pr.Z, '¬D': r.n0, s: r.n1, r: r.n2, Q: pr.q, 'Q̄': pr.nq };
+    const siec = $('#brPrSiec');
+    siec.replaceChildren(el('tr', {}, el('th', { text: 'bramka' }), el('th', { text: 'wejścia' }), el('th', { text: 'wyjście' })));
+    [['NAND 1 → ¬D', 'D', 'D', '¬D'], ['NAND 2 → s', 'D', 'Z', 's'], ['NAND 3 → r', '¬D', 'Z', 'r'], ['NAND 4 → Q', 's', 'Q̄', 'Q'], ['NAND 5 → Q̄', 'r', 'Q', 'Q̄']]
+      .forEach(([n, a, b, o], i) => siec.append(el('tr', i >= 3 ? { class: 'petla' } : {},
+        el('td', { class: 'mono', text: n + (i >= 3 ? ' ↺' : '') }),
+        el('td', { class: 'mono' }, `${a} = `, wartosc(v[a]), `, ${b} = `, wartosc(v[b])),
+        el('td', { class: 'mono' }, wartosc(v[o])))));
+    const h = $('#brPrHist');
+    h.replaceChildren(el('tr', {}, el('th', { text: 'D' }), el('th', { text: 'Z' }), el('th', { text: 'Q' }), el('th', { text: 'co się stało' })));
+    if (!hist.length) h.append(el('tr', {}, el('td', { colspan: '4', class: 'muted', text: 'Klikaj D i Z.' })));
+    for (const [d, z, q, o] of hist) h.append(el('tr', {}, el('td', { class: 'mono', text: String(d) }), el('td', { class: 'mono', text: String(z) }), el('td', { class: 'mono', text: String(q) }), el('td', { text: o })));
+  }
+
+  /* Piętro 4: rejestr 4-bitowy */
+  const rg = { D: [0, 0, 0, 0], st: [0, 1, 2, 3].map(() => ({ q: 0, nq: 1 })) };
+  function rysujRg(opis) {
+    $('#brRgWej').replaceChildren(...[3, 2, 1, 0].map((i) => przycisk('D' + '₀₁₂₃'[i], rg.D[i], () => { rg.D[i] ^= 1; rysujRg(`Wejścia: ${[3, 2, 1, 0].map((j) => rg.D[j]).join('')}. Rejestr bez zmian, dopóki nie ma impulsu zegara.`); }, 'wejście D' + i)));
+    const q = [3, 2, 1, 0].map((i) => rg.st[i].q);
+    $('#brRgWyj').replaceChildren(...[3, 2, 1, 0].map((i) => el('div', { class: 'bit' + (rg.st[i].q ? ' on' : '') }, el('span', { class: 'bv', text: String(rg.st[i].q) }), el('span', { class: 'bi', text: 'Q' + '₀₁₂₃'[i] }))));
+    $('#brRgOpis').textContent = opis || `Rejestr: ${q.join('')}₂ = ${parseInt(q.join(''), 2)}.`;
+  }
+  function zegar() {
+    for (let i = 0; i < 4; i++) {
+      rg.st[i] = zatrzask(rg.st[i], rg.D[i], 1);   // Z = 1: zapis
+      rg.st[i] = zatrzask(rg.st[i], rg.D[i], 0);   // Z = 0: pamiętaj
+    }
+    const q = [3, 2, 1, 0].map((i) => rg.st[i].q).join('');
+    rysujRg(`Impuls zegara: zapisano ${q}₂ = ${parseInt(q, 2)}. Teraz zmieniaj wejścia — rejestr trzyma wartość.`);
+  }
+
+  /* Tabela pięter */
+  let n = 16;
+  function rysujPietra() {
+    for (const b of $$('#brN button')) b.setAttribute('aria-pressed', String(Number(b.dataset.n) === n));
+    const fmt = (x) => x.toLocaleString('pl-PL');
+    const t = $('#brPietra');
+    t.replaceChildren(el('tr', {}, el('th', { text: 'piętro' }), el('th', { text: 'z czego' }), el('th', { class: 'n', text: 'ile' })));
+    [[`rejestr ${n}-bitowy`, `${n} przerzutników, wspólny zegar`, 1],
+     ['przerzutnik (zatrzask D)', '5 bramek NAND ze sprzężeniem zwrotnym', n],
+     ['bramka NAND', '4 tranzystory (CMOS)', 5 * n],
+     ['tranzystor', 'przełącznik sterowany napięciem', 20 * n]]
+      .forEach(([a, b, c]) => t.append(el('tr', {}, el('td', { text: a }), el('td', { text: b }), el('td', { class: 'n', text: fmt(c) }))));
+  }
+
+  return {
+    init() {
+      rysujTr();
+      $('#brBramka').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; g = b.dataset.g; rysujBr(); });
+      rysujBr();
+      $('#brPrReset').addEventListener('click', resetPr);
+      resetPr();
+      $('#brRgZegar').addEventListener('click', zegar);
+      rysujRg();
+      $('#brN').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; n = Number(b.dataset.n); rysujPietra(); });
+      rysujPietra();
+    },
+    _test: { nand, licz, zatrzask, BRAMKI },
+  };
+})();
+
 /* ═════════════════════ Nawigacja ═════════════════════ */
-const WIDOKI = ['start', 'pmc', 'rentgen', 'operand', 'procesor', 'ustawienia'];
+const WIDOKI = ['start', 'pmc', 'rentgen', 'operand', 'procesor', 'bramki', 'ustawienia'];
 let biezacy = null;
 function nawiguj() {
   const v = WIDOKI.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'start';
@@ -1826,13 +2128,14 @@ function nawiguj() {
   for (const a of $$('.tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + v ? 'page' : 'false');
   if (biezacy !== null) window.scrollTo(0, 0);
   biezacy = v;
-  document.title = { start: 'Wykład 5 · ćwiczenia', pmc: 'Symulator PMC · W5', rentgen: 'Rentgen słowa · W5', operand: 'Skąd operand? · W5', procesor: 'Bądź procesorem · W5', ustawienia: 'Ustawienia prowadzącego · W5' }[v];
+  document.title = { start: 'Wykład 5 · ćwiczenia', pmc: 'Symulator PMC · W5', rentgen: 'Rentgen słowa · W5', operand: 'Skąd operand? · W5', procesor: 'Bądź procesorem · W5', bramki: 'Piętra abstrakcji · W5', ustawienia: 'Ustawienia prowadzącego · W5' }[v];
 }
 Grupa.init();
 Symulator.init();
 Rentgen.init();
 Operand.init();
 BadzProcesorem.init();
+Bramki.init();
 Ustawienia.init();
 window.addEventListener('hashchange', nawiguj);
 nawiguj();
