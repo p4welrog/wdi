@@ -97,6 +97,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
 .przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
 .przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
@@ -369,9 +372,18 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Włóż 1, 2, 3, 4 i wyjmij wszystko. W jakiej kolejności wychodzą ze stosu, a w jakiej z kolejki?</li>
-      <li>Czy ciąg wyjść 3, 1, 2 jest możliwy dla stosu, jeśli wkładamy po kolei 1, 2, 3 (wyjmować można w dowolnych momentach)?</li>
-      <li>Przycisk „Wstecz” w przeglądarce i kolejka do kasy w sklepie: która struktura do czego?</li>
+      <li>Włóż 1, 2, 3, 4 i wyjmij wszystko. W jakiej kolejności wychodzą ze stosu, a w jakiej z kolejki?
+        <details class="odp"><summary>Wskazówka</summary><div>Stos oddaje najpierw to, co włożono ostatnio, a kolejka to, co włożono najdawniej.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Ze stosu elementy wychodzą w odwrotnej kolejności: 4, 3, 2, 1. Z kolejki w tej samej, w jakiej weszły: 1, 2, 3, 4.</div></details>
+      </li>
+      <li>Czy ciąg wyjść 3, 1, 2 jest możliwy dla stosu, jeśli wkładamy po kolei 1, 2, 3 (wyjmować można w dowolnych momentach)?
+        <details class="odp"><summary>Wskazówka</summary><div>Żeby 3 wyszło pierwsze, co musi już leżeć na stosie i w jakim porządku?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie jest możliwy. Żeby 3 wyszło pierwsze, trzeba najpierw włożyć 1 i 2, a wtedy 2 leży na 1. Po wyjęciu 3 na wierzchu jest 2, więc 1 nie może wyjść przed 2.</div></details>
+      </li>
+      <li>Przycisk „Wstecz” w przeglądarce i kolejka do kasy w sklepie: która struktura do czego?
+        <details class="odp"><summary>Wskazówka</summary><div>Która z nich obsługuje najpierw najnowszy element, a która najstarszy?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>„Wstecz” to stos: wraca do strony odwiedzonej ostatnio, potem do wcześniejszej. Kasa w sklepie to kolejka: pierwszy obsłużony jest ten, kto przyszedł najwcześniej.</div></details>
+      </li>
     </ol>
   </div>
 </section>
@@ -443,9 +455,18 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Jak zmieniały się Twoja trafność i czas czytania wraz z głębokością zagnieżdżenia?</li>
-      <li>Zapisz zdanie z dwoma zagnieżdżeniami w postaci nawiasów, np. [Adam, (którego Bartek, {którego Tomek zawołał}, zobaczył), zasnął]. Gdzie leży wierzch stosu przy słowie „zawołał”?</li>
-      <li>Czy umiałbyś przerobić zdanie z dwoma zagnieżdżeniami tak, by miało tę samą treść, a nie wymagało stosu?</li>
+      <li>Jak zmieniały się Twoja trafność i czas czytania wraz z głębokością zagnieżdżenia?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj w tabeli wyników wiersze dla zdań doczepionych na końcu i zagnieżdżonych.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Twojego wyniku. U większości osób jedno zagnieżdżenie prawie nie przeszkadza, a przy dwóch trafność spada i czas czytania rośnie. Zdania doczepione na końcu są zwykle łatwe niezależnie od długości, bo każde zamyka się od razu.</div></details>
+      </li>
+      <li>Zapisz zdanie z dwoma zagnieżdżeniami w postaci nawiasów, np. [Adam, (którego Bartek, {którego Tomek zawołał}, zobaczył), zasnął]. Gdzie leży wierzch stosu przy słowie „zawołał”?
+        <details class="odp"><summary>Wskazówka</summary><div>Wypisz nawiasy, które są już otwarte, a jeszcze niezamknięte, gdy czytasz „zawołał”.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy „zawołał” otwarte są wszystkie trzy nawiasy: [ ( {. Na wierzchu stosu leży { , czyli zdanie „którego Tomek zawołał”, najgłębiej zagnieżdżone. Zamyka się pierwsze, potem ( „zobaczył”, a na końcu [ „zasnął”.</div></details>
+      </li>
+      <li>Czy da się przerobić zdanie z dwoma zagnieżdżeniami tak, by miało tę samą treść, a nie wymagało stosu?
+        <details class="odp"><summary>Wskazówka</summary><div>Spróbuj zapisać tę samą treść kilkoma krótkimi zdaniami, z których każde kończy się od razu.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Tak, np. „Tomek zawołał Bartka. Bartek zobaczył Adama. Adam zasnął.” albo „Tomek zawołał Bartka, który zobaczył Adama, który zasnął.” Treść jest ta sama, ale każde zdanie zamyka się, zanim zacznie się następne, więc nie trzeba niczego trzymać „otwartego”.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">G. A. Miller, N. Chomsky, <em>Finitary Models of Language Users</em>, w: R. D. Luce i in. (red.), <em>Handbook of Mathematical Psychology</em> II, Wiley 1963; F. Karlsson, <em>Constraints on Multiple Center-Embedding of Clauses</em>, J. Linguistics 43(2), 2007, s. 365–392.</p>
@@ -497,9 +518,18 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Ile przesunięć kosztuje 1000 wstawień na początek tablicy? Skąd wzór 0 + 1 + … + 999?</li>
-      <li>Która struktura lepiej nadaje się na kolejkę, w której ciągle usuwamy z początku? A na tablicę, w której często czytamy element nr i?</li>
-      <li>Dlaczego <span class="mono">collections.deque</span> w Pythonie usuwa z początku w czasie O(1), choć <span class="mono">list.pop(0)</span> nie?</li>
+      <li>Ile przesunięć kosztuje 1000 wstawień na początek tablicy? Skąd wzór 0 + 1 + … + 999?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile elementów leży już w tablicy, gdy wstawiasz k-ty element na początek?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy wstawianiu na początek trzeba przesunąć wszystkie elementy, które już są: przy pierwszym 0, przy drugim 1, …, przy tysięcznym 999. Razem 0 + 1 + … + 999 = 999 · 1000 / 2 = 499 500 przesunięć.</div></details>
+      </li>
+      <li>Która struktura lepiej nadaje się na kolejkę, w której ciągle usuwamy z początku? A na tablicę, w której często czytamy element nr i?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj licznik dla usuwania z początku i dla odczytu elementu nr i w obu strukturach.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Na kolejkę lepsza jest lista wiązana: usunięcie z początku to tylko przestawienie wskaźnika na następny węzeł, bez przesuwania. Do czytania elementu nr i lepsza jest tablica: jego adres to adres początku + i, więc wystarczy jeden krok, a w liście trzeba przejść i wskaźników.</div></details>
+      </li>
+      <li>Dlaczego <span class="mono">collections.deque</span> w Pythonie usuwa z początku w czasie O(1), choć <span class="mono">list.pop(0)</span> nie?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy deque musi przesuwać elementy, żeby usunąć pierwszy?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>deque jest zbudowana jak lista wiązana (z bloków połączonych wskaźnikami) i pamięta, gdzie jest jej początek. Usunięcie pierwszego elementu to przesunięcie tego znacznika, bez ruszania pozostałych. list jest tablicą, więc pop(0) musi przesunąć o jedno miejsce wszystkie pozostałe elementy.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. Bhargava, <em>Algorytmy. Ilustrowany przewodnik</em>, rozdz. 2; T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdział o elementarnych strukturach danych; dokumentacja Pythona, <span class="mono">collections.deque</span>.</p>
@@ -571,9 +601,18 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Dla n = 5: ile razy liczone jest fib(2) bez pamięci? Znajdź te węzły w drzewie.</li>
-      <li>Jaka jest największa głębokość stosu dla fib(n)? Czy zależy od tego, czy używamy pamięci?</li>
-      <li>Python przerywa po ok. 1000 poziomach rekurencji. Dla jakiego n wersja z pamięcią w tej postaci zgłosi <span class="mono">RecursionError</span>? Jak tego uniknąć (wersja z tabelą ze slajdu)?</li>
+      <li>Dla n = 5: ile razy liczone jest fib(2) bez pamięci? Znajdź te węzły w drzewie.
+        <details class="odp"><summary>Wskazówka</summary><div>Rozpisz: fib(5) wywołuje fib(4) i fib(3), a fib(4) wywołuje fib(3) i fib(2).</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>3 razy: raz bezpośrednio z fib(4) i po razie w każdym z dwóch wywołań fib(3). Ta sama praca jest wykonywana wielokrotnie i to właśnie usuwa pamięć.</div></details>
+      </li>
+      <li>Jaka jest największa głębokość stosu dla fib(n)? Czy zależy od tego, czy używamy pamięci?
+        <details class="odp"><summary>Wskazówka</summary><div>Która ścieżka w drzewie jest najdłuższa? Czy pamięć ją skraca?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Największa głębokość to n: najdłuższa ścieżka to fib(n) → fib(n − 1) → … → fib(1). Nie zależy od pamięci, bo wersja z pamięcią też najpierw schodzi tą samą ścieżką aż na dół. Pamięć zmniejsza liczbę wywołań, a nie głębokość.</div></details>
+      </li>
+      <li>Python przerywa po ok. 1000 poziomach rekurencji. Dla jakiego n wersja z pamięcią w tej postaci zgłosi <span class="mono">RecursionError</span>? Jak tego uniknąć (wersja z tabelą ze slajdu)?
+        <details class="odp"><summary>Wskazówka</summary><div>Głębokość stosu dla fib(n) to n. Czy Python ma na stosie coś jeszcze poza wywołaniami fib?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Mniej więcej dla n ≈ 1000, a w praktyce trochę wcześniej, bo limit obejmuje też wywołania, które są na stosie przed fib. Rozwiązaniem jest wersja z tabelą: pętla liczy F(0), F(1), …, F(n) po kolei i w ogóle nie używa rekurencji, więc stos się nie pogłębia.</div></details>
+      </li>
     </ol>
   </div>
 </section>
@@ -613,9 +652,18 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Mini-zadanie ze slajdu: nominały 1, 5, 6, 9 i kwota 11. Najpierw policz na kartce, potem sprawdź.</li>
-      <li>Dla złotówek (1, 2, 5, 10, 20, 50 gr, 1, 2, 5 zł) przycisk nie znajduje kontrprzykładu. Dodaj monetę 4 gr — co się zmienia?</li>
-      <li>Ile komórek ma tabela dla kwoty 1000 i 9 nominałów? Ile porównań wykona DP?</li>
+      <li>Mini-zadanie ze slajdu: nominały 1, 5, 6, 9 i kwota 11. Najpierw policz na kartce, potem sprawdź.
+        <details class="odp"><summary>Wskazówka</summary><div>Zachłannie: zacznij od 9. W DP sprawdź, które dwie monety dają razem 11.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zachłannie 9 + 1 + 1, czyli 3 monety. Programowanie dynamiczne znajduje 5 + 6, czyli 2 monety. Pierwszy wybór największej monety (9) okazał się zły i metoda zachłanna nie umie się z niego wycofać.</div></details>
+      </li>
+      <li>Dla złotówek (1, 2, 5, 10, 20, 50 gr, 1, 2, 5 zł) przycisk nie znajduje kontrprzykładu. Dodaj monetę 4 gr — co się zmienia?
+        <details class="odp"><summary>Wskazówka</summary><div>Wpisz nominały z monetą 4 gr i kliknij przycisk szukania kontrprzykładu.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Pojawia się kontrprzykład: przy kwocie 8 gr metoda zachłanna bierze 5 + 2 + 1 (3 monety), a wystarczą 4 + 4 (2 monety). To samo dzieje się potem przy 18, 28 gr itd. Metoda zachłanna jest poprawna tylko dla niektórych zestawów nominałów, a dodanie jednej monety może to zepsuć.</div></details>
+      </li>
+      <li>Ile komórek ma tabela dla kwoty 1000 i 9 nominałów? Ile porównań wykona DP?
+        <details class="odp"><summary>Wskazówka</summary><div>Tabela ma komórkę na każdą kwotę od 0 do s. Ile nominałów sprawdza każda komórka?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Tabela ma 1001 komórek (kwoty od 0 do 1000). W każdej DP sprawdza co najwyżej 9 nominałów, więc razem około 9 · 1000 = 9000 porównań. Liczba kroków rośnie jak kwota razy liczba nominałów.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. Bhargava, <em>Algorytmy. Ilustrowany przewodnik</em>, rozdz. 8 i 9; T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdziały o programowaniu dynamicznym i algorytmach zachłannych.</p>
@@ -630,7 +678,7 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
     <h3>Zasady</h3>
     <ul>
       <li>Klikaj zajęcia, żeby je dodać do planu albo z niego usunąć. Kolizje zaznaczymy na czerwono.</li>
-      <li>Gdy uznasz plan za dobry, kliknij „Gotowe”. Mierzymy czas i to, czy znalazłeś największą możliwą liczbę zajęć.</li>
+      <li>Gdy uznasz plan za dobry, kliknij „Gotowe”. Mierzymy czas i to, czy plan ma największą możliwą liczbę zajęć.</li>
       <li>Nie mówimy z góry, ile zajęć da się zmieścić.</li>
     </ul>
     <button type="button" class="btn" id="plStart">Zaczynamy</button>
@@ -665,9 +713,18 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Jaką regułą się kierowałeś? Czy przypominała którąś z trzech reguł zachłannych?</li>
-      <li>Skąd wiedziałeś, że już wystarczy? Czy sprawdzałeś, czy da się zmieścić jeszcze jedne zajęcia?</li>
-      <li>Wymyśl plan, na którym reguła „najkrótsze” zawodzi. Co musi zrobić krótkie zajęcie, żeby zaszkodzić?</li>
+      <li>Jaką regułą kierował się Twój wybór? Czy przypominała którąś z trzech reguł zachłannych?
+        <details class="odp"><summary>Wskazówka</summary><div>Przypomnij sobie, od których zajęć zaczynał się Twój plan i dlaczego.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Ciebie. Wiele osób zaczyna od zajęć najwcześniejszych albo najkrótszych, a potem dokłada to, co się mieści. Reguła „najwcześniejszy koniec” zostawia najwięcej czasu na resztę dnia i tylko ona zawsze daje optimum.</div></details>
+      </li>
+      <li>Po czym poznać, że już wystarczy? Czy było sprawdzone, czy da się zmieścić jeszcze jedne zajęcia?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy przed kliknięciem „Gotowe” sprawdzało się wszystkie możliwości, czy tylko kilka?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zwykle nie sprawdza się wszystkich możliwości, tylko kończy, gdy plan „wygląda dobrze” i nic oczywistego już się nie mieści. To jest właśnie satisficing. Pewność daje dopiero dowód albo przejrzenie wszystkich planów, a tych bywa bardzo dużo.</div></details>
+      </li>
+      <li>Wymyśl plan, na którym reguła „najkrótsze” zawodzi. Co musi zrobić krótkie zajęcie, żeby zaszkodzić?
+        <details class="odp"><summary>Wskazówka</summary><div>Krótkie zajęcie szkodzi, gdy koliduje z dwoma innymi, które same się nie wykluczają.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Na przykład zajęcia 8–10 i 10–12 oraz krótkie 9:30–10:30. Reguła „najkrótsze” bierze najpierw zajęcie 9:30–10:30, a ono koliduje z oboma pozostałymi, więc w planie zostaje 1 zajęcie zamiast 2. Krótkie zajęcie szkodzi, gdy leży na granicy dwóch dłuższych.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">H. A. Simon, <em>A Behavioral Model of Rational Choice</em>, Q. J. Econ. 69(1), 1955, s. 99–118; T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, „Problem wyboru zajęć” (rozdział o algorytmach zachłannych).</p>
@@ -739,10 +796,22 @@ svg.drzewo .w.mem circle { fill: var(--surface-2); stroke: var(--s2); stroke-das
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przepuść przez stację <span class="mono">8 - 3 - 2</span> i <span class="mono">2 ^ 3 ^ 2</span>. W którym kroku algorytm postępuje inaczej i dlaczego?</li>
-      <li>W części B wpisz <span class="mono">8 3 -</span> i <span class="mono">3 8 -</span>. Który element stosu jest lewym argumentem odejmowania?</li>
-      <li>Wpisz w części B błędne ONP, np. <span class="mono">3 + 4</span> albo <span class="mono">3 4 5 +</span>. Po czym algorytm poznaje, że wyrażenie jest niepoprawne?</li>
-      <li>Liczby w ONP stoją w tej samej kolejności co w zapisie szkolnym, zmienia się tylko miejsce operatorów. Dlaczego?</li>
+      <li>Przepuść przez stację <span class="mono">8 - 3 - 2</span> i <span class="mono">2 ^ 3 ^ 2</span>. W którym kroku algorytm postępuje inaczej i dlaczego?
+        <details class="odp"><summary>Wskazówka</summary><div>Patrz na krok, w którym przychodzi drugi operator, a pierwszy leży na stosie.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Różnica jest przy drugim operatorze. Odejmowanie jest lewostronnie łączne, więc drugi „−” najpierw zdejmuje pierwszy ze stosu: wynik 8 3 − 2 −, czyli (8 − 3) − 2 = 3. Potęgowanie jest prawostronnie łączne, więc drugi „^” zostaje na stosie nad pierwszym: 2 3 2 ^ ^, czyli 2^(3^2) = 512.</div></details>
+      </li>
+      <li>W części B wpisz <span class="mono">8 3 -</span> i <span class="mono">3 8 -</span>. Który element stosu jest lewym argumentem odejmowania?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj wyniki: 5 i −5. Który element zdjęto ze stosu jako drugi?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>8 3 − daje 5, a 3 8 − daje −5. Pierwszy zdjęty element (wierzch) to prawy argument, a drugi, leżący pod nim, to lewy. Lewy argument to więc liczba, która trafiła na stos wcześniej.</div></details>
+      </li>
+      <li>Wpisz w części B błędne ONP, np. <span class="mono">3 + 4</span> albo <span class="mono">3 4 5 +</span>. Po czym algorytm poznaje, że wyrażenie jest niepoprawne?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile liczb musi leżeć na stosie, gdy przychodzi operator, a ile na końcu?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Są dwa rodzaje błędów. W 3 + 4 operator przychodzi, gdy na stosie jest tylko jedna liczba, a potrzebuje dwóch. W 3 4 5 + na końcu na stosie zostają dwie liczby (3 i 9) zamiast jednej, czyli brakuje operatora. Poprawne ONP kończy się dokładnie jedną liczbą na stosie.</div></details>
+      </li>
+      <li>Liczby w ONP stoją w tej samej kolejności co w zapisie szkolnym, zmienia się tylko miejsce operatorów. Dlaczego?
+        <details class="odp"><summary>Wskazówka</summary><div>Co algorytm stacji rozrządowej robi z liczbą, a co z operatorem?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Bo stacja rozrządowa każdą liczbę od razu wypisuje na wyjście, w kolejności czytania. Na stosie czekają tylko operatory i nawiasy, i to one zmieniają miejsce. Kolejność argumentów musi się zgadzać, bo np. 8 − 3 to nie to samo co 3 − 8.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">E. W. Dijkstra, raport o translatorze ALGOL 60, Mathematisch Centrum, Amsterdam 1961; J. Łukasiewicz, <em>Elementy logiki matematycznej</em>, Warszawa 1929; dokumentacja Pythona, moduł <span class="mono">dis</span>.</p>
