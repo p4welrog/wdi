@@ -475,7 +475,7 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
       <li>Zrób własną mapę na kartce z pamięci, a dopiero potem porównaj ją z tą. Czego zabrakło?</li>
     </ol>
   </div>
-  <p class="src">Mapa pojęć (concept map) według J. D. Novaka: pojęcia połączone podpisanymi relacjami. Metaanaliza J. C. Nesbit, O. O. Adesope, <em>Learning With Concept and Knowledge Maps</em>, Review of Educational Research 76(3), 2006, s. 413–448: uczenie się z map pojęć, gotowych i budowanych samodzielnie, dawało średnio lepsze zapamiętywanie niż czytanie tekstu, list czy konspektów. Numery slajdów według pliku W12.pdf.</p>
+  <p class="src">Mapa pojęć (concept map) według J. D. Novaka: pojęcia połączone podpisanymi relacjami. Metaanaliza J. C. Nesbit, O. O. Adesope, <em>Learning With Concept and Knowledge Maps</em>, Review of Educational Research 76(3), 2006, s. 413–448: uczenie się z map pojęć, gotowych i budowanych samodzielnie, dawało średnio lepsze zapamiętywanie niż czytanie tekstu, list czy konspektów. Numery slajdów według pliku <a href="slajdy/W12.pdf">W12.pdf</a> (slajdy wykładu).</p>
 </section>
 
 <!-- ═══════════════════ 1. PAKIETY ═══════════════════ -->
@@ -2003,7 +2003,7 @@ const Diagnoza = (() => {
 /* ═════════════════════ Mapa pojęć ═════════════════════ */
 const Mapa = (() => {
   // Gdzie leżą slajdy w PDF. null: numery slajdów są tylko tekstem; np. 'slajdy/W12.pdf': linki z #page=N.
-  const SLAJDY_PDF = null;
+  const SLAJDY_PDF = 'slajdy/W12.pdf';
   const SLAJDY = { 5: 'Internet: sieć sieci', 7: 'Przełączanie obwodów a przełączanie pakietów', 9: 'Po co warstwy?', 10: 'Stos protokołów Internetu (TCP/IP)', 11: 'Enkapsulacja: koperta w kopercie', 12: 'Model OSI a TCP/IP', 14: 'Adres IP i port', 15: 'Trasowanie: Dijkstra w każdym routerze', 16: 'DNS: książka adresowa Internetu', 17: 'TCP i UDP: dwa sposoby transportu', 18: 'HTTP i HTTPS', 19: 'Ułóż kroki w kolejności', 21: 'Cztery składniki opóźnienia', 22: 'Przykład: Warszawa – Nowy Jork', 23: 'Ile czekania zniesie człowiek?', 25: 'Gdy łącze jest prawie pełne', 26: 'TCP: sprzężenie zwrotne zamiast korka' };
   const MOD = { pakiety: 'Obwody czy pakiety?', warstwy: 'Koperta w kopercie', adres: 'Adres IP i port', trasowanie: 'Trasowanie', dns: 'DNS i transport', opoznienie: 'Kalkulator opóźnień', otwarcie: 'Otwarcie strony', czekanie: 'Ile czekania zniesiesz?', korek: 'Korek w sieci' };
   // x, y — środek; l — wiersze napisu; r — rdzenie akceptowanych odpowiedzi (bez polskich znaków)
