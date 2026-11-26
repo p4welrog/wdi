@@ -97,6 +97,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .todo { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .todo h3 { color: var(--accent); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4em; }
 .todo ol { margin: 0; padding-left: 1.2em; }
@@ -335,7 +338,7 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
   <p class="lead">Ćwiczenia do wykładu 11, w kolejności slajdów. Działają w przeglądarce, także bez internetu, i niczego nie wysyłają, chyba że prowadzący włączy tryb grupowy.</p>
   <div class="grid2">
     <a class="tile" href="#stany"><span class="num">1</span><h3>Stany procesu</h3><p>Diagram stanów procesu i dziesięć zdarzeń z życia programu: wczytanie pliku, koniec kwantu, naciśnięty klawisz. Wskaż przejście, które wykona system.</p><div class="meta">ok. 4 min · slajdy „Program a proces” i „Stany procesu”</div></a>
-    <a class="tile" href="#planista"><span class="num">2</span><h3>Planista procesora</h3><p>Zadania, cztery reguły planowania i wykresy Gantta. Średni czas oczekiwania, czas do pierwszego uruchomienia, koszt przełączania kontekstu i wybór kwantu. Ułóż kolejkę sam i zobacz, jak starzenie chroni przed zagłodzeniem.</p><div class="meta">ok. 12 min · slajdy od „Przełączania kontekstu” do „Przykładu: cztery zadania, trzy reguły”</div></a>
+    <a class="tile" href="#planista"><span class="num">2</span><h3>Planista procesora</h3><p>Zadania, cztery reguły planowania i wykresy Gantta. Średni czas oczekiwania, czas do pierwszego uruchomienia, koszt przełączania kontekstu i wybór kwantu. Ułóż kolejkę samodzielnie i zobacz, jak starzenie chroni przed zagłodzeniem.</p><div class="meta">ok. 12 min · slajdy od „Przełączania kontekstu” do „Przykładu: cztery zadania, trzy reguły”</div></a>
     <a class="tile" href="#przelaczanie"><span class="num">3</span><h3>Przełączanie zadań u ludzi</h3><p>Krótki eksperyment: oceniaj cyfry raz według parzystości, raz według wielkości. Czy zmiana zadania kosztuje czas? Twój wynik i — w trybie grupowym — wynik sali.</p><div class="meta">ok. 5 min · slajd „Przełączanie się między zadaniami u ludzi”</div></a>
     <a class="tile" href="#pamiec"><span class="num">4</span><h3>Pamięć wirtualna</h3><p>Adres wirtualny rozłożony na stronę i przesunięcie, tablice stron dwóch procesów, adres fizyczny. Co się stanie przy zapisie do kodu, wykonaniu danych albo odwołaniu do strony na dysku?</p><div class="meta">ok. 7 min · slajdy „Pamięć wirtualna” i „Ochrona: izolacja, uprawnienia, bit NX”</div></a>
     <a class="tile" href="#architektury"><span class="num">5</span><h3>Gdzie to działa?</h3><p>Elementy systemu zapisów na zajęcia rozdziel między warstwy: prezentację, logikę i dane. Potem rozpoznaj klienta, serwer i sieć peer-to-peer.</p><div class="meta">ok. 5 min · slajdy od „Klient–serwer i peer-to-peer” do „Monolitu czy mikroserwisów?”</div></a>
@@ -361,9 +364,18 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Dlaczego proces, któremu właśnie dotarły dane z dysku, nie wraca od razu do stanu „wykonywany”?</li>
-      <li>Większość z kilkuset procesów na Twoim komputerze jest teraz w stanie oczekującym. Na co mogą czekać?</li>
-      <li>Które przejście wymusza przerwanie zegarowe, a które wywołuje sam proces?</li>
+      <li>Dlaczego proces, któremu właśnie dotarły dane z dysku, nie wraca od razu do stanu „wykonywany”?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy procesor jest wolny w chwili, gdy dane dotarły? Kto go teraz używa?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Bo procesor jest w tym czasie zajęty innym procesem. Przyjście danych tylko kończy czekanie: proces przechodzi do stanu „gotowy” i staje w kolejce. Procesor dostanie, gdy planista go wybierze, a o tym decyduje reguła planowania, a nie samo zdarzenie.</div></details>
+      </li>
+      <li>Większość z kilkuset procesów na Twoim komputerze jest teraz w stanie oczekującym. Na co mogą czekać?
+        <details class="odp"><summary>Wskazówka</summary><div>Pomyśl o programach, które są otwarte, ale nic teraz nie liczą.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Na naciśnięcie klawisza albo ruch myszy, na wiadomość z sieci (poczta, komunikator), na dane z dysku, na upływ czasu (budzik, przypomnienie, zaplanowane zadanie) albo na sygnał od innego procesu. Większość programów przez większość czasu na coś czeka, dlatego kilkaset procesów mieści się na kilku rdzeniach.</div></details>
+      </li>
+      <li>Które przejście wymusza przerwanie zegarowe, a które wywołuje sam proces?
+        <details class="odp"><summary>Wskazówka</summary><div>Które przejście dzieje się wbrew woli procesu, a które proces zgłasza sam, prosząc system o usługę?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przerwanie zegarowe wymusza przejście wykonywany → gotowy: kwant się skończył i system odbiera procesor. Sam proces wywołuje przejście wykonywany → oczekujący, gdy prosi system o operację, na którą trzeba poczekać (np. odczyt z dysku), oraz przejście do stanu zakończony, gdy kończy pracę.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. Silberschatz, P. B. Galvin, G. Gagne, <em>Operating System Concepts</em>, 10th ed., Wiley 2018, rozdz. 3.1; J. G. Brookshear, D. Brylow, <em>Computer Science: An Overview</em>, 13th ed., rozdz. 3.</p>
@@ -377,7 +389,7 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
     <h3>Co zrobić</h3>
     <ol>
       <li>Zostaw zestaw „Slajd: P1–P4” i porównaj cztery wykresy Gantta z tabelą pod nimi. Która reguła ma najmniejszy średni czas oczekiwania?</li>
-      <li>W „Ułóż kolejkę sam” klikaj zadania w swojej kolejności i spróbuj wypaść lepiej niż SJF.</li>
+      <li>W „Ułóż kolejkę samodzielnie” klikaj zadania w swojej kolejności i spróbuj wypaść lepiej niż SJF.</li>
       <li>Zmieniaj kwant q i koszt przełączenia c, a potem obejrzyj tabelę „Jaki kwant wybrać?”.</li>
       <li>Wybierz zestaw „Konwój: długie na początku” i zobacz, jak wypada FCFS. Na koniec w karcie „Zagłodzenie i starzenie” włącz i wyłącz starzenie.</li>
     </ol>
@@ -412,7 +424,7 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
   </div>
 
   <div class="card">
-    <h3>Ułóż kolejkę sam</h3>
+    <h3>Ułóż kolejkę samodzielnie</h3>
     <p class="small muted">Klikaj zadania w kolejności, w jakiej mają dostać procesor (bez wywłaszczania). Czy da się mieć mniejszy średni czas oczekiwania niż SJF?</p>
     <div class="row" id="ukPrzyciski"></div>
     <div id="ukGantt"></div>
@@ -435,10 +447,22 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>W przykładzie ze slajdu SJF ma najmniejszy średni czas oczekiwania. Dlaczego w prawdziwym systemie trudno go stosować?</li>
-      <li>Ustaw q = 1, a potem koszt przełączenia c = 1. Co się dzieje z liczbą przełączeń i z czasem, w którym procesor robi coś pożytecznego?</li>
-      <li>Ustaw q większe od najdłuższego zadania. Z którą regułą zrównuje się wtedy reguła rotacyjna?</li>
-      <li>W karcie „Zagłodzenie i starzenie” ustaw pilne zadanie co 2 ms. Kiedy D dostaje procesor bez starzenia, a kiedy ze starzeniem? Co starzenie kosztuje pilne zadania? Starzenie to sprzężenie zwrotne: co jest tu skutkiem, a co przyczyną?</li>
+      <li>W przykładzie ze slajdu SJF ma najmniejszy średni czas oczekiwania. Dlaczego w prawdziwym systemie trudno go stosować?
+        <details class="odp"><summary>Wskazówka</summary><div>Czego SJF potrzebuje wiedzieć o zadaniu, zanim je uruchomi?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>SJF musi znać czas pracy każdego zadania z góry, a system operacyjny go nie zna, bo zależy od danych i od tego, co zrobi użytkownik. W praktyce można go tylko szacować z poprzednich przebiegów. Do tego SJF może zagłodzić długie zadania, jeśli wciąż przychodzą krótsze.</div></details>
+      </li>
+      <li>Ustaw q = 1, a potem koszt przełączenia c = 1. Co się dzieje z liczbą przełączeń i z czasem, w którym procesor robi coś pożytecznego?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj kolumny „przełączenia” i „procesor pracuje” dla q = 1 przy c = 0 i c = 1.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy q = 1 przełączeń jest najwięcej (w przykładzie 11 zamiast 6 przy q = 2). Dopóki przełączenie jest darmowe, to nic nie kosztuje. Przy c = 1 każde przełączenie zjada 1 ms i procesor robi coś pożytecznego tylko przez ok. 58% czasu, a średnie oczekiwanie rośnie z 5,25 do 12,5 ms. Zbyt mały kwant marnuje czas na samo przełączanie.</div></details>
+      </li>
+      <li>Ustaw q większe od najdłuższego zadania. Z którą regułą zrównuje się wtedy reguła rotacyjna?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile razy zadanie zostaje przerwane, jeśli kwant jest dłuższy niż jego czas pracy?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Z FCFS. Gdy kwant jest dłuższy od każdego zadania, żadne nie zostaje przerwane: każde dostaje procesor i kończy pracę w pierwszym kwancie, w kolejności z kolejki. Tabela „Jaki kwant wybrać?” pokazuje, że od q równego najdłuższemu zadaniu wyniki RR i FCFS są takie same.</div></details>
+      </li>
+      <li>W karcie „Zagłodzenie i starzenie” ustaw pilne zadanie co 2 ms. Kiedy D dostaje procesor bez starzenia, a kiedy ze starzeniem? Co starzenie kosztuje pilne zadania? Starzenie to sprzężenie zwrotne: co jest tu skutkiem, a co przyczyną?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj wykres dla trybu „wyłączone” i „włączone”, a potem przeczytaj opis pod wykresem.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Bez starzenia D nie dostaje procesora wcale (w 40 ms symulacji), bo zawsze czeka jakieś pilne zadanie z lepszym priorytetem. Ze starzeniem dostaje go w chwili 16, a najdłuższe czekanie pilnego zadania rośnie z 0 do 6 ms. Przyczyną jest czas czekania D, a skutkiem poprawa jego priorytetu. Lepszy priorytet daje procesor, a to kończy czekanie, więc pętla się równoważy.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. Silberschatz, P. B. Galvin, G. Gagne, <em>Operating System Concepts</em>, 10th ed., Wiley 2018, rozdz. 5 (planowanie przydziału procesora). Przykład P1–P4 ze slajdu. Mini-zadania ze slajdu tu nie ma — zrób je na kartce.</p>
@@ -495,10 +519,22 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Czy u Ciebie odpowiedzi po zmianie zadania były wolniejsze niż po powtórzeniu? A trafność?</li>
-      <li>Zmiana była przewidywalna (zawsze co dwie próby), a napis nad cyfrą ją zapowiadał. Dlaczego mimo to koszt może nie zniknąć?</li>
-      <li>Pojedynczy pomiar jednej osoby jest zaszumiony. Ile prób albo osób potrzeba, żeby wynik był wiarygodny? Porównaj z wynikiem sali.</li>
-      <li>Czy pisanie notatek i jednoczesne odpisywanie na wiadomości to „wielozadaniowość”, czy szybkie przełączanie?</li>
+      <li>Czy u Ciebie odpowiedzi po zmianie zadania były wolniejsze niż po powtórzeniu? A trafność?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj w wyniku czasy i trafność dla prób „zmiana” i „powtórzenie” w bloku mieszanym.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Twojego wyniku. U większości osób odpowiedzi po zmianie zadania są wolniejsze o kilkadziesiąt do ok. 100–200 ms, a błędów bywa trochę więcej. W krótkim pomiarze jednej osoby różnica może jednak zniknąć w szumie.</div></details>
+      </li>
+      <li>Zmiana była przewidywalna (zawsze co dwie próby), a napis nad cyfrą ją zapowiadał. Dlaczego mimo to koszt może nie zniknąć?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy wiedza, że zmiana nadejdzie, wystarcza, żeby przygotować się do niej w pełni?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zapowiedź pozwala przygotować się częściowo, więc koszt maleje, gdy jest więcej czasu między napisem a cyfrą. Część kosztu zostaje jednak nawet przy długim przygotowaniu (Rogers i Monsell): nowy zestaw reguł „dopina się” dopiero przy pierwszej odpowiedzi, a stare reguły jeszcze przez chwilę przeszkadzają.</div></details>
+      </li>
+      <li>Pojedynczy pomiar jednej osoby jest zaszumiony. Ile prób albo osób potrzeba, żeby wynik był wiarygodny? Porównaj z wynikiem sali.
+        <details class="odp"><summary>Wskazówka</summary><div>Ile wynosi różnica, której szukasz, a o ile wahają się pojedyncze czasy reakcji?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Pojedyncze czasy reakcji wahają się o kilkaset milisekund, a szukana różnica to często kilkadziesiąt. Trzeba więc wielu prób (dziesiątek na warunek) i wielu osób, by średnia była stabilna. Wynik sali uśrednia wiele osób, więc zwykle pokazuje efekt wyraźniej niż wynik pojedynczej osoby.</div></details>
+      </li>
+      <li>Czy pisanie notatek i jednoczesne odpisywanie na wiadomości to „wielozadaniowość”, czy szybkie przełączanie?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy możesz naraz układać zdanie notatki i zdanie odpowiedzi na wiadomość?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Raczej szybkie przełączanie. Obie czynności wymagają języka i uwagi, więc nie da się ich robić naprawdę równocześnie, tylko na przemian, jak procesy na jednym rdzeniu. Każde przełączenie kosztuje czas i zwiększa ryzyko błędu. Prawdziwa równoległość jest możliwa raczej przy czynnościach zautomatyzowanych, np. chodzeniu i rozmowie.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">R. D. Rogers, S. Monsell, <em>Costs of a predictable switch between simple cognitive tasks</em>, J. Exp. Psychol. Gen. 124(2), 1995, s. 207–231; J. S. Rubinstein, D. E. Meyer, J. E. Evans, J. Exp. Psychol. Hum. Percept. Perform. 27(4), 2001, s. 763–797; S. Monsell, <em>Task switching</em>, Trends Cogn. Sci. 7(3), 2003, s. 134–140.</p>
@@ -547,10 +583,22 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Wpisz ten sam adres dla procesu A i B. Dlaczego adresy fizyczne są różne i co to daje?</li>
-      <li>Przy stronach 4 KiB przesunięcie to dokładnie trzy ostatnie cyfry szesnastkowe. Dlaczego? Co się zmienia przy stronach 1 KiB?</li>
-      <li>Atak z W5 wstrzykiwał rozkazy jako dane. Które pole tablicy stron mu przeszkadza?</li>
-      <li>Strona „na dysku” nie jest błędem programu. Kto i jak naprawia tę sytuację? Dlaczego program tego nie zauważa — poza czasem?</li>
+      <li>Wpisz ten sam adres dla procesu A i B. Dlaczego adresy fizyczne są różne i co to daje?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj kolumnę „ramka w RAM” w tablicach stron procesu A i B.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Każdy proces ma własną tablicę stron, więc ten sam numer strony wskazuje inną ramkę w RAM. Np. 0x00403A7C to w A adres fizyczny 0x00590A7C, a w B 0x01273A7C. Dzięki temu procesy nie widzą i nie psują nawzajem swojej pamięci, a każdy program może używać tych samych adresów, nie wiedząc o innych.</div></details>
+      </li>
+      <li>Przy stronach 4 KiB przesunięcie to dokładnie trzy ostatnie cyfry szesnastkowe. Dlaczego? Co się zmienia przy stronach 1 KiB?
+        <details class="odp"><summary>Wskazówka</summary><div>4 KiB = 2¹² bajtów, a jedna cyfra szesnastkowa to 4 bity.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Strona 4 KiB ma 2¹² bajtów, więc przesunięcie zajmuje 12 bitów, a to dokładnie 3 cyfry szesnastkowe. Przy stronach 1 KiB = 2¹⁰ przesunięcie ma 10 bitów, czyli 2,5 cyfry szesnastkowej. Granica nie wypada wtedy między cyframi i trzeba rozpisać adres na bity.</div></details>
+      </li>
+      <li>Atak z W5 wstrzykiwał rozkazy jako dane. Które pole tablicy stron mu przeszkadza?
+        <details class="odp"><summary>Wskazówka</summary><div>Spróbuj przykładu „wykonanie danych (NX)”. Jakie uprawnienia mają strony danych?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Pole uprawnień, a dokładnie brak prawa wykonania (x) na stronach danych i stosu, czyli rw-. Rozkazy wstrzyknięte jako dane leżą na stronie bez x, więc próba ich wykonania zostaje zatrzymana przez procesor. Tak działa ochrona NX (no-execute).</div></details>
+      </li>
+      <li>Strona „na dysku” nie jest błędem programu. Kto i jak naprawia tę sytuację? Dlaczego program tego nie zauważa — poza czasem?
+        <details class="odp"><summary>Wskazówka</summary><div>Co robi procesor, gdy w tablicy stron zamiast ramki jest „na dysku”?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To błąd strony (page fault). Procesor przerywa program i oddaje sterowanie systemowi operacyjnemu. System wczytuje stronę z dysku do wolnej ramki, wpisuje ją do tablicy stron i wznawia program od tego samego rozkazu. Program widzi tylko, że ten jeden dostęp do pamięci trwał bardzo długo.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. Silberschatz, P. B. Galvin, G. Gagne, <em>Operating System Concepts</em>, 10th ed., Wiley 2018, rozdz. 9–10 (stronicowanie, pamięć wirtualna). Tablice stron na tej stronie są uproszczone (jeden poziom, przykładowe ramki).</p>
@@ -574,9 +622,18 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przycisk „Zapisz” jest wyszarzony, gdy brak miejsc. Czy to wystarczy, żeby nikt nie zapisał się ponad limit? Dlaczego?</li>
-      <li>Jupyter w przeglądarce i jądro Pythona działają na tym samym laptopie. Co tu jest klientem, a co serwerem?</li>
-      <li>Zespół trzech osób buduje system zapisów dla jednego wydziału. Monolit czy mikroserwisy? A dla całego kraju i trzydziestu zespołów?</li>
+      <li>Przycisk „Zapisz” jest wyszarzony, gdy brak miejsc. Czy to wystarczy, żeby nikt nie zapisał się ponad limit? Dlaczego?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy wszystko, co dzieje się w przeglądarce, jest pod kontrolą twórców systemu?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie. Przycisk to tylko warstwa prezentacji, a ją użytkownik może obejść, np. wysyłając żądanie bezpośrednio do serwera. Do tego dwie osoby mogą kliknąć „Zapisz” w tej samej chwili, gdy zostało jedno miejsce. Limit musi sprawdzać warstwa logiki albo baza danych, w jednej niepodzielnej operacji.</div></details>
+      </li>
+      <li>Jupyter w przeglądarce i jądro Pythona działają na tym samym laptopie. Co tu jest klientem, a co serwerem?
+        <details class="odp"><summary>Wskazówka</summary><div>Klient i serwer to role w komunikacji, a nie osobne komputery.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przeglądarka z Jupyterem jest klientem: wysyła kod i wyświetla wyniki. Jądro Pythona jest serwerem: czeka na żądania, wykonuje kod i odsyła wynik. To, że oba działają na jednym laptopie, nie zmienia ról.</div></details>
+      </li>
+      <li>Zespół trzech osób buduje system zapisów dla jednego wydziału. Monolit czy mikroserwisy? A dla całego kraju i trzydziestu zespołów?
+        <details class="odp"><summary>Wskazówka</summary><div>Co kosztuje koordynacja wielu małych usług, a co jeden duży program, nad którym pracuje wiele zespołów?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla trzech osób i jednego wydziału lepszy jest zwykle monolit: jeden program łatwiej zbudować, testować i wdrażać, a mikroserwisy dodałyby tylko koszt komunikacji i utrzymania. Dla całego kraju i 30 zespołów mikroserwisy pozwalają zespołom pracować i wdrażać niezależnie oraz skalować tylko te części, które są obciążone.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">J. F. Kurose, K. W. Ross, <em>Computer Networking: A Top-Down Approach</em>, 8th ed., Pearson 2021, rozdz. 1.2 i 2.1; J. G. Brookshear, D. Brylow, <em>Computer Science: An Overview</em>, 13th ed., rozdz. 0 (abstrakcja).</p>
@@ -627,9 +684,18 @@ table.odpow td.kom:focus-visible { outline: 2px solid var(--accent); outline-off
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>W części A zaznacz „wymaga Windows”. Dlaczego kontener na gospodarzu z Linuksem nie pomoże, a maszyna wirtualna tak?</li>
-      <li>Ile jąder systemu pracuje przy czterech maszynach wirtualnych, a ile przy czterech kontenerach? Co z tego wynika dla pamięci i dla izolacji?</li>
-      <li>W tabeli „kto czym zarządza” przy SaaS zostają Ci tylko dane. Dlaczego to nadal Twoja odpowiedzialność?</li>
+      <li>W części A zaznacz „wymaga Windows”. Dlaczego kontener na gospodarzu z Linuksem nie pomoże, a maszyna wirtualna tak?
+        <details class="odp"><summary>Wskazówka</summary><div>Kontener współdzieli jądro gospodarza. Jakie to jądro?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Kontener korzysta z jądra gospodarza, a gospodarz ma jądro Linuksa, więc w kontenerze da się uruchomić tylko programy dla Linuksa. Maszyna wirtualna udaje cały komputer, więc można w niej zainstalować własny system z własnym jądrem, także Windows.</div></details>
+      </li>
+      <li>Ile jąder systemu pracuje przy czterech maszynach wirtualnych, a ile przy czterech kontenerach? Co z tego wynika dla pamięci i dla izolacji?
+        <details class="odp"><summary>Wskazówka</summary><div>Policz jądra w części A dla czterech aplikacji w obu kolumnach.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy czterech maszynach wirtualnych pracują 4 jądra, po jednym w każdym systemie gościa (do tego hiperwizor), a przy czterech kontenerach jedno, wspólne jądro gospodarza. Kontenery zajmują więc mniej pamięci i startują szybciej. Maszyny wirtualne są lepiej odizolowane: błąd albo atak na jądro jednej nie dotyka pozostałych, a w kontenerach jądro jest wspólne.</div></details>
+      </li>
+      <li>W tabeli „kto czym zarządza” przy SaaS zostają Ci tylko dane. Dlaczego to nadal Twoja odpowiedzialność?
+        <details class="odp"><summary>Wskazówka</summary><div>Kto decyduje, kto ma dostęp do danych i co do nich trafia?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Bo dostawca odpowiada za działanie usługi, ale nie za to, jakie dane do niej wkładasz, komu dajesz dostęp i czy masz do tego prawo. Ty decydujesz o kontach i uprawnieniach, kopiach zapasowych, zgodzie osób, których dane dotyczą, i o przepisach (np. RODO). Wyciek przez słabe hasło albo źle udostępniony plik to nadal Twoja odpowiedzialność.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">G. J. Popek, R. P. Goldberg, Comm. ACM 17(7), 1974, s. 412–421; P. Mell, T. Grance, <em>The NIST Definition of Cloud Computing</em>, NIST SP 800-145, 2011; dokumentacja Dockera (docs.docker.com). Tabela „kto czym zarządza” jest uproszczeniem: granice zależą od konkretnej usługi.</p>
