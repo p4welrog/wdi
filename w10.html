@@ -97,6 +97,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
 .src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
 
@@ -337,9 +340,18 @@ svg.graf .strz { fill: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Mini-zadanie ze slajdu: BFS z F. Zapisz kolejność i odległości, potem sprawdź.</li>
-      <li>DFS z A daje A, B, D, F, E, C. Dlaczego C jest na końcu, choć to sąsiad A?</li>
-      <li>Startując z A, nie dojdziemy do G ani H. Jak policzyć, ile grafu ma spójnych składowych?</li>
+      <li>Mini-zadanie ze slajdu: BFS z F. Zapisz kolejność i odległości, potem sprawdź.
+        <details class="odp"><summary>Wskazówka</summary><div>BFS z F: najpierw sąsiedzi F w kolejności alfabetycznej, potem ich sąsiedzi.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Kolejność: F, D, E, B, C, A. Odległości: F 0, D i E 1, B i C 2, A 3. G i H nie zostaną odwiedzone, bo nie są połączone z resztą grafu.</div></details>
+      </li>
+      <li>DFS z A daje A, B, D, F, E, C. Dlaczego C jest na końcu, choć to sąsiad A?
+        <details class="odp"><summary>Wskazówka</summary><div>Prześledź, gdzie jest DFS, zanim wróci do A po raz drugi.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>DFS idzie w głąb: z A do B, potem D, F, E, a z E do C, bo C to sąsiad E. Gdy DFS wraca do A, C jest już odwiedzone, więc nie wchodzi tam drugi raz. C jest na końcu, bo trafiło się do niego okrężną drogą, a nie bezpośrednio z A.</div></details>
+      </li>
+      <li>Startując z A, nie dojdziemy do G ani H. Jak policzyć, ile grafu ma spójnych składowych?
+        <details class="odp"><summary>Wskazówka</summary><div>Co zrobić, gdy po zakończeniu przeszukiwania zostały nieodwiedzone wierzchołki?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wystarczy przejść po wszystkich wierzchołkach. Gdy któryś jest jeszcze nieodwiedzony, uruchamiamy z niego BFS albo DFS i zwiększamy licznik o 1. Każde uruchomienie odwiedza całą jedną składową, więc licznik na końcu to liczba składowych. Tu wychodzą 2: {A, B, C, D, E, F} i {G, H}.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. Bhargava, <em>Algorytmy</em>, rozdz. 6; T. H. Cormen i in., <em>Wprowadzenie do algorytmów</em>, rozdz. 22.2–22.3.</p>
@@ -368,9 +380,18 @@ svg.graf .strz { fill: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Na pustej planszy uruchom oba. Który znalazł najkrótszą drogę? Który odwiedził mniej pól?</li>
-      <li>Czy DFS może znaleźć najkrótszą drogę? Czy może odwiedzić mniej pól niż BFS? Zbuduj taki labirynt.</li>
-      <li>Co by się stało, gdyby algorytm nie zapamiętywał odwiedzonych pól?</li>
+      <li>Na pustej planszy uruchom oba. Który znalazł najkrótszą drogę? Który odwiedził mniej pól?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj liczniki „odwiedzone pola” i „długość znalezionej drogi” po obu uruchomieniach.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Na pustej planszy oba znajdują drogę najkrótszą (34 kroki), ale BFS odwiedza ok. 315 pól, a DFS tylko ok. 35. BFS rozchodzi się falą we wszystkich kierunkach, a DFS idzie prosto w jedną stronę i tu akurat od razu trafia do wyjścia.</div></details>
+      </li>
+      <li>Czy DFS może znaleźć najkrótszą drogę? Czy może odwiedzić mniej pól niż BFS? Zbuduj taki labirynt.
+        <details class="odp"><summary>Wskazówka</summary><div>Spróbuj labiryntu, w którym pierwszy kierunek wybierany przez DFS prowadzi długim objazdem.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Tak, oba są możliwe, np. na pustej planszy DFS znajduje najkrótszą drogę i odwiedza mniej pól. Gwarancji jednak nie ma. Wystarczy labirynt, w którym kierunek wybierany przez DFS najpierw prowadzi długą, krętą drogą, a krótka droga zaczyna się w drugą stronę: DFS znajdzie długą. Tylko BFS zawsze znajduje najkrótszą drogę.</div></details>
+      </li>
+      <li>Co by się stało, gdyby algorytm nie zapamiętywał odwiedzonych pól?
+        <details class="odp"><summary>Wskazówka</summary><div>Pomyśl o dwóch sąsiednich wolnych polach: z każdego da się przejść do drugiego.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Algorytm chodziłby w kółko: z pola na sąsiednie i z powrotem albo dookoła pętli w labiryncie, i mógłby nigdy nie skończyć. Nawet gdyby skończył, przetwarzałby te same pola wiele razy. Zapamiętywanie odwiedzonych gwarantuje, że każde pole jest przetwarzane najwyżej raz.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Labirynt generowany losowym DFS z kilkoma dodatkowymi przejściami, żeby istniało kilka dróg.</p>
@@ -405,9 +426,18 @@ svg.graf .strz { fill: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Ile różnych poprawnych kolejności ma ten plan? (Wskazówka: pierwsze dwa i ostatnie dwa zadania mają stałe miejsca.)</li>
-      <li>Włącz cykl. Na którym zadaniu utkniesz Ty, a na którym algorytm?</li>
-      <li>Gdy w kolejce algorytmu Kahna czeka kilka zadań naraz, wybiera jedno z nich. Czy Twoja kolejność musiała się zgadzać z kolejnością algorytmu, żeby była poprawna? Które zadania mógłby robić równocześnie zespół kilku osób?</li>
+      <li>Ile różnych poprawnych kolejności ma ten plan? (Wskazówka: pierwsze dwa i ostatnie dwa zadania mają stałe miejsca.)
+        <details class="odp"><summary>Wskazówka</summary><div>Między hipotezami a analizą są ankieta, komisja etyczna, plan analizy i zbieranie danych. Jakie warunki muszą spełniać?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>8 kolejności. Przegląd literatury i hipotezy są zawsze pierwsze, a analiza i raport ostatnie. W środku zbieranie danych musi być po ankiecie i zgodzie komisji, a plan analizy może być gdziekolwiek. Ankieta, komisja i zbieranie danych dają 2 kolejności (ankieta i komisja w dowolnym porządku), a plan analizy można wstawić w jedno z 4 miejsc: 2 · 4 = 8.</div></details>
+      </li>
+      <li>Włącz cykl. Na którym zadaniu utkniesz Ty, a na którym algorytm?
+        <details class="odp"><summary>Wskazówka</summary><div>Zobacz, które zadania mają w rogu zero po zrobieniu przeglądu literatury.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Z cyklem utkniesz zaraz po przeglądzie literatury: hipotezy czekają na analizę, a analiza (pośrednio) na hipotezy. Algorytm Kahna kończy się w tym samym miejscu: po przeglądzie literatury kolejka jest pusta, choć zostały niewykonane zadania. Tak algorytm wykrywa cykl: nie wszystkie zadania trafiły do kolejki.</div></details>
+      </li>
+      <li>Gdy w kolejce algorytmu Kahna czeka kilka zadań naraz, wybiera jedno z nich. Czy Twoja kolejność musiała się zgadzać z kolejnością algorytmu, żeby była poprawna? Które zadania mógłby robić równocześnie zespół kilku osób?
+        <details class="odp"><summary>Wskazówka</summary><div>Poprawność zależy tylko od tego, czy każde zadanie jest po swoich poprzednikach.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie musiała. Każda kolejność, w której zadanie stoi po wszystkich swoich poprzednikach, jest poprawna, a algorytm wybiera tylko jedną z nich. Równocześnie można robić zadania, które czekają w kolejce w tym samym czasie: po hipotezach ankietę, zgodę komisji i plan analizy, a potem jeszcze plan analizy razem ze zbieraniem danych.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. B. Kahn, <em>Topological Sorting of Large Networks</em>, Comm. ACM 5(11), 1962, s. 558–562; T. H. Cormen i in., rozdz. 22.4.</p>
@@ -445,9 +475,18 @@ svg.graf .strz { fill: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>W grafie ze slajdu krawędź S–A ma wagę 4, a do A dochodzimy z odległością 3. Kiedy Dijkstra „zmienia zdanie” o A?</li>
-      <li>W mini-zadaniu D i E mają tę samą odległość 20. Czy kolejność ich zdjęcia ma znaczenie dla wyniku?</li>
-      <li>Przy ujemnej wadze Dijkstra ogłasza A ostatecznym za wcześnie. Które założenie dowodu przestaje działać?</li>
+      <li>W grafie ze slajdu krawędź S–A ma wagę 4, a do A dochodzimy z odległością 3. Kiedy Dijkstra „zmienia zdanie” o A?
+        <details class="odp"><summary>Wskazówka</summary><div>Kiedy B zostaje zdjęte z kopca, co dzieje się z jego sąsiadem A?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Najpierw A dostaje odległość 4 (bezpośrednio z S). Potem z kopca schodzi B (odległość 1) i relaksacja krawędzi B–A daje 1 + 2 = 3 < 4, więc odległość A spada do 3. Wolno ją zmienić, bo A nie zostało jeszcze zdjęte z kopca. Ostateczna staje się dopiero przy zdjęciu.</div></details>
+      </li>
+      <li>W mini-zadaniu D i E mają tę samą odległość 20. Czy kolejność ich zdjęcia ma znaczenie dla wyniku?
+        <details class="odp"><summary>Wskazówka</summary><div>Po zdjęciu D sprawdź, czy relaksacja krawędzi D–E może coś poprawić.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie ma. Gdy dwa wierzchołki mają tę samą najmniejszą odległość, obie są już ostateczne. Krawędź D–E ma wagę 6 > 0, więc żaden z nich nie poprawi drugiego. Inna kolejność zmienia tylko kolejność kroków, a nie odległości.</div></details>
+      </li>
+      <li>Przy ujemnej wadze Dijkstra ogłasza A ostatecznym za wcześnie. Które założenie dowodu przestaje działać?
+        <details class="odp"><summary>Wskazówka</summary><div>Dlaczego przy wagach ≥ 0 żadna dłuższa droga nie może okazać się krótsza?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dowód zakłada, że wszystkie wagi są nieujemne: każda droga przez wierzchołek, który jeszcze nie został zdjęty, jest co najmniej tak długa jak najmniejsza odległość w kopcu. Wtedy zdjęty wierzchołek ma odległość ostateczną. Z ujemną krawędzią B → A dłuższa droga może się skrócić: A ogłoszono z odległością 2, a S → B → A ma 3 − 2 = 1.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">E. W. Dijkstra, <em>A Note on Two Problems in Connexion with Graphs</em>, Numer. Math. 1, 1959, s. 269–271; A. Bhargava, <em>Algorytmy</em>, rozdz. 7. Kod jak na slajdzie „Dijkstra w Pythonie” (heapq, pomijanie nieaktualnych wpisów).</p>
@@ -461,7 +500,7 @@ svg.graf .strz { fill: var(--muted); }
     <h3>Zasady</h3>
     <ul>
       <li>Klikaj krawędzie, żeby je wybrać lub odznaczyć. Krawędź zamykająca cykl zaświeci na czerwono — jest zbędna.</li>
-      <li>„Gotowe” działa, gdy wszystkie osiedla są połączone. Trzy plansze; mierzymy czas i to, czy trafiłeś w najtańszą sieć.</li>
+      <li>„Gotowe” działa, gdy wszystkie osiedla są połączone. Trzy plansze; mierzymy czas i to, czy sieć jest najtańsza.</li>
     </ul>
     <button type="button" class="btn" id="msStart">Zaczynamy</button>
   </div>
@@ -495,9 +534,18 @@ svg.graf .strz { fill: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Jaką regułą się kierowałeś? Czy przypominała Kruskala (zawsze najtańsza krawędź gdziekolwiek) czy Prima (najtańsza krawędź z już zbudowanej sieci)?</li>
-      <li>Na pierwszej planszy (ze slajdu) policz drogę A → F w MST i najkrótszą drogę A → F w całym grafie. Czy są równe? Czy muszą być?</li>
-      <li>Dlaczego drzewo rozpinające dla n osiedli ma zawsze n − 1 krawędzi?</li>
+      <li>Jaką regułą kierował się Twój wybór? Czy przypominała Kruskala (zawsze najtańsza krawędź gdziekolwiek) czy Prima (najtańsza krawędź z już zbudowanej sieci)?
+        <details class="odp"><summary>Wskazówka</summary><div>Przypomnij sobie, od której krawędzi zaczynała się Twoja sieć i jak dochodziły kolejne.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Ciebie. Wiele osób zaczyna od najtańszej krawędzi na całej planszy (jak Kruskal), a inni rozbudowują sieć od jednego osiedla (jak Prim). Obie reguły dają najtańszą sieć, jeśli tylko odrzuca się krawędzie zamykające cykl.</div></details>
+      </li>
+      <li>Na pierwszej planszy (ze slajdu) policz drogę A → F w MST i najkrótszą drogę A → F w całym grafie. Czy są równe? Czy muszą być?
+        <details class="odp"><summary>Wskazówka</summary><div>MST na pierwszej planszy: A–C, B–C, D–E, E–F, B–D. Którędy prowadzi w nim droga z A do F?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>W MST droga A → C → B → D → E → F kosztuje 1 + 2 + 5 + 2 + 3 = 13, a najkrótsza droga w całym grafie też ma 13. Tu wyszło równo, ale nie musi. MST minimalizuje koszt całej sieci, a nie poszczególnych tras. W trójkącie z krawędziami 2, 2 i 3 MST bierze obie dwójki, więc droga między końcami krawędzi 3 ma w nim długość 4 zamiast 3.</div></details>
+      </li>
+      <li>Dlaczego drzewo rozpinające dla n osiedli ma zawsze n − 1 krawędzi?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile krawędzi trzeba, żeby połączyć 2 osiedla, 3, 4? Co się stanie po dodaniu jeszcze jednej?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zaczynamy od n osobnych osiedli. Każda krawędź bez cyklu łączy dwie osobne części w jedną, więc zmniejsza liczbę części o 1. Żeby z n części została jedna, trzeba dokładnie n − 1 krawędzi. Każda kolejna krawędź łączyłaby osiedla już połączone, czyli zamykałaby cykl.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">J. B. Kruskal, Proc. Amer. Math. Soc. 7(1), 1956, s. 48–50; R. C. Prim, Bell Syst. Tech. J. 36(6), 1957, s. 1389–1401; T. H. Cormen i in., rozdz. 23. Plansza 1 — graf ze slajdów W10; na planszach 2 i 3 wagi są różne, więc najtańsza sieć jest jedna.</p>
