@@ -97,6 +97,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
 .przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
 .przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
@@ -469,10 +472,22 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Znajdź na mapie pętlę, czyli drogę strzałkami, która wraca do punktu wyjścia. Co by się stało z siecią, gdyby jednej strzałki z tej pętli zabrakło? (Moduł „Korek w sieci”.)</li>
-      <li>Które pojęcie ma najwięcej połączeń? Co to mówi o jego roli w sieci?</li>
-      <li>Dorysuj w myślach brakujące pojęcie: HTTPS = HTTP + … Do którego węzła dołączysz strzałkę i jak ją podpiszesz?</li>
-      <li>Zrób własną mapę na kartce z pamięci, a dopiero potem porównaj ją z tą. Czego zabrakło?</li>
+      <li>Znajdź na mapie pętlę, czyli drogę strzałkami, która wraca do punktu wyjścia. Co by się stało z siecią, gdyby jednej strzałki z tej pętli zabrakło? (Moduł „Korek w sieci”.)
+        <details class="odp"><summary>Wskazówka</summary><div>Szukaj dwóch pojęć połączonych strzałkami w obie strony.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Pętla to Kolejka w routerze → (straty są sygnałem dla) → Sprzężenie zwrotne → (rozładowuje) → Kolejka w routerze. Gdyby zabrakło strzałki „rozładowuje”, czyli nadawcy nie zwalnialiby po stratach, kolejki rosłyby, pakiety ginęłyby coraz częściej, a ponowne wysyłanie jeszcze bardziej zatykałoby sieć.</div></details>
+      </li>
+      <li>Które pojęcie ma najwięcej połączeń? Co to mówi o jego roli w sieci?
+        <details class="odp"><summary>Wskazówka</summary><div>Policz strzałki wchodzące i wychodzące dla kilku pojęć ze środka mapy.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Najwięcej połączeń, cztery, ma Kolejka w routerze: z Routerem, Sprzężeniem zwrotnym (w obie strony) i Opóźnieniem. To węzeł, w którym spotykają się sprzęt, sterowanie ruchem i to, co odczuwa użytkownik. Kolejki w routerach są miejscem, gdzie problemy sieci stają się widoczne jako opóźnienie i straty.</div></details>
+      </li>
+      <li>Dorysuj w myślach brakujące pojęcie: HTTPS = HTTP + … Do którego węzła dołączysz strzałkę i jak ją podpiszesz?
+        <details class="odp"><summary>Wskazówka</summary><div>Co dodaje „S” w HTTPS? Która warstwa szyfruje w stosie TCP/IP?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>HTTPS = HTTP + TLS (szyfrowanie). Nowe pojęcie TLS dołącza się do HTTP, np. strzałką „HTTP → szyfruje przez → TLS”, i do TCP: „TLS → korzysta z → TCP”. TLS leży więc między aplikacją a transportem.</div></details>
+      </li>
+      <li>Zrób własną mapę na kartce z pamięci, a dopiero potem porównaj ją z tą. Czego zabrakło?
+        <details class="odp"><summary>Wskazówka</summary><div>Najpierw zapisz pojęcia, które pamiętasz, potem dorysuj strzałki z podpisami.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Twojej mapy. Zwykle najłatwiej pamięta się pojęcia, a najczęściej brakuje podpisanych strzałek, czyli tego, jak pojęcia się łączą: np. że straty są sygnałem dla TCP albo że łącze wyznacza czas transmisji. Odtwarzanie z pamięci i porównanie z wzorem uczy więcej niż samo oglądanie gotowej mapy.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Mapa pojęć (concept map) według J. D. Novaka: pojęcia połączone podpisanymi relacjami. Metaanaliza J. C. Nesbit, O. O. Adesope, <em>Learning With Concept and Knowledge Maps</em>, Review of Educational Research 76(3), 2006, s. 413–448: uczenie się z map pojęć, gotowych i budowanych samodzielnie, dawało średnio lepsze zapamiętywanie niż czytanie tekstu, list czy konspektów. Numery slajdów według pliku <a href="slajdy/W12.pdf">W12.pdf</a> (slajdy wykładu).</p>
@@ -505,9 +520,18 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Zwiększaj N przy p = 10%. Przy ilu użytkownikach przeciążenie zdarza się częściej niż w 1% chwil? Ile to razy więcej niż przy obwodach?</li>
-      <li>Ustaw p = 100% (wszyscy nadają bez przerwy). Co zostaje z przewagi pakietów?</li>
-      <li>Założenie o niezależności: czy w przerwie między zajęciami studenci korzystają z sieci niezależnie? Co to zmienia?</li>
+      <li>Zwiększaj N przy p = 10%. Przy ilu użytkownikach przeciążenie zdarza się częściej niż w 1% chwil? Ile to razy więcej niż przy obwodach?
+        <details class="odp"><summary>Wskazówka</summary><div>Przesuwaj N i patrz na prawdopodobieństwo przeciążenia. Ilu użytkowników obsłużą obwody przy R = 1000 i r = 100?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy p = 10% przeciążenie przekracza 1% chwil od ok. 51 użytkowników. Obwody obsłużą tylko 10 (1000 / 100), więc pakiety mieszczą ok. 5 razy więcej osób. Przy 35 użytkownikach z przykładu przeciążenie zdarza się w ok. 0,04% chwil.</div></details>
+      </li>
+      <li>Ustaw p = 100% (wszyscy nadają bez przerwy). Co zostaje z przewagi pakietów?
+        <details class="odp"><summary>Wskazówka</summary><div>Gdy każdy nadaje stale, ilu użytkowników jednocześnie potrzebuje łącza?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nic nie zostaje. Gdy wszyscy nadają bez przerwy, naraz nadaje N osób i łącze uniesie tylko 10, jak przy obwodach. Ponad 10 użytkowników przeciążenie jest stałe. Przewaga pakietów bierze się wyłącznie z tego, że ludzie nadają tylko przez część czasu.</div></details>
+      </li>
+      <li>Założenie o niezależności: czy w przerwie między zajęciami studenci korzystają z sieci niezależnie? Co to zmienia?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy po dzwonku studenci sięgają po telefony w losowych chwilach?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie są niezależni: w przerwie wielu studentów naraz sprawdza wiadomości i otwiera strony. Wtedy naraz nadaje dużo więcej osób, niż przewiduje rozkład dwumianowy, i przeciążenie zdarza się znacznie częściej niż w modelu. Sieć projektuje się więc na szczyty, a nie na średnią.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">J. F. Kurose, K. W. Ross, <em>Computer Networking: A Top-Down Approach</em>, 8th ed., Pearson 2021, rozdz. 1.3 (przykład 1 Mb/s, 35 użytkowników).</p>
@@ -548,9 +572,18 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Który nagłówek router zmienia, a którego nie rusza (poza TTL)? Dlaczego router nie zagląda do nagłówka TCP?</li>
-      <li>Wyślij wiadomość „ok”. Ile procent ramki to treść, a ile koperty? Co by było przy pliku 1 MB podzielonym na pakiety?</li>
-      <li>Ta sama strona działa przez Wi-Fi, Ethernet i 5G. Która warstwa się zmienia, a których przeglądarka „nie widzi”?</li>
+      <li>Który nagłówek router zmienia, a którego nie rusza (poza TTL)? Dlaczego router nie zagląda do nagłówka TCP?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj nagłówki ramki przed routerem i za nim.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Router zdejmuje ramkę Ethernet i pakuje datagram w nową, z adresami MAC następnego odcinka. Nagłówek IP zostaje (poza TTL i sumą kontrolną), bo adres celu się nie zmienia. Do TCP router nie zagląda, bo jest urządzeniem warstwy sieciowej: wystarcza mu adres IP. Porty i kolejność danych to sprawa obu końców połączenia.</div></details>
+      </li>
+      <li>Wyślij wiadomość „ok”. Ile procent ramki to treść, a ile koperty? Co by było przy pliku 1 MB podzielonym na pakiety?
+        <details class="odp"><summary>Wskazówka</summary><div>Odczytaj liczby pod schematem: treść, nagłówki w ramce, narzut.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy „ok” treść to 2 B, a nagłówki 58 B (TCP 20, IP 20, Ethernet 14 + 4). Treść to tylko ok. 3% ramki, a narzut 97%. Plik 1 MB dzieli się na pakiety po ok. 1460 B treści i każdy dostaje te same 58 B nagłówków, więc narzut spada do ok. 4%.</div></details>
+      </li>
+      <li>Ta sama strona działa przez Wi-Fi, Ethernet i 5G. Która warstwa się zmienia, a których przeglądarka „nie widzi”?
+        <details class="odp"><summary>Wskazówka</summary><div>Która warstwa opisuje kabel, radio i ramki? Z której warstwy korzysta przeglądarka?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zmieniają się warstwy łącza danych i fizyczna: inne ramki i inny sposób przesyłania bitów (radio, kabel). Przeglądarka działa w warstwie aplikacji i korzysta z TCP przez gniazdo, więc warstwy łącza i fizycznej w ogóle nie widzi. Dzięki temu ta sama aplikacja działa w każdej sieci.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Kurose, Ross, rozdz. 1.5 (warstwy, enkapsulacja); RFC 9293 (TCP), RFC 791 (IPv4), IEEE 802.3 (Ethernet); RFC 5737 (adresy IP do dokumentacji).</p>
@@ -596,9 +629,18 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Ustaw w części A wszystkie bity na 1. Jaki to adres i jaka liczba? Dlaczego w żadnym bajcie nie da się zapisać 256?</li>
-      <li>Ile urządzeń z adresem IP masz przy sobie i w domu? Czy wystarczyłoby dla wszystkich ludzi 2<sup>32</sup> adresów?</li>
-      <li>Każde dołożenie jednego bitu podwaja liczbę adresów. O ile bitów trzeba wydłużyć adres, żeby było ich 1000 razy więcej? (Przypomnij sobie 2<sup>10</sup> z W3).</li>
+      <li>Ustaw w części A wszystkie bity na 1. Jaki to adres i jaka liczba? Dlaczego w żadnym bajcie nie da się zapisać 256?
+        <details class="odp"><summary>Wskazówka</summary><div>Jaka jest największa liczba na 8 bitach?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To 255.255.255.255, czyli liczba 2³² − 1 = 4 294 967 295. W jednym bajcie największa liczba to 11111111₂ = 255. 256 = 100000000₂ wymaga 9 bitów, więc w bajcie się nie mieści.</div></details>
+      </li>
+      <li>Ile urządzeń z adresem IP masz przy sobie i w domu? Czy wystarczyłoby dla wszystkich ludzi 2<sup>32</sup> adresów?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile urządzeń przypada na jedną osobę i ilu jest ludzi na świecie?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zwykle kilka: telefon, laptop, telewizor, router, zegarek. Ludzi jest ok. 8 miliardów, a adresów IPv4 tylko ok. 4,3 miliarda, więc nie wystarczyłoby nawet po jednym na osobę. Dlatego używa się NAT (wiele urządzeń za jednym adresem) i IPv6 ze 128-bitowymi adresami.</div></details>
+      </li>
+      <li>Każde dołożenie jednego bitu podwaja liczbę adresów. O ile bitów trzeba wydłużyć adres, żeby było ich 1000 razy więcej? (Przypomnij sobie 2<sup>10</sup> z W3).
+        <details class="odp"><summary>Wskazówka</summary><div>2¹⁰ = 1024 ≈ 1000.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>O 10 bitów, bo 2¹⁰ = 1024 ≈ 1000. Każdy bit podwaja liczbę adresów, a 10 podwojeń daje ok. 1000 razy więcej. Tak samo jak 1 KiB = 2¹⁰ B ≈ 1000 B.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Slajd „Adres IP i port” (W12). Kurose, Ross, rozdz. 3 (porty) i 4 (IPv4, NAT, IPv6); RFC 791 (IPv4), RFC 8200 (IPv6), RFC 5737 (adresy do dokumentacji). Maski i podsieci: ćwiczenia.</p>
@@ -639,10 +681,22 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Najtańsza trasa A → F ma koszt 11 i pięć przeskoków. Dlaczego router nie wybiera trasy A–B–D–F z trzema przeskokami?</li>
-      <li>Zepsuj łącze D–E. Które wpisy w tablicy routera A się zmieniły? A które zostały, choć zmienił się ich koszt?</li>
-      <li>Zepsuj tyle łączy, żeby F stał się nieosiągalny. Co wtedy zrobi router z pakietem do F?</li>
-      <li>Zepsuj łącze B–C. Które łącze przejmuje najwięcej tras? Co się z nim stanie, jeśli już wcześniej było prawie pełne (moduł „Korek w sieci”)? Żaden router o tym nie zdecydował — to skutek wielu niezależnych obliczeń.</li>
+      <li>Najtańsza trasa A → F ma koszt 11 i pięć przeskoków. Dlaczego router nie wybiera trasy A–B–D–F z trzema przeskokami?
+        <details class="odp"><summary>Wskazówka</summary><div>Policz koszt trasy A–B–D–F z wag na łączach.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Bo OSPF szuka najmniejszego kosztu, a nie najmniejszej liczby przeskoków. A–B–D–F kosztuje 2 + 7 + 3 = 12, a trasa przez C, E i D tylko 11. Koszt łącza może odzwierciedlać np. jego przepustowość albo opóźnienie, więc krótsza liczbą przeskoków trasa nie musi być najlepsza.</div></details>
+      </li>
+      <li>Zepsuj łącze D–E. Które wpisy w tablicy routera A się zmieniły? A które zostały, choć zmienił się ich koszt?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj tablicę A przed awarią i po niej: kolumnę „przez którego sąsiada” i kolumnę kosztu osobno.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Kolumna „wyślij przez” się nie zmienia: do każdego celu A nadal wysyła przez B. Zmieniają się tylko koszty: D z 8 na 9 (teraz przez B–D) i F z 11 na 12. Router A nie musi nic zmieniać u siebie, choć dalsza część trasy biegnie inaczej. Decyduje o niej router B.</div></details>
+      </li>
+      <li>Zepsuj tyle łączy, żeby F stał się nieosiągalny. Co wtedy zrobi router z pakietem do F?
+        <details class="odp"><summary>Wskazówka</summary><div>Jaki wpis ma tablica przekazywania dla celu, do którego nie prowadzi żadna droga?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla F nie ma wpisu w tablicy, więc router nie ma dokąd go wysłać. Odrzuca pakiet i zwykle odsyła nadawcy komunikat „cel nieosiągalny” (ICMP). Pakiet nie krąży w kółko, bo każdy router sprawdza tablicę, a TTL i tak ograniczyłby jego wędrówkę.</div></details>
+      </li>
+      <li>Zepsuj łącze B–C. Które łącze przejmuje najwięcej tras? Co się z nim stanie, jeśli już wcześniej było prawie pełne (moduł „Korek w sieci”)? Żaden router o tym nie zdecydował — to skutek wielu niezależnych obliczeń.
+        <details class="odp"><summary>Wskazówka</summary><div>Patrz na tabelę obciążenia łączy i kolumnę zmian po zepsuciu B–C.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Najwięcej tras przejmuje łącze B–D, przez które wcześniej nie szła żadna najtańsza trasa. Jeśli było już prawie pełne, czas w kolejce rośnie gwałtownie (1 / (1 − ρ)) i pakiety zaczynają ginąć. Żaden router nie postanowił go przeciążyć. Każdy policzył swoje najtańsze trasy osobno, a suma tych decyzji skupiła ruch na jednym łączu.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Kurose, Ross, rozdz. 4.1, 5.2.1 i 5.3 (przekazywanie, trasowanie stanu łączy, OSPF); E. W. Dijkstra, Numer. Math. 1, 1959. Sieć i koszty ze slajdu W12.</p>
@@ -684,9 +738,18 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Zapytaj o <span class="mono">swps.edu.pl</span>, a potem o <span class="mono">uw.edu.pl</span>. Dlaczego drugie zapytanie potrzebuje mniej kroków, choć tej nazwy jeszcze nie było?</li>
-      <li>Krótki TTL czy długi? Co zyskuje, a co traci właściciel domeny, który często zmienia adres serwera?</li>
-      <li>Nazwy tworzą drzewo. Czym schodzenie po drzewie DNS przypomina szukanie w drzewie BST z W9, a czym się różni?</li>
+      <li>Zapytaj o <span class="mono">swps.edu.pl</span>, a potem o <span class="mono">uw.edu.pl</span>. Dlaczego drugie zapytanie potrzebuje mniej kroków, choć tej nazwy jeszcze nie było?
+        <details class="odp"><summary>Wskazówka</summary><div>Zajrzyj do pamięci podręcznej lokalnego serwera po pierwszym zapytaniu. Co już w niej jest oprócz swps.edu.pl?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Po pierwszym zapytaniu lokalny serwer zapamiętał nie tylko adres swps.edu.pl, ale też to, które serwery obsługują pl i edu.pl. Pytając o uw.edu.pl, idzie od razu do serwera edu.pl i pomija serwer główny oraz serwer pl. Wspólna część nazwy oszczędza kroki.</div></details>
+      </li>
+      <li>Krótki TTL czy długi? Co zyskuje, a co traci właściciel domeny, który często zmienia adres serwera?
+        <details class="odp"><summary>Wskazówka</summary><div>Co się dzieje z adresem zapamiętanym przed zmianą, dopóki nie minie TTL?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Krótki TTL: nowy adres szybko dociera do wszystkich, ale serwery DNS pytają częściej, więc jest więcej ruchu i dłuższe pierwsze otwarcie strony. Długi TTL: mniej zapytań i szybsze odpowiedzi z pamięci, ale po zmianie adresu część osób przez długi czas trafia pod stary. Kto często zmienia adres, wybiera krótki TTL i płaci za to liczbą zapytań.</div></details>
+      </li>
+      <li>Nazwy tworzą drzewo. Czym schodzenie po drzewie DNS przypomina szukanie w drzewie BST z W9, a czym się różni?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile dzieci ma węzeł w BST, a ile w drzewie nazw? Jak wybiera się, w którą stronę zejść?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Podobieństwo: w obu schodzi się od korzenia, a każdy krok zawęża poszukiwanie do jednego poddrzewa, więc kroków jest tyle, ile poziomów. Różnice: w DNS węzeł może mieć tysiące dzieci, a kierunek wybiera się po etykiecie nazwy (pl, edu, swps), a nie przez porównanie „mniejsze/większe”. Do tego każdą część drzewa obsługuje inny serwer i odpowiedzi są zapamiętywane.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">P. Mockapetris, RFC 1034 i RFC 1035, 1987; Kurose, Ross, rozdz. 2.2 (HTTP), 2.4 (DNS), 3 (TCP i UDP); RFC 9110 (kody odpowiedzi HTTP).</p>
@@ -736,9 +799,18 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Dla pakietu 1500 B do Nowego Jorku: o ile skróci opóźnienie łącze 10 razy szybsze? A o ile przy pliku 100 MB?</li>
-      <li>Nawet w próżni (3·10⁸ m/s) RTT do Tokio przekracza próg 0,1 s, gdy otwarcie strony wymaga kilku RTT. Co mogą zrobić duże serwisy?</li>
-      <li>Polecenie traceroute z otwarcia pokazało rzeczywiste czasy. Dlaczego są większe niż wynik kalkulatora?</li>
+      <li>Dla pakietu 1500 B do Nowego Jorku: o ile skróci opóźnienie łącze 10 razy szybsze? A o ile przy pliku 100 MB?
+        <details class="odp"><summary>Wskazówka</summary><div>Odczytaj osobno d_trans i d_prop. Którą część zmienia szybsze łącze?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla 1500 B łączem 100 Mb/s d_trans to 0,12 ms, a d_prop do Nowego Jorku 34,3 ms. Łącze 10 razy szybsze skraca transmisję do 0,012 ms, czyli zyskujesz ok. 0,1 ms z 34,4 ms, prawie nic. Dla 100 MB transmisja trwa 8 s, a po przyspieszeniu 0,8 s, więc zyskujesz ok. 7,2 s. Szybsze łącze pomaga przy dużych plikach, a przy małych pakietach liczy się odległość.</div></details>
+      </li>
+      <li>Nawet w próżni (3·10⁸ m/s) RTT do Tokio przekracza próg 0,1 s, gdy otwarcie strony wymaga kilku RTT. Co mogą zrobić duże serwisy?
+        <details class="odp"><summary>Wskazówka</summary><div>Czego nie da się przyspieszyć, a co da się skrócić albo usunąć?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Prędkości światła nie da się zwiększyć, więc trzeba skrócić drogę albo zmniejszyć liczbę wymian. Duże serwisy stawiają serwery i kopie treści blisko użytkowników (CDN), utrzymują otwarte połączenia, łączą uzgodnienia w jedno (QUIC, HTTP/3) i zapamiętują odpowiedzi DNS. Tokio w próżni to ok. 57 ms RTT, więc 4 RTT to ok. 230 ms.</div></details>
+      </li>
+      <li>Polecenie traceroute z otwarcia pokazało rzeczywiste czasy. Dlaczego są większe niż wynik kalkulatora?
+        <details class="odp"><summary>Wskazówka</summary><div>Czego kalkulator nie liczy i jaką drogą naprawdę biegną kable?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Kalkulator liczy drogę po kole wielkim i pomija kolejki, przetwarzanie i transmisję. Prawdziwe kable biegną okrężnie, wzdłuż dróg i dna morza, a trasa przechodzi przez wiele routerów, z których każdy dokłada czas w kolejce i na przetwarzanie. Do tego traceroute mierzy tam i z powrotem przez te same opóźnienia.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Kurose, Ross, rozdz. 1.4 (opóźnienia, analogia z karawaną). Odległości: po kole wielkim (wzór haversine) między centrami miast, zaokrąglone do km.</p>
@@ -776,9 +848,18 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Dla Nowego Jorku szybsze łącze nie skróci żadnego z tych kroków. Dlaczego? Co by pomogło?</li>
-      <li>Duże serwisy trzymają kopie stron w wielu miastach (CDN). Wybierz Frankfurt zamiast Nowego Jorku: ile razy krócej czekasz?</li>
-      <li>Które dwa ustawienia razem zbijają otwarcie strony z Nowego Jorku najbliżej progu 0,1 s? Czy udaje się zejść poniżej?</li>
+      <li>Dla Nowego Jorku szybsze łącze nie skróci żadnego z tych kroków. Dlaczego? Co by pomogło?
+        <details class="odp"><summary>Wskazówka</summary><div>Z czego składa się jeden RTT i co z tego zależy od przepustowości?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Każdy krok to krótka wiadomość tam i z powrotem, a jej czas to prawie sama propagacja (68,5 ms RTT), a nie transmisja. Szybsze łącze skraca transmisję, której tu prawie nie ma. Pomaga bliższy serwer (CDN) albo mniej wymian: zapamiętany adres z DNS i HTTP/3, które łączy TCP i TLS.</div></details>
+      </li>
+      <li>Duże serwisy trzymają kopie stron w wielu miastach (CDN). Wybierz Frankfurt zamiast Nowego Jorku: ile razy krócej czekasz?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj liczby „strona po co najmniej” dla obu miast.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Frankfurt jest ok. 890 km od Warszawy, a Nowy Jork 6854 km. Otwarcie trwa ok. 36 ms zamiast 274 ms, czyli ok. 7,7 razy krócej. To poniżej progu 0,1 s, więc strona wydaje się natychmiastowa.</div></details>
+      </li>
+      <li>Które dwa ustawienia razem zbijają otwarcie strony z Nowego Jorku najbliżej progu 0,1 s? Czy udaje się zejść poniżej?
+        <details class="odp"><summary>Wskazówka</summary><div>Zaznacz oba pola wyboru i odczytaj liczbę RTT oraz czas.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zapamiętany adres z DNS i HTTP/3 razem zostawiają 2 RTT zamiast 4, czyli ok. 137 ms. To połowa wcześniejszego czasu, ale nadal ponad 0,1 s. Żeby zejść poniżej progu, potrzebny jest bliższy serwer.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Slajdy „Ułóż kroki w kolejności”, „Przykład: Warszawa – Nowy Jork” i „Ile czekania zniesie człowiek?” (W12). Kurose, Ross, rozdz. 2.2 (HTTP i RTT), 2.6.3 (CDN), 3 (TCP); RFC 8446 (TLS 1.3), RFC 9000 (QUIC).</p>
@@ -787,7 +868,7 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
 <!-- ═══════════════════ 6. CZEKANIE ═══════════════════ -->
 <section id="v-czekanie" hidden>
   <h2>8. Ile czekania zniesiesz?</h2>
-  <p class="lead">Klikasz przycisk, a „serwer” odpowiada po chwili — od kilkudziesięciu milisekund do kilku sekund. Po każdej odpowiedzi oceń, jak odebrałeś czekanie. Na końcu zobaczysz swoje progi.</p>
+  <p class="lead">Klikasz przycisk, a „serwer” odpowiada po chwili — od kilkudziesięciu milisekund do kilku sekund. Po każdej odpowiedzi oceń, jak odbierasz czekanie. Na końcu zobaczysz swoje progi.</p>
 
   <div class="card" id="czIntro">
     <h3>Zasady</h3>
@@ -823,15 +904,24 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="card most">
     <h3>Psychologia ↔ informatyka: progi czasu odpowiedzi</h3>
     <p>R. B. Miller (1968) i S. K. Card z zespołem (1991) opisali trzy orientacyjne progi: ok. <b>0,1 s</b> — reakcja wydaje się natychmiastowa; ok. <b>1 s</b> — opóźnienie zauważalne, ale tok myślenia nie zostaje przerwany; ok. <b>10 s</b> — granica utrzymania uwagi na zadaniu. Tego trzeciego progu ten pomiar nie sprawdza: najdłuższe czekanie trwa tu 4 s.</p>
-    <p class="small"><b>Reguły orientacyjne.</b> Progi to praktyczne wskazówki projektowe, a nie ścisłe prawa; zależą od zadania i oczekiwań. Twoje oceny zależą też od tego, jakie czasy widziałeś wcześniej w tym pomiarze.</p>
+    <p class="small"><b>Reguły orientacyjne.</b> Progi to praktyczne wskazówki projektowe, a nie ścisłe prawa; zależą od zadania i oczekiwań. Twoje oceny zależą też od tego, jakie czasy pojawiły się wcześniej w tym pomiarze.</p>
   </div>
 
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Gdzie wypadł Twój próg „natychmiast”? Czy jest bliżej 0,1 s czy 1 s?</li>
-      <li>Otwarcie strony z Nowego Jorku to co najmniej 4 RTT ≈ 274 ms. Jak oceniłbyś takie czekanie? A z serwera w Polsce?</li>
-      <li>Kręcący się wskaźnik ładowania nie skraca czekania. Dlaczego mimo to projektanci go dodają?</li>
+      <li>Gdzie wypadł Twój próg „natychmiast”? Czy jest bliżej 0,1 s czy 1 s?
+        <details class="odp"><summary>Wskazówka</summary><div>Odczytaj w wyniku, przy jakim czasie „natychmiast” przestało być najczęstszą oceną.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Twojego wyniku. U wielu osób granica „natychmiast” wypada w okolicy 0,1–0,3 s, czyli bliżej 0,1 s. Wynik zależy jednak od zadania, nastawienia i tego, jakie czasy pojawiły się wcześniej w pomiarze.</div></details>
+      </li>
+      <li>Otwarcie strony z Nowego Jorku to co najmniej 4 RTT ≈ 274 ms. Jak oceniasz takie czekanie? A z serwera w Polsce?
+        <details class="odp"><summary>Wskazówka</summary><div>274 ms leży między dwoma progami. Ile RTT do serwera w Polsce?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>274 ms jest powyżej progu 0,1 s i poniżej 1 s, więc zwykle odbiera się je jako „zauważalnie, ale nie przeszkadza”. Serwer w Polsce ma RTT kilka milisekund, więc 4 RTT to wciąż mniej niż 0,1 s, a otwarcie wydaje się natychmiastowe (jeśli serwer szybko odpowiada).</div></details>
+      </li>
+      <li>Kręcący się wskaźnik ładowania nie skraca czekania. Dlaczego mimo to projektanci go dodają?
+        <details class="odp"><summary>Wskazówka</summary><div>Co użytkownik wie bez wskaźnika, gdy nic się nie dzieje?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wskaźnik daje informację zwrotną: system działa, nie zawiesił się. Bez niego użytkownik nie wie, czy kliknięcie zadziałało, czeka w niepewności i często klika jeszcze raz albo odświeża, co dodatkowo obciąża serwer (zob. moduł „Dlaczego zapisy zwalniają?”). Czekanie z widocznym postępem wydaje się też krótsze i mniej frustrujące.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">R. B. Miller, <em>Response Time in Man-Computer Conversational Transactions</em>, AFIPS FJCC 33, 1968, s. 267–277; S. K. Card, G. G. Robertson, J. D. Mackinlay, <em>The Information Visualizer, an Information Workspace</em>, CHI 1991.</p>
@@ -893,10 +983,22 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przesuń ρ z 0,5 na 0,9, a potem na 0,95. Ile razy wydłuża się czas w routerze przy każdym kroku? Dlaczego ostatnie 5 punktów procentowych kosztuje więcej niż poprzednie 40?</li>
-      <li>Ustaw bufor 10 pakietów i ρ = 0,95. Co się dzieje z czasem w routerze, a co z utratą pakietów? Co woli rozmowa wideo, a co pobieranie pliku?</li>
-      <li>W części B ustaw bardzo różne tempa startowe. Po ilu RTT nadawcy dzielą łącze mniej więcej po równo? Kto o tym zdecydował?</li>
-      <li>Przełącz nadawcę 2 na „nie reaguje” i daj mu tempo 60, a potem 100. Kto na tym traci? Dlaczego aplikacje działające na UDP też powinny ograniczać tempo?</li>
+      <li>Przesuń ρ z 0,5 na 0,9, a potem na 0,95. Ile razy wydłuża się czas w routerze przy każdym kroku? Dlaczego ostatnie 5 punktów procentowych kosztuje więcej niż poprzednie 40?
+        <details class="odp"><summary>Wskazówka</summary><div>Odczytaj krzywą modelu dla ρ = 0,5, 0,9 i 0,95. Ile wolnego miejsca zostaje na łączu?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Z 2 do 10, czyli 5 razy, a potem z 10 do 20, czyli jeszcze 2 razy. Czas w routerze zależy od wolnej części łącza, 1 − ρ. Przy 0,5 → 0,9 zapas spada z 0,5 do 0,1, a przy 0,9 → 0,95 z 0,1 do 0,05, czyli o połowę. Blisko pełnego łącza każda mała zmiana obciążenia mocno zmienia zapas, więc i czekanie.</div></details>
+      </li>
+      <li>Ustaw bufor 10 pakietów i ρ = 0,95. Co się dzieje z czasem w routerze, a co z utratą pakietów? Co woli rozmowa wideo, a co pobieranie pliku?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj czas w routerze i liczbę utraconych pakietów dla bufora 10 i bez limitu.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Z buforem 10 pakietów czas w routerze jest ograniczony, ale część pakietów ginie, bo nie ma dla nich miejsca. Rozmowa wideo woli straty niż opóźnienie: zgubiona klatka to chwila zakłócenia, a spóźniona jest bezużyteczna. Pobieranie pliku woli opóźnienie, bo każdy bajt musi dotrzeć, a zgubione pakiety trzeba wysłać jeszcze raz.</div></details>
+      </li>
+      <li>W części B ustaw bardzo różne tempa startowe. Po ilu RTT nadawcy dzielą łącze mniej więcej po równo? Kto o tym zdecydował?
+        <details class="odp"><summary>Wskazówka</summary><div>Odczytaj licznik „podział prawie równy od RTT”.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy starcie 80 i 5 nadawcy dzielą łącze prawie po równo po ok. 90 RTT (licznik pokazuje dokładną liczbę). Nikt o tym nie zdecydował: każde przepełnienie zabiera obu połowę tempa, więc szybszy traci więcej, a przyrost o 1 jest dla obu jednakowy. Różnica maleje sama, dzięki sprzężeniu zwrotnemu.</div></details>
+      </li>
+      <li>Przełącz nadawcę 2 na „nie reaguje” i daj mu tempo 60, a potem 100. Kto na tym traci? Dlaczego aplikacje działające na UDP też powinny ograniczać tempo?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj średnie tempo nadawcy 1 przy tempie 60 i 100 nadawcy 2.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Traci nadawca TCP. Przy 60 dostaje tylko ok. 30, bo sam zwalnia po stratach, a nadawca 2 nie. Przy 100 nie przesyła prawie nic. Aplikacje na UDP powinny same ograniczać tempo, bo inaczej zabierają łącze uczciwym nadawcom i mogą doprowadzić do zatkania sieci, w której ginie większość pakietów.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Kurose, Ross, rozdz. 1.4.2 (opóźnienie kolejki i utrata pakietów), 3.6–3.7 (kontrola przeciążenia, AIMD, sprawiedliwość); V. Jacobson, <em>Congestion Avoidance and Control</em>, SIGCOMM 1988. Część A: model kolejki M/M/1 (losowe przyjścia i czasy wysyłania), czas w jednostkach średniego czasu wysłania jednego pakietu. Część B: uproszczenie — oba połączenia mają to samo RTT i tracą pakiety w tej samej chwili.</p>
@@ -928,10 +1030,22 @@ svg.mp .et.akt { fill: var(--accent); font-weight: 600; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przy 1000 użytkowników odpowiedź trwa 0,5 s, przy 2000 — prawie 13 s. Dlaczego dwa razy więcej osób to aż 26 razy dłuższe czekanie? (Moduł „Korek w sieci”.)</li>
-      <li>Szybsze łącze nic by tu nie dało. Jak to wyczytać z pomiarów, zanim wyda się pieniądze?</li>
-      <li>Drugi serwer aplikacji też by pomógł. Co jest lepsze na początek: poprawka w kodzie czy drugi serwer? Od czego to zależy?</li>
-      <li>Wskaż w tej historii: wąskie gardło, kompromis, sprzężenie zwrotne i warstwy (strona główna: „Pięć idei, które wracają”).</li>
+      <li>Przy 1000 użytkowników odpowiedź trwa 0,5 s, przy 2000 — prawie 13 s. Dlaczego dwa razy więcej osób to aż 26 razy dłuższe czekanie? (Moduł „Korek w sieci”.)
+        <details class="odp"><summary>Wskazówka</summary><div>Policz ρ = użytkownicy / 2040 dla 1000 i 2000 użytkowników, a potem 0,25 s / (1 − ρ).</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy 1000 użytkowników ρ ≈ 0,49 i czas to 0,25 / 0,51 ≈ 0,49 s. Przy 2000 ρ ≈ 0,98 i czas to 0,25 / 0,02 ≈ 12,8 s. Dwa razy więcej osób zmniejsza wolną część możliwości serwera z ok. 0,5 do 0,02, czyli ok. 26 razy, i tyle razy dłużej się czeka. Serwer jest tuż przed granicą swoich możliwości.</div></details>
+      </li>
+      <li>Szybsze łącze nic by tu nie dało. Jak to wyczytać z pomiarów, zanim wyda się pieniądze?
+        <details class="odp"><summary>Wskazówka</summary><div>Które zasoby są zajęte prawie w 100%, a które mają duży zapas?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Łącze uczelni jest wykorzystane tylko w 35%, a DNS i baza odpowiadają szybko (dysk zajęty w 20%). Prawie pełny jest procesor serwera aplikacji: 98% o 9:00 i 3% w nocy. Wąskim gardłem jest procesor, a szybsze łącze przyspieszyłoby coś, co i tak nie jest pełne.</div></details>
+      </li>
+      <li>Drugi serwer aplikacji też by pomógł. Co jest lepsze na początek: poprawka w kodzie czy drugi serwer? Od czego to zależy?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile kosztuje każde rozwiązanie i czy problem wróci, gdy studentów przybędzie?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zależy od przyczyny i kosztów. Jeśli kod robi coś zbędnego przy każdym żądaniu albo przeglądarki same co kilka sekund odświeżają stronę, poprawka w kodzie jest tania i usuwa przyczynę. Drugi serwer pomaga szybko, jeśli architektura pozwala dodać go bez zmian, ale kosztuje stale i może tylko przesunąć problem. Rozsądnie jest najpierw zmierzyć, gdzie procesor traci czas.</div></details>
+      </li>
+      <li>Wskaż w tej historii: wąskie gardło, kompromis, sprzężenie zwrotne i warstwy (strona główna: „Pięć idei, które wracają”).
+        <details class="odp"><summary>Wskazówka</summary><div>Szukaj kolejno: co jest pełne, co się wymienia, co się samo nakręca, w której warstwie jest problem.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wąskie gardło: procesor serwera aplikacji (98%). Kompromis: koszt drugiego serwera wobec czasu na poprawkę kodu. Sprzężenie zwrotne: wolna strona sprawia, że studenci odświeżają ją co kilka sekund, żądań przybywa (300 → 520 na sekundę) i strona zwalnia jeszcze bardziej, czyli pętla wzmacniająca. Warstwy: problem leży w warstwie logiki, a nie w sieci, DNS czy bazie danych.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Przykład dydaktyczny: system i dane są zmyślone, czasy odpowiedzi policzone z modelu kolejki 0,25 s / (1 − ρ), ρ = liczba użytkowników / 2040 (jak w module „Korek w sieci”). Haszowanie: W9; planowanie i architektura trójwarstwowa: W11; kolejki i TCP: W12.</p>
