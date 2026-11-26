@@ -95,6 +95,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .przyp { background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px 14px; margin: 10px 0; }
 .przyp summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .92rem; }
 .przyp ul { margin: .5em 0 0; padding-left: 1.2em; color: var(--text-2); font-size: .95rem; }
@@ -470,11 +473,26 @@ table.t th.n { text-align: right; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przy dzieleniu przez 2 reszty czytamy od dołu. Która reszta jest cyfrą jedności i dlaczego wychodzi jako pierwsza?</li>
-      <li>Ustaw 8 bitów i liczbę 255, a potem kliknij +1. Co się stało i ilu bitów potrzeba na 256? Ile cyfr ma liczba n w systemie o podstawie p?</li>
-      <li>Kliknij kilka razy „×2 (≪)”. Dlaczego mnożenie przez podstawę to przesunięcie cyfr? Co robi dopisanie zera w systemie dziesiętnym?</li>
-      <li>Dlaczego jedna cyfra szesnastkowa to dokładnie 4 bity, a jednej cyfrze dziesiętnej nie odpowiada żadna stała liczba bitów?</li>
-      <li>Ile mnożeń wykonuje schemat Hornera dla liczby o n cyfrach? Porównaj z liczeniem każdej potęgi od zera.</li>
+      <li>Przy dzieleniu przez 2 reszty czytamy od dołu. Która reszta jest cyfrą jedności i dlaczego wychodzi jako pierwsza?
+        <details class="odp"><summary>Wskazówka</summary><div>Reszta z dzielenia przez 2 mówi, czy liczba jest parzysta. Która cyfra zapisu dwójkowego o tym decyduje?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Pierwsza reszta to cyfra jedności: liczba jest parzysta wtedy i tylko wtedy, gdy jej ostatnia cyfra dwójkowa to 0. Dzielenie przez 2 „odcina” ostatnią cyfrę, więc kolejne reszty to kolejne cyfry od prawej. Zapisujemy od lewej, od najstarszej, dlatego reszty czytamy od dołu.</div></details>
+      </li>
+      <li>Ustaw 8 bitów i liczbę 255, a potem kliknij +1. Co się stało i ilu bitów potrzeba na 256? Ile cyfr ma liczba n w systemie o podstawie p?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile wynosi 255 dwójkowo, a ile 256?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>255 = 11111111₂ to największa liczba na 8 bitach. 256 = 100000000₂ ma już 9 cyfr, więc na 8 bitach się nie mieści. Liczba n &gt; 0 ma w systemie o podstawie p dokładnie ⌊log_p n⌋ + 1 cyfr. Dla 256 w systemie dwójkowym: log₂ 256 = 8, więc 9 cyfr.</div></details>
+      </li>
+      <li>Kliknij kilka razy „×2 (≪)”. Dlaczego mnożenie przez podstawę to przesunięcie cyfr? Co robi dopisanie zera w systemie dziesiętnym?
+        <details class="odp"><summary>Wskazówka</summary><div>Jaką wagę ma każda cyfra przed przesunięciem, a jaką po nim?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przesunięcie o jedną pozycję w lewo zwiększa wagę każdej cyfry p razy, więc cała liczba rośnie p razy. W systemie dwójkowym to mnożenie przez 2, a w dziesiętnym dopisanie zera mnoży przez 10 (47 → 470).</div></details>
+      </li>
+      <li>Dlaczego jedna cyfra szesnastkowa to dokładnie 4 bity, a jednej cyfrze dziesiętnej nie odpowiada żadna stała liczba bitów?
+        <details class="odp"><summary>Wskazówka</summary><div>16 = 2⁴. Czy 10 jest potęgą dwójki?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>16 = 2⁴, więc 4 bity dają dokładnie 16 kombinacji, po jednej na każdą cyfrę szesnastkową. 10 nie jest potęgą dwójki: jedna cyfra dziesiętna to log₂ 10 ≈ 3,32 bitu. Granice cyfr dziesiętnych nie pokrywają się więc z granicami grup bitów i nie da się zamieniać „po kawałku”.</div></details>
+      </li>
+      <li>Ile mnożeń wykonuje schemat Hornera dla liczby o n cyfrach? Porównaj z liczeniem każdej potęgi od zera.
+        <details class="odp"><summary>Wskazówka</summary><div>Horner liczy (…((c₁ · p + c₂) · p + c₃) …). Ile razy pojawia się „· p”?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Schemat Hornera wykonuje n − 1 mnożeń, po jednym na każdą cyfrę oprócz pierwszej. Liczenie każdej potęgi od zera wymaga dla cyfry na pozycji k aż k mnożeń (k − 1 na potęgę i jedno przez cyfrę), razem n(n − 1)/2. Dla 10 cyfr to 9 mnożeń zamiast 45.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 3; D. E. Knuth, <em>The Art of Computer Programming</em>, t. 2, §4.4 (zamiana podstaw).</p>
@@ -553,10 +571,22 @@ table.t th.n { text-align: right; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Dlaczego zera dopisane z lewej nie zmieniają liczby, a dopisane z prawej zmieniają? Co to mówi o cięciu od lewej?</li>
-      <li>Kolor zajmuje 3 bajty. Ile różnych kolorów da się tak zapisać? Dlaczego w CSS piszemy je szesnastkowo, a nie dziesiętnie?</li>
-      <li>Dlaczego do uprawnień pasuje system ósemkowy, a do kolorów szesnastkowy?</li>
-      <li>Spróbuj zapamiętać ciąg 12 bitów, a potem te same bity jako 3 cyfry szesnastkowe. Co jest łatwiejsze? Porównaj z ćwiczeniem „Bity i kawałki” z wykładu 1.</li>
+      <li>Dlaczego zera dopisane z lewej nie zmieniają liczby, a dopisane z prawej zmieniają? Co to mówi o cięciu od lewej?
+        <details class="odp"><summary>Wskazówka</summary><div>Dopisz zero z lewej, a potem z prawej do 101₂. Co się dzieje z wartością?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zera z lewej mają wagę zero, więc niczego nie dodają. Zero z prawej przesuwa wszystkie cyfry i mnoży liczbę przez podstawę. Cięcie od lewej działa tak, jakby niepełną ostatnią grupę dopełnić zerami z prawej, a to zmienia wartość. Dlatego grupy tniemy od prawej, a niepełną grupę dopełniamy z lewej.</div></details>
+      </li>
+      <li>Kolor zajmuje 3 bajty. Ile różnych kolorów da się tak zapisać? Dlaczego w CSS piszemy je szesnastkowo, a nie dziesiętnie?
+        <details class="odp"><summary>Wskazówka</summary><div>Każdy kanał to 8 bitów. Ile różnych wartości mają 3 bajty?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>3 bajty to 24 bity, czyli 2²⁴ = 16 777 216 kolorów. Szesnastkowo każdy bajt to dokładnie 2 cyfry, więc w #RRGGBB od razu widać wartość każdego kanału. Zapis dziesiętny całej liczby (np. 16 711 680) ukrywa granice bajtów.</div></details>
+      </li>
+      <li>Dlaczego do uprawnień pasuje system ósemkowy, a do kolorów szesnastkowy?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile bitów ma jedna grupa uprawnień rwx, a ile jeden kanał koloru?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Uprawnienia tworzą grupy po 3 bity (rwx dla właściciela, grupy i pozostałych), a 3 bity to dokładnie jedna cyfra ósemkowa: 755 to rwx r-x r-x. Kolor składa się z bajtów po 8 bitów, a bajt to dokładnie 2 cyfry szesnastkowe. Wybieramy system, którego cyfry pasują do naturalnych grup danych.</div></details>
+      </li>
+      <li>Spróbuj zapamiętać ciąg 12 bitów, a potem te same bity jako 3 cyfry szesnastkowe. Co jest łatwiejsze? Porównaj z ćwiczeniem „Bity i kawałki” z wykładu 1.
+        <details class="odp"><summary>Wskazówka</summary><div>Ile kawałków zapamiętujesz w każdej wersji?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zwykle łatwiejsze są 3 cyfry szesnastkowe: to 3 kawałki zamiast 12. Ilość informacji się nie zmienia (12 bitów), zmienia się tylko liczba elementów do zapamiętania. To ten sam efekt przekodowania co w ćwiczeniu „Bity i kawałki”.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 3; W3C, <em>CSS Color Module Level 4</em> (zapis #RRGGBB); POSIX, opis polecenia <span class="mono">chmod</span>.</p>
@@ -654,10 +684,22 @@ table.t th.n { text-align: right; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Dlaczego nadmiar może się zdarzyć tylko przy dodawaniu liczb tego samego znaku?</li>
-      <li>Znajdź liczbę różną od 0, której negacja w U2 daje ją samą. Dlaczego zakres U2 jest asymetryczny?</li>
-      <li>Ten sam sumator dodaje liczby bez znaku i liczby w U2. Znajdź przykład, w którym wynik jest dobry w jednej interpretacji, a zły w drugiej.</li>
-      <li>W Pythonie <span class="mono">127 + 1</span> daje 128, a w <span class="mono">numpy.int8</span> daje −128. Skąd ta różnica? Co ma z tym wspólnego Ariane 5?</li>
+      <li>Dlaczego nadmiar może się zdarzyć tylko przy dodawaniu liczb tego samego znaku?
+        <details class="odp"><summary>Wskazówka</summary><div>Gdzie leży suma liczby dodatniej i ujemnej względem obu składników?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Suma liczb o różnych znakach leży między nimi, więc mieści się w zakresie, jeśli oba składniki się mieszczą. Nadmiar jest możliwy tylko przy dodawaniu liczb tego samego znaku: wtedy suma może wyjść poza zakres i „przeskoczyć” na drugą stronę koła.</div></details>
+      </li>
+      <li>Znajdź liczbę różną od 0, której negacja w U2 daje ją samą. Dlaczego zakres U2 jest asymetryczny?
+        <details class="odp"><summary>Wskazówka</summary><div>Sprawdź najmniejszą liczbę na kole 4-bitowym.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Na 4 bitach to −8 = 1000: odwrócenie bitów daje 0111, a +1 znowu 1000. Zakres jest asymetryczny, bo zero ma najstarszy bit 0 i zajmuje jedno z miejsc „nieujemnych”. Na 4 bitach 16 słów to: zero, 8 liczb ujemnych i tylko 7 dodatnich.</div></details>
+      </li>
+      <li>Ten sam sumator dodaje liczby bez znaku i liczby w U2. Znajdź przykład, w którym wynik jest dobry w jednej interpretacji, a zły w drugiej.
+        <details class="odp"><summary>Wskazówka</summary><div>Spróbuj w sumatorze 4-bitowym 0111 + 0001 i 1111 + 0001. Patrz osobno na flagi C i OF.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>0111 + 0001 = 1000: bez znaku 7 + 1 = 8 jest dobrze, w U2 7 + 1 = −8 jest źle (nadmiar, OF). 1111 + 0001 = 0000 z przeniesieniem: bez znaku 15 + 1 = 0 jest źle (C), w U2 −1 + 1 = 0 jest dobrze. Sumator robi to samo, a o tym, czy wynik jest dobry, decyduje interpretacja.</div></details>
+      </li>
+      <li>W Pythonie <span class="mono">127 + 1</span> daje 128, a w <span class="mono">numpy.int8</span> daje −128. Skąd ta różnica? Co ma z tym wspólnego Ariane 5?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile bitów ma int w Pythonie, a ile numpy.int8?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Liczby całkowite w Pythonie nie mają ustalonej liczby bitów i rosną w miarę potrzeby, więc 127 + 1 = 128. numpy.int8 ma dokładnie 8 bitów w U2: 127 + 1 przekracza zakres i zawija się do −128. W 1996 r. rakieta Ariane 5 zniszczyła się, bo zamiana 64-bitowej liczby zmiennoprzecinkowej na 16-bitową liczbę całkowitą przekroczyła zakres.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 4; J. G. Brookshear, D. Brylow, <em>Computer Science: An Overview</em>, §1.6 (zapis U2 i nadmiar).</p>
@@ -705,10 +747,22 @@ table.t th.n { text-align: right; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Ile liczb ≥ 0 ma każdy z formatów 8-bitowych (statystyka pod osią)? Skoro tyle samo, to czym te formaty się różnią?</li>
-      <li>Gdzie format zmiennoprzecinkowy jest dokładniejszy od Q4.4, a gdzie mniej dokładny? Spójrz na błąd bezwzględny i względny dla 0,1, 5,3 i 30.</li>
-      <li>Dlaczego pomiar czasu w sekundach od uruchomienia (Patriot) to zły pomysł dla formatu, w którym odstępy rosną z wielkością liczby? A dla stałoprzecinkowego?</li>
-      <li>Ułóż w głowie liczby 1, 10, 100 i 1000 na osi od 0 do 1000. Czy Twoje „wewnętrzne odstępy” przypominają któryś z tych formatów? (Most do slajdu o logarytmicznej osi liczb).</li>
+      <li>Ile liczb ≥ 0 ma każdy z formatów 8-bitowych (statystyka pod osią)? Skoro tyle samo, to czym te formaty się różnią?
+        <details class="odp"><summary>Wskazówka</summary><div>Odczytaj statystykę „wszystkie liczby ≥ 0” pod osią i porównaj rozmieszczenie kresek.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Oba formaty mają po 128 liczb ≥ 0, bo oba mają 8 bitów, w tym bit znaku. Różnią się rozmieszczeniem. Q4.4 ma równe odstępy 1/16 od 0 do 7,9375. Format zmiennoprzecinkowy ma gęste liczby przy małych wartościach, a rzadkie przy dużych, za to sięga dalej.</div></details>
+      </li>
+      <li>Gdzie format zmiennoprzecinkowy jest dokładniejszy od Q4.4, a gdzie mniej dokładny? Spójrz na błąd bezwzględny i względny dla 0,1, 5,3 i 30.
+        <details class="odp"><summary>Wskazówka</summary><div>Wpisz 0,1, 5,3 i 30 w polu „Zapisz liczbę” i porównaj kolumny błędów.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla 5,3 dokładniejszy jest Q4.4 (5,3125, błąd ok. 0,24%) niż format zmiennoprzecinkowy (5,25, ok. 0,94%), bo w okolicy 5 jego krok 1/16 jest drobniejszy niż 1/4. Liczbę 30 zapisze tylko format zmiennoprzecinkowy, i to dokładnie, bo Q4.4 kończy się poniżej 8. Dla 0,1 oba dają 0,125 (błąd 25%), bo 0,1 jest poniżej najmniejszej liczby obu formatów.</div></details>
+      </li>
+      <li>Dlaczego pomiar czasu w sekundach od uruchomienia (Patriot) to zły pomysł dla formatu, w którym odstępy rosną z wielkością liczby? A dla stałoprzecinkowego?
+        <details class="odp"><summary>Wskazówka</summary><div>Co się dzieje z odstępem między sąsiednimi liczbami, gdy liczba rośnie?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>W formacie zmiennoprzecinkowym im dłużej system działa, tym większa liczba sekund i tym większe odstępy, więc rośnie też błąd bezwzględny pomiaru czasu. W stałoprzecinkowym krok jest stały, ale każde dodanie niedokładnej 0,1 s dokłada ten sam mały błąd i błędy się sumują. Tak było w Patriocie: po ok. 100 godzinach pracy błąd zegara wynosił ok. 0,34 s, a to wystarczyło, by chybić celu.</div></details>
+      </li>
+      <li>Ułóż w głowie liczby 1, 10, 100 i 1000 na osi od 0 do 1000. Czy Twoje „wewnętrzne odstępy” przypominają któryś z tych formatów? (Most do slajdu o logarytmicznej osi liczb).
+        <details class="odp"><summary>Wskazówka</summary><div>Gdzie na Twojej osi wypadło 10: blisko 0 czy wyraźnie dalej? Porównaj odstęp między 1 a 10 z odstępem między 100 a 1000.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Wiele osób, zwłaszcza dzieci, stawia małe liczby za daleko od siebie, a duże za blisko, jak na osi logarytmicznej. Taka „wewnętrzna oś” przypomina format zmiennoprzecinkowy: gęsto i dokładnie przy małych liczbach, rzadko przy dużych. Z wiekiem i doświadczeniem z liczbami oś w głowie staje się bardziej liniowa.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">IEEE Std 754-2019, §4.3.1 (zaokrąglanie do najbliższej, remis do parzystej); D. Goldberg, <em>What Every Computer Scientist Should Know About Floating-Point Arithmetic</em>, ACM Comput. Surv. 23(1), 1991.</p>
@@ -758,10 +812,22 @@ table.t th.n { text-align: right; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Kliknij „następna →” przy 1, a potem przy 16 777 216 (float). Jak duży jest odstęp w obu miejscach? Dlaczego <span class="mono">float</span> nie zapisze 16 777 217?</li>
-      <li>Zmień tylko pierwszy bit. Co się dzieje z liczbą? Dlaczego zmiana znaku jest w IEEE 754 taka tania?</li>
-      <li>Ustaw same zera w cesze i jedynkę na ostatnim bicie mantysy. Ile to jest i dlaczego ta liczba nie ma ukrytej jedynki?</li>
-      <li>W tabeli „0.1 + 0.2” suma różni się od 0.3 o ile kroków? Czy <span class="mono">math.isclose(0.1 + 0.2, 0.3)</span> powinno dać <span class="mono">True</span>?</li>
+      <li>Kliknij „następna →” przy 1, a potem przy 16 777 216 (float). Jak duży jest odstęp w obu miejscach? Dlaczego <span class="mono">float</span> nie zapisze 16 777 217?
+        <details class="odp"><summary>Wskazówka</summary><div>Odstęp to 2 do potęgi (wykładnik − 23) dla float. Jaki jest wykładnik dla 1, a jaki dla 2²⁴?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przy 1 odstęp wynosi 2⁻²³ ≈ 0,00000012, a przy 16 777 216 = 2²⁴ już 2. Mantysa ma 23 bity, więc w przedziale od 2²⁴ do 2²⁵ zmieszczą się tylko co drugie liczby całkowite. 16 777 217 leży między dwiema liczbami formatu i zostaje zaokrąglona.</div></details>
+      </li>
+      <li>Zmień tylko pierwszy bit. Co się dzieje z liczbą? Dlaczego zmiana znaku jest w IEEE 754 taka tania?
+        <details class="odp"><summary>Wskazówka</summary><div>Który bit jest bitem znaku i czy zależy od niego cecha albo mantysa?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zmienia się tylko znak liczby. Znak jest osobnym bitem, a cecha i mantysa opisują wartość bezwzględną, jak w zapisie znak–moduł. Zmiana znaku to więc odwrócenie jednego bitu, bez żadnych rachunków, inaczej niż w U2.</div></details>
+      </li>
+      <li>Ustaw same zera w cesze i jedynkę na ostatnim bicie mantysy. Ile to jest i dlaczego ta liczba nie ma ukrytej jedynki?
+        <details class="odp"><summary>Wskazówka</summary><div>Cecha 0 oznacza w IEEE 754 liczby zdenormalizowane. Jaki jest wtedy wykładnik?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To 2⁻¹⁴⁹ ≈ 1,4 · 10⁻⁴⁵, najmniejsza dodatnia liczba float. Przy cesze 0 liczba jest zdenormalizowana: mantysa jest odczytywana jako 0,mmm…, a nie 1,mmm…. Dzięki temu da się zapisać zero i liczby bliższe zeru niż najmniejsza znormalizowana, a odstępy przy zerze nie mają „dziury”.</div></details>
+      </li>
+      <li>W tabeli „0.1 + 0.2” suma różni się od 0.3 o ile kroków? Czy <span class="mono">math.isclose(0.1 + 0.2, 0.3)</span> powinno dać <span class="mono">True</span>?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj w tabeli bity sumy i bity 0.3, najpierw dla float, potem dla double.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla float suma trafia dokładnie w tę samą liczbę co 0.3 (0 kroków). Dla double różni się o jeden krok, czyli o najmniejszy możliwy odstęp: 0.30000000000000004 wobec 0.3. math.isclose(0.1 + 0.2, 0.3) daje True, bo porównuje z tolerancją względną. Dlatego liczby zmiennoprzecinkowe porównuje się z tolerancją, a nie przez ==.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">IEEE Std 754-2019, <em>IEEE Standard for Floating-Point Arithmetic</em>, §3.4 (kodowanie formatów binarnych); D. Goldberg, ACM Comput. Surv. 23(1), 1991.</p>
@@ -854,10 +920,22 @@ table.t th.n { text-align: right; }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Wpisz „é” (dwa punkty kodowe) i skopiuj obok „é” z przycisku „é (jeden)”. Wyglądają tak samo. Czy Python uzna je za równe? Co z tego wynika dla wyszukiwania w tekście?</li>
-      <li>W UTF-8 bajt zaczynający się od <span class="mono">10</span> nigdy nie rozpoczyna znaku. Dlaczego to ułatwia odczyt pliku, w którym zgubił się jeden bajt?</li>
-      <li>W fabryce krzaczków zapisz napis w UTF-8 i odczytaj jako Windows-1250. Ile obcych znaków powstaje z jednej polskiej litery i dlaczego akurat tyle?</li>
-      <li>Ile bajtów zajmuje emoji „rodzina”, a ile znaków widzisz na ekranie? Które z tych liczb zwraca <span class="mono">len()</span> w Pythonie?</li>
+      <li>Wpisz „é” (dwa punkty kodowe) i skopiuj obok „é” z przycisku „é (jeden)”. Wyglądają tak samo. Czy Python uzna je za równe? Co z tego wynika dla wyszukiwania w tekście?
+        <details class="odp"><summary>Wskazówka</summary><div>Spójrz na kolumnę „punkt kodowy” dla obu wersji.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Nie: „é” jako jeden znak to U+00E9, a jako dwa to „e” (U+0065) i znak łączący U+0301. Python porównuje ciągi punktów kodowych, więc uzna je za różne. Przed wyszukiwaniem trzeba ujednolicić zapis (normalizacja Unicode, np. unicodedata.normalize("NFC", s)), inaczej „kawé” nie znajdzie „kawé”.</div></details>
+      </li>
+      <li>W UTF-8 bajt zaczynający się od <span class="mono">10</span> nigdy nie rozpoczyna znaku. Dlaczego to ułatwia odczyt pliku, w którym zgubił się jeden bajt?
+        <details class="odp"><summary>Wskazówka</summary><div>Bajt 10xxxxxx to zawsze kontynuacja znaku. Co robi program, który trafi na środek znaku?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Program, który trafi na bajt 10xxxxxx, wie, że to środek znaku. Przeskakuje takie bajty aż do najbliższego bajtu zaczynającego znak i od niego czyta dalej poprawnie. Zgubienie bajtu psuje więc tylko jeden znak, a nie resztę pliku.</div></details>
+      </li>
+      <li>W fabryce krzaczków zapisz napis w UTF-8 i odczytaj jako Windows-1250. Ile obcych znaków powstaje z jednej polskiej litery i dlaczego akurat tyle?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile bajtów ma polska litera w UTF-8, a ile bajtów na znak czyta kodowanie jednobajtowe?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Z każdej polskiej litery powstają dwa obce znaki. W UTF-8 polska litera zajmuje 2 bajty, a Windows-1250 czyta każdy bajt jako osobny znak. Litery ASCII mają w UTF-8 jeden bajt i odczytują się poprawnie.</div></details>
+      </li>
+      <li>Ile bajtów zajmuje emoji „rodzina”, a ile znaków widzisz na ekranie? Które z tych liczb zwraca <span class="mono">len()</span> w Pythonie?
+        <details class="odp"><summary>Wskazówka</summary><div>Spójrz na wiersze tabeli: ile jest punktów kodowych i co oznacza znak między emoji?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>„Rodzina” w tym ćwiczeniu to 3 emoji osób połączone 2 niewidocznymi znakami ZWJ (U+200D): 5 punktów kodowych i 18 bajtów w UTF-8 (3 · 4 + 2 · 3). Na ekranie widać 1 znak. len() w Pythonie zwraca liczbę punktów kodowych, czyli 5.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">F. Yergeau, <em>UTF-8, a transformation format of ISO 10646</em>, RFC 3629, 2003, rozdz. 3; The Unicode Consortium, <em>The Unicode Standard</em>, rozdz. 2 i 3.9; tablice ISO/IEC 8859-2, Windows-1250 i CP852 wg modułu <span class="mono">codecs</span> Pythona.</p>
