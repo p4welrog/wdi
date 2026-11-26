@@ -177,6 +177,15 @@ details.ref summary { cursor: pointer; font-weight: 600; color: var(--accent); }
 .fbline { font-weight: 600; font-size: 1.1rem; margin: 12px 0 4px; }
 .fbline.dobrze { color: var(--good); }
 .fbline.zle { color: var(--bad); }
+.dgkrok { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 14px; }
+.dgkrok:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+.dgodp { display: grid; gap: 8px; margin: 8px 0; }
+.dgodp .btn { text-align: left; font-weight: 500; }
+.dgodp .btn.dobra { background: var(--good); border-color: var(--good); color: #fff; }
+.dgodp .btn.zla { background: var(--bad); border-color: var(--bad); color: #fff; }
+.dgpom { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 8px 0; }
+.dgpom details { border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; background: var(--surface); }
+.dgpom summary { cursor: pointer; font-weight: 600; color: var(--accent); }
 .group { border: 1px solid var(--s1); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; background: var(--surface); }
 .group h3 { display: flex; gap: 8px; align-items: center; }
 .group .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); display: inline-block; }
@@ -349,6 +358,7 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
     <a href="#otwarcie">7. Otwarcie strony</a>
     <a href="#czekanie">8. Ile czekania?</a>
     <a href="#korek">9. Korek w sieci</a>
+    <a href="#diagnoza">10. Diagnoza</a>
   </nav>
 </header>
 
@@ -368,6 +378,7 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
     <a class="tile" href="#otwarcie"><span class="num">7</span><h3>Otwarcie strony</h3><p>Ułóż kroki od wpisania adresu do odpowiedzi 200 OK. Potem oś czasu: ile RTT kosztuje otwarcie strony z Frankfurtu, a ile z Nowego Jorku, i co zmienia pamięć DNS lub HTTP/3?</p><div class="meta">ok. 6 min · slajdy „Ułóż kroki w kolejności” i „Przykład: Warszawa – Nowy Jork”</div></a>
     <a class="tile" href="#czekanie"><span class="num">8</span><h3>Ile czekania zniesiesz?</h3><p>Klikasz, a odpowiedź przychodzi po krótszej lub dłuższej chwili. Oceń, jak to odbierasz. Gdzie leżą Twoje progi — i progi sali?</p><div class="meta">ok. 4 min · slajd „Ile czekania zniesie człowiek?”</div></a>
     <a class="tile" href="#korek"><span class="num">9</span><h3>Korek w sieci</h3><p>Obciążaj łącze i patrz, jak rośnie kolejka w routerze, gdy zbliżasz się do 100%. Potem dwóch nadawców TCP, którzy bez żadnej centrali dzielą się łączem dzięki sprzężeniu zwrotnemu.</p><div class="meta">ok. 10 min · slajdy „Gdy łącze jest prawie pełne” i „TCP: sprzężenie zwrotne zamiast korka”</div></a>
+    <a class="tile" href="#diagnoza"><span class="num">10</span><h3>Dlaczego zapisy zwalniają?</h3><p>Studium przypadku na koniec kursu. W poniedziałek o 9:00 system zapisów na zajęcia ledwo działa. Obejrzyj pomiary, znajdź wąskie gardło i zaproponuj poprawkę: przydadzą się W7–W12.</p><div class="meta">ok. 12 min · cały kurs, zwłaszcza W9, W11 i W12</div></a>
   </div>
 </section>
 
@@ -769,6 +780,41 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
   <p class="src">Kurose, Ross, rozdz. 1.4.2 (opóźnienie kolejki i utrata pakietów), 3.6–3.7 (kontrola przeciążenia, AIMD, sprawiedliwość); V. Jacobson, <em>Congestion Avoidance and Control</em>, SIGCOMM 1988. Część A: model kolejki M/M/1 (losowe przyjścia i czasy wysyłania), czas w jednostkach średniego czasu wysłania jednego pakietu. Część B: uproszczenie — oba połączenia mają to samo RTT i tracą pakiety w tej samej chwili.</p>
 </section>
 
+<!-- ═══════════════════ 10. DIAGNOZA ═══════════════════ -->
+<section id="v-diagnoza" hidden>
+  <h2>10. Dlaczego zapisy zwalniają?</h2>
+  <p class="lead">Uczelniany system zapisów na zajęcia ma architekturę trójwarstwową (W11): przeglądarka, serwer aplikacji, baza danych. W poniedziałek o 9:00 otwierają się zapisy i ok. 2000 studentów wchodzi naraz. Strona ładuje się kilkanaście sekund, część osób widzi błąd. Twoje zadanie: znaleźć przyczynę i zaproponować poprawkę.</p>
+
+  <div class="card">
+    <h3>Pomiary</h3>
+    <p class="small muted">Rozwiń te, które chcesz obejrzeć. Dobry diagnosta najpierw mierzy, potem zgaduje.</p>
+    <div class="dgpom">
+      <details><summary>Czas odpowiedzi a liczba użytkowników</summary>
+        <div class="scroll-x"><table class="t"><thead><tr><th>użytkowników naraz</th><th>średni czas odpowiedzi</th></tr></thead><tbody>
+          <tr><td>100</td><td>0,26 s</td></tr><tr><td>500</td><td>0,33 s</td></tr><tr><td>1000</td><td>0,49 s</td></tr><tr><td>1500</td><td>0,94 s</td></tr><tr><td>1900</td><td>3,6 s</td></tr><tr><td>2000</td><td>12,8 s</td></tr>
+        </tbody></table></div></details>
+      <details><summary>Procesor serwera aplikacji</summary><p class="small">O 9:00 zajęty w 98%. W nocy: 3%.</p></details>
+      <details><summary>Łącze internetowe uczelni</summary><p class="small">O 9:00 wykorzystane w 35%. Strona zapisów waży ok. 60 kB.</p></details>
+      <details><summary>DNS</summary><p class="small">Nazwa serwera zapisów jest w pamięci podręcznej serwerów DNS uczelni; odpowiedź w ok. 2 ms.</p></details>
+      <details><summary>Baza danych</summary><p class="small">Pojedyncze zapytanie trwa 2–4 ms, dysk bazy zajęty w 20%.</p></details>
+      <details><summary>Żądania na sekundę</summary><p class="small">9:00 — ok. 300 na sekundę; 9:02 — ok. 520 na sekundę, choć zalogowanych jest tyle samo osób. W dzienniku widać wiele żądań tej samej strony od tych samych studentów co kilka sekund.</p></details>
+    </div>
+  </div>
+
+  <div class="card" id="dgKroki"></div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Przy 1000 użytkowników odpowiedź trwa 0,5 s, przy 2000 — prawie 13 s. Dlaczego dwa razy więcej osób to aż 26 razy dłuższe czekanie? (Moduł „Korek w sieci”.)</li>
+      <li>Szybsze łącze nic by tu nie dało. Jak to wyczytać z pomiarów, zanim wyda się pieniądze?</li>
+      <li>Drugi serwer aplikacji też by pomógł. Co jest lepsze na początek: poprawka w kodzie czy drugi serwer? Od czego to zależy?</li>
+      <li>Wskaż w tej historii: wąskie gardło, kompromis, sprzężenie zwrotne i warstwy (strona główna: „Pięć idei, które wracają”).</li>
+    </ol>
+  </div>
+  <p class="src">Przykład dydaktyczny: system i dane są zmyślone, czasy odpowiedzi policzone z modelu kolejki 0,25 s / (1 − ρ), ρ = liczba użytkowników / 2040 (jak w module „Korek w sieci”). Haszowanie: W9; planowanie i architektura trójwarstwowa: W11; kolejki i TCP: W12.</p>
+</section>
+
 <section id="v-ustawienia" hidden>
   <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
   <p class="lead">Ćwiczenie 6 („Ile czekania zniesiesz?”) może wysyłać anonimowe wyniki do Formularza Google i pokazywać wyniki całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła. Można użyć tego samego formularza co w poprzednich wykładach.</p>
@@ -833,7 +879,7 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
 
 <script>
 'use strict';
-const KONF = {"wyk": "W12", "key": "wdi-w12-grupa", "widoki": {"start": "Wykład 12 · ćwiczenia", "pakiety": "Obwody czy pakiety? · W12", "warstwy": "Koperta w kopercie · W12", "adres": "Adres IP i port · W12", "trasowanie": "Trasowanie · W12", "dns": "DNS i transport · W12", "opoznienie": "Kalkulator opóźnień · W12", "otwarcie": "Otwarcie strony · W12", "czekanie": "Ile czekania zniesiesz? · W12", "korek": "Korek w sieci · W12", "ustawienia": "Ustawienia prowadzącego · W12"}, "linki": [{"id": "sLink0", "hash": "czekanie", "label": "Ile czekania zniesiesz?"}]};
+const KONF = {"wyk": "W12", "key": "wdi-w12-grupa", "widoki": {"start": "Wykład 12 · ćwiczenia", "pakiety": "Obwody czy pakiety? · W12", "warstwy": "Koperta w kopercie · W12", "adres": "Adres IP i port · W12", "trasowanie": "Trasowanie · W12", "dns": "DNS i transport · W12", "opoznienie": "Kalkulator opóźnień · W12", "otwarcie": "Otwarcie strony · W12", "czekanie": "Ile czekania zniesiesz? · W12", "korek": "Korek w sieci · W12", "diagnoza": "Dlaczego zapisy zwalniają? · W12", "ustawienia": "Ustawienia prowadzącego · W12"}, "linki": [{"id": "sLink0", "hash": "czekanie", "label": "Ile czekania zniesiesz?"}]};
 /* ═════════════════════ Narzędzia ═════════════════════ */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1768,7 +1814,71 @@ const Korek = (() => {
   return { init, _t: { symuluj, aimd } };
 })();
 
-const MODULY = { pakiety: Pakiety, warstwy: Warstwy, adres: Adres, trasowanie: Trasowanie, dns: Dns, opoznienie: Opoznienie, otwarcie: Otwarcie, czekanie: Czekanie, korek: Korek };
+/* ═════════════════════ Ćwiczenie 10: diagnoza ═════════════════════ */
+const Diagnoza = (() => {
+  const KROKI = [
+    { q: '1. Gdzie jest wąskie gardło?', o: [
+      ['łącze internetowe uczelni', false, 'Łącze jest wykorzystane w 35% — ma zapas. Szybsze łącze nic nie da: to nie ono ogranicza całość.'],
+      ['serwer DNS', false, 'DNS odpowiada z pamięci podręcznej w 2 ms i robi to raz na wizytę. To nie on.'],
+      ['procesor serwera aplikacji', true, 'Tak: 98% zajętości o 9:00. Gdy element jest zajęty prawie cały czas, kolejka przed nim rośnie gwałtownie — stąd skok z 3,6 s do 12,8 s przy ostatnich 100 osobach.'],
+      ['baza danych', false, 'Zapytania trwają kilka milisekund, a dysk jest zajęty w 20%. Baza ma zapas.'],
+    ] },
+    { q: '2. Co obciąża procesor? Fragment logiki aplikacji wywoływany przy każdym kliknięciu „zapisz”:', kod: ['wszystkie_zapisy = [...]   # lista ok. 40 000 par (student, grupa)', '', 'def czy_zapisany(student, grupa):', '    for z in wszystkie_zapisy:', '        if z == (student, grupa):', '            return True', '    return False'], o: [
+      ['Planista ma za krótki kwant czasu (W11).', false, 'Kwant wpływa na liczbę przełączeń, ale nie zmniejszy pracy, którą trzeba wykonać. Tu każde kliknięcie przegląda całą listę.'],
+      ['Wyszukiwanie liniowe: każde kliknięcie to do 40 000 porównań (W6, W9).', true, 'Tak. Lista daje O(n) na sprawdzenie. Zbiór lub słownik (haszowanie, W9) daje średnio O(1): set(wszystkie_zapisy) i (student, grupa) in zapisy.'],
+      ['Python jest za wolny, trzeba przepisać system w innym języku.', false, 'Szybszy język przyspieszy każde porównanie kilka razy, ale nadal będzie ich 40 000 na kliknięcie. Lepsza struktura danych zmienia rząd wielkości.'],
+      ['Za dużo pamięci RAM zajmuje lista.', false, '40 000 par to mało pamięci. Problem to czas przeglądania, nie miejsce.'],
+    ] },
+    { q: '3. Dlaczego o 9:02 żądań jest więcej, choć studentów nie przybyło?', o: [
+      ['To atak z zewnątrz.', false, 'Żądania pochodzą od zalogowanych studentów i powtarzają tę samą stronę. Prostsze wyjaśnienie jest bliżej.'],
+      ['Czekający studenci odświeżają stronę, a każde odświeżenie to nowe żądanie w kolejce.', true, 'Tak: sprzężenie zwrotne wzmacniające. Wolniej → więcej odświeżeń → dłuższa kolejka → jeszcze wolniej. Pomaga komunikat „jesteś w kolejce, nie odświeżaj” albo blokada przycisku po kliknięciu.'],
+      ['Przeglądarki wysyłają dane przez UDP, więc pakiety się dublują.', false, 'Strony WWW działają na TCP (albo QUIC z własną niezawodnością), a powtórzenia widać w dzienniku jako osobne żądania studentów.'],
+      ['DNS przestał działać i przeglądarki pytają ciągle od nowa.', false, 'DNS odpowiada w 2 ms. Powtarzają się żądania strony zapisów, a nie zapytania o nazwę.'],
+    ] },
+    { q: '4. Co zrobić najpierw?', o: [
+      ['Kupić szybsze łącze.', false, 'Łącze nie jest wąskim gardłem — koszt bez efektu.'],
+      ['Zamienić listę na zbiór, a przycisk „zapisz” blokować do czasu odpowiedzi.', true, 'Najtańsze i usuwa przyczynę. Jeśli czas obsługi spadnie 5 razy (z 0,25 s do 0,05 s), przy 2000 osób ρ ≈ 0,2 i odpowiedź trwa ok. 0,06 s. Drugi serwer można dodać później — to kompromis: więcej mocy za cenę kosztów i większej złożoności.'],
+      ['Przenieść sprawdzanie zapisów do przeglądarki studenta (W11).', false, 'Odciąży serwer, ale reguły w przeglądarce student może obejść — logika musi zostać na serwerze (architektura trójwarstwowa, W11).'],
+      ['Uruchomić serwer ponownie o 8:59.', false, 'Restart nie zmienia ilości pracy na każde kliknięcie. Po minucie problem wróci.'],
+    ] },
+  ];
+  let stan = [];
+  function rysuj() {
+    const host = $('#dgKroki'); host.replaceChildren(el('h3', { text: 'Diagnoza krok po kroku' }));
+    KROKI.forEach((k, n) => {
+      if (n > 0 && !stan[n - 1]) return;
+      const box = el('div', { class: 'dgkrok' }, el('p', { class: 'zad', text: k.q }));
+      if (k.kod) box.append(el('pre', { class: 'kod' }, ...k.kod.map((l) => el('span', { text: l || ' ' }))));
+      const odp = el('div', { class: 'dgodp' }); const fb = el('p', { class: 'fbline', role: 'status' });
+      k.o.forEach(([t, ok, f], i) => {
+        const b = el('button', { type: 'button', class: 'btn ghost', text: t });
+        b.addEventListener('click', () => {
+          for (const x of odp.children) x.classList.remove('dobra', 'zla');
+          b.classList.add(ok ? 'dobra' : 'zla');
+          fb.className = 'fbline ' + (ok ? 'dobrze' : 'zle'); fb.textContent = (ok ? '✓ ' : '✗ ') + f;
+          if (ok && !stan[n]) { stan[n] = true; rysuj(); }
+        });
+        if (stan[n] && ok) b.classList.add('dobra');
+        odp.append(b);
+      });
+      if (stan[n]) { fb.className = 'fbline dobrze'; fb.textContent = '✓ ' + k.o.find((x) => x[1])[2]; }
+      box.append(odp, fb); host.append(box);
+    });
+    if (stan.length === KROKI.length && stan.every(Boolean)) {
+      host.append(el('div', { class: 'dgkrok' }, el('p', { class: 'zad', text: 'Gotowe. W tej historii były wszystkie idee kursu:' }), el('ul', {},
+        el('li', { text: 'wąskie gardło: procesor serwera aplikacji, a nie łącze ani baza;' }),
+        el('li', { text: 'nieliniowość kolejki: ostatnie 5% obciążenia kosztowało najwięcej czasu;' }),
+        el('li', { text: 'sprzężenie zwrotne: odświeżanie strony pogarszało korek;' }),
+        el('li', { text: 'kompromis: poprawka w kodzie czy drugi serwer;' }),
+        el('li', { text: 'warstwy: reguły zostają w warstwie logiki, nie w przeglądarce.' })),
+        (() => { const b = el('button', { type: 'button', class: 'btn ghost small', text: 'Od nowa' }); b.addEventListener('click', () => { stan = []; rysuj(); }); return b; })()));
+    }
+  }
+  function init() { rysuj(); }
+  return { init, _t: { KROKI } };
+})();
+
+const MODULY = { pakiety: Pakiety, warstwy: Warstwy, adres: Adres, trasowanie: Trasowanie, dns: Dns, opoznienie: Opoznienie, otwarcie: Otwarcie, czekanie: Czekanie, korek: Korek, diagnoza: Diagnoza };
 
 /* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
 const Ustawienia = (() => {

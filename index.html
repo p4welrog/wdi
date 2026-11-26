@@ -24,6 +24,9 @@ main { padding: 24px 0 40px; }
 a { color: var(--accent); }
 .soon { color: var(--muted); }
 .dl { display: inline-block; margin-top: 10px; font-size: .9rem; }
+.idee { border-left: 4px solid var(--accent); }
+.idee dt { font-weight: 600; margin-top: 10px; }
+.idee dd { margin: 2px 0 0; color: var(--text-2); }
 footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--border); padding: 16px 0 28px; }
 </style>
 </head>
@@ -188,8 +191,26 @@ footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--bor
       <li><a href="w12.html#otwarcie">Otwarcie strony: kolejność kroków i oś czasu w RTT</a></li>
       <li><a href="w12.html#czekanie">Ile czekania zniesiesz? Progi czasu odpowiedzi</a></li>
       <li><a href="w12.html#korek">Korek w sieci: kolejka przy pełnym łączu i sprzężenie zwrotne w TCP</a></li>
+      <li><a href="w12.html#diagnoza">Dlaczego zapisy zwalniają? Studium przypadku na koniec kursu</a></li>
     </ul>
     <a class="dl" href="w12.html" download>Pobierz do pracy bez internetu (jeden plik HTML)</a>
+  </section>
+  <section class="lec idee" id="idee">
+    <h2>Pięć idei, które wracają przez cały kurs</h2>
+    <div class="meta">Te same sposoby myślenia o systemach pojawiają się w różnych wykładach. Linki prowadzą do ćwiczeń, w których widać je w działaniu.</div>
+    <dl>
+      <dt>Warstwy i abstrakcja</dt>
+      <dd>Każde piętro korzysta z usług niższego i nie musi znać jego szczegółów: <a href="w05.html#bramki">od tranzystora do rejestru</a>, <a href="w11.html#wirtualizacja">maszyna wirtualna i kontener</a>, <a href="w12.html#warstwy">koperta w kopercie</a>.</dd>
+      <dt>Wąskie gardło</dt>
+      <dd>Całość działa tak szybko jak jej najwolniejszy element; przyspieszanie innych niewiele daje: <a href="w12.html#opoznienie">łącze czy odległość?</a>, <a href="w12.html#trasowanie">obciążenie łączy po awarii</a>.</dd>
+      <dt>Kompromis</dt>
+      <dd>Nie da się mieć wszystkiego naraz, więc wybór zależy od celu: <a href="w09.html#hasz">haszowanie a zapełnienie tablicy</a>, <a href="w11.html#planista">reguły planisty</a>, <a href="w11.html#wirtualizacja">izolacja a lekkość</a>, <a href="w12.html#dns">TCP czy UDP</a>.</dd>
+      <dt>Sprzężenie zwrotne</dt>
+      <dd>Skutek wraca i wpływa na swoją przyczynę: wzmacnia ją albo osłabia. <a href="w05.html#bramki">Przerzutnik pamięta bit</a>, <a href="w09.html#hasz">bloki w tablicy same się sklejają</a>, <a href="w11.html#planista">starzenie chroni przed zagłodzeniem</a>, <a href="w12.html#korek">TCP zwalnia przy przeciążeniu</a>.</dd>
+      <dt>Lokalne reguły, zachowanie całości</dt>
+      <dd>Wynik dla całego systemu wyłania się z decyzji podejmowanych lokalnie i nie zawsze jest najlepszy: <a href="w07.html#reszta">zachłanny kasjer</a>, <a href="w12.html#trasowanie">każdy router liczy sam</a>, <a href="w12.html#korek">nadawcy bez centrali dzielą łącze</a>.</dd>
+    </dl>
+    <p style="margin: 12px 0 0">Wszystko naraz: <a href="w12.html#diagnoza">Dlaczego zapisy zwalniają?</a> — studium przypadku na koniec kursu.</p>
   </section>
 </main>
 <footer><div class="wrap">dr Paweł Róg · Uniwersytet SWPS. Strony działają w przeglądarce i niczego nie wysyłają (poza trybem grupowym na wykładzie).</div></footer>
