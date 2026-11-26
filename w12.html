@@ -242,6 +242,13 @@ svg.rozklad .os { stroke: var(--border); }
 svg.rozklad text { fill: var(--muted); font: 11px var(--font); text-anchor: middle; }
 svg.rozklad .gr { stroke: var(--bad); stroke-dasharray: 4 3; }
 svg.rozklad text.gr { fill: var(--bad); stroke: none; font-weight: 700; }
+svg.rozklad .siatka { stroke: var(--grid); }
+svg.rozklad .krzywa { stroke: var(--s1); stroke-width: 2.5; fill: none; }
+svg.rozklad .krzywa.b { stroke: var(--s2); }
+svg.rozklad .krzywa.kolejka { stroke-width: 1.5; }
+svg.rozklad .pkt { fill: var(--s2); stroke: var(--surface); stroke-width: 2; }
+svg.rozklad .pkt.model { fill: var(--s1); }
+svg.rozklad text.l { text-anchor: start; }
 
 /* ───────── W12: enkapsulacja ───────── */
 .trasa { display: flex; align-items: stretch; gap: 8px; margin: 12px 0; }
@@ -341,6 +348,7 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
     <a href="#opoznienie">6. Opóźnienia</a>
     <a href="#otwarcie">7. Otwarcie strony</a>
     <a href="#czekanie">8. Ile czekania?</a>
+    <a href="#korek">9. Korek w sieci</a>
   </nav>
 </header>
 
@@ -359,6 +367,7 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
     <a class="tile" href="#opoznienie"><span class="num">6</span><h3>Kalkulator opóźnień</h3><p>Odległość, rozmiar danych i przepustowość. Który składnik dominuje: transmisja czy propagacja? Zadania: co bardziej pomoże — szybsze łącze czy bliższy serwer?</p><div class="meta">ok. 7 min · slajdy „Cztery składniki opóźnienia” i „Przykład: Warszawa – Nowy Jork”</div></a>
     <a class="tile" href="#otwarcie"><span class="num">7</span><h3>Otwarcie strony</h3><p>Ułóż kroki od wpisania adresu do odpowiedzi 200 OK. Potem oś czasu: ile RTT kosztuje otwarcie strony z Frankfurtu, a ile z Nowego Jorku, i co zmienia pamięć DNS lub HTTP/3?</p><div class="meta">ok. 6 min · slajdy „Ułóż kroki w kolejności” i „Przykład: Warszawa – Nowy Jork”</div></a>
     <a class="tile" href="#czekanie"><span class="num">8</span><h3>Ile czekania zniesiesz?</h3><p>Klikasz, a odpowiedź przychodzi po krótszej lub dłuższej chwili. Oceń, jak to odbierasz. Gdzie leżą Twoje progi — i progi sali?</p><div class="meta">ok. 4 min · slajd „Ile czekania zniesie człowiek?”</div></a>
+    <a class="tile" href="#korek"><span class="num">9</span><h3>Korek w sieci</h3><p>Obciążaj łącze i patrz, jak rośnie kolejka w routerze, gdy zbliżasz się do 100%. Potem dwóch nadawców TCP, którzy bez żadnej centrali dzielą się łączem dzięki sprzężeniu zwrotnemu.</p><div class="meta">ok. 10 min · slajdy „Gdy łącze jest prawie pełne” i „TCP: sprzężenie zwrotne zamiast korka”</div></a>
   </div>
 </section>
 
@@ -704,6 +713,54 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
   <p class="src">R. B. Miller, <em>Response Time in Man-Computer Conversational Transactions</em>, AFIPS FJCC 33, 1968, s. 267–277; S. K. Card, G. G. Robertson, J. D. Mackinlay, <em>The Information Visualizer, an Information Workspace</em>, CHI 1991.</p>
 </section>
 
+<!-- ═══════════════════ 9. KOREK W SIECI ═══════════════════ -->
+<section id="v-korek" hidden>
+  <h2>9. Korek w sieci</h2>
+  <p class="lead">Router wysyła pakiety po kolei. Gdy przychodzą szybciej, niż łącze je wypycha, czekają w kolejce, a gdy bufor jest pełny — giną. Obciążenie łącza ρ = La / R mówi, jaką część czasu łącze jest zajęte.</p>
+
+  <div class="card">
+    <h3>Część A: kolejka w routerze</h3>
+    <div class="row" style="gap: 18px">
+      <span class="row"><label for="kkRho">obciążenie ρ =</label><input id="kkRho" type="range" min="10" max="99" value="50"><span class="mono" id="kkRhov">0,50</span></span>
+      <span class="row"><span class="small muted" id="kkBufLab">bufor:</span><span class="seg" id="kkBuf" role="group" aria-labelledby="kkBufLab"><button type="button" data-k="10" aria-pressed="false">10 pakietów</button><button type="button" data-k="50" aria-pressed="false">50</button><button type="button" data-k="0" aria-pressed="true">bez limitu</button></span></span>
+      <button type="button" class="btn ghost small" id="kkLos">Nowe losowanie</button>
+    </div>
+    <div class="stats" id="kkStaty"></div>
+    <div class="scroll-x"><svg class="rozklad" id="kkKrzywa" viewBox="0 0 640 230" role="img" aria-label="Średni czas w routerze w zależności od obciążenia łącza"></svg></div>
+    <div class="legend"><span><i style="background: var(--s1)"></i>model: 1 / (1 − ρ)</span><span><i style="background: var(--s2)"></i>symulacja dla wybranego ρ</span></div>
+    <div class="scroll-x"><svg class="rozklad" id="kkCzas" viewBox="0 0 640 190" role="img" aria-label="Liczba pakietów w routerze w czasie"></svg></div>
+    <p class="small muted" id="kkOpis"></p>
+  </div>
+
+  <div class="card">
+    <h3>Część B: TCP, czyli sprzężenie zwrotne</h3>
+    <p class="small">Dwóch nadawców dzieli łącze, które mieści 100 pakietów na RTT. Każdy nadawca TCP po każdym RTT bez strat wysyła o 1 pakiet więcej, a po stracie zmniejsza tempo o połowę. Nikt nie mówi im, ile wolno.</p>
+    <div class="row" style="gap: 18px">
+      <span class="row"><label for="tcA">start nadawcy 1:</label><input id="tcA" type="range" min="1" max="100" value="80"><span class="mono" id="tcAv">80</span></span>
+      <span class="row"><label for="tcB">start nadawcy 2:</label><input id="tcB" type="range" min="1" max="100" value="5"><span class="mono" id="tcBv">5</span></span>
+    </div>
+    <div class="row" style="margin-top: 8px">
+      <span class="small muted" id="tcTrybLab">nadawca 2:</span>
+      <span class="seg" id="tcTryb" role="group" aria-labelledby="tcTrybLab"><button type="button" data-t="tcp" aria-pressed="true">TCP (reaguje na straty)</button><button type="button" data-t="udp" aria-pressed="false">nie reaguje (stałe tempo)</button></span>
+    </div>
+    <div class="stats" id="tcStaty"></div>
+    <div class="scroll-x"><svg class="rozklad" id="tcSvg" viewBox="0 0 640 230" role="img" aria-label="Tempo nadawania dwóch nadawców w kolejnych RTT"></svg></div>
+    <div class="legend"><span><i style="background: var(--s1)"></i>nadawca 1 (TCP)</span><span><i style="background: var(--s2)"></i>nadawca 2</span><span><i style="background: var(--bad)"></i>przepustowość łącza</span></div>
+    <p class="small muted" id="tcOpis"></p>
+  </div>
+
+  <div class="think">
+    <h3>Do przemyślenia</h3>
+    <ol>
+      <li>Przesuń ρ z 0,5 na 0,9, a potem na 0,95. Ile razy wydłuża się czas w routerze przy każdym kroku? Dlaczego ostatnie 5 punktów procentowych kosztuje więcej niż poprzednie 40?</li>
+      <li>Ustaw bufor 10 pakietów i ρ = 0,95. Co się dzieje z czasem w routerze, a co z utratą pakietów? Co woli rozmowa wideo, a co pobieranie pliku?</li>
+      <li>W części B ustaw bardzo różne tempa startowe. Po ilu RTT nadawcy dzielą łącze mniej więcej po równo? Kto o tym zdecydował?</li>
+      <li>Przełącz nadawcę 2 na „nie reaguje” i daj mu tempo 60, a potem 100. Kto na tym traci? Dlaczego aplikacje działające na UDP też powinny ograniczać tempo?</li>
+    </ol>
+  </div>
+  <p class="src">Kurose, Ross, rozdz. 1.4.2 (opóźnienie kolejki i utrata pakietów), 3.6–3.7 (kontrola przeciążenia, AIMD, sprawiedliwość); V. Jacobson, <em>Congestion Avoidance and Control</em>, SIGCOMM 1988. Część A: model kolejki M/M/1 (losowe przyjścia i czasy wysyłania), czas w jednostkach średniego czasu wysłania jednego pakietu. Część B: uproszczenie — oba połączenia mają to samo RTT i tracą pakiety w tej samej chwili.</p>
+</section>
+
 <section id="v-ustawienia" hidden>
   <h2>Dla prowadzącego: wspólne wyniki grupy</h2>
   <p class="lead">Ćwiczenie 6 („Ile czekania zniesiesz?”) może wysyłać anonimowe wyniki do Formularza Google i pokazywać wyniki całej sali. Bez tej konfiguracji strona działa samodzielnie i nic nie wysyła. Można użyć tego samego formularza co w poprzednich wykładach.</p>
@@ -768,7 +825,7 @@ ol.otleg .t { white-space: nowrap; margin-left: auto; font-family: var(--mono); 
 
 <script>
 'use strict';
-const KONF = {"wyk": "W12", "key": "wdi-w12-grupa", "widoki": {"start": "Wykład 12 · ćwiczenia", "pakiety": "Obwody czy pakiety? · W12", "warstwy": "Koperta w kopercie · W12", "adres": "Adres IP i port · W12", "trasowanie": "Trasowanie · W12", "dns": "DNS i transport · W12", "opoznienie": "Kalkulator opóźnień · W12", "otwarcie": "Otwarcie strony · W12", "czekanie": "Ile czekania zniesiesz? · W12", "ustawienia": "Ustawienia prowadzącego · W12"}, "linki": [{"id": "sLink0", "hash": "czekanie", "label": "Ile czekania zniesiesz?"}]};
+const KONF = {"wyk": "W12", "key": "wdi-w12-grupa", "widoki": {"start": "Wykład 12 · ćwiczenia", "pakiety": "Obwody czy pakiety? · W12", "warstwy": "Koperta w kopercie · W12", "adres": "Adres IP i port · W12", "trasowanie": "Trasowanie · W12", "dns": "DNS i transport · W12", "opoznienie": "Kalkulator opóźnień · W12", "otwarcie": "Otwarcie strony · W12", "czekanie": "Ile czekania zniesiesz? · W12", "korek": "Korek w sieci · W12", "ustawienia": "Ustawienia prowadzącego · W12"}, "linki": [{"id": "sLink0", "hash": "czekanie", "label": "Ile czekania zniesiesz?"}]};
 /* ═════════════════════ Narzędzia ═════════════════════ */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1583,7 +1640,103 @@ const Otwarcie = (() => {
   return { init, _t: { etapy, rtt } };
 })();
 
-const MODULY = { pakiety: Pakiety, warstwy: Warstwy, adres: Adres, trasowanie: Trasowanie, dns: Dns, opoznienie: Opoznienie, otwarcie: Otwarcie, czekanie: Czekanie };
+/* ═════════════════════ Ćwiczenie 9: korek w sieci ═════════════════════ */
+const Korek = (() => {
+  let ziarno = 12345, bufor = 0, trybB = 'tcp';
+  function rng(a) { return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  /** Kolejka M/M/1 z buforem K (0 = bez limitu): przyjścia z intensywnością rho, czas wysyłania średnio 1. */
+  function symuluj(rho, K, n, seed) {
+    const los = rng(seed), wyk = (l) => -Math.log(1 - los()) / l;
+    let t = 0, ost = 0, suma = 0, obsl = 0, utr = 0; const odj = []; let gl = 0; const slad = [];
+    for (let i = 0; i < n; i++) {
+      t += wyk(rho);
+      while (gl < odj.length && odj[gl] <= t) gl++;
+      const wSys = odj.length - gl;
+      if (slad.length < 400) slad.push([t, wSys]);
+      if (K > 0 && wSys >= K + 1) { utr++; continue; }
+      const start = Math.max(t, ost); ost = start + wyk(1); odj.push(ost); suma += ost - t; obsl++;
+    }
+    return { czas: suma / Math.max(obsl, 1), utrata: utr / n, slad };
+  }
+  /** AIMD: tempo w pakietach na RTT; po przekroczeniu przepustowości C nadawcy TCP dzielą tempo na pół. */
+  function aimd(a, b, udp, C = 100, rtt = 200) {
+    const x = [[a, b]]; let straty = 0;
+    for (let r = 1; r < rtt; r++) {
+      let [p, q] = x[r - 1];
+      if (p + q > C) { straty++; p = p / 2; if (!udp) q = q / 2; } else { p += 1; if (!udp) q += 1; }
+      x.push([p, q]);
+    }
+    return { x, straty };
+  }
+  function osie(svg, W, H, L, B, T, xmax, ymax, xt, yt, xlab, ylab) {
+    for (const v of yt) { const y = B - ((B - T) * v) / ymax; svg.append(sv('line', { x1: L, y1: y, x2: W - 10, y2: y, class: 'siatka' }), sv('text', { x: L - 6, y: y + 4, style: 'text-anchor: end' }, ulamek(v, 2))); }
+    for (const v of xt) { const x = L + ((W - 10 - L) * v) / xmax; svg.append(sv('text', { x, y: B + 15 }, ulamek(v, 2))); }
+    svg.append(sv('line', { x1: L, y1: B, x2: W - 10, y2: B, class: 'os' }), sv('line', { x1: L, y1: T, x2: L, y2: B, class: 'os' }));
+    svg.append(sv('text', { x: (L + W) / 2, y: H - 2 }, xlab), sv('text', { x: L + 4, y: T - 4, class: 'l' }, ylab));
+  }
+  function rysujA() {
+    const rho = +$('#kkRho').value / 100; $('#kkRhov').textContent = ulamek(rho, 2).padEnd(4, '0');
+    const sym = symuluj(rho, bufor, 20000, ziarno), model = 1 / (1 - rho);
+    const st = $('#kkStaty'); st.replaceChildren();
+    const stat = (k, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v', text: v })));
+    stat('model (bufor bez limitu)', `${ulamek(model, 1)} ×`);
+    stat('symulacja: czas w routerze', `${ulamek(sym.czas, 1)} ×`);
+    stat('symulacja: utracone pakiety', `${ulamek(sym.utrata * 100, sym.utrata > 0 && sym.utrata < 0.01 ? 2 : 1)}%`);
+    // krzywa
+    let svg = $('#kkKrzywa'); svg.replaceChildren();
+    const W = 640, H = 230, L = 40, B = 200, T = 16, YM = 30, px = (r) => L + (W - 10 - L) * r, py = (v) => B - ((B - T) * Math.min(v, YM)) / YM;
+    osie(svg, W, H, L, B, T, 1, YM, [0, 0.25, 0.5, 0.75, 1], [0, 10, 20, 30], 'obciążenie łącza ρ', 'czas w routerze (× czas wysłania pakietu)');
+    const pts = []; for (let r = 0; r <= 0.967; r += 0.005) pts.push(`${px(r).toFixed(1)},${py(1 / (1 - r)).toFixed(1)}`);
+    svg.append(sv('polyline', { points: pts.join(' '), class: 'krzywa' }));
+    svg.append(sv('circle', { cx: px(rho), cy: py(model), r: 5, class: 'pkt model' }), sv('circle', { cx: px(rho), cy: py(sym.czas), r: 6, class: 'pkt' }));
+    // kolejka w czasie
+    svg = $('#kkCzas'); svg.replaceChildren();
+    const H2 = 190, B2 = 160, tmax = sym.slad[sym.slad.length - 1][0], qmax = Math.max(5, ...sym.slad.map((z) => z[1]));
+    const ym = Math.ceil(qmax / 5) * 5;
+    osie(svg, W, H2, L, B2, T, tmax, ym, [], [0, ym / 2, ym], 'czas (pierwsze 400 przyjść pakietów)', 'pakietów w routerze');
+    const qx = (t) => L + ((W - 10 - L) * t) / tmax, qy = (q) => B2 - ((B2 - T) * q) / ym;
+    const qp = []; sym.slad.forEach(([t, q], i) => { if (i) qp.push(`${qx(t).toFixed(1)},${qy(sym.slad[i - 1][1]).toFixed(1)}`); qp.push(`${qx(t).toFixed(1)},${qy(q).toFixed(1)}`); });
+    svg.append(sv('polyline', { points: qp.join(' '), class: 'krzywa kolejka' }));
+    if (bufor) { const y = qy(bufor + 1); svg.append(sv('line', { x1: L, y1: y, x2: W - 10, y2: y, class: 'gr' }), sv('text', { x: W - 14, y: y - 4, class: 'gr', style: 'text-anchor: end' }, 'bufor pełny')); }
+    let op = `Przy ρ = ${ulamek(rho, 2)} łącze jest zajęte przez ${Math.round(rho * 100)}% czasu. `;
+    op += rho >= 0.9 ? 'Kolejka rośnie gwałtownie: rzadkie przerwy nie wystarczają, by ją rozładować. ' : 'Kolejka zwykle szybko się rozładowuje. ';
+    op += bufor ? `Bufor mieści ${bufor} pakietów: czas w routerze jest ograniczony, ale nadmiar pakietów ginie.` : 'Bufor bez limitu: nic nie ginie, ale czekanie może być bardzo długie. Symulacja jest losowa, więc przy ρ bliskim 1 jej wynik mocno się waha.';
+    $('#kkOpis').textContent = op;
+  }
+  function rysujB() {
+    const a = +$('#tcA').value, b = +$('#tcB').value; $('#tcAv').textContent = a; $('#tcBv').textContent = b;
+    const udp = trybB === 'udp', { x, straty } = aimd(a, b, udp);
+    const ost = x.slice(-100), s1 = ost.reduce((z, v) => z + v[0], 0) / 100, s2 = ost.reduce((z, v) => z + Math.min(v[1], 100), 0) / 100;
+    let wyr = null; if (!udp) for (let r = 0; r < x.length; r++) if (Math.abs(x[r][0] - x[r][1]) < 5) { wyr = r; break; }
+    const st = $('#tcStaty'); st.replaceChildren();
+    const stat = (k, v) => st.append(el('div', { class: 'stat' }, el('div', { class: 'k', text: k }), el('div', { class: 'v', text: v })));
+    stat('nadawca 1: średnie tempo (ostatnie 100 RTT)', ulamek(s1, 0));
+    stat('nadawca 2: średnie tempo', ulamek(s2, 0));
+    stat('przepełnienia łącza', String(straty));
+    if (!udp) stat('podział prawie równy od RTT', wyr === null ? '—' : String(wyr));
+    const svg = $('#tcSvg'); svg.replaceChildren();
+    const W = 640, H = 230, L = 40, B = 200, T = 16, YM = 120, n = x.length;
+    osie(svg, W, H, L, B, T, n, YM, [0, 50, 100, 150, 200], [0, 50, 100], 'kolejne RTT', 'tempo (pakiety na RTT)');
+    const gx = (r) => L + ((W - 10 - L) * r) / n, gy = (v) => B - ((B - T) * Math.min(v, YM)) / YM;
+    svg.append(sv('line', { x1: L, y1: gy(100), x2: W - 10, y2: gy(100), class: 'gr' }));
+    for (const [k, c] of [[0, 'krzywa'], [1, 'krzywa b']]) svg.append(sv('polyline', { points: x.map((v, r) => `${gx(r).toFixed(1)},${gy(v[k]).toFixed(1)}`).join(' '), class: c }));
+    let op;
+    if (!udp) op = `Nadawcy startują z tempem ${a} i ${b}. Każde przepełnienie zabiera obu połowę tempa, więc większy traci więcej, a dodawanie po 1 jest dla obu takie samo — różnica maleje sama. ${wyr === null ? '' : `Po ok. ${wyr} RTT dzielą łącze prawie po równo.`}`;
+    else op = b >= 100 ? 'Nadawca 2 sam zapełnia całe łącze i nie zwalnia: nadawca 1 przy każdej próbie traci pakiety i niemal nic nie przesyła.' : `Nadawca 2 nadaje stale ${b} pakietów na RTT i nie reaguje na straty. Cały ciężar sprzężenia zwrotnego bierze na siebie nadawca 1: dostaje tylko to, co zostanie.`;
+    $('#tcOpis').textContent = op;
+  }
+  function init() {
+    $('#kkRho').addEventListener('input', rysujA);
+    for (const btn of $$('#kkBuf button')) btn.addEventListener('click', () => { bufor = +btn.dataset.k; for (const x of $$('#kkBuf button')) x.setAttribute('aria-pressed', String(x === btn)); rysujA(); });
+    $('#kkLos').addEventListener('click', () => { ziarno = Math.floor(Math.random() * 2147483647); rysujA(); });
+    for (const id of ['#tcA', '#tcB']) $(id).addEventListener('input', rysujB);
+    for (const btn of $$('#tcTryb button')) btn.addEventListener('click', () => { trybB = btn.dataset.t; for (const x of $$('#tcTryb button')) x.setAttribute('aria-pressed', String(x === btn)); rysujB(); });
+    rysujA(); rysujB();
+  }
+  return { init, _t: { symuluj, aimd } };
+})();
+
+const MODULY = { pakiety: Pakiety, warstwy: Warstwy, adres: Adres, trasowanie: Trasowanie, dns: Dns, opoznienie: Opoznienie, otwarcie: Otwarcie, czekanie: Czekanie, korek: Korek };
 
 /* ═════════════════════ Ustawienia prowadzącego ═════════════════════ */
 const Ustawienia = (() => {
