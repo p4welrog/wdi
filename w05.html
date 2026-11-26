@@ -96,6 +96,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .todo { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .todo h3 { color: var(--accent); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .4em; }
 .todo ol { margin: 0; padding-left: 1.2em; }
@@ -444,10 +447,22 @@ svg.brsch .lab.sm { font-weight: 400; font-size: 12px; fill: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>W „2 · (a + b)” przejdź jeden rozkaz fazami. W której fazie zmienia się PC? Dlaczego po wykonaniu rozkazu z komórki 3 PC wynosi 4?</li>
-      <li>Uruchom „Pułapkę”. Co jest w komórce 0 po zakończeniu i dlaczego wynik nie trafił do komórki 7? Co by się stało, gdyby po STORE był skok do 0?</li>
-      <li>W „Pętli” zmień n w komórce 10 na 0, a potem na 5. Ile rozkazów wykona maszyna? Wyprowadź wzór zależny od n.</li>
-      <li>W „Liczbie czy rozkazie?” komórka 0 zawiera liczbę 2565. Co zrobił z nią procesor? Co by się stało, gdyby w komórce 0 była liczba −1?</li>
+      <li>W „2 · (a + b)” przejdź jeden rozkaz fazami. W której fazie zmienia się PC? Dlaczego po wykonaniu rozkazu z komórki 3 PC wynosi 4?
+        <details class="odp"><summary>Wskazówka</summary><div>Przeczytaj opis fazy 1 nad przyciskami: co dzieje się z PC przy pobraniu?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>PC zmienia się w fazie pobrania: IR ← MEM[PC], a zaraz potem PC ← PC + 1. Po pobraniu rozkazu z komórki 3 PC wskazuje już komórkę 4, zanim rozkaz w ogóle zostanie wykonany. Dlatego procesor bez żadnego skoku przechodzi do następnej komórki.</div></details>
+      </li>
+      <li>Uruchom „Pułapkę”. Co jest w komórce 0 po zakończeniu i dlaczego wynik nie trafił do komórki 7? Co by się stało, gdyby po STORE był skok do 0?
+        <details class="odp"><summary>Wskazówka</summary><div>W trybie @ argument to adres komórki, z której bierzemy wartość. Co jest w komórce 7 na początku?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>W trybie @ procesor bierze OR z komórki 7, a tam jest 0, więc STORE zapisuje wynik 110 pod adres 0, na pierwszy rozkaz programu. Komórka 7 zostaje bez zmian. Gdyby potem był skok do 0, procesor wykonałby słowo 110 jako rozkaz: jego pole code to 0000, czyli STOP, więc maszyna by się zatrzymała. Dane nadpisały program.</div></details>
+      </li>
+      <li>W „Pętli” zmień n w komórce 10 na 0, a potem na 5. Ile rozkazów wykona maszyna? Wyprowadź wzór zależny od n.
+        <details class="odp"><summary>Wskazówka</summary><div>Policz rozkazy jednego obiegu pętli, a osobno te wykonywane na końcu.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Każdy obieg to 8 rozkazów (od LOAD @ 10 do JUMP $ 0), a na końcu wykonują się jeszcze 3: LOAD, JZERO i STOP. Razem 8n + 3: dla n = 0 to 3 rozkazy, dla n = 3 to 27, dla n = 5 to 43.</div></details>
+      </li>
+      <li>W „Liczbie czy rozkazie?” komórka 0 zawiera liczbę 2565. Co zrobił z nią procesor? Co by się stało, gdyby w komórce 0 była liczba −1?
+        <details class="odp"><summary>Wskazówka</summary><div>2565 = 0000 1010 0000 0101. Podziel bity na pola: bit 15, code, mode, arg.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Procesor pobrał 2565 jako rozkaz: pola dają code 0001 (LOAD), mode 01 (@) i arg 5, czyli LOAD @ 5, więc do AC trafiło 42 z komórki 5. Liczba −1 to same jedynki. Bit 15 jest pomijany, a reszta to SHC + 511: przesunięcie cykliczne o MEM[511] = 0, czyli bez zmian. Potem procesor trafia na STOP. Każde słowo da się wykonać jako jakiś rozkaz.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (PMC). Szczegóły nieopisane w modelu przyjęto tak: działania na liczbach 16-bitowych w U2 z zawinięciem przy nadmiarze, DIV zaokrągla iloraz w stronę zera, przesunięcia SHZ są logiczne, bit 15 rozkazu jest pomijany.</p>
@@ -492,10 +507,22 @@ svg.brsch .lab.sm { font-weight: 400; font-size: 12px; fill: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Kliknij „NOT”, a potem „+1”. Porównaj z „−x”. Dlaczego to to samo (W3: negacja w U2)?</li>
-      <li>Ustaw 32767 i kliknij „+1”. Co się stało z liczbą w U2, a co z liczbą bez znaku? Który odczyt „ma rację”?</li>
-      <li>Słowa z zagadki 2 — znak „A” i liczba ujemna jednocześnie — jest ich 128. Dlaczego akurat tyle?</li>
-      <li>Słowo 0 to jednocześnie liczba 0, „fałsz”, znak NUL i rozkaz STOP. Co by się stało, gdyby program w PMC „wyjechał” poza swój kod na wyzerowaną pamięć?</li>
+      <li>Kliknij „NOT”, a potem „+1”. Porównaj z „−x”. Dlaczego to to samo (W3: negacja w U2)?
+        <details class="odp"><summary>Wskazówka</summary><div>Przypomnij sobie z W3, jak w U2 liczy się liczbę przeciwną.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>W U2 liczbę przeciwną otrzymuje się właśnie tak: odwracamy wszystkie bity (NOT) i dodajemy 1. Przycisk „−x” daje więc ten sam wynik. Dzięki temu procesor nie potrzebuje osobnego układu do odejmowania: a − b to a + (NOT b) + 1.</div></details>
+      </li>
+      <li>Ustaw 32767 i kliknij „+1”. Co się stało z liczbą w U2, a co z liczbą bez znaku? Który odczyt „ma rację”?
+        <details class="odp"><summary>Wskazówka</summary><div>Spójrz na bit 15 przed kliknięciem i po nim.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>32767 = 0111…1, a po +1 dostajemy 1000…0. Bez znaku to 32768 i wszystko się zgadza, a w U2 to −32768, czyli nadmiar. Oba odczyty są poprawne, każdy według swojej umowy. Która liczba „ma rację”, zależy od tego, jak program używa tego słowa.</div></details>
+      </li>
+      <li>Słowa z zagadki 2 — znak „A” i liczba ujemna jednocześnie — jest ich 128. Dlaczego akurat tyle?
+        <details class="odp"><summary>Wskazówka</summary><div>Znak to kod ASCII w młodszym bajcie, a o znaku liczby w U2 decyduje bit 15. Ile bitów zostaje wolnych?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Młodszy bajt (bity 0–7) musi zawierać kod litery „A” (65), a bit 15 musi być 1, żeby liczba w U2 była ujemna. Pozostałe bity 8–14 mogą być dowolne: to 7 bitów, czyli 2⁷ = 128 słów.</div></details>
+      </li>
+      <li>Słowo 0 to jednocześnie liczba 0, „fałsz”, znak NUL i rozkaz STOP. Co by się stało, gdyby program w PMC „wyjechał” poza swój kod na wyzerowaną pamięć?
+        <details class="odp"><summary>Wskazówka</summary><div>Jaki rozkaz koduje słowo 0?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Słowo 0 odczytane jako rozkaz to STOP, więc program, który „wyjechał” poza swój kod na wyzerowaną pamięć, po prostu się zatrzyma. To szczęśliwy przypadek tej umowy: gdyby 0 oznaczało inny rozkaz, procesor wykonywałby kolejne puste komórki jako program.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (PMC: typy danych i format rozkazu); kody znaków: ANSI X3.4-1986 (ASCII). Bit 15 rozkazu jest w tym modelu nieużywany; symulator go pomija.</p>
@@ -560,10 +587,22 @@ svg.brsch .lab.sm { font-weight: 400; font-size: 12px; fill: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Ile odczytów pamięci potrzebuje procesor, żeby wyznaczyć operand w każdym z czterech trybów? Który tryb jest więc najszybszy?</li>
-      <li>Dlaczego w trybie natychmiastowym nie da się podać liczby ujemnej ani większej niż 511?</li>
-      <li>Tryb indeksowy przydaje się do tablic: arg to początek tablicy, AC — numer elementu. Jak przejść po wszystkich elementach tablicy w pętli?</li>
-      <li>W trybie pośrednim komórka pamięci zawiera adres innej komórki. Gdzie spotkasz tę samą ideę w Pythonie (podpowiedź: lista w liście)?</li>
+      <li>Ile odczytów pamięci potrzebuje procesor, żeby wyznaczyć operand w każdym z czterech trybów? Który tryb jest więc najszybszy?
+        <details class="odp"><summary>Wskazówka</summary><div>Dla każdego trybu policz, ile razy trzeba zajrzeć do pamięci, zanim OR jest gotowy.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Natychmiastowy: 0 odczytów (argument jest w rozkazie). Bezpośredni: 1 odczyt (MEM[arg]). Indeksowy: 1 odczyt (MEM[AC + arg], dodawanie robi procesor). Pośredni: 2 odczyty (najpierw adres, potem wartość). Najszybszy jest tryb natychmiastowy.</div></details>
+      </li>
+      <li>Dlaczego w trybie natychmiastowym nie da się podać liczby ujemnej ani większej niż 511?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile bitów ma pole arg i czy jest w nim miejsce na znak?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Argument zajmuje 9 bitów pola arg i jest odczytywany jako liczba bez znaku: od 0 do 2⁹ − 1 = 511. Liczby ujemnej ani większej niż 511 nie da się więc wpisać do rozkazu. Trzeba ją umieścić w pamięci i wczytać w trybie bezpośrednim.</div></details>
+      </li>
+      <li>Tryb indeksowy przydaje się do tablic: arg to początek tablicy, AC — numer elementu. Jak przejść po wszystkich elementach tablicy w pętli?
+        <details class="odp"><summary>Wskazówka</summary><div>LOAD + arg nadpisuje AC. Gdzie przechowasz numer bieżącego elementu?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Numer elementu i trzymaj w osobnej komórce. W każdym obiegu: LOAD @ (komórka z i), potem LOAD + (początek tablicy), co daje AC ← MEM[i + początek], przetwórz element i zapisz wynik. Potem zwiększ i (LOAD, ADD $ 1, STORE) i skocz na początek, dopóki i nie osiągnie długości tablicy.</div></details>
+      </li>
+      <li>W trybie pośrednim komórka pamięci zawiera adres innej komórki. Gdzie spotkasz tę samą ideę w Pythonie (podpowiedź: lista w liście)?
+        <details class="odp"><summary>Wskazówka</summary><div>Zmienna w Pythonie, która jest listą, przechowuje odwołanie do listy, a nie samą listę.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Lista w liście: a[1][0] najpierw odczytuje z a odwołanie do wewnętrznej listy, a dopiero z niej wartość. To jak tryb pośredni: komórka nie zawiera wartości, tylko informację, gdzie jej szukać. Dlatego zmiana wewnętrznej listy jest widoczna przez wszystkie odwołania do niej.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (tryby adresowania PMC). Na wykładzie: slajd „Tryby adresowania: skąd wziąć operand?”.</p>
@@ -627,10 +666,22 @@ svg.brsch .lab.sm { font-weight: 400; font-size: 12px; fill: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przy ilu śledzonych wartościach zacząłeś się mylić? Jak to się ma do szacunku Cowana?</li>
-      <li>Jakich strategii używałeś (powtarzanie w myślach, grupowanie liczb, „zgadywanie” na końcu)? Który odpowiednik ma to w komputerze?</li>
-      <li>Wszystkie programy mają tyle samo rozkazów. Co jeszcze — poza liczbą śledzonych wartości — mogło utrudniać trudniejsze poziomy?</li>
-      <li>Współczesne procesory mają kilkanaście–kilkadziesiąt rejestrów ogólnego przeznaczenia (W5). Po co tyle, skoro wszystko można trzymać w pamięci?</li>
+      <li>Przy ilu śledzonych wartościach zacząłeś się mylić? Jak to się ma do szacunku Cowana?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj trafność dla 1, 2, 3 i 4 śledzonych wartości.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Twojego wyniku. U większości osób trafność wyraźnie spada przy 3–4 wartościach, a czas rośnie wcześniej. To pasuje do szacunku Cowana (3–5 porcji), choć pomiar jest krótki i pokazowy.</div></details>
+      </li>
+      <li>Jakich strategii używałeś (powtarzanie w myślach, grupowanie liczb, „zgadywanie” na końcu)? Który odpowiednik ma to w komputerze?
+        <details class="odp"><summary>Wskazówka</summary><div>Pomyśl, co robi procesor, gdy brakuje mu rejestrów.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Typowe strategie to powtarzanie wartości w myślach, łączenie liczb w jedną całość i zgadywanie na końcu. Odpowiednik grupowania to upakowanie kilku małych liczb w jedno słowo. Komputer, któremu brakuje rejestrów, odkłada wartości do pamięci (STORE) i potem je wczytuje: tego właśnie nie wolno Ci było zrobić na kartce. Zgadywanie nie ma odpowiednika, bo komputer nie zgaduje.</div></details>
+      </li>
+      <li>Wszystkie programy mają tyle samo rozkazów. Co jeszcze — poza liczbą śledzonych wartości — mogło utrudniać trudniejsze poziomy?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj rozkazy w łatwym i trudnym programie: rodzaj działań, wielkość liczb, kolejność zmian.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Na przykład rodzaj działań (mnożenie jest trudniejsze niż dodawanie), wielkość liczb, tryby adresowania do rozszyfrowania i to, że wartości zmieniają się na przemian i się mylą (interferencja). Do tego dochodzą zmęczenie i presja czasu. Liczba śledzonych wartości to tylko jeden z czynników.</div></details>
+      </li>
+      <li>Współczesne procesory mają kilkanaście–kilkadziesiąt rejestrów ogólnego przeznaczenia (W5). Po co tyle, skoro wszystko można trzymać w pamięci?
+        <details class="odp"><summary>Wskazówka</summary><div>Porównaj czas dostępu do rejestru i do pamięci.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Odczyt z rejestru trwa jeden takt, a odczyt z pamięci głównej nawet kilkaset razy dłużej. Im więcej wartości mieści się w rejestrach, tym rzadziej procesor czeka na pamięć. Dlatego kompilator stara się trzymać w nich najczęściej używane zmienne.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">A. D. Baddeley, G. Hitch, <em>Working memory</em>, w: G. H. Bower (red.), Psychology of Learning and Motivation 8 (1974), s. 47–89; N. Cowan, <em>The magical number 4 in short-term memory</em>, Behav. Brain Sci. 24 (2001), s. 87–114; G. A. Miller, Psychol. Rev. 63 (1956), s. 81–97; R. Kawa, J. Lembas, <em>Wstęp do informatyki</em>, PWN 2017, rozdz. 6 (PMC).</p>
@@ -729,10 +780,22 @@ svg.brsch .lab.sm { font-weight: 400; font-size: 12px; fill: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Dlaczego wystarcza jeden rodzaj bramki? Zbuduj NOR (nie lub) z samych NAND. Ile bramek potrzeba?</li>
-      <li>W przerzutniku ustaw Z = 0 i zmieniaj D. Gdzie „siedzi” zapamiętany bit, skoro żadna bramka nie ma pamięci?</li>
-      <li>Programista PMC pisze <span class="mono">LOAD @ 6</span> i nie myśli o tranzystorach. Co zyskuje, a co traci, nie wiedząc, co dzieje się piętro niżej?</li>
-      <li>Rejestr 16-bitowy z tego ćwiczenia ma 320 tranzystorów. Współczesny procesor ma ich miliardy. Na co idzie reszta?</li>
+      <li>Dlaczego wystarcza jeden rodzaj bramki? Zbuduj NOR (nie lub) z samych NAND. Ile bramek potrzeba?
+        <details class="odp"><summary>Wskazówka</summary><div>NOR = NOT(A OR B), a A OR B = NAND(NOT A, NOT B).</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Z NAND da się zrobić NOT (oba wejścia razem) i AND (NAND, a potem NOT), a z NOT i AND każdą funkcję logiczną. Dlatego wystarcza jeden rodzaj bramki. NOR: dwie bramki NAND robią NOT A i NOT B, trzecia daje NAND(NOT A, NOT B) = A OR B, a czwarta neguje wynik. Razem 4 bramki.</div></details>
+      </li>
+      <li>W przerzutniku ustaw Z = 0 i zmieniaj D. Gdzie „siedzi” zapamiętany bit, skoro żadna bramka nie ma pamięci?
+        <details class="odp"><summary>Wskazówka</summary><div>Prześledź wyjścia bramek NAND 4 i 5: skąd każda z nich bierze wejście?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Bit jest zapamiętany w pętli sprzężenia zwrotnego: wyjście NAND 4 wchodzi do NAND 5, a wyjście NAND 5 z powrotem do NAND 4. Przy Z = 0 bramki 2 i 3 dają na wyjściu 1 i nie wpływają na pętlę, więc ta podtrzymuje swój stan. Pamięć to nie właściwość jednej bramki, tylko połączenia.</div></details>
+      </li>
+      <li>Programista PMC pisze <span class="mono">LOAD @ 6</span> i nie myśli o tranzystorach. Co zyskuje, a co traci, nie wiedząc, co dzieje się piętro niżej?
+        <details class="odp"><summary>Wskazówka</summary><div>Pomyśl o błędach, które widać dopiero piętro niżej: czas, zasilanie, zakłócenia.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Zyskuje prostotę: myśli o rozkazach i komórkach, a nie o milionach przełączników, a jego program zadziała na każdym procesorze z tą samą listą rozkazów. Traci wpływ na to, czego abstrakcja nie pokazuje: szybkość pamięci, zużycie energii albo rzadkie błędy sprzętu. Gdy coś działa nie tak, ich przyczyna może leżeć piętro niżej.</div></details>
+      </li>
+      <li>Rejestr 16-bitowy z tego ćwiczenia ma 320 tranzystorów. Współczesny procesor ma ich miliardy. Na co idzie reszta?
+        <details class="odp"><summary>Wskazówka</summary><div>Rejestr to tylko kilkadziesiąt bajtów. Co jeszcze jest w procesorze?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Na pamięć podręczną (cache), czyli megabajty szybkiej pamięci po kilka tranzystorów na bit, na wiele rdzeni, na układy arytmetyczne (np. mnożenie, liczby zmiennoprzecinkowe) i na układy przyspieszające wykonanie, np. przewidywanie skoków. Często jest tam też procesor grafiki.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Slajd „Piętra abstrakcji” (W5). N. Nisan, S. Schocken, <em>The Elements of Computing Systems</em>, wyd. 2, MIT Press 2021, rozdz. 1 (bramki z NAND) i 3 (pamięć). Tę samą drogę, aż do całego komputera, przechodzi gra <a href="https://nandgame.com/" target="_blank" rel="noopener">nandgame.com</a> (po angielsku).</p>
