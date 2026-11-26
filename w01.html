@@ -95,6 +95,9 @@ main { padding-top: 22px; padding-bottom: 40px; }
 .think { background: var(--amber-soft); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 14px 0; }
 .think h3 { color: var(--amber); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .4em; }
 .think ol, .think ul { margin: 0; padding-left: 1.2em; }
+.think details.odp { margin: 4px 0 2px; }
+.think details.odp summary { cursor: pointer; color: var(--amber); font-weight: 600; font-size: .85rem; }
+.think details.odp > div { color: var(--text-2); font-size: .93rem; margin: .3em 0 .5em; }
 .note { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; font-size: .92rem; color: var(--text-2); margin: 10px 0; }
 .src { font-size: .8rem; color: var(--muted); margin-top: 18px; }
 
@@ -338,9 +341,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Która strategia wygrała w symulacji, a która była najwygodniejsza, gdy grałeś sam? Dlaczego to nie musi być to samo?</li>
-      <li>Pytanie „czy Twoja litera jest w tej grupie?” wymaga od mrugającego przejrzenia wielu liter naraz. Jaki koszt pomija liczenie samych kroków?</li>
-      <li>Strategia „grupy według częstości” to zapowiedź wykładu 2. Spróbuj odgadnąć, dlaczego jest najkrótsza.</li>
+      <li>Która strategia wygrała w symulacji, a która była najwygodniejsza, gdy grałeś sam? Dlaczego to nie musi być to samo?
+        <details class="odp"><summary>Wskazówka</summary><div>Policz nie tylko kroki, ale też wysiłek mrugającego przy każdym kroku.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>W symulacji zwykle wygrywa strategia z grupami liter ułożonymi według częstości, bo potrzebuje najmniej kroków. Przy samodzielnej grze często wygodniejsze jest czytanie liter po kolei, bo każdy krok to jedno łatwe porównanie. Liczba kroków to tylko jedna miara kosztu: człowiek płaci też czasem i uwagą przy każdym kroku.</div></details>
+      </li>
+      <li>Pytanie „czy Twoja litera jest w tej grupie?” wymaga od mrugającego przejrzenia wielu liter naraz. Jaki koszt pomija liczenie samych kroków?
+        <details class="odp"><summary>Wskazówka</summary><div>Ile liter trzeba obejrzeć przed jednym mrugnięciem?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Pomija koszt jednego kroku: przejrzenie wzrokiem całej grupy liter wymaga czasu i uwagi, męczy i sprzyja pomyłkom. Krok „czy Twoja litera jest w tej grupie?” jest dłuższy i trudniejszy niż krok „czy to ta litera?”.</div></details>
+      </li>
+      <li>Strategia „grupy według częstości” to zapowiedź wykładu 2. Spróbuj odgadnąć, dlaczego jest najkrótsza.
+        <details class="odp"><summary>Wskazówka</summary><div>Które litery są w polskim tekście najczęstsze i po ilu pytaniach do nich dochodzimy?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Częste litery (np. A, I, E, O) są rozpoznawane po niewielu pytaniach, a rzadkie po większej liczbie. Częste litery pojawiają się w wiadomości wiele razy, więc średnia liczba pytań na literę spada. To idea kodów o zmiennej długości, takich jak kod Huffmana z wykładu 2.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Źródło przykładu: P. Curzon, P. W. McOwan, <em>The Power of Computational Thinking</em>, World Scientific 2017, rozdz. 2. Tekst domyślny: A. Mickiewicz, <em>Pan Tadeusz</em>, Księga I (domena publiczna).</p>
@@ -408,9 +420,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Zagraj ze złośliwym przeciwnikiem, pytając po kolei „czy x = 1?”, „czy x = 2?”… Ile pytań musisz zadać? A ile przy dzieleniu na pół?</li>
-      <li>Przy losowej liczbie zdarza się wygrać w mniej niż 7 pytaniach. Dlaczego nie przeczy to tezie, że 7 jest najlepszą gwarancją dla N = 100?</li>
-      <li>Porównaj N = 128 i N = 1000 (prawie 8 razy więcej liczb). O ile pytań wzrosła gwarancja? Dlaczego tak mało?</li>
+      <li>Zagraj ze złośliwym przeciwnikiem, pytając po kolei „czy x = 1?”, „czy x = 2?”… Ile pytań musisz zadać? A ile przy dzieleniu na pół?
+        <details class="odp"><summary>Wskazówka</summary><div>Złośliwy przeciwnik zawsze wybiera odpowiedź, która zostawia Ci więcej możliwości.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Pytając po kolei, w najgorszym razie zadajesz 99 pytań: po 99 odpowiedziach „nie” zostaje tylko liczba 100. Dzieląc na pół, wystarczy 7 pytań, bo 2⁶ = 64 &lt; 100 ≤ 128 = 2⁷.</div></details>
+      </li>
+      <li>Przy losowej liczbie zdarza się wygrać w mniej niż 7 pytaniach. Dlaczego nie przeczy to tezie, że 7 jest najlepszą gwarancją dla N = 100?
+        <details class="odp"><summary>Wskazówka</summary><div>Czym różni się „czasem wystarczy” od „zawsze wystarczy”?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>7 to gwarancja na najgorszy przypadek. 6 pytań tak/nie rozróżnia najwyżej 2⁶ = 64 możliwości, więc żadna strategia nie zagwarantuje mniej niż 7 pytań dla 100 liczb. Szczęśliwe trafienie przy jednej liczbie nie zmienia tego, że przy innej ta sama strategia potrzebowałaby więcej.</div></details>
+      </li>
+      <li>Porównaj N = 128 i N = 1000 (prawie 8 razy więcej liczb). O ile pytań wzrosła gwarancja? Dlaczego tak mało?
+        <details class="odp"><summary>Wskazówka</summary><div>Każde pytanie podwaja liczbę możliwości, które da się rozróżnić. Ile razy trzeba podwoić 128, żeby przekroczyć 1000?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Dla N = 128 gwarancja to 7 pytań (2⁷ = 128), a dla N = 1000 to 10 pytań (2⁹ = 512 &lt; 1000 ≤ 1024 = 2¹⁰). Prawie 8 razy więcej liczb to tylko 3 pytania więcej, bo 8 = 2³. Liczba pytań rośnie jak log₂ N, czyli bardzo wolno.</div></details>
+      </li>
     </ol>
   </div>
 </section>
@@ -447,9 +468,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Milion losowych zer i jedynek kompresuje się do ok. 16% oryginału. Teoretyczne minimum to 1/8, czyli 12,5%; żaden kompresor nie zejdzie niżej. Dlaczego akurat 1/8? (Podpowiedź: ile bitów informacji niesie jeden losowy znak 0/1, a ile miejsca zajmuje w pliku?)</li>
-      <li>Ten sam tekst powtórzony 20 razy zajmuje po kompresji niewiele więcej niż jedna kopia. Co to mówi o informacji w kopii?</li>
-      <li>Dlaczego bardzo krótki tekst może się po kompresji wydłużyć?</li>
+      <li>Milion losowych zer i jedynek kompresuje się do ok. 16% oryginału. Teoretyczne minimum to 1/8, czyli 12,5%; żaden kompresor nie zejdzie niżej. Dlaczego akurat 1/8? (Podpowiedź: ile bitów informacji niesie jeden losowy znak 0/1, a ile miejsca zajmuje w pliku?)
+        <details class="odp"><summary>Wskazówka</summary><div>Jeden losowy znak 0/1 to wybór z dwóch równie prawdopodobnych możliwości. Ile to bitów informacji? A ile bitów zajmuje znak w pliku?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Losowy znak 0/1 niesie 1 bit informacji, a w pliku zajmuje 1 bajt, czyli 8 bitów. Kompresor może najwyżej usunąć 7 zbędnych bitów z każdych 8, więc zostaje co najmniej 1/8 = 12,5%. Deflate dochodzi do ok. 16%, bo nie jest idealny.</div></details>
+      </li>
+      <li>Ten sam tekst powtórzony 20 razy zajmuje po kompresji niewiele więcej niż jedna kopia. Co to mówi o informacji w kopii?
+        <details class="odp"><summary>Wskazówka</summary><div>Jak najkrócej opisać komuś zawartość takiego pliku?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Kopia nie wnosi prawie nic nowego: wystarczy zapisać „ten sam tekst jeszcze 19 razy”. Kompresor robi właśnie to: zastępuje powtórzenia krótkimi odwołaniami do wcześniejszego fragmentu. Informacji w 20 kopiach jest niewiele więcej niż w jednej.</div></details>
+      </li>
+      <li>Dlaczego bardzo krótki tekst może się po kompresji wydłużyć?
+        <details class="odp"><summary>Wskazówka</summary><div>Co oprócz samych danych musi zapisać kompresor, żeby dało się je odtworzyć?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Plik po kompresji zawiera stały narzut: nagłówek i opis sposobu kodowania. Przy kilku znakach ten narzut jest większy niż to, co da się zaoszczędzić, więc wynik bywa dłuższy niż oryginał.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Kompresja: algorytm Deflate (ten sam co w ZIP, gzip i PNG), wbudowany w przeglądarkę. Rozmiar po kompresji to tylko górne oszacowanie informacji: inny algorytm mógłby zapisać dane krócej. Dokładną miarę, entropię, poznamy na wykładzie 2.</p>
@@ -475,9 +505,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>W eksperymencie S. Smitha 20 osób miało zasięg ok. 9 cyfr dwójkowych i ok. 7 ósemkowych. Po 5–10 minutach nauki przekodowania zasięg wzrósł u wszystkich, ale mniej, niż przewidywano. Jak wypadł Twój wynik i dlaczego krótka nauka może nie wystarczyć?</li>
-      <li>Smith po długim treningu zapamiętywał ok. 12 cyfr ósemkowych, czyli 36 dwójkowych. Ile to bitów informacji? Ile kawałków?</li>
-      <li>Zamiana trójki cyfr dwójkowych na cyfrę ósemkową to system liczbowy z wykładu 3. Gdzie jeszcze w życiu codziennym grupujesz dane, żeby je zapamiętać?</li>
+      <li>W eksperymencie S. Smitha 20 osób miało zasięg ok. 9 cyfr dwójkowych i ok. 7 ósemkowych. Po 5–10 minutach nauki przekodowania zasięg wzrósł u wszystkich, ale mniej, niż przewidywano. Jak wypadł Twój wynik i dlaczego krótka nauka może nie wystarczyć?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy zaraz po krótkiej nauce zamieniasz trójki cyfr automatycznie, czy musisz to przeliczać?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>To zależy od Twojego wyniku. Typowo po krótkiej nauce zamiana trójki cyfr dwójkowych na cyfrę ósemkową wymaga świadomego przeliczania, a ono zajmuje tę samą pamięć, którą chcemy odciążyć. Zysk przychodzi, gdy przekodowanie staje się automatyczne, a to wymaga długiego treningu, jak u Smitha.</div></details>
+      </li>
+      <li>Smith po długim treningu zapamiętywał ok. 12 cyfr ósemkowych, czyli 36 dwójkowych. Ile to bitów informacji? Ile kawałków?
+        <details class="odp"><summary>Wskazówka</summary><div>Jedna cyfra ósemkowa to dokładnie 3 cyfry dwójkowe.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>36 losowych cyfr dwójkowych to 36 bitów informacji. Kawałków jest ok. 12, bo każda cyfra ósemkowa to jeden kawałek. Liczba kawałków jest podobna jak bez treningu, ale każdy niesie 3 bity zamiast 1.</div></details>
+      </li>
+      <li>Zamiana trójki cyfr dwójkowych na cyfrę ósemkową to system liczbowy z wykładu 3. Gdzie jeszcze w życiu codziennym grupujesz dane, żeby je zapamiętać?
+        <details class="odp"><summary>Wskazówka</summary><div>Pomyśl o numerach telefonów, numerach kont albo skrótach.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Na przykład numer telefonu czytany jako 3 + 3 + 3 cyfry, numer konta w grupach po 4, skróty (SWPS, PKO) albo rok „1989” zapamiętany jako jedna liczba zamiast czterech cyfr. Za każdym razem kilka elementów łączymy w jeden znany kawałek.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">G. A. Miller, <em>The Magical Number Seven, Plus or Minus Two</em>, Psychological Review 63(2), 1956, s. 81–97; eksperyment S. Smitha: s. 93–95.</p>
@@ -492,9 +531,18 @@ footer a { color: var(--muted); }
   <div class="think">
     <h3>Do przemyślenia</h3>
     <ol>
-      <li>Przy których problemach najtrudniej było wybrać jeden obszar? Co to mówi o granicach między gałęziami?</li>
-      <li>Przy jednym z problemów żaden z dziewięciu obszarów z 1989 r. nie pasował w całości. Dlaczego CC2020 wydziela dziś dyscypliny, których w 1989 r. nie było?</li>
-      <li>Wybierz problem z własnych zainteresowań psychologicznych i opisz go tak, żeby wymagał co najmniej trzech obszarów.</li>
+      <li>Przy których problemach najtrudniej było wybrać jeden obszar? Co to mówi o granicach między gałęziami?
+        <details class="odp"><summary>Wskazówka</summary><div>Czy problemy z życia zwykle mieszczą się w jednym obszarze?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Najtrudniej jest zwykle przy problemach, które wymagają kilku obszarów naraz, np. przechowywania danych, ich analizy i wygodnego interfejsu. Granice między gałęziami są umowne: podział porządkuje dziedzinę, ale prawdziwe problemy go przekraczają.</div></details>
+      </li>
+      <li>Przy jednym z problemów żaden z dziewięciu obszarów z 1989 r. nie pasował w całości. Dlaczego CC2020 wydziela dziś dyscypliny, których w 1989 r. nie było?
+        <details class="odp"><summary>Wskazówka</summary><div>Którego problemu dotyczył ten przypadek? Jak wyglądały komputery i sieci w 1989 r., a jak wyglądają dziś?</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Chodzi o bezpieczeństwo. W 1989 r. jego elementy były rozproszone po kilku obszarach, np. systemach operacyjnych i sieciach, a masowego internetu jeszcze nie było. Gdy problem urósł, powstała osobna wiedza, zawody i programy studiów. Dlatego CC2020 wydziela cyberbezpieczeństwo (a także naukę o danych) jako osobne dyscypliny. Podział dziedziny zmienia się razem z nią.</div></details>
+      </li>
+      <li>Wybierz problem z własnych zainteresowań psychologicznych i opisz go tak, żeby wymagał co najmniej trzech obszarów.
+        <details class="odp"><summary>Wskazówka</summary><div>Weź na przykład aplikację do badania nastroju albo eksperyment psychologiczny w przeglądarce.</div></details>
+        <details class="odp"><summary>Odpowiedź</summary><div>Przykład: aplikacja, która codziennie pyta badanych o nastrój i szuka w odpowiedziach wzorców. Wymaga komunikacji człowiek–komputer (pytania, które łatwo wypełnić na telefonie), baz danych i wyszukiwania informacji (bezpieczne przechowywanie i szybkie odnajdywanie odpowiedzi) oraz sztucznej inteligencji albo obliczeń numerycznych (wykrywanie wzorców). Odpowiedzi mogą być różne: ważne, żeby każdy obszar był naprawdę potrzebny.</div></details>
+      </li>
     </ol>
   </div>
   <p class="src">Obszary: P. J. Denning i in., <em>Computing as a Discipline</em>, Communications of the ACM 32(1), 1989, s. 12; dyscypliny: ACM, IEEE-CS, <em>Computing Curricula 2020</em>, rozdz. 2. Przypisania „głównych” obszarów to propozycja prowadzącego do dyskusji, a nie jedyna poprawna odpowiedź.</p>
